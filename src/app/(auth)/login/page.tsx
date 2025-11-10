@@ -9,7 +9,7 @@ import { Logo } from "@/components/Logo";
 export default function Login() {
   return (
     <AuthLayout>
-      <form action="#" method="POST" className="grid w-full max-w-sm grid-cols-1 gap-8">
+      <form action={""} method="POST" className="grid w-full max-w-sm grid-cols-1 gap-8">
         <Logo className="h-10" />
 
         <hgroup>
