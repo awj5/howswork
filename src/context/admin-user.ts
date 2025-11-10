@@ -1,8 +1,8 @@
 import { createContext } from "react";
 
 export type AdminUser = {
-  id: string;
-  email?: string;
+  id: string; // Auth user UUID
+  email?: string; // Auth user email
   companyID?: number;
   companyName?: string;
   superAdmin?: boolean;
