@@ -1,0 +1,30 @@
+import Image from "next/image";
+import clsx from "clsx";
+
+type LogoProps = {
+  className?: string;
+};
+
+export function Logo(props: LogoProps) {
+  return (
+    <>
+      <Image
+        src="/img/logo-icon.svg"
+        width={256}
+        height={256}
+        alt="MoodCheck"
+        className={clsx("inline w-auto dark:hidden", props.className)}
+        priority
+      />
+
+      <Image
+        src="/img/logo-icon-dark.svg"
+        width={256}
+        height={256}
+        alt="MoodCheck"
+        className={clsx("hidden w-auto dark:inline", props.className)}
+        priority
+      />
+    </>
+  );
+}
