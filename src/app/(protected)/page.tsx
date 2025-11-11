@@ -1,7 +1,5 @@
+import { Heading } from "@/components/heading";
+
 export default function Home() {
-  return (
-    <>
-      <p>Hello</p>
-    </>
-  );
+  return <Heading>Hello world!</Heading>;
 }
