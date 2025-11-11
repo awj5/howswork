@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { login } from "./action";
 import { AuthLayout } from "@/components/auth-layout";
@@ -11,7 +11,7 @@ import { Input } from "@/components/input";
 import { Strong, Text, TextLink } from "@/components/text";
 import { Logo } from "@/components/Logo";
 
-export default function Login() {
+function LoginForm() {
   const searchParams = useSearchParams();
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
@@ -68,5 +68,13 @@ export default function Login() {
         )}
       </form>
     </AuthLayout>
+  );
+}
+
+export default function Login() {
+  return (
+    <Suspense fallback={<div />}>
+      <LoginForm />
+    </Suspense>
   );
 }
