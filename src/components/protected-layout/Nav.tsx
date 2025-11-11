@@ -8,8 +8,9 @@ import {
   UsersIcon,
   Cog6ToothIcon,
   DocumentChartBarIcon,
+  QuestionMarkCircleIcon,
 } from "@heroicons/react/20/solid";
-import { Sidebar, SidebarBody, SidebarItem, SidebarLabel, SidebarSection } from "@/components/sidebar";
+import { Sidebar, SidebarBody, SidebarItem, SidebarLabel, SidebarSection, SidebarSpacer } from "@/components/sidebar";
 import { Link } from "@/components/link";
 import { Logo } from "@/components/Logo";
 import Footer from "./nav/Footer";
@@ -20,7 +21,7 @@ export default function Nav() {
   return (
     <Sidebar>
       <SidebarBody>
-        <div className="m-2">
+        <div className="m-2 mb-4">
           <Link href="/" aria-label="Dashboard">
             <Logo className="h-8" />
           </Link>
@@ -55,6 +56,15 @@ export default function Nav() {
           <SidebarItem href="/settings" current={pathname === "/settings"}>
             <Cog6ToothIcon />
             <SidebarLabel>Settings</SidebarLabel>
+          </SidebarItem>
+        </SidebarSection>
+
+        <SidebarSpacer />
+
+        <SidebarSection>
+          <SidebarItem href="mailto:support@moodcheck.co?subject=Dashboard Support Request">
+            <QuestionMarkCircleIcon />
+            <SidebarLabel>Support</SidebarLabel>
           </SidebarItem>
         </SidebarSection>
       </SidebarBody>
