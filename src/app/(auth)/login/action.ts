@@ -4,13 +4,15 @@ import { createClient } from "@/utils/supabase/server";
 
 export async function login(formData: FormData) {
   const supabase = await createClient();
-  const email = formData.get("email") as string;
+  const base = process.env.NODE_ENV === "production" ? "https://board.moodcheck.co" : "http://localhost:3001";
+  const emailRedirectTo = `${base}/callback?return_to=${encodeURIComponent(formData.get("return_to") as string)}`;
 
   // Send magic link
   const { error } = await supabase.auth.signInWithOtp({
-    email,
+    email: formData.get("email") as string,
     options: {
-      emailRedirectTo: `https://board.moodcheck.co/callback`,
+      emailRedirectTo,
+      shouldCreateUser: false,
     },
   });
 

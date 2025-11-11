@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { login } from "./action";
 import { AuthLayout } from "@/components/auth-layout";
 import { Button } from "@/components/button";
@@ -8,9 +10,9 @@ import { Heading } from "@/components/heading";
 import { Input } from "@/components/input";
 import { Strong, Text, TextLink } from "@/components/text";
 import { Logo } from "@/components/Logo";
-import { useState } from "react";
 
 export default function Login() {
+  const searchParams = useSearchParams();
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
 
@@ -18,6 +20,7 @@ export default function Login() {
     e.preventDefault();
     setSubmitting(true);
     const formData = new FormData(e.currentTarget);
+    formData.set("return_to", searchParams.get("return_to") ?? "/"); // Redirect URL on login
     const result = await login(formData);
 
     if (result.error) {

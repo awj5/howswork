@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
-import AdminUserProvider from "@/components/protected-layout/admin-user-provider";
 import type { AdminUser } from "@/context/admin-user";
+import AdminUserProvider from "@/components/protected-layout/admin-user-provider";
 
 export default async function ProtectedLayout({
   children,
