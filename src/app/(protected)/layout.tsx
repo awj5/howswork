@@ -2,6 +2,9 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import type { AdminUser } from "@/context/admin-user";
 import AdminUserProvider from "@/components/protected-layout/admin-user-provider";
+import { SidebarLayout } from "@/components/sidebar-layout";
+import Nav from "@/components/protected-layout/Nav";
+import Header from "@/components/protected-layout/Header";
 
 export default async function ProtectedLayout({
   children,
@@ -18,5 +21,11 @@ export default async function ProtectedLayout({
     email: data.user.email,
   };
 
-  return <AdminUserProvider user={user}>{children}</AdminUserProvider>;
+  return (
+    <AdminUserProvider user={user}>
+      <SidebarLayout sidebar={<Nav />} navbar={<Header />}>
+        {children}
+      </SidebarLayout>
+    </AdminUserProvider>
+  );
 }
