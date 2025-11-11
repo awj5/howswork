@@ -16,7 +16,7 @@ export default async function ProtectedLayout({
 
     // Get auth user
     const { data: authData, error: authError } = await supabase.auth.getUser();
-    if (authError) throw authError;
+    if (authError || !authData.user) throw new Error("Unauthenticated");
 
     // Get user from users table
     const { data: usersData, error: usersError } = await supabase
