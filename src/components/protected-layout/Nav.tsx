@@ -9,11 +9,10 @@ import {
   Cog6ToothIcon,
   DocumentChartBarIcon,
 } from "@heroicons/react/20/solid";
-import { Sidebar, SidebarBody, SidebarFooter, SidebarItem, SidebarLabel, SidebarSection } from "@/components/sidebar";
-import { Dropdown, DropdownButton, DropdownMenu } from "@/components/dropdown";
+import { Sidebar, SidebarBody, SidebarItem, SidebarLabel, SidebarSection } from "@/components/sidebar";
 import { Link } from "@/components/link";
 import { Logo } from "@/components/Logo";
-import SignOut from "./SignOut";
+import Footer from "./nav/Footer";
 
 export default function Nav() {
   const pathname = usePathname();
@@ -60,17 +59,7 @@ export default function Nav() {
         </SidebarSection>
       </SidebarBody>
 
-      <SidebarFooter className="max-lg:hidden">
-        <Dropdown>
-          <DropdownButton as={SidebarItem}>
-            <span>Hello</span>
-          </DropdownButton>
-
-          <DropdownMenu className="min-w-64" anchor="top start">
-            <SignOut />
-          </DropdownMenu>
-        </Dropdown>
-      </SidebarFooter>
+      <Footer />
     </Sidebar>
   );
 }

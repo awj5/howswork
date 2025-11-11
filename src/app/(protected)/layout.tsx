@@ -11,21 +11,42 @@ export default async function ProtectedLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Get auth user
-  const supabase = await createClient();
-  const { data, error } = await supabase.auth.getUser();
-  if (error || !data?.user) redirect("/login");
+  try {
+    const supabase = await createClient();
 
-  const user: AdminUser = {
-    id: data.user.id,
-    email: data.user.email,
-  };
+    // Get auth user
+    const { data: authData, error: authError } = await supabase.auth.getUser();
+    if (authError) throw authError;
 
-  return (
-    <AdminUserProvider user={user}>
-      <SidebarLayout sidebar={<Nav />} navbar={<Header />}>
-        {children}
-      </SidebarLayout>
-    </AdminUserProvider>
-  );
+    // Get user from users table
+    const { data: usersData, error: usersError } = await supabase
+      .from("users")
+      .select("email, company_id, uuid, first_name, last_name")
+      .eq("admin_uuid", authData.user.id)
+      .single();
+
+    if (usersError) throw usersError;
+
+    // Pass to context provider
+    const user: AdminUser = {
+      id: authData.user.id,
+      email: usersData.email,
+      uuid: usersData.uuid,
+      companyID: usersData.company_id,
+      superAdmin: usersData.company_id === 3,
+      firstName: usersData.first_name ?? undefined,
+      lastName: usersData.last_name ?? undefined,
+    };
+
+    return (
+      <AdminUserProvider user={user}>
+        <SidebarLayout sidebar={<Nav />} navbar={<Header />}>
+          {children}
+        </SidebarLayout>
+      </AdminUserProvider>
+    );
+  } catch (error) {
+    console.error(error);
+    redirect("/login");
+  }
 }
