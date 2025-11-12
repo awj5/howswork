@@ -41,9 +41,7 @@ function LoginForm() {
           <Heading>{sent ? "Magic link sent" : "Sign in to MoodCheck"}</Heading>
 
           <Text>
-            {sent
-              ? "Check your email to sign in securely."
-              : "Employer access to your organisation's wellbeing and compliance dashboard."}
+            {sent ? "Check your email to sign in securely." : "Access your wellbeing and compliance dashboard."}
           </Text>
         </div>
 
@@ -60,8 +58,8 @@ function LoginForm() {
 
             <Text>
               New to MoodCheck?{" "}
-              <TextLink href="https://www.moodcheck.co">
-                <Strong>Set up your organisation</Strong>
+              <TextLink href="/sign-up">
+                <Strong>Sign up</Strong>
               </TextLink>
             </Text>
           </>

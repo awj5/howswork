@@ -48,9 +48,9 @@ export default function Nav() {
             <SidebarLabel>Check-Ins</SidebarLabel>
           </SidebarItem>
 
-          <SidebarItem href="/people" current={pathname === "/people"}>
+          <SidebarItem href="/" current={pathname === "/people"}>
             <UsersIcon />
-            <SidebarLabel>People</SidebarLabel>
+            <SidebarLabel>People & Teams</SidebarLabel>
           </SidebarItem>
 
           <SidebarItem href="/settings" current={pathname === "/settings"}>

@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import { DropdownItem, DropdownLabel } from "@/components/dropdown";
+import { ArrowRightStartOnRectangleIcon } from "@heroicons/react/16/solid";
 
 export default function SignOut() {
   const router = useRouter();
@@ -15,6 +16,7 @@ export default function SignOut() {
 
   return (
     <DropdownItem onClick={click}>
+      <ArrowRightStartOnRectangleIcon />
       <DropdownLabel>Sign out</DropdownLabel>
     </DropdownItem>
   );
