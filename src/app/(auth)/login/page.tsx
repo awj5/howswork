@@ -38,17 +38,8 @@ function LoginForm() {
   return (
     <AuthLayout>
       <form onSubmit={submit} className="grid w-full max-w-sm grid-cols-1 gap-8">
-        <Logo className="h-10" />
-
-        <div>
-          <Heading>{sent ? "Magic link sent" : "Sign in to MoodCheck"}</Heading>
-
-          <Text>
-            {sent
-              ? "Check your email to sign in securely."
-              : "Access your company's psychological safety and risk reporting dashboard."}
-          </Text>
-        </div>
+        <Logo className="h-7" />
+        <Heading>{sent ? "Magic link sent" : "Sign in to your account"}</Heading>
 
         {!sent && (
           <Fieldset className="flex flex-col gap-8" disabled={submitting}>
@@ -64,7 +55,7 @@ function LoginForm() {
 
             <Text>
               New to MoodCheck?{" "}
-              <TextLink href="/sign-up">
+              <TextLink href="/register">
                 <Strong>Set up your company</Strong>
               </TextLink>
             </Text>
