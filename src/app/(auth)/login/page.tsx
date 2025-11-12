@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { login } from "./action";
 import { AuthLayout } from "@/components/auth-layout";
 import { Button } from "@/components/button";
-import { Field, Label } from "@/components/fieldset";
+import { Field, Fieldset, Label } from "@/components/fieldset";
 import { Heading } from "@/components/heading";
 import { Input } from "@/components/input";
 import { Strong, Text, TextLink } from "@/components/text";
@@ -41,12 +41,14 @@ function LoginForm() {
           <Heading>{sent ? "Magic link sent" : "Sign in to MoodCheck"}</Heading>
 
           <Text>
-            {sent ? "Check your email to sign in securely." : "Access your wellbeing and compliance dashboard."}
+            {sent
+              ? "Check your email to sign in securely."
+              : "Access your company's psychological safety and risk reporting dashboard."}
           </Text>
         </div>
 
         {!sent && (
-          <>
+          <Fieldset className="flex flex-col gap-8" disabled={submitting}>
             <Field disabled={submitting}>
               <Label>Email</Label>
               <Input type="email" name="email" required />
@@ -59,10 +61,10 @@ function LoginForm() {
             <Text>
               New to MoodCheck?{" "}
               <TextLink href="/sign-up">
-                <Strong>Sign up</Strong>
+                <Strong>Set up your company</Strong>
               </TextLink>
             </Text>
-          </>
+          </Fieldset>
         )}
       </form>
     </AuthLayout>
