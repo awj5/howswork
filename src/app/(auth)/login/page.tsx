@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { login } from "./action";
 import { AuthLayout } from "@/components/auth-layout";
 import { Button } from "@/components/button";
-import { Field, Fieldset, Label } from "@/components/fieldset";
+import { ErrorMessage, Field, Fieldset, Label } from "@/components/fieldset";
 import { Heading } from "@/components/heading";
 import { Input } from "@/components/input";
 import { Strong, Text, TextLink } from "@/components/text";
@@ -15,15 +15,18 @@ function LoginForm() {
   const searchParams = useSearchParams();
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState(false);
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(false);
     setSubmitting(true);
     const formData = new FormData(e.currentTarget);
     formData.set("return_to", searchParams.get("return_to") ?? "/"); // Redirect URL on login
     const result = await login(formData);
 
     if (result.error) {
+      setError(true);
       console.error(result.error);
     } else {
       setSent(true);
@@ -49,12 +52,13 @@ function LoginForm() {
 
         {!sent && (
           <Fieldset className="flex flex-col gap-8" disabled={submitting}>
-            <Field disabled={submitting}>
+            <Field>
               <Label>Email</Label>
-              <Input type="email" name="email" required />
+              <Input type="email" name="email" invalid={error} required />
+              {error && <ErrorMessage>No account found for this email.</ErrorMessage>}
             </Field>
 
-            <Button type="submit" className="w-full" outline disabled={submitting}>
+            <Button type="submit" className="w-full" outline>
               Continue
             </Button>
 
