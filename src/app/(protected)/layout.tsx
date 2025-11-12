@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
-import type { AdminUser } from "@/context/admin-user";
+import type { UserType } from "@/context/user";
 import AdminUserProvider from "@/components/protected-layout/admin-user-provider";
 import { SidebarLayout } from "@/components/sidebar-layout";
 import Nav from "@/components/protected-layout/Nav";
@@ -20,20 +20,17 @@ export default async function ProtectedLayout({
 
     // Get user from users table
     const { data: usersData, error: usersError } = await supabase
-      .from("users")
-      .select("email, company_id, uuid, first_name, last_name")
-      .eq("admin_uuid", authData.user.id)
+      .from("profiles")
+      .select("email, first_name, last_name")
+      .eq("id", authData.user.id)
       .single();
 
     if (usersError) throw usersError;
 
     // Pass to context provider
-    const user: AdminUser = {
+    const user: UserType = {
       id: authData.user.id,
       email: usersData.email,
-      uuid: usersData.uuid,
-      companyID: usersData.company_id,
-      superAdmin: usersData.company_id === 3,
       firstName: usersData.first_name ?? undefined,
       lastName: usersData.last_name ?? undefined,
     };

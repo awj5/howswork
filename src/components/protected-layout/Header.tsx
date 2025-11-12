@@ -1,13 +1,13 @@
 "use client";
 
 import { useContext } from "react";
-import { AdminUserContext } from "@/context/admin-user";
+import { UserContext } from "@/context/user";
 import { Navbar, NavbarItem, NavbarSection, NavbarSpacer } from "@/components/navbar";
 import { Dropdown, DropdownButton, DropdownMenu } from "@/components/dropdown";
 import SignOut from "./SignOut";
 
 export default function Header() {
-  const user = useContext(AdminUserContext);
+  const user = useContext(UserContext);
 
   return (
     <Navbar>

@@ -4,7 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 
 export async function login(formData: FormData) {
   const supabase = await createClient();
-  const base = process.env.NODE_ENV === "production" ? "https://board.moodcheck.co" : "http://localhost:3000";
+  const base = process.env.NODE_ENV === "production" ? "https://app.moodcheck.co" : "http://localhost:3000";
   const emailRedirectTo = `${base}/callback?return_to=${encodeURIComponent(formData.get("return_to") as string)}`;
 
   // Send magic link

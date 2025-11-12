@@ -9,8 +9,14 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "MoodCheck - Employer Dashboard",
+  title: "MoodCheck",
   description: "Psychological safety. Made human.",
+  icons: {
+    icon: [
+      { url: "/img/logo-icon.png", media: "(prefers-color-scheme: light)" },
+      { url: "/img/logo-icon-dark.png", media: "(prefers-color-scheme: dark)" },
+    ],
+  },
 };
 
 export default function RootLayout({

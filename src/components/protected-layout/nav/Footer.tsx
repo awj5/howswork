@@ -1,11 +1,11 @@
 import { useContext } from "react";
-import { AdminUserContext } from "@/context/admin-user";
+import { UserContext } from "@/context/user";
 import { SidebarFooter, SidebarItem } from "@/components/sidebar";
 import { Dropdown, DropdownButton, DropdownMenu } from "@/components/dropdown";
 import SignOut from "../SignOut";
 
 export default function Footer() {
-  const user = useContext(AdminUserContext);
+  const user = useContext(UserContext);
 
   return (
     <SidebarFooter className="max-lg:hidden">
