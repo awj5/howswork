@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { Toaster } from "sonner";
 import { createClient } from "@/utils/supabase/server";
 import type { UserType } from "@/context/user";
 import AdminUserProvider from "@/components/protected-layout/admin-user-provider";
@@ -40,6 +41,8 @@ export default async function ProtectedLayout({
         <SidebarLayout sidebar={<Nav />} navbar={<Header />}>
           {children}
         </SidebarLayout>
+
+        <Toaster theme="system" />
       </AdminUserProvider>
     );
   } catch (error) {

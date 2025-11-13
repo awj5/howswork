@@ -40,7 +40,7 @@ function RegisterForm() {
       <form onSubmit={submit} className="grid w-full max-w-sm grid-cols-1 gap-8">
         <Logo className="h-7" />
 
-        <div>
+        <div className="flex flex-col gap-1">
           <Heading>{sent ? "Set up complete!" : "Set up your company"}</Heading>
           {sent && <Text>A secure sign in link has been sent to your email.</Text>}
         </div>
@@ -52,6 +52,7 @@ function RegisterForm() {
               <Input type="email" name="email" invalid={error} required />
               {error && <ErrorMessage>This email already has an account.</ErrorMessage>}
             </Field>
+
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-4">
               <Field>
                 <Label>First name</Label>
@@ -63,19 +64,22 @@ function RegisterForm() {
                 <Input name="last_name" required />
               </Field>
             </div>
+
             <Field>
               <Label>Company name</Label>
               <Input name="company" required />
             </Field>
+
             <Button type="submit" className="w-full" outline>
               Create account
             </Button>
+
             <Text>
               Already using MoodCheck?{" "}
               <TextLink href="/login">
                 <Strong>Sign in</Strong>
               </TextLink>
-            </Text>{" "}
+            </Text>
           </Fieldset>
         )}
       </form>

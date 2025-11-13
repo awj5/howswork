@@ -40,7 +40,7 @@ function LoginForm() {
       <form onSubmit={submit} className="grid w-full max-w-sm grid-cols-1 gap-8">
         <Logo className="h-7" />
 
-        <div>
+        <div className="flex flex-col gap-1">
           <Heading>{sent ? "Magic link sent" : "Sign in to your dashboard"}</Heading>
           {sent && <Text>Check your email to sign in securely.</Text>}
         </div>
