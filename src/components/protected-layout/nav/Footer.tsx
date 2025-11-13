@@ -3,7 +3,7 @@ import { UserContext } from "@/context/user";
 import { SidebarFooter, SidebarItem } from "@/components/sidebar";
 import { Dropdown, DropdownButton, DropdownMenu } from "@/components/dropdown";
 import { Avatar } from "@/components/avatar";
-import SignOut from "../SignOut";
+import AccountMenu from "../AccountMenu";
 
 export default function Footer() {
   const user = useContext(UserContext);
@@ -37,7 +37,7 @@ export default function Footer() {
         </DropdownButton>
 
         <DropdownMenu className="min-w-64" anchor="top start">
-          <SignOut />
+          <AccountMenu />
         </DropdownMenu>
       </Dropdown>
     </SidebarFooter>

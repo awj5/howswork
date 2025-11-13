@@ -23,7 +23,7 @@ export default function Nav() {
       <SidebarBody>
         <div className="m-2 mb-4">
           <Link href="/" aria-label="Dashboard">
-            <Logo className="h-8" />
+            <Logo className="h-8" iconOnly />
           </Link>
         </div>
 
@@ -33,24 +33,24 @@ export default function Nav() {
             <SidebarLabel>Dashboard</SidebarLabel>
           </SidebarItem>
 
-          <SidebarItem href="/" current={pathname === "/reports"}>
+          <SidebarItem href="/reports" current={pathname === "/reports"}>
             <DocumentChartBarIcon />
-            <SidebarLabel>Reports</SidebarLabel>
+            <SidebarLabel>Risk Reports</SidebarLabel>
           </SidebarItem>
 
-          <SidebarItem href="/" current={pathname === "/hazards"}>
+          <SidebarItem href="/incidents" current={pathname === "/incidents"}>
             <ExclamationTriangleIcon />
-            <SidebarLabel>Hazards & Incidents</SidebarLabel>
+            <SidebarLabel>Incidents & Concerns</SidebarLabel>
           </SidebarItem>
 
-          <SidebarItem href="/" current={pathname === "/check-ins"}>
+          <SidebarItem href="/check-ins" current={pathname === "/check-ins"}>
             <CheckCircleIcon />
             <SidebarLabel>Check-Ins</SidebarLabel>
           </SidebarItem>
 
-          <SidebarItem href="/" current={pathname === "/people"}>
+          <SidebarItem href="/teams" current={pathname === "/teams"}>
             <UsersIcon />
-            <SidebarLabel>People & Teams</SidebarLabel>
+            <SidebarLabel>Teams</SidebarLabel>
           </SidebarItem>
 
           <SidebarItem href="/settings" current={pathname === "/settings"}>

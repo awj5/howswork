@@ -39,7 +39,11 @@ function LoginForm() {
     <AuthLayout>
       <form onSubmit={submit} className="grid w-full max-w-sm grid-cols-1 gap-8">
         <Logo className="h-7" />
-        <Heading>{sent ? "Magic link sent" : "Sign in to your account"}</Heading>
+
+        <div>
+          <Heading>{sent ? "Magic link sent" : "Sign in to your dashboard"}</Heading>
+          {sent && <Text>Check your email to sign in securely.</Text>}
+        </div>
 
         {!sent && (
           <Fieldset className="flex flex-col gap-8" disabled={submitting}>

@@ -5,7 +5,7 @@ import { UserContext } from "@/context/user";
 import { Navbar, NavbarItem, NavbarSection, NavbarSpacer } from "@/components/navbar";
 import { Dropdown, DropdownButton, DropdownMenu } from "@/components/dropdown";
 import { Avatar } from "../avatar";
-import SignOut from "./SignOut";
+import AccountMenu from "./AccountMenu";
 
 export default function Header() {
   const user = useContext(UserContext);
@@ -28,7 +28,7 @@ export default function Header() {
           </DropdownButton>
 
           <DropdownMenu className="min-w-64" anchor="bottom end">
-            <SignOut />
+            <AccountMenu />
           </DropdownMenu>
         </Dropdown>
       </NavbarSection>
