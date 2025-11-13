@@ -12,7 +12,7 @@ export function Logo(props: LogoProps) {
       {props.iconOnly ? (
         <>
           <Image
-            src="/img/logo-icon.png"
+            src="/img/logo-icon.svg"
             width={256}
             height={256}
             alt="MoodCheck"
@@ -21,7 +21,7 @@ export function Logo(props: LogoProps) {
           />
 
           <Image
-            src="/img/logo-icon-dark.png"
+            src="/img/logo-icon-dark.svg"
             width={256}
             height={256}
             alt="MoodCheck"
@@ -32,7 +32,7 @@ export function Logo(props: LogoProps) {
       ) : (
         <>
           <Image
-            src="/img/logo.png"
+            src="/img/logo.svg"
             width={784}
             height={128}
             alt="MoodCheck"
@@ -41,7 +41,7 @@ export function Logo(props: LogoProps) {
           />
 
           <Image
-            src="/img/logo-dark.png"
+            src="/img/logo-dark.svg"
             width={784}
             height={128}
             alt="MoodCheck"

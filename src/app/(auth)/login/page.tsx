@@ -2,6 +2,7 @@
 
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 import { login } from "./action";
 import { AuthLayout } from "@/components/auth-layout";
 import { Button } from "@/components/button";
@@ -21,6 +22,7 @@ function LoginForm() {
     e.preventDefault();
     setError(false);
     setSubmitting(true);
+    toast.loading("Verifying...");
     const formData = new FormData(e.currentTarget);
     formData.set("return_to", searchParams.get("return_to") ?? "/"); // Redirect URL on login
     const result = await login(formData);
@@ -32,6 +34,7 @@ function LoginForm() {
       setSent(true);
     }
 
+    toast.dismiss();
     setSubmitting(false);
   };
 
@@ -41,8 +44,8 @@ function LoginForm() {
         <Logo className="h-7" />
 
         <div className="flex flex-col gap-1">
-          <Heading>{sent ? "Magic link sent" : "Sign in to your dashboard"}</Heading>
-          {sent && <Text>Check your email to sign in securely.</Text>}
+          <Heading>{sent ? "Check your email" : "Sign in to your dashboard"}</Heading>
+          {sent && <Text>We've sent you a secure sign-in link.</Text>}
         </div>
 
         {!sent && (

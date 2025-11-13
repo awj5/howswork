@@ -2,6 +2,7 @@
 
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 import { signup } from "./action";
 import { AuthLayout } from "@/components/auth-layout";
 import { Button } from "@/components/button";
@@ -21,6 +22,7 @@ function RegisterForm() {
     e.preventDefault();
     setError(false);
     setSubmitting(true);
+    toast.loading("Creating...");
     const formData = new FormData(e.currentTarget);
     formData.set("return_to", searchParams.get("return_to") ?? "/"); // Redirect URL on login
     const result = await signup(formData);
@@ -32,6 +34,7 @@ function RegisterForm() {
       setSent(true);
     }
 
+    toast.dismiss();
     setSubmitting(false);
   };
 
@@ -42,17 +45,11 @@ function RegisterForm() {
 
         <div className="flex flex-col gap-1">
           <Heading>{sent ? "Set up complete!" : "Set up your company"}</Heading>
-          {sent && <Text>A secure sign in link has been sent to your email.</Text>}
+          {sent && <Text>We've sent a secure sign-in link to your email.</Text>}
         </div>
 
         {!sent && (
           <Fieldset className="flex flex-col gap-8" disabled={submitting}>
-            <Field>
-              <Label>Email</Label>
-              <Input type="email" name="email" invalid={error} required />
-              {error && <ErrorMessage>This email already has an account.</ErrorMessage>}
-            </Field>
-
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-4">
               <Field>
                 <Label>First name</Label>
@@ -64,6 +61,12 @@ function RegisterForm() {
                 <Input name="last_name" required />
               </Field>
             </div>
+
+            <Field>
+              <Label>Email</Label>
+              <Input type="email" name="email" invalid={error} required />
+              {error && <ErrorMessage>This email already has an account.</ErrorMessage>}
+            </Field>
 
             <Field>
               <Label>Company name</Label>

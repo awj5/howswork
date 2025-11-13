@@ -18,13 +18,38 @@ export default function Account() {
   const [lastName, setLastName] = useState<string | undefined>("");
   const [submitting, setSubmitting] = useState(true);
   const [sent, setSent] = useState(false);
-  const [error, setError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(false);
+    setEmailError(false);
     setSubmitting(true);
-    toast.success("My first toast");
+    const supabase = createClient();
+
+    // Update profile
+    const { error: updateProfilesError } = await supabase
+      .from("profiles")
+      .update({
+        first_name: firstName,
+        last_name: firstName,
+      })
+      .eq("id", user?.id);
+
+    if (updateProfilesError) {
+      toast.error(updateProfilesError.message);
+      console.error(updateProfilesError);
+      setSubmitting(false);
+      return;
+    }
+
+    // Update user
+    /*const { error } = await supabase.auth.updateUser({
+      email: email,
+    });*/
+
+    // Success
+    toast.success("Changes saved.");
+    setSubmitting(false);
   };
 
   useEffect(() => {
@@ -42,26 +67,6 @@ export default function Account() {
 
       <Fieldset disabled={submitting}>
         <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
-          <div className="flex flex-col gap-1">
-            <Subheading>Email</Subheading>
-            <Text>Can be changed but you will need to sign in again.</Text>
-          </div>
-
-          <div>
-            <Input
-              type="email"
-              aria-label="Email"
-              name="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              required
-            />
-          </div>
-        </section>
-
-        <Divider className="my-10" soft />
-
-        <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
           <Field>
             <Label>First name</Label>
             <Input
@@ -76,6 +81,26 @@ export default function Account() {
             <Label>Last name</Label>
             <Input name="last_name" value={lastName} onChange={(event) => setLastName(event.target.value)} required />
           </Field>
+        </section>
+
+        <Divider className="my-10" soft />
+
+        <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
+          <div className="flex flex-col gap-1">
+            <Subheading>Email</Subheading>
+            <Text>You'll need to sign in again if you change this.</Text>
+          </div>
+
+          <div>
+            <Input
+              type="email"
+              aria-label="Email"
+              name="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              required
+            />
+          </div>
         </section>
 
         <Divider className="my-10" soft />
