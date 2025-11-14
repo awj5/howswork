@@ -1,10 +1,10 @@
 "use client";
 
-import { useMemo } from "react";
+import { useState } from "react";
 import { UserContext, type UserType } from "@/context/user";
 
-export default function AdminUserProvider({ user, children }: { user: UserType; children: React.ReactNode }) {
-  const value = useMemo(() => user, [user]);
+export default function AdminUserProvider({ authUser, children }: { authUser: UserType; children: React.ReactNode }) {
+  const [user, setUser] = useState<UserType | null>(authUser);
 
-  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{ user, setUser }}>{children}</UserContext.Provider>;
 }

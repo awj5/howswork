@@ -14,28 +14,61 @@ import { Logo } from "@/components/Logo";
 
 function RegisterForm() {
   const searchParams = useSearchParams();
-  const [submitting, setSubmitting] = useState(false);
-  const [sent, setSent] = useState(false);
-  const [error, setError] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [firstNameError, setFirstNameError] = useState(false);
+  const [lastNameError, setLastNameError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const [companyError, setCompanyError] = useState(false);
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(false);
-    setSubmitting(true);
-    toast.loading("Creating...");
+    setFirstNameError(false);
+    setLastNameError(false);
+    setEmailError(false);
+    setCompanyError(false);
     const formData = new FormData(e.currentTarget);
+
+    // Validate
+    const firstName = formData.get("first_name") as string;
+    const lastName = formData.get("last_name") as string;
+    const email = formData.get("email") as string;
+    const company = formData.get("company") as string;
+
+    if (!firstName) {
+      setFirstNameError(true);
+      return;
+    }
+
+    if (!lastName) {
+      setLastNameError(true);
+      return;
+    }
+
+    if (!email || !email.includes("@")) {
+      setEmailError(true);
+      return;
+    }
+
+    if (!company) {
+      setCompanyError(true);
+      return;
+    }
+
+    // Fetch
+    setDisabled(true);
     formData.set("return_to", searchParams.get("return_to") ?? "/"); // Redirect URL on login
+    const toastId = toast.loading("Creating...");
     const result = await signup(formData);
 
     if (result.error) {
-      setError(true);
-      console.error(result.error);
+      toast.error(result.error);
     } else {
-      setSent(true);
+      setSubmitted(true);
     }
 
-    toast.dismiss();
-    setSubmitting(false);
+    toast.dismiss(toastId);
+    setDisabled(false);
   };
 
   return (
@@ -44,33 +77,36 @@ function RegisterForm() {
         <Logo className="h-7" />
 
         <div className="flex flex-col gap-1">
-          <Heading>{sent ? "Set up complete!" : "Set up your company"}</Heading>
-          {sent && <Text>We've sent a secure sign-in link to your email.</Text>}
+          <Heading>{submitted ? "Set up complete!" : "Set up your company"}</Heading>
+          {submitted && <Text>We've sent a secure sign-in link to your email.</Text>}
         </div>
 
-        {!sent && (
-          <Fieldset className="flex flex-col gap-8" disabled={submitting}>
+        {!submitted && (
+          <Fieldset className="flex flex-col gap-8" disabled={disabled}>
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-4">
               <Field>
                 <Label>First name</Label>
-                <Input name="first_name" required />
+                <Input name="first_name" invalid={firstNameError} />
+                {firstNameError && <ErrorMessage>This field is required.</ErrorMessage>}
               </Field>
 
               <Field>
                 <Label>Last name</Label>
-                <Input name="last_name" required />
+                <Input name="last_name" invalid={lastNameError} />
+                {lastNameError && <ErrorMessage>This field is required.</ErrorMessage>}
               </Field>
             </div>
 
             <Field>
               <Label>Email</Label>
-              <Input type="email" name="email" invalid={error} required />
-              {error && <ErrorMessage>This email already has an account.</ErrorMessage>}
+              <Input type="email" name="email" invalid={emailError} />
+              {emailError && <ErrorMessage>This field is required.</ErrorMessage>}
             </Field>
 
             <Field>
               <Label>Company name</Label>
-              <Input name="company" required />
+              <Input name="company" invalid={companyError} />
+              {companyError && <ErrorMessage>This field is required.</ErrorMessage>}
             </Field>
 
             <Button type="submit" className="w-full" outline>

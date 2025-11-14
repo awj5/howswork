@@ -1,14 +1,13 @@
 "use client";
 
-import { useContext } from "react";
-import { UserContext } from "@/context/user";
+import { useUserContext } from "@/hooks/useUserContext";
 import { Navbar, NavbarItem, NavbarSection, NavbarSpacer } from "@/components/navbar";
 import { Dropdown, DropdownButton, DropdownMenu } from "@/components/dropdown";
 import { Avatar } from "../avatar";
 import AccountMenu from "./AccountMenu";
 
 export default function Header() {
-  const user = useContext(UserContext);
+  const { user } = useUserContext();
 
   return (
     <Navbar>

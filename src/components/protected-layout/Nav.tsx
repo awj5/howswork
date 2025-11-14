@@ -18,6 +18,15 @@ import Footer from "./nav/Footer";
 export default function Nav() {
   const pathname = usePathname();
 
+  const nav = [
+    { href: "/", label: "Dashboard", Icon: HomeIcon },
+    { href: "/reports", label: "Risk Reports", Icon: DocumentChartBarIcon },
+    { href: "/incidents", label: "Incidents & Concerns", Icon: ExclamationTriangleIcon },
+    { href: "/check-ins", label: "Check-Ins", Icon: CheckCircleIcon },
+    { href: "/teams", label: "Teams", Icon: UsersIcon },
+    { href: "/settings", label: "Settings", Icon: Cog6ToothIcon },
+  ];
+
   return (
     <Sidebar>
       <SidebarBody>
@@ -28,35 +37,12 @@ export default function Nav() {
         </div>
 
         <SidebarSection>
-          <SidebarItem href="/" current={pathname === "/"}>
-            <HomeIcon />
-            <SidebarLabel>Dashboard</SidebarLabel>
-          </SidebarItem>
-
-          <SidebarItem href="/reports" current={pathname === "/reports"}>
-            <DocumentChartBarIcon />
-            <SidebarLabel>Risk Reports</SidebarLabel>
-          </SidebarItem>
-
-          <SidebarItem href="/incidents" current={pathname === "/incidents"}>
-            <ExclamationTriangleIcon />
-            <SidebarLabel>Incidents & Concerns</SidebarLabel>
-          </SidebarItem>
-
-          <SidebarItem href="/check-ins" current={pathname === "/check-ins"}>
-            <CheckCircleIcon />
-            <SidebarLabel>Check-Ins</SidebarLabel>
-          </SidebarItem>
-
-          <SidebarItem href="/teams" current={pathname === "/teams"}>
-            <UsersIcon />
-            <SidebarLabel>Teams</SidebarLabel>
-          </SidebarItem>
-
-          <SidebarItem href="/settings" current={pathname === "/settings"}>
-            <Cog6ToothIcon />
-            <SidebarLabel>Settings</SidebarLabel>
-          </SidebarItem>
+          {nav.map(({ href, label, Icon }) => (
+            <SidebarItem key={href} href={href} current={pathname === href}>
+              <Icon />
+              <SidebarLabel>{label}</SidebarLabel>
+            </SidebarItem>
+          ))}
         </SidebarSection>
 
         <SidebarSpacer />

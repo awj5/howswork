@@ -16,27 +16,27 @@ export default async function ProtectedLayout({
 
     // Get auth user
     const { data: authData, error: authError } = await supabase.auth.getUser();
-    if (authError || !authData.user) throw new Error("Unauthenticated");
+    if (authError || !authData.user.email) throw new Error("Unauthenticated");
 
-    // Get user from users table
-    const { data: usersData, error: usersError } = await supabase
+    // Get user from profiles
+    const { data: profilesData, error: profilesError } = await supabase
       .from("profiles")
-      .select("email, first_name, last_name")
+      .select("first_name, last_name")
       .eq("id", authData.user.id)
       .single();
 
-    if (usersError) throw usersError;
+    if (profilesError) throw profilesError;
 
     // Pass to context provider
-    const user: UserType = {
+    const authUser: UserType = {
       id: authData.user.id,
-      email: usersData.email,
-      firstName: usersData.first_name ?? undefined,
-      lastName: usersData.last_name ?? undefined,
+      email: authData.user.email,
+      firstName: profilesData.first_name,
+      lastName: profilesData.last_name,
     };
 
     return (
-      <AdminUserProvider user={user}>
+      <AdminUserProvider authUser={authUser}>
         <SidebarLayout sidebar={<Nav />} navbar={<Header />}>
           {children}
         </SidebarLayout>

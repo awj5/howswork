@@ -14,8 +14,8 @@ export const metadata: Metadata = {
   description: "Psychological safety. Made human.",
   icons: {
     icon: [
-      { url: "/img/logo-icon.png", media: "(prefers-color-scheme: light)" },
-      { url: "/img/logo-icon-dark.png", media: "(prefers-color-scheme: dark)" },
+      { url: "/img/logo-icon.svg", media: "(prefers-color-scheme: light)" },
+      { url: "/img/logo-icon-dark.svg", media: "(prefers-color-scheme: dark)" },
     ],
   },
 };

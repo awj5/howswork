@@ -1,21 +1,21 @@
 "use client";
 
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { createClient } from "@/utils/supabase/client";
-import { UserContext } from "@/context/user";
+import { useUserContext } from "@/hooks/useUserContext";
 import { Heading, Subheading } from "@/components/heading";
 import { Text } from "@/components/text";
 import { Divider } from "@/components/divider";
 import { Input } from "@/components/input";
-import { Field, Fieldset, Label } from "@/components/fieldset";
+import { ErrorMessage, Field, Fieldset, Label } from "@/components/fieldset";
 import { Button } from "@/components/button";
 
 export default function Account() {
-  const user = useContext(UserContext);
-  const [email, setEmail] = useState<string | undefined>("");
-  const [firstName, setFirstName] = useState<string | undefined>("");
-  const [lastName, setLastName] = useState<string | undefined>("");
+  const { user, setUser } = useUserContext();
+  const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [submitting, setSubmitting] = useState(true);
   const [sent, setSent] = useState(false);
   const [emailError, setEmailError] = useState(false);
@@ -42,10 +42,32 @@ export default function Account() {
       return;
     }
 
-    // Update user
-    /*const { error } = await supabase.auth.updateUser({
-      email: email,
-    });*/
+    //user?.firstName = firstName
+
+    // Update user if email changed
+    if (email !== user?.email) {
+      const { error: authUserError } = await supabase.auth.updateUser({
+        email: email,
+      });
+
+      if (authUserError) {
+        setEmailError(true);
+        console.error(authUserError);
+        setSubmitting(false);
+        return;
+      }
+    }
+
+    setUser((prev) =>
+      prev
+        ? {
+            ...prev,
+            firstName,
+            lastName,
+            email,
+          }
+        : prev
+    );
 
     // Success
     toast.success("Changes saved.");
@@ -54,9 +76,9 @@ export default function Account() {
 
   useEffect(() => {
     // Get user details from context
-    setEmail(user?.email);
-    setFirstName(user?.firstName);
-    setLastName(user?.lastName);
+    setEmail(user?.email ?? "");
+    setFirstName(user?.firstName ?? "");
+    setLastName(user?.lastName ?? "");
     setSubmitting(false);
   }, []);
 
@@ -69,6 +91,7 @@ export default function Account() {
         <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
           <Field>
             <Label>First name</Label>
+
             <Input
               name="first_name"
               value={firstName}
@@ -91,16 +114,19 @@ export default function Account() {
             <Text>You'll need to sign in again if you change this.</Text>
           </div>
 
-          <div>
+          <Field>
             <Input
               type="email"
               aria-label="Email"
               name="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
+              invalid={emailError}
               required
             />
-          </div>
+
+            {emailError && <ErrorMessage>This email is already in use by another account.</ErrorMessage>}
+          </Field>
         </section>
 
         <Divider className="my-10" soft />

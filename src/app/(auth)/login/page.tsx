@@ -14,28 +14,37 @@ import { Logo } from "@/components/Logo";
 
 function LoginForm() {
   const searchParams = useSearchParams();
-  const [submitting, setSubmitting] = useState(false);
-  const [sent, setSent] = useState(false);
-  const [error, setError] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [emailError, setEmailError] = useState(false);
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(false);
-    setSubmitting(true);
-    toast.loading("Verifying...");
+    setEmailError(false);
     const formData = new FormData(e.currentTarget);
+
+    // Validate
+    const email = formData.get("email") as string;
+
+    if (!email || !email.includes("@")) {
+      setEmailError(true);
+      return;
+    }
+
+    // Fetch
+    setDisabled(true);
     formData.set("return_to", searchParams.get("return_to") ?? "/"); // Redirect URL on login
+    const toastId = toast.loading("Verifying...");
     const result = await login(formData);
 
     if (result.error) {
-      setError(true);
-      console.error(result.error);
+      toast.error(result.error);
     } else {
-      setSent(true);
+      setSubmitted(true);
     }
 
-    toast.dismiss();
-    setSubmitting(false);
+    toast.dismiss(toastId);
+    setDisabled(false);
   };
 
   return (
@@ -44,16 +53,16 @@ function LoginForm() {
         <Logo className="h-7" />
 
         <div className="flex flex-col gap-1">
-          <Heading>{sent ? "Check your email" : "Sign in to your dashboard"}</Heading>
-          {sent && <Text>We've sent you a secure sign-in link.</Text>}
+          <Heading>{submitted ? "Check your email" : "Sign in to your dashboard"}</Heading>
+          {submitted && <Text>We've sent you a secure sign-in link.</Text>}
         </div>
 
-        {!sent && (
-          <Fieldset className="flex flex-col gap-8" disabled={submitting}>
+        {!submitted && (
+          <Fieldset className="flex flex-col gap-8" disabled={disabled}>
             <Field>
               <Label>Email</Label>
-              <Input type="email" name="email" invalid={error} required />
-              {error && <ErrorMessage>No account found for this email.</ErrorMessage>}
+              <Input type="email" name="email" invalid={emailError} />
+              {emailError && <ErrorMessage>This field is required.</ErrorMessage>}
             </Field>
 
             <Button type="submit" className="w-full" outline>
