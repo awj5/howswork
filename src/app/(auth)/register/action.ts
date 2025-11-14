@@ -2,10 +2,10 @@
 
 import { createClient } from "@/utils/supabase/server";
 
-export async function signup(formData: FormData) {
+export async function signUp(formData: FormData) {
   const supabase = await createClient();
   const base = process.env.NODE_ENV === "production" ? "https://app.moodcheck.co" : "http://localhost:3000";
-  const emailRedirectTo = `${base}/callback`;
+  const emailRedirectTo = `${base}/callback?return_to=/`;
   let email = formData.get("email") as string;
   email = email.trim().toLowerCase();
   let firstName = formData.get("first_name") as string;
@@ -35,12 +35,7 @@ export async function signup(formData: FormData) {
 
   // Sign up
   const { error: signUpError } = await supabase.auth.signUp(data);
-
-  if (signUpError) {
-    console.error(signUpError);
-    return { error: "This email already has an account." };
-  }
-
+  if (signUpError) return { error: signUpError.message };
   await supabase.auth.signOut(); // Sign out new user
 
   // Send magic link
@@ -52,10 +47,6 @@ export async function signup(formData: FormData) {
     },
   });
 
-  if (signInError) {
-    console.error(signInError);
-    return { error: "We couldn't send your sign-in link. Please try again." };
-  }
-
+  if (signInError) return { error: signInError.message };
   return { success: true };
 }

@@ -2,7 +2,7 @@
 
 import { Suspense, useState } from "react";
 import { toast } from "sonner";
-import { signup } from "./action";
+import { signUp } from "./action";
 import { AuthLayout } from "@/components/auth-layout";
 import { Button } from "@/components/button";
 import { Field, Label, Fieldset, ErrorMessage } from "@/components/fieldset";
@@ -56,7 +56,7 @@ function RegisterForm() {
     // Fetch
     setDisabled(true);
     const toastId = toast.loading("Creating...");
-    const result = await signup(formData);
+    const result = await signUp(formData);
 
     if (result.error) {
       toast.error(result.error);

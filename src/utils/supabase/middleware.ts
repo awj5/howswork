@@ -47,7 +47,7 @@ export async function updateSession(request: NextRequest) {
     const returnTo = request.nextUrl.pathname;
     url.pathname = "/login";
     url.search = ""; // Clear all existing search params
-    if (returnTo !== "/") url.searchParams.set("return_to", returnTo);
+    if (returnTo !== "/") url.searchParams.set("return_to", returnTo); // Add return_to
     return NextResponse.redirect(url);
   }
 

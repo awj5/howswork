@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { createClient } from "@/utils/supabase/client";
 import { useUserContext } from "@/hooks/useUserContext";
@@ -13,7 +12,6 @@ import { ErrorMessage, Field, Fieldset, Label } from "@/components/fieldset";
 import { Button } from "@/components/button";
 
 export default function Account() {
-  const router = useRouter();
   const { user, setUser } = useUserContext();
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -82,8 +80,7 @@ export default function Account() {
 
       // Logout
       await supabase.auth.signOut();
-      router.replace("/login");
-      return;
+      window.location.reload();
     }
 
     // Update context
