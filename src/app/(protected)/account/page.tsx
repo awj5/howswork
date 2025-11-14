@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { createClient } from "@/utils/supabase/client";
 import { useUserContext } from "@/hooks/useUserContext";
@@ -12,66 +13,94 @@ import { ErrorMessage, Field, Fieldset, Label } from "@/components/fieldset";
 import { Button } from "@/components/button";
 
 export default function Account() {
+  const router = useRouter();
   const { user, setUser } = useUserContext();
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [submitting, setSubmitting] = useState(true);
-  const [sent, setSent] = useState(false);
+  const [disabled, setDisabled] = useState(true);
+  const [firstNameError, setFirstNameError] = useState(false);
+  const [lastNameError, setLastNameError] = useState(false);
   const [emailError, setEmailError] = useState(false);
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setFirstNameError(false);
+    setLastNameError(false);
     setEmailError(false);
-    setSubmitting(true);
+
+    // Validate
+    const cleanFirstName = firstName.trim();
+    const cleanLastName = lastName.trim();
+    const cleanEmail = email.trim().toLowerCase();
+
+    if (!cleanFirstName) {
+      setFirstNameError(true);
+      return;
+    }
+
+    if (!cleanLastName) {
+      setLastNameError(true);
+      return;
+    }
+
+    if (!cleanEmail.includes("@")) {
+      setEmailError(true);
+      return;
+    }
+
+    // Update
+    setDisabled(true);
     const supabase = createClient();
 
     // Update profile
     const { error: updateProfilesError } = await supabase
       .from("profiles")
       .update({
-        first_name: firstName,
-        last_name: firstName,
+        first_name: cleanFirstName,
+        last_name: cleanLastName,
       })
       .eq("id", user?.id);
 
     if (updateProfilesError) {
       toast.error(updateProfilesError.message);
-      console.error(updateProfilesError);
-      setSubmitting(false);
+      setDisabled(false);
       return;
     }
 
-    //user?.firstName = firstName
-
     // Update user if email changed
-    if (email !== user?.email) {
+    if (cleanEmail !== user?.email) {
       const { error: authUserError } = await supabase.auth.updateUser({
-        email: email,
+        email: cleanEmail,
       });
 
       if (authUserError) {
-        setEmailError(true);
-        console.error(authUserError);
-        setSubmitting(false);
+        toast.error(authUserError.message);
+        setDisabled(false);
         return;
       }
+
+      // Logout
+      await supabase.auth.signOut();
+      router.replace("/login");
+      return;
     }
 
+    // Update context
     setUser((prev) =>
       prev
         ? {
             ...prev,
-            firstName,
-            lastName,
-            email,
+            firstName: cleanFirstName,
+            lastName: cleanLastName,
+            email: cleanEmail,
           }
         : prev
     );
 
     // Success
     toast.success("Changes saved.");
-    setSubmitting(false);
+    setDisabled(false);
   };
 
   useEffect(() => {
@@ -79,7 +108,7 @@ export default function Account() {
     setEmail(user?.email ?? "");
     setFirstName(user?.firstName ?? "");
     setLastName(user?.lastName ?? "");
-    setSubmitting(false);
+    setDisabled(false);
   }, []);
 
   return (
@@ -87,7 +116,7 @@ export default function Account() {
       <Heading>My Account</Heading>
       <Divider className="mt-6 mb-10" />
 
-      <Fieldset disabled={submitting}>
+      <Fieldset disabled={disabled}>
         <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
           <Field>
             <Label>First name</Label>
@@ -96,13 +125,23 @@ export default function Account() {
               name="first_name"
               value={firstName}
               onChange={(event) => setFirstName(event.target.value)}
-              required
+              invalid={firstNameError}
             />
+
+            {firstNameError && <ErrorMessage>This field is required.</ErrorMessage>}
           </Field>
 
           <Field>
             <Label>Last name</Label>
-            <Input name="last_name" value={lastName} onChange={(event) => setLastName(event.target.value)} required />
+
+            <Input
+              name="last_name"
+              value={lastName}
+              onChange={(event) => setLastName(event.target.value)}
+              invalid={lastNameError}
+            />
+
+            {lastNameError && <ErrorMessage>This field is required.</ErrorMessage>}
           </Field>
         </section>
 
@@ -122,10 +161,9 @@ export default function Account() {
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               invalid={emailError}
-              required
             />
 
-            {emailError && <ErrorMessage>This email is already in use by another account.</ErrorMessage>}
+            {emailError && <ErrorMessage>This field is required.</ErrorMessage>}
           </Field>
         </section>
 

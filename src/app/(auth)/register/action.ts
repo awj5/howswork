@@ -5,7 +5,7 @@ import { createClient } from "@/utils/supabase/server";
 export async function signup(formData: FormData) {
   const supabase = await createClient();
   const base = process.env.NODE_ENV === "production" ? "https://app.moodcheck.co" : "http://localhost:3000";
-  const emailRedirectTo = `${base}/callback?return_to=${encodeURIComponent(formData.get("return_to") as string)}`;
+  const emailRedirectTo = `${base}/callback`;
   let email = formData.get("email") as string;
   email = email.trim().toLowerCase();
   let firstName = formData.get("first_name") as string;
@@ -14,7 +14,7 @@ export async function signup(formData: FormData) {
   lastName = lastName.trim();
   let company = formData.get("company") as string;
   company = company.trim();
-  if (!email || !email.includes("@") || !firstName || !lastName || !company) return { error: "Form is invalid." };
+  if (!email.includes("@") || !firstName || !lastName || !company) return { error: "Form is invalid." };
 
   // Generate a random password since users will only sign in via magic link
   const password = Array.from(crypto.getRandomValues(new Uint8Array(32)))
@@ -41,6 +41,8 @@ export async function signup(formData: FormData) {
     return { error: "This email already has an account." };
   }
 
+  await supabase.auth.signOut(); // Sign out new user
+
   // Send magic link
   const { error: signInError } = await supabase.auth.signInWithOtp({
     email,
@@ -52,7 +54,7 @@ export async function signup(formData: FormData) {
 
   if (signInError) {
     console.error(signInError);
-    return { error: "No account found for this email." };
+    return { error: "We couldn't send your sign-in link. Please try again." };
   }
 
   return { success: true };

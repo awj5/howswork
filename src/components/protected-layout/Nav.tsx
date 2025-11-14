@@ -21,7 +21,7 @@ export default function Nav() {
   const nav = [
     { href: "/", label: "Dashboard", Icon: HomeIcon },
     { href: "/reports", label: "Risk Reports", Icon: DocumentChartBarIcon },
-    { href: "/incidents", label: "Incidents & Concerns", Icon: ExclamationTriangleIcon },
+    { href: "/incidents", label: "Incidents", Icon: ExclamationTriangleIcon },
     { href: "/check-ins", label: "Check-Ins", Icon: CheckCircleIcon },
     { href: "/teams", label: "Teams", Icon: UsersIcon },
     { href: "/settings", label: "Settings", Icon: Cog6ToothIcon },

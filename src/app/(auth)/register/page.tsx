@@ -1,7 +1,6 @@
 "use client";
 
 import { Suspense, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { signup } from "./action";
 import { AuthLayout } from "@/components/auth-layout";
@@ -13,7 +12,6 @@ import { Strong, Text, TextLink } from "@/components/text";
 import { Logo } from "@/components/Logo";
 
 function RegisterForm() {
-  const searchParams = useSearchParams();
   const [disabled, setDisabled] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [firstNameError, setFirstNameError] = useState(false);
@@ -35,29 +33,28 @@ function RegisterForm() {
     const email = formData.get("email") as string;
     const company = formData.get("company") as string;
 
-    if (!firstName) {
+    if (!firstName.trim()) {
       setFirstNameError(true);
       return;
     }
 
-    if (!lastName) {
+    if (!lastName.trim()) {
       setLastNameError(true);
       return;
     }
 
-    if (!email || !email.includes("@")) {
+    if (!email.includes("@")) {
       setEmailError(true);
       return;
     }
 
-    if (!company) {
+    if (!company.trim()) {
       setCompanyError(true);
       return;
     }
 
     // Fetch
     setDisabled(true);
-    formData.set("return_to", searchParams.get("return_to") ?? "/"); // Redirect URL on login
     const toastId = toast.loading("Creating...");
     const result = await signup(formData);
 

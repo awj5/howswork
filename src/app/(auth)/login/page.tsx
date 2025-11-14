@@ -26,7 +26,7 @@ function LoginForm() {
     // Validate
     const email = formData.get("email") as string;
 
-    if (!email || !email.includes("@")) {
+    if (!email.includes("@")) {
       setEmailError(true);
       return;
     }
