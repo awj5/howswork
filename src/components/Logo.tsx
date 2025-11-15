@@ -33,7 +33,7 @@ export function Logo(props: LogoProps) {
         <>
           <Image
             src="/img/logo.svg"
-            width={784}
+            width={780}
             height={128}
             alt="MoodCheck"
             className={clsx("inline w-auto dark:hidden", props.className)}
@@ -42,7 +42,7 @@ export function Logo(props: LogoProps) {
 
           <Image
             src="/img/logo-dark.svg"
-            width={784}
+            width={780}
             height={128}
             alt="MoodCheck"
             className={clsx("hidden w-auto dark:inline", props.className)}

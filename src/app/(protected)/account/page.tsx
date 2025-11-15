@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { TrashIcon } from "@heroicons/react/16/solid";
 import { update } from "./action";
 import { createClient } from "@/utils/supabase/client";
 import { useUserContext } from "@/hooks/useUserContext";
 import { Heading, Subheading } from "@/components/heading";
+import { Alert, AlertActions, AlertDescription, AlertTitle } from "@/components/alert";
 import { Text } from "@/components/text";
 import { Divider } from "@/components/divider";
 import { Input } from "@/components/input";
@@ -21,6 +23,7 @@ export default function Account() {
   const [firstNameError, setFirstNameError] = useState(false);
   const [lastNameError, setLastNameError] = useState(false);
   const [emailError, setEmailError] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -156,7 +159,27 @@ export default function Account() {
 
         <Divider className="my-10" soft />
 
-        <div className="flex justify-end gap-4">
+        <div className="flex flex-col-reverse items-end justify-between gap-10 sm:flex-row">
+          <Button type="button" onClick={() => setConfirmDelete(true)} color="red">
+            <TrashIcon />
+            Delete account
+          </Button>
+
+          <Alert open={confirmDelete} onClose={setConfirmDelete}>
+            <AlertTitle>Are you sure you want to delete your account?</AlertTitle>
+            <AlertDescription>This action cannot be undone. Your account will be permanently deleted.</AlertDescription>
+
+            <AlertActions>
+              <Button plain onClick={() => setConfirmDelete(false)}>
+                Cancel
+              </Button>
+
+              <Button onClick={() => setConfirmDelete(false)} color="red">
+                Delete
+              </Button>
+            </AlertActions>
+          </Alert>
+
           <Button type="submit" outline>
             Save changes
           </Button>
