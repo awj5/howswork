@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { update } from "./action";
 import { createClient } from "@/utils/supabase/client";
 import { useUserContext } from "@/hooks/useUserContext";
 import { Heading, Subheading } from "@/components/heading";
@@ -49,38 +50,24 @@ export default function Account() {
 
     // Update
     setDisabled(true);
-    const supabase = createClient();
+    const result = await update({
+      firstName: cleanFirstName,
+      lastName: cleanLastName,
+      email: cleanEmail,
+    });
 
-    // Update profile
-    const { error: updateProfilesError } = await supabase
-      .from("profiles")
-      .update({
-        first_name: cleanFirstName,
-        last_name: cleanLastName,
-      })
-      .eq("id", user?.id);
-
-    if (updateProfilesError) {
-      toast.error(updateProfilesError.message);
+    if (result.error) {
+      toast.error(result.error);
       setDisabled(false);
       return;
     }
 
-    // Update user if email changed
-    if (cleanEmail !== user?.email) {
-      const { error: authUserError } = await supabase.auth.updateUser({
-        email: cleanEmail,
-      });
-
-      if (authUserError) {
-        toast.error(authUserError.message);
-        setDisabled(false);
-        return;
-      }
-
-      // Logout
+    if (result.emailChanged) {
+      // Logout and reload if email changed
+      const supabase = createClient();
       await supabase.auth.signOut();
       window.location.reload();
+      return;
     }
 
     // Update context
@@ -147,7 +134,10 @@ export default function Account() {
         <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
           <div className="flex flex-col gap-1">
             <Subheading>Email</Subheading>
-            <Text>You'll need to sign in again if you change this.</Text>
+            <Text>
+              Changing your email will log you out. You'll need to confirm your new email address before signing back
+              in.
+            </Text>
           </div>
 
           <Field>

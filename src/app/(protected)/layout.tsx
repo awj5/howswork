@@ -16,7 +16,7 @@ export default async function ProtectedLayout({
 
     // Get auth user
     const { data: authData, error: authError } = await supabase.auth.getUser();
-    if (authError || !authData.user.email) throw new Error("Unauthenticated");
+    if (authError || !authData.user) throw new Error("Unauthenticated");
 
     // Get user from profiles
     const { data: profilesData, error: profilesError } = await supabase
@@ -30,7 +30,7 @@ export default async function ProtectedLayout({
     // Pass to context provider
     const authUser: UserType = {
       id: authData.user.id,
-      email: authData.user.email,
+      email: authData.user.email as string,
       firstName: profilesData.first_name,
       lastName: profilesData.last_name,
     };
