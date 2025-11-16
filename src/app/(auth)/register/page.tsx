@@ -2,7 +2,7 @@
 
 import { Suspense, useState } from "react";
 import { toast } from "sonner";
-import { signUp } from "./action";
+import { signUp } from "./actions";
 import { AuthLayout } from "@/components/auth-layout";
 import { Button } from "@/components/button";
 import { Field, Label, Fieldset, ErrorMessage } from "@/components/fieldset";

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { TrashIcon } from "@heroicons/react/16/solid";
-import { update } from "./action";
+import { updateAccount, deleteAccount } from "./actions";
 import { createClient } from "@/utils/supabase/client";
 import { useUserContext } from "@/hooks/useUserContext";
 import { Heading, Subheading } from "@/components/heading";
@@ -24,6 +24,12 @@ export default function Account() {
   const [lastNameError, setLastNameError] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+
+  const logout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    window.location.reload();
+  };
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -53,7 +59,8 @@ export default function Account() {
 
     // Update
     setDisabled(true);
-    const result = await update({
+
+    const result = await updateAccount({
       firstName: cleanFirstName,
       lastName: cleanLastName,
       email: cleanEmail,
@@ -67,9 +74,7 @@ export default function Account() {
 
     if (result.emailChanged) {
       // Logout and reload if email changed
-      const supabase = createClient();
-      await supabase.auth.signOut();
-      window.location.reload();
+      logout();
       return;
     }
 
@@ -88,6 +93,20 @@ export default function Account() {
     // Success
     toast.success("Changes saved.");
     setDisabled(false);
+  };
+
+  const deleteClick = async () => {
+    setDisabled(true);
+    setConfirmDelete(false);
+    const result = await deleteAccount();
+
+    if (result.error) {
+      toast.error(result.error);
+      setDisabled(false);
+      return;
+    }
+
+    //logout();
   };
 
   useEffect(() => {
@@ -167,14 +186,19 @@ export default function Account() {
 
           <Alert open={confirmDelete} onClose={setConfirmDelete}>
             <AlertTitle>Are you sure you want to delete your account?</AlertTitle>
-            <AlertDescription>This action cannot be undone. Your account will be permanently deleted.</AlertDescription>
+
+            <AlertDescription>
+              {user?.email
+                ? "Deleting your account is permanent. If you are the only company admin, all company data will also be permanently deleted."
+                : "This action cannot be undone. Your account will be permanently deleted."}
+            </AlertDescription>
 
             <AlertActions>
               <Button plain onClick={() => setConfirmDelete(false)}>
                 Cancel
               </Button>
 
-              <Button onClick={() => setConfirmDelete(false)} color="red">
+              <Button onClick={deleteClick} color="red">
                 Delete
               </Button>
             </AlertActions>

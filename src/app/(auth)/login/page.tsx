@@ -3,7 +3,7 @@
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { login } from "./action";
+import { login } from "./actions";
 import { AuthLayout } from "@/components/auth-layout";
 import { Button } from "@/components/button";
 import { ErrorMessage, Field, Fieldset, Label } from "@/components/fieldset";
