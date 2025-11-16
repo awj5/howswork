@@ -111,7 +111,7 @@ function RegisterForm() {
             </Button>
 
             <Text>
-              Already using PsychSignal?{" "}
+              Already using MoodCheck?{" "}
               <TextLink href="/login">
                 <Strong>Sign in</Strong>
               </TextLink>
