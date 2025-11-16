@@ -32,7 +32,7 @@ export default function Nav() {
       <SidebarBody>
         <div className="m-2 mb-4">
           <Link href="/" aria-label="Dashboard">
-            <Logo className="h-8" />
+            <Logo className="h-8" iconOnly />
           </Link>
         </div>
 
