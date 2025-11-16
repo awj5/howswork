@@ -71,7 +71,7 @@ function RegisterForm() {
   return (
     <AuthLayout>
       <form onSubmit={submit} className="grid w-full max-w-sm grid-cols-1 gap-8">
-        <Logo className="h-6" />
+        <Logo className="h-7" />
 
         <div className="flex flex-col gap-1">
           <Heading>{submitted ? "Set up complete!" : "Set up your company"}</Heading>
