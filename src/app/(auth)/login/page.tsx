@@ -50,7 +50,7 @@ function LoginForm() {
   return (
     <AuthLayout>
       <form onSubmit={submit} className="grid w-full max-w-sm grid-cols-1 gap-8">
-        <Logo className="h-7" />
+        <Logo className="h-8" />
 
         <div className="flex flex-col gap-1">
           <Heading>{submitted ? "Check your email" : "Sign in to your dashboard"}</Heading>
@@ -70,7 +70,7 @@ function LoginForm() {
             </Button>
 
             <Text>
-              New to MoodCheck?{" "}
+              New to PsychSignal?{" "}
               <TextLink href="/register">
                 <Strong>Set up your company</Strong>
               </TextLink>
