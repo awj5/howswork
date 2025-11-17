@@ -16,7 +16,7 @@ export async function updateAccount(formData: { firstName: string; lastName: str
       first_name: formData.firstName,
       last_name: formData.lastName,
     })
-    .eq("id", authData.user.id);
+    .eq("user_id", authData.user.id);
 
   if (updateProfileError) return { error: updateProfileError.message };
 
@@ -44,7 +44,7 @@ export async function deleteAccount() {
   const { data: profileData, error: profileError } = await supabase
     .from("profiles")
     .select("admin, company_id")
-    .eq("id", authData.user.id)
+    .eq("user_id", authData.user.id)
     .single();
 
   if (profileError) return { error: profileError.message };

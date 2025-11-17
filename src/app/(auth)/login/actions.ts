@@ -1,14 +1,14 @@
 "use server";
 
+import { baseURL, isValidEmail } from "@/utils/helpers";
 import { createClient } from "@/utils/supabase/server";
 
 export async function login(formData: FormData) {
   const supabase = await createClient();
-  const base = process.env.NODE_ENV === "production" ? "https://app.moodcheck.co" : "http://localhost:3000";
-  const emailRedirectTo = `${base}/callback?return_to=${encodeURIComponent(formData.get("return_to") as string)}`;
+  const emailRedirectTo = `${baseURL}/callback?return_to=${encodeURIComponent(formData.get("return_to") as string)}`;
   let email = formData.get("email") as string;
   email = email.trim().toLowerCase();
-  if (!email.includes("@")) return { error: "Form is invalid." };
+  if (!isValidEmail(email)) return { error: "Form is invalid." };
 
   // Send magic link
   const { error } = await supabase.auth.signInWithOtp({

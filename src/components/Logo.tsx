@@ -12,7 +12,7 @@ export function Logo(props: LogoProps) {
       {props.iconOnly ? (
         <>
           <Image
-            src="/img/logo-icon.svg"
+            src="/img/icon.svg"
             width={256}
             height={256}
             alt="MoodCheck"
@@ -21,7 +21,7 @@ export function Logo(props: LogoProps) {
           />
 
           <Image
-            src="/img/logo-icon-dark.svg"
+            src="/img/icon-dark.svg"
             width={256}
             height={256}
             alt="MoodCheck"

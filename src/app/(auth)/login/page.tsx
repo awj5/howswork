@@ -4,6 +4,7 @@ import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { login } from "./actions";
+import { isValidEmail } from "@/utils/helpers";
 import { AuthLayout } from "@/components/auth-layout";
 import { Button } from "@/components/button";
 import { ErrorMessage, Field, Fieldset, Label } from "@/components/fieldset";
@@ -26,7 +27,7 @@ function LoginForm() {
     // Validate
     const email = formData.get("email") as string;
 
-    if (!email.includes("@")) {
+    if (!isValidEmail(email)) {
       setEmailError(true);
       return;
     }
@@ -34,7 +35,7 @@ function LoginForm() {
     // Fetch
     setDisabled(true);
     formData.set("return_to", searchParams.get("return_to") ?? "/"); // Redirect URL on login
-    const toastId = toast.loading("Verifying...");
+    const loadingToast = toast.loading("Verifying...");
     const result = await login(formData);
 
     if (result.error) {
@@ -43,14 +44,14 @@ function LoginForm() {
       setSubmitted(true);
     }
 
-    toast.dismiss(toastId);
+    toast.dismiss(loadingToast);
     setDisabled(false);
   };
 
   return (
     <AuthLayout>
       <form onSubmit={submit} className="grid w-full max-w-sm grid-cols-1 gap-8">
-        <Logo className="h-7" />
+        <Logo className="h-6" />
 
         <div className="flex flex-col gap-1">
           <Heading>{submitted ? "Check your email" : "Sign in to your dashboard"}</Heading>

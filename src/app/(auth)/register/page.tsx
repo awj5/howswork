@@ -3,6 +3,7 @@
 import { Suspense, useState } from "react";
 import { toast } from "sonner";
 import { signUp } from "./actions";
+import { isValidEmail } from "@/utils/helpers";
 import { AuthLayout } from "@/components/auth-layout";
 import { Button } from "@/components/button";
 import { Field, Label, Fieldset, ErrorMessage } from "@/components/fieldset";
@@ -11,20 +12,20 @@ import { Input } from "@/components/input";
 import { Strong, Text, TextLink } from "@/components/text";
 import { Logo } from "@/components/Logo";
 
+type FormErrorsType = {
+  first_name?: boolean;
+  last_name?: boolean;
+  email?: boolean;
+  company?: boolean;
+};
+
 function RegisterForm() {
   const [disabled, setDisabled] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [firstNameError, setFirstNameError] = useState(false);
-  const [lastNameError, setLastNameError] = useState(false);
-  const [emailError, setEmailError] = useState(false);
-  const [companyError, setCompanyError] = useState(false);
+  const [formErrors, setFormErrors] = useState<FormErrorsType>({});
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setFirstNameError(false);
-    setLastNameError(false);
-    setEmailError(false);
-    setCompanyError(false);
     const formData = new FormData(e.currentTarget);
 
     // Validate
@@ -32,24 +33,15 @@ function RegisterForm() {
     const lastName = formData.get("last_name") as string;
     const email = formData.get("email") as string;
     const company = formData.get("company") as string;
+    const errors: FormErrorsType = {};
 
-    if (!firstName.trim()) {
-      setFirstNameError(true);
-      return;
-    }
+    if (!firstName.trim()) errors.first_name = true;
+    if (!lastName.trim()) errors.last_name = true;
+    if (!isValidEmail(email)) errors.email = true;
+    if (!company.trim()) errors.company = true;
 
-    if (!lastName.trim()) {
-      setLastNameError(true);
-      return;
-    }
-
-    if (!email.includes("@")) {
-      setEmailError(true);
-      return;
-    }
-
-    if (!company.trim()) {
-      setCompanyError(true);
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
       return;
     }
 
@@ -71,7 +63,7 @@ function RegisterForm() {
   return (
     <AuthLayout>
       <form onSubmit={submit} className="grid w-full max-w-sm grid-cols-1 gap-8">
-        <Logo className="h-7" />
+        <Logo className="h-6" />
 
         <div className="flex flex-col gap-1">
           <Heading>{submitted ? "Set up complete!" : "Set up your company"}</Heading>
@@ -83,27 +75,27 @@ function RegisterForm() {
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-4">
               <Field>
                 <Label>First name</Label>
-                <Input name="first_name" invalid={firstNameError} />
-                {firstNameError && <ErrorMessage>This field is required.</ErrorMessage>}
+                <Input name="first_name" invalid={formErrors.first_name} />
+                {formErrors.first_name && <ErrorMessage>This field is required.</ErrorMessage>}
               </Field>
 
               <Field>
                 <Label>Last name</Label>
-                <Input name="last_name" invalid={lastNameError} />
-                {lastNameError && <ErrorMessage>This field is required.</ErrorMessage>}
+                <Input name="last_name" invalid={formErrors.last_name} />
+                {formErrors.last_name && <ErrorMessage>This field is required.</ErrorMessage>}
               </Field>
             </div>
 
             <Field>
               <Label>Email</Label>
-              <Input type="email" name="email" invalid={emailError} />
-              {emailError && <ErrorMessage>This field is required.</ErrorMessage>}
+              <Input type="email" name="email" invalid={formErrors.email} />
+              {formErrors.email && <ErrorMessage>This field is required.</ErrorMessage>}
             </Field>
 
             <Field>
               <Label>Company name</Label>
-              <Input name="company" invalid={companyError} />
-              {companyError && <ErrorMessage>This field is required.</ErrorMessage>}
+              <Input name="company" invalid={formErrors.company} />
+              {formErrors.company && <ErrorMessage>This field is required.</ErrorMessage>}
             </Field>
 
             <Button type="submit" className="w-full" outline>

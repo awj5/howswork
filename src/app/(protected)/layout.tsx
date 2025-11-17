@@ -22,7 +22,7 @@ export default async function ProtectedLayout({
     const { data: profilesData, error: profilesError } = await supabase
       .from("profiles")
       .select("first_name, last_name")
-      .eq("id", authData.user.id)
+      .eq("user_id", authData.user.id)
       .single();
 
     if (profilesError) throw profilesError;
