@@ -16,6 +16,7 @@ export async function updateAccount(formData: { firstName: string; lastName: str
     .update({
       first_name: formData.firstName,
       last_name: formData.lastName,
+      email: formData.email,
     })
     .eq("user_id", authData.user.id);
 
