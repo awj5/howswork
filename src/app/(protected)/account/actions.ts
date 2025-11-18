@@ -10,8 +10,8 @@ export async function updateAccount(formData: { firstName: string; lastName: str
   const { data: authData, error: authError } = await supabase.auth.getUser();
   if (authError || !authData.user) return { error: "Not authenticated" };
 
-  // Update profile
-  const { error: updateProfileError } = await supabase
+  // Update profile (use admin because no update policy exists (stops user from changing company))
+  const { error: updateProfileError } = await supabaseAdmin
     .from("profiles")
     .update({
       first_name: formData.firstName,
