@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
+import supabaseAdmin from "@/utils/supabase/admin";
 
 export async function updateAccount(formData: { firstName: string; lastName: string; email: string }) {
   const supabase = await createClient();
@@ -39,36 +40,10 @@ export async function deleteAccount() {
   // Get auth user
   const { data: authData, error: authError } = await supabase.auth.getUser();
   if (authError || !authData.user) return { error: "Not authenticated" };
-  /*
-  // Get profile
-  const { data: profileData, error: profileError } = await supabase
-    .from("profiles")
-    .select("admin, company_id")
-    .eq("user_id", authData.user.id)
-    .single();
 
-  if (profileError) return { error: profileError.message };
+  // Delete
+  const { error: deleteAuthUserError } = await supabaseAdmin.auth.admin.deleteUser(authData.user.id);
+  if (deleteAuthUserError) return { error: deleteAuthUserError.message };
 
-  // Get company admins
-  const { count: profilesCount, error: profilesError } = await supabase
-    .from("profiles")
-    .select("id", { count: "exact", head: true })
-    .eq("company_id", profileData.company_id)
-    .eq("admin", true);
-
-  if (profilesError) return { error: profilesError.message };
-
-  // Check if only admin
-  if (profilesCount === 1) {
-    // Remove company from users
-    const { error: updateProfilesError } = await supabase
-      .from("profiles")
-      .update({ company_id: null })
-      .eq("company_id", profileData.company_id);
-
-    if (updateProfilesError) return { error: updateProfilesError.message };
-  }
-
-  // Count if any other admins for company*/
   return { success: true };
 }

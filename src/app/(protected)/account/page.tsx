@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { TrashIcon } from "@heroicons/react/16/solid";
 import { updateAccount, deleteAccount } from "./actions";
 import { createClient } from "@/utils/supabase/client";
+import { isValidEmail } from "@/utils/helpers";
 import { useUserContext } from "@/hooks/useUserContext";
 import { Heading, Subheading } from "@/components/heading";
 import { Alert, AlertActions, AlertDescription, AlertTitle } from "@/components/alert";
@@ -14,56 +15,50 @@ import { Input } from "@/components/input";
 import { ErrorMessage, Field, Fieldset, Label } from "@/components/fieldset";
 import { Button } from "@/components/button";
 
+type FormErrorsType = {
+  first_name?: boolean;
+  last_name?: boolean;
+  email?: boolean;
+};
+
 export default function Account() {
   const { user, setUser } = useUserContext();
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [disabled, setDisabled] = useState(true);
-  const [firstNameError, setFirstNameError] = useState(false);
-  const [lastNameError, setLastNameError] = useState(false);
-  const [emailError, setEmailError] = useState(false);
+  const [formErrors, setFormErrors] = useState<FormErrorsType>({});
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   const logout = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
-    window.location.reload();
+    window.location.reload(); // Refresh page
   };
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setFirstNameError(false);
-    setLastNameError(false);
-    setEmailError(false);
 
     // Validate
-    const cleanFirstName = firstName.trim();
-    const cleanLastName = lastName.trim();
-    const cleanEmail = email.trim().toLowerCase();
+    const errors: FormErrorsType = {};
+    if (!firstName.trim()) errors.first_name = true;
+    if (!lastName.trim()) errors.last_name = true;
+    if (!isValidEmail(email)) errors.email = true;
 
-    if (!cleanFirstName) {
-      setFirstNameError(true);
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
       return;
     }
 
-    if (!cleanLastName) {
-      setLastNameError(true);
-      return;
-    }
-
-    if (!cleanEmail.includes("@")) {
-      setEmailError(true);
-      return;
-    }
+    setFormErrors({});
 
     // Update
     setDisabled(true);
 
     const result = await updateAccount({
-      firstName: cleanFirstName,
-      lastName: cleanLastName,
-      email: cleanEmail,
+      firstName,
+      lastName,
+      email,
     });
 
     if (result.error) {
@@ -72,8 +67,8 @@ export default function Account() {
       return;
     }
 
+    // Logout and reload if email changed
     if (result.emailChanged) {
-      // Logout and reload if email changed
       logout();
       return;
     }
@@ -83,9 +78,9 @@ export default function Account() {
       prev
         ? {
             ...prev,
-            firstName: cleanFirstName,
-            lastName: cleanLastName,
-            email: cleanEmail,
+            firstName,
+            lastName,
+            email,
           }
         : prev
     );
@@ -97,7 +92,7 @@ export default function Account() {
 
   const deleteClick = async () => {
     setDisabled(true);
-    setConfirmDelete(false);
+    setConfirmDelete(false); // Close
     const result = await deleteAccount();
 
     if (result.error) {
@@ -106,7 +101,7 @@ export default function Account() {
       return;
     }
 
-    //logout();
+    logout();
   };
 
   useEffect(() => {
@@ -131,10 +126,10 @@ export default function Account() {
               name="first_name"
               value={firstName}
               onChange={(event) => setFirstName(event.target.value)}
-              invalid={firstNameError}
+              invalid={formErrors.first_name}
             />
 
-            {firstNameError && <ErrorMessage>This field is required.</ErrorMessage>}
+            {formErrors.first_name && <ErrorMessage>This field is required.</ErrorMessage>}
           </Field>
 
           <Field>
@@ -144,10 +139,10 @@ export default function Account() {
               name="last_name"
               value={lastName}
               onChange={(event) => setLastName(event.target.value)}
-              invalid={lastNameError}
+              invalid={formErrors.last_name}
             />
 
-            {lastNameError && <ErrorMessage>This field is required.</ErrorMessage>}
+            {formErrors.last_name && <ErrorMessage>This field is required.</ErrorMessage>}
           </Field>
         </section>
 
@@ -169,10 +164,10 @@ export default function Account() {
               name="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              invalid={emailError}
+              invalid={formErrors.email}
             />
 
-            {emailError && <ErrorMessage>This field is required.</ErrorMessage>}
+            {formErrors.email && <ErrorMessage>This field is required.</ErrorMessage>}
           </Field>
         </section>
 
@@ -187,11 +182,7 @@ export default function Account() {
           <Alert open={confirmDelete} onClose={setConfirmDelete}>
             <AlertTitle>Are you sure you want to delete your account?</AlertTitle>
 
-            <AlertDescription>
-              {user?.email
-                ? "Deleting your account is permanent. If you are the only company admin, all company data will also be permanently deleted."
-                : "This action cannot be undone. Your account will be permanently deleted."}
-            </AlertDescription>
+            <AlertDescription>This action cannot be undone. Your account will be permanently deleted.</AlertDescription>
 
             <AlertActions>
               <Button plain onClick={() => setConfirmDelete(false)}>
