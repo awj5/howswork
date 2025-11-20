@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { EnvelopeIcon, XCircleIcon } from "@heroicons/react/16/solid";
 import { toast } from "sonner";
 import { useCompany } from "@/hooks/useCompany";
+import { isValidEmail } from "@/utils/helpers";
+import { useUserContext } from "@/hooks/useUserContext";
 import type { UserType } from "@/types";
 import { removeUser } from "@/app/(protected)/settings/actions";
 import { createClient } from "@/utils/supabase/client";
@@ -11,18 +13,35 @@ import { Subheading } from "@/components/heading";
 import { Button } from "@/components/button";
 import { Alert, AlertActions, AlertDescription, AlertTitle } from "@/components/alert";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/table";
-import { useUserContext } from "@/hooks/useUserContext";
+import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from "@/components/dialog";
+import { ErrorMessage, Field, Label } from "@/components/fieldset";
+import { Input } from "@/components/input";
 
 export default function Admins() {
   const supabase = createClient();
   const { user } = useUserContext();
   const company = useCompany();
   const [users, setUsers] = useState<UserType[]>([]);
-  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [userToRemove, setUserToRemove] = useState<UserType>();
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteEmailError, setInviteEmailError] = useState(false);
+
+  const inviteClick = async () => {
+    setInviteEmailError(false);
+
+    if (!isValidEmail(inviteEmail)) {
+      setInviteEmailError(true);
+      return;
+    }
+
+    setInviteEmail(""); // Reset
+    setDialogOpen(false);
+  };
 
   const removeClick = async () => {
-    setConfirmDelete(false);
+    setAlertOpen(false);
 
     if (userToRemove && company) {
       const result = await removeUser(userToRemove.user_id, company.id);
@@ -39,7 +58,7 @@ export default function Admins() {
 
   const confirmRemoveClick = (user: UserType) => {
     setUserToRemove(user);
-    setConfirmDelete(true);
+    setAlertOpen(true);
   };
 
   useEffect(() => {
@@ -83,7 +102,7 @@ export default function Admins() {
           <div className="mt-8 flex items-end justify-between">
             <Subheading>Administrators</Subheading>
 
-            <Button outline>
+            <Button onClick={() => setDialogOpen(true)} outline>
               <EnvelopeIcon />
               Invite admin
             </Button>
@@ -123,7 +142,40 @@ export default function Admins() {
         </>
       )}
 
-      <Alert open={confirmDelete} onClose={setConfirmDelete}>
+      <Dialog open={dialogOpen} onClose={setDialogOpen}>
+        <DialogTitle>Invite administrator</DialogTitle>
+
+        <DialogDescription>
+          We'll email this person an invite to join your MoodCheck dashboard as an admin. Only invite people you trust
+          to have full access.
+        </DialogDescription>
+
+        <DialogBody>
+          <Field>
+            <Label>Email</Label>
+
+            <Input
+              type="email"
+              name="email"
+              value={inviteEmail}
+              onChange={(event) => setInviteEmail(event.target.value)}
+              invalid={inviteEmailError}
+            />
+
+            {inviteEmailError && <ErrorMessage>This field is required.</ErrorMessage>}
+          </Field>
+        </DialogBody>
+
+        <DialogActions>
+          <Button plain onClick={() => setDialogOpen(false)}>
+            Cancel
+          </Button>
+
+          <Button onClick={inviteClick}>Invite</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Alert open={alertOpen} onClose={setAlertOpen}>
         <AlertTitle>
           Are you sure you want to remove{" "}
           {`${userToRemove?.user_id === user?.user_id ? "yourself" : "this administrator"}`}?
@@ -135,7 +187,7 @@ export default function Admins() {
         </AlertDescription>
 
         <AlertActions>
-          <Button plain onClick={() => setConfirmDelete(false)}>
+          <Button plain onClick={() => setAlertOpen(false)}>
             Cancel
           </Button>
 

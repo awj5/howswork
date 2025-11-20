@@ -5,6 +5,7 @@ import { Navbar, NavbarItem, NavbarSection, NavbarSpacer } from "@/components/na
 import { Dropdown, DropdownButton, DropdownMenu } from "@/components/dropdown";
 import { Avatar } from "@/components/avatar";
 import AccountMenu from "./AccountMenu";
+import CompanySwitcher from "./CompanySwitcher";
 
 export default function Header() {
   const { user } = useUserContext();
@@ -14,6 +15,8 @@ export default function Header() {
       <NavbarSpacer />
 
       <NavbarSection>
+        <CompanySwitcher />
+
         <Dropdown>
           <DropdownButton as={NavbarItem}>
             <Avatar
