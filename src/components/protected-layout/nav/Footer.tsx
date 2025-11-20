@@ -3,12 +3,15 @@ import { SidebarFooter, SidebarItem } from "@/components/sidebar";
 import { Dropdown, DropdownButton, DropdownMenu } from "@/components/dropdown";
 import { Avatar } from "@/components/avatar";
 import AccountMenu from "../AccountMenu";
+import CompanySwitcher from "../CompanySwitcher";
 
 export default function Footer() {
   const { user } = useUserContext();
 
   return (
-    <SidebarFooter className="max-lg:hidden">
+    <SidebarFooter className="gap-4 max-lg:hidden">
+      <CompanySwitcher />
+
       <Dropdown>
         <DropdownButton as={SidebarItem}>
           <span className="flex min-w-0 items-center gap-3">

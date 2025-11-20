@@ -78,46 +78,50 @@ export default function Admins() {
 
   return (
     <>
-      <div className="mt-8 flex items-end justify-between">
-        <Subheading>Administrators</Subheading>
+      {company && (
+        <>
+          <div className="mt-8 flex items-end justify-between">
+            <Subheading>Administrators</Subheading>
 
-        <Button outline>
-          <EnvelopeIcon />
-          Invite admin
-        </Button>
-      </div>
+            <Button outline>
+              <EnvelopeIcon />
+              Invite admin
+            </Button>
+          </div>
 
-      <Table className="mt-4">
-        <TableHead>
-          <TableRow>
-            <TableHeader>Name</TableHeader>
-            <TableHeader>Email</TableHeader>
+          <Table className="mt-4 [--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
+            <TableHead>
+              <TableRow>
+                <TableHeader>Name</TableHeader>
+                <TableHeader>Email</TableHeader>
 
-            <TableHeader className="relative w-0">
-              <span className="sr-only">Actions</span>
-            </TableHeader>
-          </TableRow>
-        </TableHead>
+                <TableHeader className="relative w-0">
+                  <span className="sr-only">Actions</span>
+                </TableHeader>
+              </TableRow>
+            </TableHead>
 
-        <TableBody>
-          {users.map((user) => (
-            <TableRow key={user.user_id}>
-              <TableCell className="font-medium">
-                {user?.first_name} {user?.last_name}
-              </TableCell>
+            <TableBody>
+              {users.map((user) => (
+                <TableRow key={user.user_id}>
+                  <TableCell className="font-medium">
+                    {user?.first_name} {user?.last_name}
+                  </TableCell>
 
-              <TableCell>{user?.email}</TableCell>
+                  <TableCell>{user?.email}</TableCell>
 
-              <TableCell>
-                <Button onClick={() => confirmRemoveClick(user)} plain>
-                  <XCircleIcon />
-                  Remove
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+                  <TableCell className="text-right">
+                    <Button onClick={() => confirmRemoveClick(user)} plain>
+                      <XCircleIcon />
+                      Remove
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </>
+      )}
 
       <Alert open={confirmDelete} onClose={setConfirmDelete}>
         <AlertTitle>
