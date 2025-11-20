@@ -1,20 +1,20 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { createClient } from "@/utils/supabase/client";
-import { DropdownDivider, DropdownItem, DropdownLabel } from "@/components/dropdown";
 import {
   ArrowRightStartOnRectangleIcon,
   LightBulbIcon,
   ShieldCheckIcon,
   UserCircleIcon,
 } from "@heroicons/react/16/solid";
+import { createClient } from "@/utils/supabase/client";
+import { DropdownDivider, DropdownItem, DropdownLabel } from "@/components/dropdown";
 
 export default function AccountMenu() {
   const router = useRouter();
   const supabase = createClient();
 
-  const click = async () => {
+  const signOutClick = async () => {
     await supabase.auth.signOut();
     router.push("/login");
   };
@@ -40,7 +40,7 @@ export default function AccountMenu() {
 
       <DropdownDivider />
 
-      <DropdownItem onClick={click}>
+      <DropdownItem onClick={signOutClick}>
         <ArrowRightStartOnRectangleIcon />
         <DropdownLabel>Sign out</DropdownLabel>
       </DropdownItem>

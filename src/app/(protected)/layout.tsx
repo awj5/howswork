@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import type { UserType } from "@/types";
-import AdminUserProvider from "@/components/protected-layout/admin-user-provider";
+import UserProvider from "@/components/protected-layout/UserProvider";
 import { SidebarLayout } from "@/components/sidebar-layout";
 import Nav from "@/components/protected-layout/Nav";
 import Header from "@/components/protected-layout/Header";
@@ -14,10 +14,10 @@ export default async function ProtectedLayout({
   const supabase = await createClient();
 
   // Get auth user
-  const { data: authData } = await supabase.auth.getUser();
-  if (!authData.user) redirect("/login");
+  const { data: authData, error: authError } = await supabase.auth.getUser();
+  if (authError || !authData.user) redirect("/login");
 
-  // Get user from profiles
+  // Get profile
   const { data: profileData, error: profileError } = await supabase
     .from("profiles")
     .select("first_name, last_name")
@@ -27,7 +27,7 @@ export default async function ProtectedLayout({
   if (profileError) throw profileError;
 
   // Pass to context provider
-  const authUser: UserType = {
+  const user: UserType = {
     user_id: authData.user.id,
     email: authData.user.email as string,
     first_name: profileData.first_name,
@@ -35,10 +35,10 @@ export default async function ProtectedLayout({
   };
 
   return (
-    <AdminUserProvider authUser={authUser}>
+    <UserProvider authUser={user}>
       <SidebarLayout sidebar={<Nav />} navbar={<Header />}>
         {children}
       </SidebarLayout>
-    </AdminUserProvider>
+    </UserProvider>
   );
 }

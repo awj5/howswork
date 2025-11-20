@@ -22,21 +22,21 @@ type FormErrorsType = {
 };
 
 export default function Account() {
+  const supabase = createClient();
   const { user, setUser } = useUserContext();
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [disabled, setDisabled] = useState(true);
   const [formErrors, setFormErrors] = useState<FormErrorsType>({});
-  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [alertOpen, setAlertOpen] = useState(false);
 
   const logout = async () => {
-    const supabase = createClient();
     await supabase.auth.signOut();
     window.location.reload(); // Refresh page
   };
 
-  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // Validate
@@ -54,12 +54,7 @@ export default function Account() {
 
     // Update
     setDisabled(true);
-
-    const result = await updateAccount({
-      firstName,
-      lastName,
-      email,
-    });
+    const result = await updateAccount(firstName, lastName, email);
 
     if (result.error) {
       toast.error(result.error);
@@ -90,9 +85,9 @@ export default function Account() {
     setDisabled(false);
   };
 
-  const deleteClick = async () => {
+  const deleteAccountClick = async () => {
     setDisabled(true);
-    setConfirmDelete(false); // Close
+    setAlertOpen(false); // Close
     const result = await deleteAccount();
 
     if (result.error) {
@@ -113,7 +108,7 @@ export default function Account() {
   }, []);
 
   return (
-    <form onSubmit={submit} className="mx-auto max-w-4xl">
+    <form onSubmit={submitForm} className="mx-auto max-w-4xl">
       <Heading>My Account</Heading>
       <Divider className="mt-6 mb-10" />
 
@@ -151,6 +146,7 @@ export default function Account() {
         <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
           <div className="flex flex-col gap-1">
             <Subheading>Email</Subheading>
+
             <Text>
               Changing your email will log you out. You'll need to confirm your new email address before signing back
               in.
@@ -174,7 +170,7 @@ export default function Account() {
         <Divider className="my-10" soft />
 
         <div className="flex flex-col-reverse items-end justify-between gap-10 sm:flex-row">
-          <Button type="button" onClick={() => setConfirmDelete(true)} color="red">
+          <Button type="button" onClick={() => setAlertOpen(true)} color="red">
             <TrashIcon />
             Delete account
           </Button>
@@ -185,17 +181,16 @@ export default function Account() {
         </div>
       </Fieldset>
 
-      <Alert open={confirmDelete} onClose={setConfirmDelete}>
+      <Alert open={alertOpen} onClose={setAlertOpen}>
         <AlertTitle>Are you sure you want to delete your account?</AlertTitle>
-
         <AlertDescription>This action cannot be undone. Your account will be permanently deleted.</AlertDescription>
 
         <AlertActions>
-          <Button plain onClick={() => setConfirmDelete(false)}>
+          <Button plain onClick={() => setAlertOpen(false)}>
             Cancel
           </Button>
 
-          <Button onClick={deleteClick} color="red">
+          <Button onClick={deleteAccountClick} color="red">
             Delete
           </Button>
         </AlertActions>

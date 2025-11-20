@@ -19,7 +19,7 @@ function LoginForm() {
   const [submitted, setSubmitted] = useState(false);
   const [emailError, setEmailError] = useState(false);
 
-  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setEmailError(false);
     const formData = new FormData(e.currentTarget);
@@ -32,7 +32,7 @@ function LoginForm() {
       return;
     }
 
-    // Fetch
+    // Login
     setDisabled(true);
     formData.set("return_to", searchParams.get("return_to") ?? "/"); // Redirect URL on login
     const loadingToast = toast.loading("Verifying...");
@@ -50,7 +50,7 @@ function LoginForm() {
 
   return (
     <AuthLayout>
-      <form onSubmit={submit} className="grid w-full max-w-sm grid-cols-1 gap-8">
+      <form onSubmit={submitForm} className="grid w-full max-w-sm grid-cols-1 gap-8">
         <Logo className="h-6" />
 
         <div className="flex flex-col gap-1">

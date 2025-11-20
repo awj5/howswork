@@ -1,23 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { CompanyType } from "@/types";
 import { createClient } from "@/utils/supabase/client";
 
-export type CompanyType = {
-  id: number;
-  name: string;
-};
-
 export function useCompany() {
-  const [company, setCompany] = useState<CompanyType | null>(null);
+  const supabase = createClient();
+  const [company, setCompany] = useState<CompanyType>();
 
   useEffect(() => {
     async function getCompany() {
-      const supabase = createClient();
-
       // Get auth user
-      const { data: authData } = await supabase.auth.getUser();
-      if (!authData.user) return;
+      const { data: authData, error: authError } = await supabase.auth.getUser();
+      if (authError || !authData.user) return;
 
       // Get users companies (may have more than one)
       const { data: companyUsersData, error: companyUsersError } = await supabase

@@ -4,3 +4,8 @@ export type UserType = {
   first_name: string;
   last_name: string;
 };
+
+export type CompanyType = {
+  id: number;
+  name: string;
+};

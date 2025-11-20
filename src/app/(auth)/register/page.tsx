@@ -24,17 +24,16 @@ function RegisterForm() {
   const [submitted, setSubmitted] = useState(false);
   const [formErrors, setFormErrors] = useState<FormErrorsType>({});
 
-  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
     // Validate
+    const errors: FormErrorsType = {};
     const firstName = formData.get("first_name") as string;
     const lastName = formData.get("last_name") as string;
     const email = formData.get("email") as string;
     const company = formData.get("company") as string;
-    const errors: FormErrorsType = {};
-
     if (!firstName.trim()) errors.first_name = true;
     if (!lastName.trim()) errors.last_name = true;
     if (!isValidEmail(email)) errors.email = true;
@@ -45,9 +44,9 @@ function RegisterForm() {
       return;
     }
 
-    // Fetch
+    // Sign up
     setDisabled(true);
-    const toastId = toast.loading("Creating...");
+    const toastLoading = toast.loading("Creating...");
     const result = await signUp(formData);
 
     if (result.error) {
@@ -56,13 +55,13 @@ function RegisterForm() {
       setSubmitted(true);
     }
 
-    toast.dismiss(toastId);
+    toast.dismiss(toastLoading);
     setDisabled(false);
   };
 
   return (
     <AuthLayout>
-      <form onSubmit={submit} className="grid w-full max-w-sm grid-cols-1 gap-8">
+      <form onSubmit={submitForm} className="grid w-full max-w-sm grid-cols-1 gap-8">
         <Logo className="h-6" />
 
         <div className="flex flex-col gap-1">

@@ -18,7 +18,7 @@ import Footer from "./nav/Footer";
 export default function Nav() {
   const pathname = usePathname();
 
-  const nav = [
+  const navItems = [
     { href: "/", label: "Dashboard", Icon: HomeIcon },
     { href: "/reports", label: "Risk Reports", Icon: DocumentChartBarIcon },
     { href: "/incidents", label: "Incidents", Icon: ExclamationTriangleIcon },
@@ -37,7 +37,7 @@ export default function Nav() {
         </div>
 
         <SidebarSection>
-          {nav.map(({ href, label, Icon }) => (
+          {navItems.map(({ href, label, Icon }) => (
             <SidebarItem key={href} href={href} current={pathname === href}>
               <Icon />
               <SidebarLabel>{label}</SidebarLabel>
