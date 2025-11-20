@@ -1,5 +1,10 @@
+"use client";
+
+import { useCompany } from "@/hooks/useCompany";
 import { Heading } from "@/components/heading";
 
 export default function Home() {
-  return <Heading>Hello world!</Heading>;
+  const company = useCompany();
+
+  return <Heading>{company?.name}</Heading>;
 }

@@ -2,7 +2,6 @@
 
 import { Suspense, useState } from "react";
 import { toast } from "sonner";
-import { signUp } from "./actions";
 import { isValidEmail } from "@/utils/helpers";
 import { AuthLayout } from "@/components/auth-layout";
 import { Button } from "@/components/button";
@@ -11,6 +10,7 @@ import { Heading } from "@/components/heading";
 import { Input } from "@/components/input";
 import { Strong, Text, TextLink } from "@/components/text";
 import { Logo } from "@/components/Logo";
+import { signUp } from "./actions";
 
 type FormErrorsType = {
   first_name?: boolean;

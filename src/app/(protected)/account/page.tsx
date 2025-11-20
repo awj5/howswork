@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { TrashIcon } from "@heroicons/react/16/solid";
-import { updateAccount, deleteAccount } from "./actions";
 import { createClient } from "@/utils/supabase/client";
 import { isValidEmail } from "@/utils/helpers";
 import { useUserContext } from "@/hooks/useUserContext";
@@ -14,6 +13,7 @@ import { Divider } from "@/components/divider";
 import { Input } from "@/components/input";
 import { ErrorMessage, Field, Fieldset, Label } from "@/components/fieldset";
 import { Button } from "@/components/button";
+import { updateAccount, deleteAccount } from "./actions";
 
 type FormErrorsType = {
   first_name?: boolean;
@@ -107,8 +107,8 @@ export default function Account() {
   useEffect(() => {
     // Get user details from context
     setEmail(user?.email ?? "");
-    setFirstName(user?.firstName ?? "");
-    setLastName(user?.lastName ?? "");
+    setFirstName(user?.first_name ?? "");
+    setLastName(user?.last_name ?? "");
     setDisabled(false);
   }, []);
 
@@ -179,27 +179,27 @@ export default function Account() {
             Delete account
           </Button>
 
-          <Alert open={confirmDelete} onClose={setConfirmDelete}>
-            <AlertTitle>Are you sure you want to delete your account?</AlertTitle>
-
-            <AlertDescription>This action cannot be undone. Your account will be permanently deleted.</AlertDescription>
-
-            <AlertActions>
-              <Button plain onClick={() => setConfirmDelete(false)}>
-                Cancel
-              </Button>
-
-              <Button onClick={deleteClick} color="red">
-                Delete
-              </Button>
-            </AlertActions>
-          </Alert>
-
           <Button type="submit" outline>
             Save changes
           </Button>
         </div>
       </Fieldset>
+
+      <Alert open={confirmDelete} onClose={setConfirmDelete}>
+        <AlertTitle>Are you sure you want to delete your account?</AlertTitle>
+
+        <AlertDescription>This action cannot be undone. Your account will be permanently deleted.</AlertDescription>
+
+        <AlertActions>
+          <Button plain onClick={() => setConfirmDelete(false)}>
+            Cancel
+          </Button>
+
+          <Button onClick={deleteClick} color="red">
+            Delete
+          </Button>
+        </AlertActions>
+      </Alert>
     </form>
   );
 }

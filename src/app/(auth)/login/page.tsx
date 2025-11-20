@@ -3,7 +3,6 @@
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { login } from "./actions";
 import { isValidEmail } from "@/utils/helpers";
 import { AuthLayout } from "@/components/auth-layout";
 import { Button } from "@/components/button";
@@ -12,6 +11,7 @@ import { Heading } from "@/components/heading";
 import { Input } from "@/components/input";
 import { Strong, Text, TextLink } from "@/components/text";
 import { Logo } from "@/components/Logo";
+import { login } from "./actions";
 
 function LoginForm() {
   const searchParams = useSearchParams();

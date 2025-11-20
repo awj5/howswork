@@ -14,8 +14,8 @@ export default function Footer() {
           <span className="flex min-w-0 items-center gap-3">
             <Avatar
               initials={
-                user?.firstName && user?.lastName
-                  ? `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`
+                user?.first_name && user?.last_name
+                  ? `${user.first_name.charAt(0)}${user.last_name.charAt(0)}`
                   : user?.email.charAt(0)
               }
               className="size-10"
@@ -25,7 +25,7 @@ export default function Footer() {
 
             <span className="min-w-0">
               <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">
-                {user?.firstName}
+                {user?.first_name}
               </span>
 
               <span className="block truncate text-xs/5 font-normal text-zinc-500 dark:text-zinc-400">
