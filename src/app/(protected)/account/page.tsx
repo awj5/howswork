@@ -81,7 +81,7 @@ export default function Account() {
     );
 
     // Success
-    toast.success("Changes saved.");
+    toast.success("Changes saved!");
     setDisabled(false);
   };
 

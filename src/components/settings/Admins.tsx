@@ -7,7 +7,7 @@ import { useCompany } from "@/hooks/useCompany";
 import { isValidEmail } from "@/utils/helpers";
 import { useUserContext } from "@/hooks/useUserContext";
 import type { UserType } from "@/types";
-import { removeUser } from "@/app/(protected)/settings/actions";
+import { removeUser, inviteUser } from "@/app/(protected)/settings/actions";
 import { createClient } from "@/utils/supabase/client";
 import { Subheading } from "@/components/heading";
 import { Button } from "@/components/button";
@@ -27,6 +27,7 @@ export default function Admins() {
   const [userToRemove, setUserToRemove] = useState<UserType>();
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteEmailError, setInviteEmailError] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
   const inviteClick = async () => {
     setInviteEmailError(false);
@@ -36,24 +37,36 @@ export default function Admins() {
       return;
     }
 
+    // Send
+    if (!company) return;
+    setDisabled(true);
+    const result = await inviteUser(inviteEmail, company);
+
+    if (result.error) {
+      toast.error(result.error);
+      setDisabled(false);
+      return;
+    }
+
+    // Success
+    toast.success("Invite sent!");
+    setDisabled(false);
     setInviteEmail(""); // Reset
     setDialogOpen(false);
   };
 
-  const removeClick = async () => {
+  const removeUserClick = async () => {
     setAlertOpen(false);
+    if (!userToRemove || !company) return;
+    const result = await removeUser(userToRemove.user_id, company.id);
 
-    if (userToRemove && company) {
-      const result = await removeUser(userToRemove.user_id, company.id);
-
-      if (result.error) {
-        toast.error(result.error);
-        return;
-      }
-
-      setUsers((prev) => prev.filter((u) => u.user_id !== userToRemove.user_id)); // Remove from list
-      if (userToRemove.user_id === user?.user_id) window.location.reload(); // Refresh page if auth user
+    if (result.error) {
+      toast.error(result.error);
+      return;
     }
+
+    setUsers((prev) => prev.filter((u) => u.user_id !== userToRemove.user_id)); // Remove from list
+    if (userToRemove.user_id === user?.user_id) window.location.reload(); // Refresh page if auth user
   };
 
   const confirmRemoveClick = (user: UserType) => {
@@ -76,7 +89,7 @@ export default function Admins() {
 
       const userIDs = companyUsersData.map((row) => row.user_id);
 
-      // Get profiles
+      // Get profiles (don't show super admins unless it's their company)
       const { data: profilesData, error: profilesError } = await supabase
         .from("profiles")
         .select("user_id, first_name, last_name, email")
@@ -97,50 +110,46 @@ export default function Admins() {
 
   return (
     <>
-      {company && (
-        <>
-          <div className="mt-8 flex items-end justify-between">
-            <Subheading>Administrators</Subheading>
+      <div className="mt-8 flex items-end justify-between">
+        <Subheading>Administrators</Subheading>
 
-            <Button onClick={() => setDialogOpen(true)} outline>
-              <EnvelopeIcon />
-              Invite admin
-            </Button>
-          </div>
+        <Button onClick={() => setDialogOpen(true)} outline>
+          <EnvelopeIcon />
+          Invite admin
+        </Button>
+      </div>
 
-          <Table className="mt-4 [--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
-            <TableHead>
-              <TableRow>
-                <TableHeader>Name</TableHeader>
-                <TableHeader>Email</TableHeader>
+      <Table className="mt-4 [--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
+        <TableHead>
+          <TableRow>
+            <TableHeader>Name</TableHeader>
+            <TableHeader>Email</TableHeader>
 
-                <TableHeader className="relative w-0">
-                  <span className="sr-only">Actions</span>
-                </TableHeader>
-              </TableRow>
-            </TableHead>
+            <TableHeader className="relative w-0">
+              <span className="sr-only">Actions</span>
+            </TableHeader>
+          </TableRow>
+        </TableHead>
 
-            <TableBody>
-              {users.map((user) => (
-                <TableRow key={user.user_id}>
-                  <TableCell className="font-medium">
-                    {user?.first_name} {user?.last_name}
-                  </TableCell>
+        <TableBody>
+          {users.map((user) => (
+            <TableRow key={user.user_id}>
+              <TableCell className="font-medium">
+                {user?.first_name} {user?.last_name}
+              </TableCell>
 
-                  <TableCell>{user?.email}</TableCell>
+              <TableCell>{user?.email}</TableCell>
 
-                  <TableCell className="text-right">
-                    <Button onClick={() => confirmRemoveClick(user)} plain>
-                      <XCircleIcon />
-                      Remove
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </>
-      )}
+              <TableCell className="text-right">
+                <Button onClick={() => confirmRemoveClick(user)} plain>
+                  <XCircleIcon />
+                  Remove
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
 
       <Dialog open={dialogOpen} onClose={setDialogOpen}>
         <DialogTitle>Invite administrator</DialogTitle>
@@ -160,6 +169,7 @@ export default function Admins() {
               value={inviteEmail}
               onChange={(event) => setInviteEmail(event.target.value)}
               invalid={inviteEmailError}
+              disabled={disabled}
             />
 
             {inviteEmailError && <ErrorMessage>This field is required.</ErrorMessage>}
@@ -171,7 +181,9 @@ export default function Admins() {
             Cancel
           </Button>
 
-          <Button onClick={inviteClick}>Invite</Button>
+          <Button onClick={inviteClick} disabled={disabled}>
+            Invite
+          </Button>
         </DialogActions>
       </Dialog>
 
@@ -191,7 +203,7 @@ export default function Admins() {
             Cancel
           </Button>
 
-          <Button onClick={removeClick} color="red">
+          <Button onClick={removeUserClick} color="red">
             Remove
           </Button>
         </AlertActions>
