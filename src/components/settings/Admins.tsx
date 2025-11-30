@@ -21,6 +21,7 @@ export default function Admins() {
   const supabase = createClient();
   const { user } = useUserContext();
   const company = useCompany();
+  const [refreshUsers, setRefreshUsers] = useState(false);
   const [users, setUsers] = useState<UserType[]>([]);
   const [alertOpen, setAlertOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -40,6 +41,7 @@ export default function Admins() {
     // Send
     if (!company) return;
     setDisabled(true);
+    setRefreshUsers(false);
     const result = await inviteUser(inviteEmail, company);
 
     if (result.error) {
@@ -49,23 +51,25 @@ export default function Admins() {
     }
 
     // Success
-    toast.success("Invite sent!");
+    toast.success(result.success);
     setDisabled(false);
     setInviteEmail(""); // Reset
     setDialogOpen(false);
+    setRefreshUsers(true); // Add to list if user already exists
   };
 
   const removeUserClick = async () => {
     setAlertOpen(false);
+    setRefreshUsers(false);
     if (!userToRemove || !company) return;
-    const result = await removeUser(userToRemove.user_id, company.id);
+    const result = await removeUser(userToRemove, company.id);
 
     if (result.error) {
       toast.error(result.error);
       return;
     }
 
-    setUsers((prev) => prev.filter((u) => u.user_id !== userToRemove.user_id)); // Remove from list
+    setRefreshUsers(true); // Remove from list
     if (userToRemove.user_id === user?.user_id) window.location.reload(); // Refresh page if auth user
   };
 
@@ -79,7 +83,7 @@ export default function Admins() {
       // Get company users
       const { data: companyUsersData, error: companyUsersError } = await supabase
         .from("company_users")
-        .select("user_id")
+        .select("user_id, invite_email")
         .eq("company_id", company?.id);
 
       if (companyUsersError) {
@@ -87,7 +91,8 @@ export default function Admins() {
         return;
       }
 
-      const userIDs = companyUsersData.map((row) => row.user_id);
+      const userIDs = companyUsersData.map((row) => row.user_id).filter(Boolean); // Registered users in company
+      let allUsers: UserType[] = [];
 
       // Get profiles (don't show super admins unless it's their company)
       const { data: profilesData, error: profilesError } = await supabase
@@ -102,54 +107,69 @@ export default function Admins() {
         return;
       }
 
-      setUsers(profilesData);
+      allUsers = profilesData;
+      const inviteEmails = companyUsersData.map((row) => row.invite_email).filter(Boolean); // Invited users
+
+      // Add invited users to list
+      const invitedUsers = inviteEmails.map((email) => ({
+        user_id: "",
+        first_name: "",
+        last_name: "",
+        email,
+      }));
+
+      setUsers([...allUsers, ...invitedUsers]); // Combine registered and invited
     }
 
     if (company) getUsers();
-  }, [company]);
+  }, [company, refreshUsers]);
 
   return (
     <>
-      <div className="mt-8 flex items-end justify-between">
-        <Subheading>Administrators</Subheading>
+      {users.length ? (
+        <>
+          <div className="mt-8 flex items-end justify-between">
+            <Subheading>Administrators</Subheading>
 
-        <Button onClick={() => setDialogOpen(true)} outline>
-          <EnvelopeIcon />
-          Invite admin
-        </Button>
-      </div>
+            <Button onClick={() => setDialogOpen(true)} outline>
+              <EnvelopeIcon />
+              Invite admin
+            </Button>
+          </div>
 
-      <Table className="mt-4 [--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
-        <TableHead>
-          <TableRow>
-            <TableHeader>Name</TableHeader>
-            <TableHeader>Email</TableHeader>
+          <Table className="mt-4 [--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
+            <TableHead>
+              <TableRow>
+                <TableHeader>Name</TableHeader>
+                <TableHeader>Email</TableHeader>
 
-            <TableHeader className="relative w-0">
-              <span className="sr-only">Actions</span>
-            </TableHeader>
-          </TableRow>
-        </TableHead>
+                <TableHeader className="relative w-0">
+                  <span className="sr-only">Actions</span>
+                </TableHeader>
+              </TableRow>
+            </TableHead>
 
-        <TableBody>
-          {users.map((user) => (
-            <TableRow key={user.user_id}>
-              <TableCell className="font-medium">
-                {user?.first_name} {user?.last_name}
-              </TableCell>
+            <TableBody>
+              {users.map((item) => (
+                <TableRow key={item.email}>
+                  <TableCell className={`font-medium ${!item.user_id && "text-zinc-500"}`}>
+                    {item.user_id ? `${item.first_name} ${item.last_name}` : "Pending"}
+                  </TableCell>
 
-              <TableCell>{user?.email}</TableCell>
+                  <TableCell className={`${!item.user_id && "text-zinc-500"}`}>{item.email}</TableCell>
 
-              <TableCell className="text-right">
-                <Button onClick={() => confirmRemoveClick(user)} plain>
-                  <XCircleIcon />
-                  Remove
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+                  <TableCell className="text-right">
+                    <Button onClick={() => confirmRemoveClick(item)} plain>
+                      <XCircleIcon />
+                      Remove
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </>
+      ) : null}
 
       <Dialog open={dialogOpen} onClose={setDialogOpen}>
         <DialogTitle>Invite administrator</DialogTitle>
@@ -194,7 +214,7 @@ export default function Admins() {
         </AlertTitle>
 
         <AlertDescription>
-          {`${userToRemove?.user_id === user?.user_id ? "You" : `${userToRemove?.first_name} ${userToRemove?.last_name}`}`}{" "}
+          {`${userToRemove?.user_id === user?.user_id ? "You" : !userToRemove?.user_id ? "They" : `${userToRemove?.first_name} ${userToRemove?.last_name}`}`}{" "}
           will no longer have access to the HowsWork dashboard for {company?.name}.
         </AlertDescription>
 

@@ -8,7 +8,7 @@ import {
   UsersIcon,
   Cog6ToothIcon,
   DocumentChartBarIcon,
-  QuestionMarkCircleIcon,
+  LifebuoyIcon,
 } from "@heroicons/react/20/solid";
 import { Sidebar, SidebarBody, SidebarItem, SidebarLabel, SidebarSection, SidebarSpacer } from "@/components/sidebar";
 import { Link } from "@/components/link";
@@ -21,7 +21,7 @@ export default function Nav() {
   const navItems = [
     { href: "/", label: "Dashboard", Icon: HomeIcon },
     { href: "/reports", label: "Risk Reports", Icon: DocumentChartBarIcon },
-    { href: "/incidents", label: "Incidents", Icon: ExclamationTriangleIcon },
+    { href: "/hazards", label: "Hazards", Icon: ExclamationTriangleIcon },
     { href: "/pulse-checks", label: "Pulse Checks", Icon: CheckCircleIcon },
     { href: "/teams", label: "Teams", Icon: UsersIcon },
     { href: "/settings", label: "Settings", Icon: Cog6ToothIcon },
@@ -49,7 +49,7 @@ export default function Nav() {
 
         <SidebarSection>
           <SidebarItem href="mailto:support@howswork.app?subject=Dashboard Support Request">
-            <QuestionMarkCircleIcon />
+            <LifebuoyIcon />
             <SidebarLabel>Support</SidebarLabel>
           </SidebarItem>
         </SidebarSection>
