@@ -22,7 +22,7 @@ export default function Nav() {
     { href: "/", label: "Dashboard", Icon: HomeIcon },
     { href: "/reports", label: "Risk Reports", Icon: DocumentChartBarIcon },
     { href: "/incidents", label: "Incidents", Icon: ExclamationTriangleIcon },
-    { href: "/check-ins", label: "Check-Ins", Icon: CheckCircleIcon },
+    { href: "/pulse-checks", label: "Pulse Checks", Icon: CheckCircleIcon },
     { href: "/teams", label: "Teams", Icon: UsersIcon },
     { href: "/settings", label: "Settings", Icon: Cog6ToothIcon },
   ];
@@ -30,9 +30,9 @@ export default function Nav() {
   return (
     <Sidebar>
       <SidebarBody>
-        <div className="m-2 mb-4">
+        <div className="m-2 mb-4 w-fit">
           <Link href="/" aria-label="Dashboard">
-            <Logo className="h-8" iconOnly />
+            <Logo className="h-7" iconOnly />
           </Link>
         </div>
 

@@ -15,7 +15,7 @@ export default function CompanySwitcher() {
     <Listbox name="status" defaultValue="active" aria-label="Project status">
       <ListboxOption value="active">
         <BuildingOffice2Icon />
-        <ListboxLabel>MOOD PLATFORMS</ListboxLabel>
+        <ListboxLabel>HowsWork</ListboxLabel>
       </ListboxOption>
     </Listbox>
   );
