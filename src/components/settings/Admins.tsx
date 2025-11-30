@@ -155,8 +155,8 @@ export default function Admins() {
         <DialogTitle>Invite administrator</DialogTitle>
 
         <DialogDescription>
-          We'll email this person an invite to join your MoodCheck dashboard as an admin. Only invite people you trust
-          to have full access.
+          We'll email this person an invite to join your HowsWork dashboard as an admin. Only invite people you trust to
+          have full access.
         </DialogDescription>
 
         <DialogBody>
@@ -195,7 +195,7 @@ export default function Admins() {
 
         <AlertDescription>
           {`${userToRemove?.user_id === user?.user_id ? "You" : `${userToRemove?.first_name} ${userToRemove?.last_name}`}`}{" "}
-          will no longer have access to the MoodCheck dashboard for {company?.name}.
+          will no longer have access to the HowsWork dashboard for {company?.name}.
         </AlertDescription>
 
         <AlertActions>

@@ -48,7 +48,7 @@ export default function Nav() {
         <SidebarSpacer />
 
         <SidebarSection>
-          <SidebarItem href="mailto:support@moodcheck.co?subject=Dashboard Support Request">
+          <SidebarItem href="mailto:support@howswork.app?subject=Dashboard Support Request">
             <QuestionMarkCircleIcon />
             <SidebarLabel>Support</SidebarLabel>
           </SidebarItem>

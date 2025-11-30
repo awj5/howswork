@@ -33,12 +33,12 @@ export async function inviteUser(email: string, company: CompanyType) {
   const inviteUrl = `${baseURL}/register?email=${encodeURIComponent(email)}`;
   try {
     const { error: sendInviteError } = await resend.emails.send({
-      from: "MoodCheck <no-reply@updates.moodcheck.co>",
+      from: "HowsWork <no-reply@updates.howswork.app>",
       to: email,
       subject: "You've been invited to join",
       html: `
         <p>Hi,</p>
-        <p>You've been invited to join your company on Mood.</p>
+        <p>You've been invited to join your company on HowsWork.</p>
         <p>
           <a href="${inviteUrl}">Click here to get started</a>
         </p>

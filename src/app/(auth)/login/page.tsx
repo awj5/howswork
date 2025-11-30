@@ -66,12 +66,12 @@ function LoginForm() {
               {emailError && <ErrorMessage>This field is required.</ErrorMessage>}
             </Field>
 
-            <Button type="submit" className="w-full" outline>
+            <Button type="submit" className="w-full" color="indigo">
               Continue
             </Button>
 
             <Text>
-              New to MoodCheck?{" "}
+              New to HowsWork?{" "}
               <TextLink href="/register">
                 <Strong>Set up your company</Strong>
               </TextLink>

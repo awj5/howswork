@@ -10,14 +10,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "MoodCheck - Employer Dashboard",
-  description: "Psychological safety. Made human.",
-  icons: {
-    icon: [
-      { url: "/img/icon.svg", media: "(prefers-color-scheme: light)" },
-      { url: "/img/icon-dark.svg", media: "(prefers-color-scheme: dark)" },
-    ],
-  },
+  title: "HowsWork - Employer Dashboard",
+  description:
+    "HowsWork is the anonymous inbox for psychological safety, helping employees speak up safely and giving employers real-time insights into psychosocial risks and workplace safety compliance.",
 };
 
 export default function RootLayout({

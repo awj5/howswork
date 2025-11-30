@@ -102,7 +102,7 @@ function RegisterForm() {
             </Button>
 
             <Text>
-              Already using MoodCheck?{" "}
+              Already using HowsWork?{" "}
               <TextLink href="/login">
                 <Strong>Sign in</Strong>
               </TextLink>
