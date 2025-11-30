@@ -6,6 +6,7 @@ import { TrashIcon } from "@heroicons/react/16/solid";
 import { createClient } from "@/utils/supabase/client";
 import { isValidEmail } from "@/utils/helpers";
 import { useUserContext } from "@/hooks/useUserContext";
+import { useUnsavedWarning } from "@/hooks/useUnsavedWarning";
 import { Heading, Subheading } from "@/components/heading";
 import { Alert, AlertActions, AlertDescription, AlertTitle } from "@/components/alert";
 import { Text } from "@/components/text";
@@ -30,6 +31,12 @@ export default function Account() {
   const [disabled, setDisabled] = useState(true);
   const [formErrors, setFormErrors] = useState<FormErrorsType>({});
   const [alertOpen, setAlertOpen] = useState(false);
+
+  useUnsavedWarning([
+    [firstName, user?.first_name],
+    [lastName, user?.last_name],
+    [email, user?.email],
+  ]);
 
   const logout = async () => {
     await supabase.auth.signOut();
@@ -62,23 +69,23 @@ export default function Account() {
       return;
     }
 
-    // Logout and reload if email changed
-    if (result.emailChanged) {
-      logout();
-      return;
-    }
-
     // Update context
     setUser((prev) =>
       prev
         ? {
             ...prev,
-            firstName,
-            lastName,
+            first_name: firstName,
+            last_name: lastName,
             email,
           }
         : prev
     );
+
+    // Logout and reload if email changed
+    if (result.emailChanged) {
+      logout();
+      return;
+    }
 
     // Success
     toast.success("Changes saved!");

@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { isValidEmail } from "@/utils/helpers";
 import { AuthLayout } from "@/components/auth-layout";
@@ -20,9 +21,12 @@ type FormErrorsType = {
 };
 
 function RegisterForm() {
+  const searchParams = useSearchParams();
   const [disabled, setDisabled] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [formErrors, setFormErrors] = useState<FormErrorsType>({});
+  const inviteEmail = searchParams.get("email") || "";
+  const inviteCompany = searchParams.get("company") || "";
 
   const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -65,7 +69,13 @@ function RegisterForm() {
         <Logo className="h-6" />
 
         <div className="flex flex-col gap-1">
-          <Heading>{submitted ? "Set up complete!" : "Set up your company"}</Heading>
+          <Heading>
+            {submitted
+              ? "Set up complete!"
+              : inviteCompany
+                ? `Access the ${inviteCompany} dashboard`
+                : "Set up your company"}
+          </Heading>
           {submitted && <Text>We've sent a secure sign-in link to your email.</Text>}
         </div>
 
@@ -87,18 +97,28 @@ function RegisterForm() {
 
             <Field>
               <Label>Email</Label>
-              <Input type="email" name="email" invalid={formErrors.email} />
+
+              <Input
+                type="email"
+                name="email"
+                defaultValue={inviteEmail}
+                invalid={formErrors.email}
+                disabled={!!inviteEmail}
+              />
+
               {formErrors.email && <ErrorMessage>This field is required.</ErrorMessage>}
             </Field>
 
-            <Field>
-              <Label>Company name</Label>
-              <Input name="company" invalid={formErrors.company} />
-              {formErrors.company && <ErrorMessage>This field is required.</ErrorMessage>}
-            </Field>
+            {!inviteCompany && (
+              <Field>
+                <Label>Company name</Label>
+                <Input name="company" invalid={formErrors.company} />
+                {formErrors.company && <ErrorMessage>This field is required.</ErrorMessage>}
+              </Field>
+            )}
 
             <Button type="submit" className="w-full" outline>
-              Create account
+              {inviteCompany ? "Accept invite" : "Create account"}
             </Button>
 
             <Text>

@@ -20,8 +20,8 @@ export default function Nav() {
 
   const navItems = [
     { href: "/", label: "Dashboard", Icon: HomeIcon },
-    { href: "/reports", label: "Risk Reports", Icon: DocumentChartBarIcon },
-    { href: "/hazards", label: "Hazards", Icon: ExclamationTriangleIcon },
+    { href: "/risk-register", label: "Risk Register", Icon: DocumentChartBarIcon },
+    { href: "/reports", label: "Reports", Icon: ExclamationTriangleIcon },
     { href: "/pulse-checks", label: "Pulse Checks", Icon: CheckCircleIcon },
     { href: "/teams", label: "Teams", Icon: UsersIcon },
     { href: "/settings", label: "Settings", Icon: Cog6ToothIcon },

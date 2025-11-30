@@ -50,7 +50,7 @@ export async function inviteUser(email: string, company: CompanyType) {
   if (profilesData.length) return { success: "User added!" };
 
   // Send email invite
-  const inviteUrl = `${baseURL}/register?email=${encodeURIComponent(email)}`;
+  const inviteUrl = `${baseURL}/register?email=${encodeURIComponent(email)}&company=${encodeURIComponent(company.name)}`;
 
   try {
     const { error: sendInviteError } = await resend.emails.send({
