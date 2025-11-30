@@ -103,7 +103,7 @@ export default function Account() {
       return;
     }
 
-    logout();
+    logout(); // Success
   };
 
   useEffect(() => {
@@ -177,12 +177,12 @@ export default function Account() {
         <Divider className="my-10" soft />
 
         <div className="flex flex-col-reverse items-end justify-between gap-10 sm:flex-row">
-          <Button type="button" onClick={() => setAlertOpen(true)} color="red">
+          <Button type="button" onClick={() => setAlertOpen(true)} outline>
             <TrashIcon />
             Delete account
           </Button>
 
-          <Button type="submit" outline>
+          <Button type="submit" color="indigo">
             Save changes
           </Button>
         </div>

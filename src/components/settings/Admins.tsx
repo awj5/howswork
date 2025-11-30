@@ -21,7 +21,6 @@ export default function Admins() {
   const supabase = createClient();
   const { user } = useUserContext();
   const company = useCompany();
-  const [refreshUsers, setRefreshUsers] = useState(false);
   const [users, setUsers] = useState<UserType[]>([]);
   const [alertOpen, setAlertOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -41,7 +40,6 @@ export default function Admins() {
     // Send
     if (!company) return;
     setDisabled(true);
-    setRefreshUsers(false);
     const result = await inviteUser(inviteEmail, company);
 
     if (result.error) {
@@ -55,21 +53,22 @@ export default function Admins() {
     setDisabled(false);
     setInviteEmail(""); // Reset
     setDialogOpen(false);
-    setRefreshUsers(true); // Add to list if user already exists
   };
 
   const removeUserClick = async () => {
     setAlertOpen(false);
-    setRefreshUsers(false);
     if (!userToRemove || !company) return;
+    setDisabled(true);
     const result = await removeUser(userToRemove, company.id);
 
     if (result.error) {
       toast.error(result.error);
+      setDisabled(false);
       return;
     }
 
-    setRefreshUsers(true); // Remove from list
+    // Success
+    setDisabled(false);
     if (userToRemove.user_id === user?.user_id) window.location.reload(); // Refresh page if auth user
   };
 
@@ -91,8 +90,8 @@ export default function Admins() {
         return;
       }
 
-      const userIDs = companyUsersData.map((row) => row.user_id).filter(Boolean); // Registered users in company
-      let allUsers: UserType[] = [];
+      const userIDs = companyUsersData.map((row) => row.user_id).filter(Boolean); // Registered user IDs
+      const inviteEmails = companyUsersData.map((row) => row.invite_email).filter(Boolean); // Invited user emails
 
       // Get profiles (don't show super admins unless it's their company)
       const { data: profilesData, error: profilesError } = await supabase
@@ -107,9 +106,6 @@ export default function Admins() {
         return;
       }
 
-      allUsers = profilesData;
-      const inviteEmails = companyUsersData.map((row) => row.invite_email).filter(Boolean); // Invited users
-
       // Add invited users to list
       const invitedUsers = inviteEmails.map((email) => ({
         user_id: "",
@@ -118,11 +114,11 @@ export default function Admins() {
         email,
       }));
 
-      setUsers([...allUsers, ...invitedUsers]); // Combine registered and invited
+      setUsers([...profilesData, ...invitedUsers]); // Combine
     }
 
-    if (company) getUsers();
-  }, [company, refreshUsers]);
+    if (company && !disabled) getUsers();
+  }, [company, disabled]);
 
   return (
     <>
@@ -131,7 +127,7 @@ export default function Admins() {
           <div className="mt-8 flex items-end justify-between">
             <Subheading>Administrators</Subheading>
 
-            <Button onClick={() => setDialogOpen(true)} outline>
+            <Button onClick={() => setDialogOpen(true)} color="indigo">
               <EnvelopeIcon />
               Invite admin
             </Button>
@@ -159,7 +155,7 @@ export default function Admins() {
                   <TableCell className={`${!item.user_id && "text-zinc-500"}`}>{item.email}</TableCell>
 
                   <TableCell className="text-right">
-                    <Button onClick={() => confirmRemoveClick(item)} plain>
+                    <Button onClick={() => confirmRemoveClick(item)} disabled={disabled} outline>
                       <XCircleIcon />
                       Remove
                     </Button>
@@ -175,8 +171,8 @@ export default function Admins() {
         <DialogTitle>Invite administrator</DialogTitle>
 
         <DialogDescription>
-          We'll email this person an invite to join your HowsWork dashboard as an admin. Only invite people you trust to
-          have full access.
+          We'll email this person an invite to join your dashboard as an admin. Only invite people you trust to have
+          full access.
         </DialogDescription>
 
         <DialogBody>
@@ -201,7 +197,7 @@ export default function Admins() {
             Cancel
           </Button>
 
-          <Button onClick={inviteClick} disabled={disabled}>
+          <Button onClick={inviteClick} disabled={disabled} color="indigo">
             Invite
           </Button>
         </DialogActions>
@@ -215,7 +211,7 @@ export default function Admins() {
 
         <AlertDescription>
           {`${userToRemove?.user_id === user?.user_id ? "You" : !userToRemove?.user_id ? "They" : `${userToRemove?.first_name} ${userToRemove?.last_name}`}`}{" "}
-          will no longer have access to the HowsWork dashboard for {company?.name}.
+          will no longer have access to the {company?.name} dashboard.
         </AlertDescription>
 
         <AlertActions>

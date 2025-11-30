@@ -117,7 +117,7 @@ function RegisterForm() {
               </Field>
             )}
 
-            <Button type="submit" className="w-full" outline>
+            <Button type="submit" className="w-full" color="indigo">
               {inviteCompany ? "Accept invite" : "Create account"}
             </Button>
 
