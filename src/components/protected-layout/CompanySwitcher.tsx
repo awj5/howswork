@@ -1,22 +1,27 @@
-import { useEffect } from "react";
 import { BuildingOffice2Icon } from "@heroicons/react/16/solid";
+import { useCompanies } from "@/hooks/useCompanies";
 import { Listbox, ListboxLabel, ListboxOption } from "@/components/listbox";
 
 export default function CompanySwitcher() {
-  useEffect(() => {
-    async function getCompanies() {
-      //
-    }
+  const companies = useCompanies();
 
-    getCompanies();
-  }, []);
+  const changeCompany = (id: number) => {
+    localStorage.setItem("company", String(id)); // Store locally as string
+    window.location.reload(); // Refresh page
+  };
 
   return (
-    <Listbox name="status" defaultValue="active" aria-label="Project status">
-      <ListboxOption value="active">
-        <BuildingOffice2Icon />
-        <ListboxLabel>Acme, Inc.</ListboxLabel>
-      </ListboxOption>
-    </Listbox>
+    <>
+      {companies.length > 1 && (
+        <Listbox defaultValue={companies[0].id} onChange={(e) => changeCompany(e)} aria-label="Company switcher">
+          {companies.map((c) => (
+            <ListboxOption key={c.id} value={c.id}>
+              <BuildingOffice2Icon />
+              <ListboxLabel>{c.name}</ListboxLabel>
+            </ListboxOption>
+          ))}
+        </Listbox>
+      )}
+    </>
   );
 }

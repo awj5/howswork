@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import type { CompanyType } from "@/types";
 import { createClient } from "@/utils/supabase/client";
 
-export function useCompany() {
+export function useCompanies() {
   const supabase = createClient();
-  const [company, setCompany] = useState<CompanyType>();
+  const [companies, setCompanies] = useState<CompanyType[]>([]);
 
   useEffect(() => {
     async function getCompany() {
@@ -26,27 +26,33 @@ export function useCompany() {
       }
 
       if (!companyUsersData.length) return; // User not in any companies
+      const companyIDs = companyUsersData.map((u) => u.company_id);
 
-      // Get company
-      const { data: companyData, error: companyError } = await supabase
+      // Get companies
+      const { data: companiesData, error: companiesError } = await supabase
         .from("companies")
         .select("id, name")
-        .eq("id", companyUsersData[0].company_id)
-        .single();
+        .in("id", companyIDs);
 
-      if (companyError) {
-        console.error(companyError);
+      if (companiesError) {
+        console.error(companiesError);
         return;
       }
 
-      setCompany({
-        id: companyData.id,
-        name: companyData.name,
+      const selected = localStorage.getItem("company");
+
+      // Sort locally stored first, then alphabetically
+      const sorted = [...companiesData].sort((a, b) => {
+        if (a.id.toString() === selected) return -1;
+        if (b.id.toString() === selected) return 1;
+        return a.name.localeCompare(b.name);
       });
+
+      setCompanies(sorted);
     }
 
     getCompany();
   }, []);
 
-  return company;
+  return companies;
 }

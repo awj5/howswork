@@ -1,10 +1,10 @@
 "use client";
 
-import { useCompany } from "@/hooks/useCompany";
+import { useCompanies } from "@/hooks/useCompanies";
 import { Heading } from "@/components/heading";
 
 export default function Home() {
-  const company = useCompany();
+  const companies = useCompanies();
 
-  return <Heading>{company?.name}</Heading>;
+  return <Heading>{companies[0]?.name}</Heading>;
 }

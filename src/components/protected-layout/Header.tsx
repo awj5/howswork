@@ -11,7 +11,8 @@ export default function Header() {
   const { user } = useUserContext();
 
   return (
-    <Navbar>
+    <Navbar className="h-16 sm:h-auto">
+      {/* Height added to stop listbox causing a jump on load */}
       <NavbarSpacer />
 
       <NavbarSection>

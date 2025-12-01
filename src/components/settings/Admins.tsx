@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { EnvelopeIcon, XCircleIcon } from "@heroicons/react/16/solid";
 import { toast } from "sonner";
-import { useCompany } from "@/hooks/useCompany";
+import { useCompanies } from "@/hooks/useCompanies";
 import { isValidEmail } from "@/utils/helpers";
 import { useUserContext } from "@/hooks/useUserContext";
 import type { UserType } from "@/types";
@@ -20,7 +20,7 @@ import { Input } from "@/components/input";
 export default function Admins() {
   const supabase = createClient();
   const { user } = useUserContext();
-  const company = useCompany();
+  const companies = useCompanies();
   const [users, setUsers] = useState<UserType[]>([]);
   const [alertOpen, setAlertOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -38,9 +38,8 @@ export default function Admins() {
     }
 
     // Send
-    if (!company) return;
     setDisabled(true);
-    const result = await inviteUser(inviteEmail, company);
+    const result = await inviteUser(inviteEmail, companies[0]);
 
     if (result.error) {
       toast.error(result.error);
@@ -57,9 +56,9 @@ export default function Admins() {
 
   const removeUserClick = async () => {
     setAlertOpen(false);
-    if (!userToRemove || !company) return;
+    if (!userToRemove) return;
     setDisabled(true);
-    const result = await removeUser(userToRemove, company.id);
+    const result = await removeUser(userToRemove, companies[0].id);
 
     if (result.error) {
       toast.error(result.error);
@@ -79,12 +78,12 @@ export default function Admins() {
   };
 
   useEffect(() => {
-    async function getUsers() {
+    const getUsers = async () => {
       // Get company users
       const { data: companyUsersData, error: companyUsersError } = await supabase
         .from("company_users")
         .select("user_id, invite_email")
-        .eq("company_id", company?.id);
+        .eq("company_id", companies[0].id);
 
       if (companyUsersError) {
         console.error(companyUsersError);
@@ -99,7 +98,7 @@ export default function Admins() {
         .from("profiles")
         .select("user_id, first_name, last_name, email")
         .in("user_id", userIDs)
-        .or(`super_admin_company_id.is.null,super_admin_company_id.eq.${company?.id}`)
+        .or(`super_admin_company_id.is.null,super_admin_company_id.eq.${companies[0].id}`)
         .order("first_name", { ascending: true });
 
       if (profilesError) {
@@ -116,10 +115,10 @@ export default function Admins() {
       }));
 
       setUsers([...profilesData, ...invitedUsers]); // Combine
-    }
+    };
 
-    if (company && !disabled) getUsers();
-  }, [company, disabled]);
+    if (companies.length && !disabled) getUsers();
+  }, [companies, disabled]);
 
   return (
     <>
@@ -212,7 +211,7 @@ export default function Admins() {
 
         <AlertDescription>
           {`${userToRemove?.user_id === user?.user_id ? "You" : !userToRemove?.user_id ? "They" : `${userToRemove?.first_name} ${userToRemove?.last_name}`}`}{" "}
-          will no longer have access to the {company?.name} dashboard.
+          will no longer have access to the {companies[0]?.name} dashboard.
         </AlertDescription>
 
         <AlertActions>

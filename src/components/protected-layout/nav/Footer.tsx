@@ -8,6 +8,11 @@ import CompanySwitcher from "../CompanySwitcher";
 export default function Footer() {
   const { user } = useUserContext();
 
+  const initials =
+    user?.first_name && user?.last_name
+      ? `${user.first_name.charAt(0)}${user.last_name.charAt(0)}`
+      : user?.email.charAt(0);
+
   return (
     <SidebarFooter className="gap-4 max-lg:hidden">
       <CompanySwitcher />
@@ -15,16 +20,7 @@ export default function Footer() {
       <Dropdown>
         <DropdownButton as={SidebarItem}>
           <span className="flex min-w-0 items-center gap-3">
-            <Avatar
-              initials={
-                user?.first_name && user?.last_name
-                  ? `${user.first_name.charAt(0)}${user.last_name.charAt(0)}`
-                  : user?.email.charAt(0)
-              }
-              className="size-10"
-              square
-              alt=""
-            />
+            <Avatar initials={initials} className="size-10" square alt={initials} />
 
             <span className="min-w-0">
               <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">
