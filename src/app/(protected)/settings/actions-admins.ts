@@ -22,34 +22,32 @@ export async function inviteUser(email: string, company: CompanyType) {
     .eq("company_id", company.id);
 
   if (companyUsersError) return { error: companyUsersError.message };
-  const userIDs = companyUsersData.map((row) => row.user_id).filter(Boolean); // Registered users in company
-  const inviteEmails = companyUsersData.map((row) => row.invite_email).filter(Boolean); // Invited users
+  const userIDs = companyUsersData.map((u) => u.user_id).filter(Boolean); // Registered user IDs
+  const inviteEmails = companyUsersData.map((u) => u.invite_email).filter(Boolean); // Invited user emails
   if (!userIDs.includes(authData.user.id)) return { error: "You do not have permission to modify this company." };
 
   // Check if user already exists
-  const { data: profilesData, error: profilesError } = await supabaseAdmin
+  const { data: profileData, error: profileError } = await supabaseAdmin
     .from("profiles")
     .select("user_id")
-    .eq("email", email);
+    .eq("email", email)
+    .maybeSingle();
 
-  if (profilesError) return { error: profilesError.message };
-
-  if (profilesData.length && userIDs.includes(profilesData[0].user_id))
-    return { error: "User is already in this company." };
-
+  if (profileError) return { error: profileError.message };
+  if (userIDs.includes(profileData?.user_id)) return { error: "User is already in this company." };
   if (inviteEmails.includes(email)) return { error: "User is already invited." };
 
-  // Add to company
+  // Add user to company
   const { error: insertCompanyUserError } = await supabaseAdmin.from("company_users").insert({
-    user_id: profilesData.length ? profilesData[0].user_id : null,
+    user_id: profileData?.user_id ?? null,
     company_id: company.id,
-    invite_email: !profilesData.length ? email : null,
+    invite_email: !profileData ? email : null,
   });
 
   if (insertCompanyUserError) return { error: insertCompanyUserError.message };
-  if (profilesData.length) return { success: "User added!" };
+  if (profileData) return { success: "User added!" };
 
-  // Send email invite
+  // Send email invite (if user doesn't already exist)
   const inviteUrl = `${baseURL}/register?email=${encodeURIComponent(email)}&company=${encodeURIComponent(company.name)}`;
 
   try {
@@ -60,7 +58,7 @@ export async function inviteUser(email: string, company: CompanyType) {
       html: `
       <h2>${company.name} has invited you to HowsWork</h2>
       
-      <p>Follow this link to register and accept the invite:</p>
+      <p>Follow this link to sign up and accept the invite:</p>
       <p><a href="${inviteUrl}">Accept the invite</a></p>
       `,
     });
@@ -87,12 +85,12 @@ export async function removeUser(user: UserType, companyID: number) {
     .eq("company_id", companyID);
 
   if (companyUsersError) return { error: companyUsersError.message };
-  const userIDs = companyUsersData.map((row) => row.user_id).filter(Boolean); // Registered users in company
-  const inviteEmails = companyUsersData.map((row) => row.invite_email).filter(Boolean); // Invited users
+  const userIDs = companyUsersData.map((u) => u.user_id).filter(Boolean); // Registered user IDs
+  const inviteEmails = companyUsersData.map((u) => u.invite_email).filter(Boolean); // Invited user emails
   if (!userIDs.includes(authData.user.id)) return { error: "You do not have permission to modify this company." };
 
   if ((user.user_id && !userIDs.includes(user.user_id)) || (!user.user_id && !inviteEmails.includes(user.email)))
-    return { error: "User is not part of this company." };
+    return { error: "User is not in this company." };
 
   // Delete user from company using supabase admin
   const { error: deleteCompanyUserError } = await supabaseAdmin
@@ -102,5 +100,5 @@ export async function removeUser(user: UserType, companyID: number) {
     .eq("company_id", companyID);
 
   if (deleteCompanyUserError) return { error: deleteCompanyUserError.message };
-  return { success: "Invite sent!" };
+  return { success: "Admin removed." };
 }

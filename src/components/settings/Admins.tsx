@@ -7,7 +7,7 @@ import { useCompany } from "@/hooks/useCompany";
 import { isValidEmail } from "@/utils/helpers";
 import { useUserContext } from "@/hooks/useUserContext";
 import type { UserType } from "@/types";
-import { removeUser, inviteUser } from "@/app/(protected)/settings/actions";
+import { removeUser, inviteUser } from "@/app/(protected)/settings/actions-admins";
 import { createClient } from "@/utils/supabase/client";
 import { Subheading } from "@/components/heading";
 import { Button } from "@/components/button";
@@ -68,6 +68,7 @@ export default function Admins() {
     }
 
     // Success
+    toast.success(result.success);
     setDisabled(false);
     if (userToRemove.user_id === user?.user_id) window.location.reload(); // Refresh page if auth user
   };
@@ -90,8 +91,8 @@ export default function Admins() {
         return;
       }
 
-      const userIDs = companyUsersData.map((row) => row.user_id).filter(Boolean); // Registered user IDs
-      const inviteEmails = companyUsersData.map((row) => row.invite_email).filter(Boolean); // Invited user emails
+      const userIDs = companyUsersData.map((u) => u.user_id).filter(Boolean); // Registered user IDs
+      const inviteEmails = companyUsersData.map((u) => u.invite_email).filter(Boolean); // Invited user emails
 
       // Get profiles (don't show super admins unless it's their company)
       const { data: profilesData, error: profilesError } = await supabase
@@ -146,16 +147,16 @@ export default function Admins() {
             </TableHead>
 
             <TableBody>
-              {users.map((item) => (
-                <TableRow key={item.email}>
-                  <TableCell className={`font-medium ${!item.user_id && "text-zinc-500"}`}>
-                    {item.user_id ? `${item.first_name} ${item.last_name}` : "Pending"}
+              {users.map((u) => (
+                <TableRow key={u.email}>
+                  <TableCell className={`font-medium ${!u.user_id && "text-zinc-500"}`}>
+                    {u.user_id ? `${u.first_name} ${u.last_name}` : "Pending"}
                   </TableCell>
 
-                  <TableCell className={`${!item.user_id && "text-zinc-500"}`}>{item.email}</TableCell>
+                  <TableCell className={`${!u.user_id && "text-zinc-500"}`}>{u.email}</TableCell>
 
                   <TableCell className="text-right">
-                    <Button onClick={() => confirmRemoveClick(item)} disabled={disabled} outline>
+                    <Button onClick={() => confirmRemoveClick(u)} disabled={disabled} outline>
                       <XCircleIcon />
                       Remove
                     </Button>
