@@ -27,6 +27,7 @@ function RegisterForm() {
   const [formErrors, setFormErrors] = useState<FormErrorsType>({});
   const inviteEmail = searchParams.get("email") || "";
   const inviteCompany = searchParams.get("company") || "";
+  const isInvite = !!(inviteEmail && inviteCompany);
 
   const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -40,8 +41,8 @@ function RegisterForm() {
     const company = formData.get("company") as string;
     if (!firstName.trim()) errors.first_name = true;
     if (!lastName.trim()) errors.last_name = true;
-    if (!isValidEmail(email)) errors.email = true;
-    if (!company.trim()) errors.company = true;
+    if (!isInvite && !isValidEmail(email)) errors.email = true;
+    if (!isInvite && !company.trim()) errors.company = true;
 
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
@@ -50,6 +51,12 @@ function RegisterForm() {
 
     // Sign up
     setDisabled(true);
+
+    if (isInvite) {
+      formData.set("email", inviteEmail);
+      formData.set("company", inviteCompany);
+    }
+
     const toastLoading = toast.loading("Creating...");
     const result = await signUp(formData);
 
@@ -70,12 +77,15 @@ function RegisterForm() {
 
         <div className="flex flex-col gap-1">
           <Heading>
-            {submitted
-              ? "Set up complete!"
-              : inviteCompany
-                ? `Access the ${inviteCompany} dashboard`
-                : "Set up your company"}
+            {submitted && isInvite
+              ? "Invite accepted!"
+              : submitted
+                ? "Set up complete!"
+                : isInvite
+                  ? `Access your ${inviteCompany} dashboard`
+                  : "Set up your company"}
           </Heading>
+
           {submitted && <Text>We've sent a secure sign-in link to your email.</Text>}
         </div>
 
@@ -103,13 +113,13 @@ function RegisterForm() {
                 name="email"
                 defaultValue={inviteEmail}
                 invalid={formErrors.email}
-                disabled={!!inviteEmail}
+                disabled={isInvite}
               />
 
               {formErrors.email && <ErrorMessage>This field is required.</ErrorMessage>}
             </Field>
 
-            {!inviteCompany && (
+            {!isInvite && (
               <Field>
                 <Label>Company name</Label>
                 <Input name="company" invalid={formErrors.company} />
@@ -118,15 +128,17 @@ function RegisterForm() {
             )}
 
             <Button type="submit" className="w-full" color="indigo">
-              {inviteCompany ? "Accept invite" : "Create account"}
+              {isInvite ? "Accept invite" : "Create account"}
             </Button>
 
-            <Text>
-              Already using HowsWork?{" "}
-              <TextLink href="/login">
-                <Strong>Sign in</Strong>
-              </TextLink>
-            </Text>
+            {!isInvite && (
+              <Text>
+                Already using HowsWork?{" "}
+                <TextLink href="/login">
+                  <Strong>Sign in</Strong>
+                </TextLink>
+              </Text>
+            )}
           </Fieldset>
         )}
       </form>
