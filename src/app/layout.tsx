@@ -12,7 +12,7 @@ const inter = localFont({
 export const metadata: Metadata = {
   title: "HowsWork - Dashboard",
   description:
-    "HowsWork is the anonymous inbox for psychological safety, helping employees speak up safely and giving employers real-time insights into psychosocial risks and workplace safety compliance.",
+    "HowsWork is the anonymous inbox for psychological safety — helping employees speak up safely and giving employers AI-powered insights into psychosocial risks and workplace safety compliance.",
   icons: {
     icon: [
       { url: "/img/icon.svg", media: "(prefers-color-scheme: light)" },
