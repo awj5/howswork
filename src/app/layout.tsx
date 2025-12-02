@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Inter } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
 
-const inter = localFont({
-  src: "../fonts/InterVariable.ttf",
+const inter = Inter({
+  subsets: ["latin"],
   display: "swap",
   variable: "--font-inter",
 });
