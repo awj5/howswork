@@ -13,7 +13,7 @@ export async function inviteUser(email: string, company: CompanyType) {
 
   // Get auth user
   const { data: authData, error: authError } = await supabase.auth.getUser();
-  if (authError || !authData.user) return { error: "Not authenticated" };
+  if (authError || !authData.user) return { error: "Not authenticated." };
 
   // Get all company users
   const { data: companyUsersData, error: companyUsersError } = await supabase
@@ -67,7 +67,7 @@ export async function inviteUser(email: string, company: CompanyType) {
     return { success: "Invite sent!" };
   } catch (error) {
     console.error(error);
-    return { error: "Unexpected error sending email" };
+    return { error: "Unexpected error sending email." };
   }
 }
 
@@ -76,7 +76,7 @@ export async function removeUser(user: UserType, companyID: number) {
 
   // Get auth user
   const { data: authData, error: authError } = await supabase.auth.getUser();
-  if (authError || !authData.user) return { error: "Not authenticated" };
+  if (authError || !authData.user) return { error: "Not authenticated." };
 
   // Get all company users
   const { data: companyUsersData, error: companyUsersError } = await supabase

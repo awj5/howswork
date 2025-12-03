@@ -62,12 +62,13 @@ function RegisterForm() {
 
     if (result.error) {
       toast.error(result.error);
-    } else {
-      setSubmitted(true);
+      setDisabled(false);
+      return;
     }
 
+    // Success
+    setSubmitted(true);
     toast.dismiss(toastLoading);
-    setDisabled(false);
   };
 
   return (

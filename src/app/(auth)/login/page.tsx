@@ -40,12 +40,13 @@ function LoginForm() {
 
     if (result.error) {
       toast.error(result.error);
-    } else {
-      setSubmitted(true);
+      setDisabled(false);
+      return;
     }
 
+    // Success
+    setSubmitted(true);
     toast.dismiss(loadingToast);
-    setDisabled(false);
   };
 
   return (
