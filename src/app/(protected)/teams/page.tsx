@@ -14,7 +14,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from "@/components/dropdown";
 
 export default function Teams() {
-  const teams = [
+  /*const teams = [
     { id: 1, name: "Team 1", count: 12 },
     { id: 2, name: "Team 2", count: 8 },
     { id: 3, name: "Team 3", count: 10 },
@@ -25,10 +25,11 @@ export default function Teams() {
     { id: 8, name: "Team 8", count: 33 },
     { id: 9, name: "Team 9", count: 8 },
     { id: 10, name: "Team 10", count: 9 },
-  ];
+  ];*/
 
   return (
-    <div className="mx-auto max-w-4xl">
+    <>
+      {/*<div className="mx-auto max-w-4xl">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="max-sm:w-full sm:flex-1">
           <Heading>Teams</Heading>
@@ -96,6 +97,7 @@ export default function Teams() {
 
         <PaginationNext href="?page=2" />
       </Pagination>
-    </div>
+    </div>*/}
+    </>
   );
 }
