@@ -122,7 +122,7 @@ export default function Account() {
       <Fieldset disabled={disabled}>
         <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
           <Field>
-            <Label>First name</Label>
+            <Label>First Name</Label>
 
             <Input
               name="first_name"
@@ -135,7 +135,7 @@ export default function Account() {
           </Field>
 
           <Field>
-            <Label>Last name</Label>
+            <Label>Last Name</Label>
 
             <Input
               name="last_name"

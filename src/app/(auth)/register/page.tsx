@@ -94,13 +94,13 @@ function RegisterForm() {
           <Fieldset className="flex flex-col gap-8" disabled={disabled}>
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-4">
               <Field>
-                <Label>First name</Label>
+                <Label>First Name</Label>
                 <Input name="first_name" invalid={formErrors.first_name} />
                 {formErrors.first_name && <ErrorMessage>This field is required.</ErrorMessage>}
               </Field>
 
               <Field>
-                <Label>Last name</Label>
+                <Label>Last Name</Label>
                 <Input name="last_name" invalid={formErrors.last_name} />
                 {formErrors.last_name && <ErrorMessage>This field is required.</ErrorMessage>}
               </Field>
@@ -122,7 +122,7 @@ function RegisterForm() {
 
             {!isInvite && (
               <Field>
-                <Label>Company name</Label>
+                <Label>Company Name</Label>
                 <Input name="company" invalid={formErrors.company} />
                 {formErrors.company && <ErrorMessage>This field is required.</ErrorMessage>}
               </Field>

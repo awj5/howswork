@@ -7,7 +7,7 @@ import { useCompanies } from "@/hooks/useCompanies";
 import { isValidEmail } from "@/utils/helpers";
 import { useUserContext } from "@/hooks/useUserContext";
 import type { UserType } from "@/types";
-import { removeUser, inviteUser } from "@/app/(protected)/settings/actions-admins";
+import { removeUser, inviteUser } from "@/app/(protected)/people/actions-admins";
 import { createClient } from "@/utils/supabase/client";
 import { Subheading } from "@/components/heading";
 import { Button } from "@/components/button";
