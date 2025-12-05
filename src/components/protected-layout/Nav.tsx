@@ -7,7 +7,7 @@ import {
   CheckCircleIcon,
   UsersIcon,
   Cog6ToothIcon,
-  DocumentChartBarIcon,
+  ClipboardIcon,
   LifebuoyIcon,
 } from "@heroicons/react/20/solid";
 import { Sidebar, SidebarBody, SidebarItem, SidebarLabel, SidebarSection, SidebarSpacer } from "@/components/sidebar";
@@ -20,10 +20,10 @@ export default function Nav() {
 
   const navItems = [
     { href: "/", label: "Dashboard", Icon: HomeIcon },
-    { href: "/risk-register", label: "Risk Register", Icon: DocumentChartBarIcon },
-    { href: "/reports", label: "Reports", Icon: ExclamationTriangleIcon },
     { href: "/pulse-checks", label: "Pulse Checks", Icon: CheckCircleIcon },
-    { href: "/teams", label: "Teams", Icon: UsersIcon },
+    { href: "/concerns", label: "Concerns", Icon: ExclamationTriangleIcon },
+    { href: "/risk-register", label: "Risk Register", Icon: ClipboardIcon },
+    { href: "/people", label: "People", Icon: UsersIcon },
     { href: "/settings", label: "Settings", Icon: Cog6ToothIcon },
   ];
 
