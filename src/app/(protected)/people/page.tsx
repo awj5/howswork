@@ -6,7 +6,7 @@ import { UserGroupIcon } from "@heroicons/react/16/solid";
 import { Button } from "@/components/button";
 import { Heading } from "@/components/heading";
 import { Textarea } from "@/components/textarea";
-import { Description, Field, Fieldset } from "@/components/fieldset";
+import { Description, Field, Fieldset, Label } from "@/components/fieldset";
 import { Text } from "@/components/text";
 
 export default function People() {
@@ -34,15 +34,16 @@ export default function People() {
 
       <Fieldset className="mt-8" disabled={disabled}>
         <Field>
+          <Label>Email addresses or mobile numbers</Label>
           <Description>Add the email addresses or mobile numbers of your staff.</Description>
 
           <Textarea
             rows={15}
-            placeholder={`Separate by comma or line break, e.g.
-alice@company.com.au
-bob.smith@company.com.au
+            placeholder={`Add one per line or separate with commas, e.g.
+jane@company.com.au
+john.doe@company.com.au
 +61 412 345 678
-charlie@company.com.au, dave@company.com.au`}
+alice@company.com.au, bob@company.com.au`}
           />
         </Field>
 
