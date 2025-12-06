@@ -58,7 +58,7 @@ export default function Settings() {
     setDisabled(false);
   };
 
-  const deleteAccountClick = async () => {
+  const deleteCompanyClick = async () => {
     setDisabled(true);
     setAlertOpen(false); // Close
     const result = await deleteCompany(companies[0].id);
@@ -69,7 +69,7 @@ export default function Settings() {
       return;
     }
 
-    // Success (clear)
+    // Success (clear and keep disabled)
     setName("");
     nameRef.current = "";
   };
@@ -129,7 +129,7 @@ export default function Settings() {
             Cancel
           </Button>
 
-          <Button onClick={deleteAccountClick} color="red">
+          <Button onClick={deleteCompanyClick} color="red">
             Delete
           </Button>
         </AlertActions>
