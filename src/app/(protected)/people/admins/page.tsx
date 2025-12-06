@@ -7,9 +7,9 @@ import { useCompanies } from "@/hooks/useCompanies";
 import { isValidEmail } from "@/utils/helpers";
 import { useUserContext } from "@/hooks/useUserContext";
 import type { UserType } from "@/types";
-import { removeUser, inviteUser } from "@/app/(protected)/people/actions-admins";
+import { removeUser, inviteUser } from "./actions";
 import { createClient } from "@/utils/supabase/client";
-import { Subheading } from "@/components/heading";
+import { Heading } from "@/components/heading";
 import { Button } from "@/components/button";
 import { Alert, AlertActions, AlertDescription, AlertTitle } from "@/components/alert";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/table";
@@ -121,50 +121,48 @@ export default function Admins() {
   }, [companies, disabled]);
 
   return (
-    <>
+    <div className="mx-auto max-w-6xl">
+      <div className="flex items-end justify-between gap-4">
+        <Heading>Administrators</Heading>
+
+        <Button onClick={() => setDialogOpen(true)} color="indigo">
+          <EnvelopeIcon />
+          Invite admin
+        </Button>
+      </div>
+
       {users.length ? (
-        <>
-          <div className="mt-8 flex items-end justify-between">
-            <Subheading>Administrators</Subheading>
+        <Table className="mt-8 [--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
+          <TableHead>
+            <TableRow>
+              <TableHeader>Name</TableHeader>
+              <TableHeader>Email</TableHeader>
 
-            <Button onClick={() => setDialogOpen(true)} color="indigo">
-              <EnvelopeIcon />
-              Invite admin
-            </Button>
-          </div>
+              <TableHeader className="relative w-0">
+                <span className="sr-only">Actions</span>
+              </TableHeader>
+            </TableRow>
+          </TableHead>
 
-          <Table className="mt-4 [--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
-            <TableHead>
-              <TableRow>
-                <TableHeader>Name</TableHeader>
-                <TableHeader>Email</TableHeader>
+          <TableBody>
+            {users.map((u) => (
+              <TableRow key={u.email}>
+                <TableCell className={`font-medium ${!u.user_id && "text-zinc-500"}`}>
+                  {u.user_id ? `${u.first_name} ${u.last_name}` : "Pending"}
+                </TableCell>
 
-                <TableHeader className="relative w-0">
-                  <span className="sr-only">Actions</span>
-                </TableHeader>
+                <TableCell className={`${!u.user_id && "text-zinc-500"}`}>{u.email}</TableCell>
+
+                <TableCell className="text-right">
+                  <Button onClick={() => confirmRemoveClick(u)} disabled={disabled} outline>
+                    <XCircleIcon />
+                    Remove
+                  </Button>
+                </TableCell>
               </TableRow>
-            </TableHead>
-
-            <TableBody>
-              {users.map((u) => (
-                <TableRow key={u.email}>
-                  <TableCell className={`font-medium ${!u.user_id && "text-zinc-500"}`}>
-                    {u.user_id ? `${u.first_name} ${u.last_name}` : "Pending"}
-                  </TableCell>
-
-                  <TableCell className={`${!u.user_id && "text-zinc-500"}`}>{u.email}</TableCell>
-
-                  <TableCell className="text-right">
-                    <Button onClick={() => confirmRemoveClick(u)} disabled={disabled} outline>
-                      <XCircleIcon />
-                      Remove
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </>
+            ))}
+          </TableBody>
+        </Table>
       ) : null}
 
       <Dialog open={dialogOpen} onClose={setDialogOpen}>
@@ -224,6 +222,6 @@ export default function Admins() {
           </Button>
         </AlertActions>
       </Alert>
-    </>
+    </div>
   );
 }
