@@ -123,7 +123,7 @@ export default function Admins() {
   return (
     <div className="mx-auto max-w-6xl">
       <div className="flex items-end justify-between gap-4">
-        <Heading>Administrators</Heading>
+        <Heading>Admins</Heading>
 
         <Button onClick={() => setDialogOpen(true)} color="indigo">
           <EnvelopeIcon />
