@@ -76,8 +76,9 @@ export default function Admins() {
   };
 
   useEffect(() => {
+    if (!companies.length || disabled) return;
+
     const getUsers = async () => {
-      // Get company users
       const { data: companyUsersData, error: companyUsersError } = await supabase
         .from("company_users")
         .select("user_id, invite_email")
@@ -115,7 +116,7 @@ export default function Admins() {
       setUsers([...profilesData, ...invitedUsers]); // Combine
     };
 
-    if (companies.length && !disabled) getUsers();
+    getUsers();
   }, [companies, disabled]);
 
   return (
