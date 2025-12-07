@@ -6,7 +6,6 @@ import { TrashIcon } from "@heroicons/react/16/solid";
 import { AU, CA, IE, NZ, GB, US } from "country-flag-icons/react/3x2";
 import { useCompanies } from "@/hooks/useCompanies";
 import { useUnsavedWarning } from "@/hooks/useUnsavedWarning";
-import { deleteCompany, updateCompany } from "./actions";
 import { Heading, Subheading } from "@/components/heading";
 import { Alert, AlertActions, AlertDescription, AlertTitle } from "@/components/alert";
 import { Text, TextLink } from "@/components/text";
@@ -15,6 +14,7 @@ import { Input } from "@/components/input";
 import { ErrorMessage, Field, Fieldset } from "@/components/fieldset";
 import { Button } from "@/components/button";
 import { Listbox, ListboxLabel, ListboxOption } from "@/components/listbox";
+import { deleteCompany, updateCompany } from "./actions";
 
 type FormErrorsType = {
   name?: boolean;

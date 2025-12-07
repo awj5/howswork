@@ -7,7 +7,6 @@ import { useCompanies } from "@/hooks/useCompanies";
 import { isValidEmail } from "@/utils/helpers";
 import { useUserContext } from "@/hooks/useUserContext";
 import type { UserType } from "@/types";
-import { removeUser, inviteUser } from "./actions";
 import { createClient } from "@/utils/supabase/client";
 import { Heading } from "@/components/heading";
 import { Button } from "@/components/button";
@@ -16,6 +15,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from "@/components/dialog";
 import { ErrorMessage, Field, Label } from "@/components/fieldset";
 import { Input } from "@/components/input";
+import { removeUser, inviteUser } from "./actions";
 
 export default function Admins() {
   const supabase = createClient();

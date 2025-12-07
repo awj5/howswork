@@ -2,15 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { UserGroupIcon } from "@heroicons/react/16/solid";
 import { useCompanies } from "@/hooks/useCompanies";
 import { useUnsavedWarning } from "@/hooks/useUnsavedWarning";
 import { createClient } from "@/utils/supabase/client";
+import { isValidEmail, isValidPhone } from "@/utils/helpers";
 import { Button } from "@/components/button";
 import { Heading } from "@/components/heading";
 import { Textarea } from "@/components/textarea";
-import { Description, Field, Fieldset, Label } from "@/components/fieldset";
+import { Description, ErrorMessage, Field, Fieldset, Label } from "@/components/fieldset";
 import { Text } from "@/components/text";
+import { updateStaff } from "./actions";
 
 export default function People() {
   const supabase = createClient();
@@ -18,6 +21,7 @@ export default function People() {
   const companies = useCompanies();
   const staffRef = useRef("");
   const [staff, setStaff] = useState("");
+  const [staffError, setStaffError] = useState(false);
   const [disabled, setDisabled] = useState(true);
   const [members, setMembers] = useState(0);
 
@@ -30,7 +34,31 @@ export default function People() {
   };
 
   const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
-    //
+    e.preventDefault();
+    setStaffError(false);
+    const contacts = parseContacts(staff);
+
+    // Validate
+    const invalidContacts = contacts.filter((c) => !isValidContact(c));
+
+    if (invalidContacts.length) {
+      setStaffError(true);
+      return;
+    }
+
+    // Update
+    setDisabled(true);
+    const result = await updateStaff(companies[0].id, contacts);
+    setDisabled(false);
+
+    if (result.error) {
+      toast.error(result.error);
+      return;
+    }
+
+    // Success
+    toast.success("Changes saved!");
+    staffRef.current = staff;
   };
 
   useEffect(() => {
@@ -49,7 +77,7 @@ export default function People() {
       }
 
       const contacts = staffContactsData.contacts ?? [];
-      const text = contacts.join("\n"); // One per line
+      const text = contacts.join("\n"); // One contact per line
       setStaff(text);
       staffRef.current = text;
       setMembers(contacts.length);
@@ -86,7 +114,10 @@ export default function People() {
 john.doe@company.com
 +61 412 345 678
 alice@company.com, bob@company.com`}
+            invalid={staffError}
           />
+
+          {staffError && <ErrorMessage>Some email addresses or mobile numbers are invalid.</ErrorMessage>}
         </Field>
 
         <div className="mt-8 flex items-start justify-between gap-10">
@@ -101,13 +132,17 @@ alice@company.com, bob@company.com`}
   );
 }
 
-const parseContacts = (input: string) => {
+const parseContacts = (val: string) => {
   return Array.from(
     new Set(
-      input
+      val
         .split(/[\n,]/) // split on commas OR line breaks
         .map((s) => s.trim())
         .filter(Boolean)
     )
   );
+};
+
+const isValidContact = (val: string) => {
+  return isValidEmail(val) || isValidPhone(val);
 };
