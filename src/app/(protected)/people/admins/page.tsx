@@ -40,16 +40,15 @@ export default function Admins() {
     // Send
     setDisabled(true);
     const result = await inviteUser(inviteEmail, companies[0]);
+    setDisabled(false);
 
     if (result.error) {
       toast.error(result.error);
-      setDisabled(false);
       return;
     }
 
     // Success
     toast.success(result.success);
-    setDisabled(false);
     setInviteEmail(""); // Reset
     setDialogOpen(false);
   };
@@ -59,16 +58,15 @@ export default function Admins() {
     if (!userToRemove) return;
     setDisabled(true);
     const result = await removeUser(userToRemove, companies[0].id);
+    setDisabled(false);
 
     if (result.error) {
       toast.error(result.error);
-      setDisabled(false);
       return;
     }
 
     // Success
     toast.success(result.success);
-    setDisabled(false);
     if (userToRemove.user_id === user?.user_id) window.location.reload(); // Refresh page if auth user
   };
 
@@ -181,7 +179,7 @@ export default function Admins() {
               type="email"
               name="email"
               value={inviteEmail}
-              onChange={(event) => setInviteEmail(event.target.value)}
+              onChange={(e) => setInviteEmail(e.target.value)}
               invalid={inviteEmailError}
               disabled={disabled}
             />

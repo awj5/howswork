@@ -61,11 +61,16 @@ export default function Account() {
 
     // Update
     setDisabled(true);
-    const result = await updateAccount(firstName, lastName, email);
+    const result = await updateAccount({
+      user_id: user?.user_id ?? "",
+      first_name: firstName,
+      last_name: lastName,
+      email,
+    });
+    setDisabled(false);
 
     if (result.error) {
       toast.error(result.error);
-      setDisabled(false);
       return;
     }
 
@@ -89,7 +94,6 @@ export default function Account() {
 
     // Success
     toast.success("Changes saved!");
-    setDisabled(false);
   };
 
   const deleteAccountClick = async () => {
@@ -127,7 +131,7 @@ export default function Account() {
             <Input
               name="first_name"
               value={firstName}
-              onChange={(event) => setFirstName(event.target.value)}
+              onChange={(e) => setFirstName(e.target.value)}
               invalid={formErrors.first_name}
             />
 
@@ -140,7 +144,7 @@ export default function Account() {
             <Input
               name="last_name"
               value={lastName}
-              onChange={(event) => setLastName(event.target.value)}
+              onChange={(e) => setLastName(e.target.value)}
               invalid={formErrors.last_name}
             />
 
@@ -166,7 +170,7 @@ export default function Account() {
               aria-label="Email"
               name="email"
               value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               invalid={formErrors.email}
             />
 

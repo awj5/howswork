@@ -1,17 +1,31 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
+import supabaseAdmin from "@/utils/supabase/admin";
+import { type CompanyType } from "@/types";
 
-export async function updateCompany(companyID: number, name: string) {
+export async function updateCompany(company: CompanyType) {
   const supabase = await createClient();
+
+  // Check if slug already exists (use Supabase admin to get around RLS)
+  const { data: companiesData, error: companiesError } = await supabaseAdmin
+    .from("companies")
+    .select("id")
+    .eq("slug", company.slug)
+    .neq("id", company.id);
+
+  if (companiesError) return { error: companiesError.message };
+  if (companiesData.length) return { error: "This URL is already in use. Please choose a different one." };
 
   // Update company (RLS only allows users in company to update it)
   const { error: updateCompanyError } = await supabase
     .from("companies")
     .update({
-      name,
+      name: company.name,
+      slug: company.slug,
+      country: company.country,
     })
-    .eq("id", companyID);
+    .eq("id", company.id);
 
   if (updateCompanyError) return { error: updateCompanyError.message };
   return { success: true };

@@ -2,8 +2,9 @@
 
 import { createClient } from "@/utils/supabase/server";
 import supabaseAdmin from "@/utils/supabase/admin";
+import { type UserType } from "@/types";
 
-export async function updateAccount(first_name: string, last_name: string, email: string) {
+export async function updateAccount(user: UserType) {
   const supabase = await createClient();
 
   // Get auth user
@@ -14,18 +15,18 @@ export async function updateAccount(first_name: string, last_name: string, email
   const { error: updateProfileError } = await supabaseAdmin
     .from("profiles")
     .update({
-      first_name,
-      last_name,
-      email,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      email: user.email,
     })
     .eq("user_id", authData.user.id);
 
   if (updateProfileError) return { error: updateProfileError.message };
 
   // Update auth email if changed
-  if (email !== authData.user.email) {
+  if (user.email !== authData.user.email) {
     const { error: updateAuthUserError } = await supabase.auth.updateUser({
-      email,
+      email: user.email,
     });
 
     if (updateAuthUserError) return { error: updateAuthUserError.message };

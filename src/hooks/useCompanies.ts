@@ -31,7 +31,7 @@ export function useCompanies() {
       // Get companies
       const { data: companiesData, error: companiesError } = await supabase
         .from("companies")
-        .select("id, name")
+        .select("id, name, slug, country")
         .in("id", companyIDs);
 
       if (companiesError) {
