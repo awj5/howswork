@@ -37,6 +37,7 @@ function LoginForm() {
     formData.set("return_to", searchParams.get("return_to") ?? "/"); // Redirect URL on login
     const loadingToast = toast.loading("Verifying...");
     const result = await login(formData);
+    toast.dismiss(loadingToast);
 
     if (result.error) {
       toast.error(result.error);
@@ -46,7 +47,6 @@ function LoginForm() {
 
     // Success
     setSubmitted(true);
-    toast.dismiss(loadingToast);
   };
 
   return (

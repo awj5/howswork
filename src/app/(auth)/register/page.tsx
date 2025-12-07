@@ -59,6 +59,7 @@ function RegisterForm() {
 
     const toastLoading = toast.loading("Creating...");
     const result = await signUp(formData);
+    toast.dismiss(toastLoading);
 
     if (result.error) {
       toast.error(result.error);
@@ -68,7 +69,6 @@ function RegisterForm() {
 
     // Success
     setSubmitted(true);
-    toast.dismiss(toastLoading);
   };
 
   return (
