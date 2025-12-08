@@ -178,7 +178,6 @@ export default function Admins() {
 
             <Input
               type="email"
-              name="email"
               value={inviteEmail}
               onChange={(e) => setInviteEmail(e.target.value)}
               invalid={inviteEmailError}

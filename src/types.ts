@@ -9,5 +9,5 @@ export type CompanyType = {
   id: number;
   name: string;
   slug: string;
-  country: string;
+  timezone: string;
 };

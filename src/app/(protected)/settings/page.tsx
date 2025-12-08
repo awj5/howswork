@@ -25,22 +25,52 @@ export default function Settings() {
   const companies = useCompanies();
   const nameRef = useRef("");
   const slugRef = useRef("");
-  const countryRef = useRef("");
+  const timezoneRef = useRef("");
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
-  const [country, setCountry] = useState("");
+  const [timezone, setTimezone] = useState("");
   const [disabled, setDisabled] = useState(true);
   const [formErrors, setFormErrors] = useState<FormErrorsType>({});
   const [alertOpen, setAlertOpen] = useState(false);
 
-  const countries = [
-    { name: "Australia", code: "au" },
-    { name: "Canada", code: "ca" },
-    { name: "Ireland", code: "ie" },
-    { name: "New Zealand", code: "nz" },
-    { name: "United Kingdom", code: "gb" },
-    { name: "United States", code: "us" },
-  ];
+  const timezonesByCountry = {
+    AU: [
+      "Australia/Sydney",
+      "Australia/Melbourne",
+      "Australia/Brisbane",
+      "Australia/Adelaide",
+      "Australia/Perth",
+      "Australia/Hobart",
+      "Australia/Darwin",
+    ],
+    NZ: ["Pacific/Auckland", "Pacific/Chatham"],
+    GB: ["Europe/London"],
+    IE: ["Europe/Dublin"],
+    CA: [
+      "America/Vancouver",
+      "America/Edmonton",
+      "America/Winnipeg",
+      "America/Toronto",
+      "America/Halifax",
+      "America/St_Johns",
+    ],
+    US: [
+      "America/Los_Angeles",
+      "America/Denver",
+      "America/Chicago",
+      "America/New_York",
+      "America/Anchorage",
+      "Pacific/Honolulu",
+    ],
+  };
+
+  const timezones = Object.entries(timezonesByCountry).flatMap(([code, zones]) =>
+    zones.map((z) => ({
+      value: z,
+      name: z.replace("_", " "),
+      code: code.toLowerCase(),
+    }))
+  );
 
   const flagMap: Record<string, React.ComponentType<any>> = {
     au: AU,
@@ -54,7 +84,7 @@ export default function Settings() {
   useUnsavedWarning([
     [name, nameRef.current],
     [slug, slugRef.current],
-    [country, countryRef.current],
+    [timezone, timezoneRef.current],
   ]);
 
   const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -75,7 +105,7 @@ export default function Settings() {
 
     // Update
     setDisabled(true);
-    const result = await updateCompany({ id: companies[0].id, name, slug, country });
+    const result = await updateCompany({ id: companies[0].id, name, slug, timezone });
     setDisabled(false);
 
     if (result.error) {
@@ -87,7 +117,7 @@ export default function Settings() {
     toast.success("Changes saved!");
     nameRef.current = name;
     slugRef.current = slug;
-    countryRef.current = country;
+    timezoneRef.current = timezone;
   };
 
   const deleteCompanyClick = async () => {
@@ -104,10 +134,10 @@ export default function Settings() {
     // Success (clear and keep disabled)
     setName("");
     setSlug("");
-    setCountry("");
+    setTimezone("");
     nameRef.current = "";
     slugRef.current = "";
-    countryRef.current = "";
+    timezoneRef.current = "";
   };
 
   useEffect(() => {
@@ -116,8 +146,8 @@ export default function Settings() {
     nameRef.current = companies[0].name;
     setSlug(companies[0].slug);
     slugRef.current = companies[0].slug;
-    setCountry(companies[0].country);
-    countryRef.current = companies[0].country;
+    setTimezone(companies[0].timezone);
+    timezoneRef.current = companies[0].timezone;
     setDisabled(false);
   }, [companies]);
 
@@ -136,7 +166,6 @@ export default function Settings() {
           <Field>
             <Input
               aria-label="Company Name"
-              name="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               invalid={formErrors.name}
@@ -164,7 +193,6 @@ export default function Settings() {
           <Field>
             <Input
               aria-label="Company URL"
-              name="slug"
               value={slug}
               onChange={(e) => setSlug(e.target.value)}
               invalid={formErrors.slug}
@@ -180,19 +208,19 @@ export default function Settings() {
 
         <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
           <div className="flex flex-col gap-1">
-            <Subheading>Country</Subheading>
-            <Text>Used to set language and your country's phone code.</Text>
+            <Subheading>Timezone</Subheading>
+            <Text>Used for language settings and scheduling pulse checks in your local time.</Text>
           </div>
 
           <Field>
-            <Listbox name="country" value={country} onChange={(e) => setCountry(e)}>
-              {countries.map((c) => {
-                const Flag = flagMap[c.code];
+            <Listbox value={timezone} onChange={(e) => setTimezone(e)}>
+              {timezones.map((t) => {
+                const Flag = flagMap[t.code];
 
                 return (
-                  <ListboxOption key={c.code} value={c.code}>
+                  <ListboxOption key={t.value} value={t.value}>
                     <Flag className="w-5 sm:w-4" />
-                    <ListboxLabel>{c.name}</ListboxLabel>
+                    <ListboxLabel>{t.name}</ListboxLabel>
                   </ListboxOption>
                 );
               })}

@@ -127,27 +127,13 @@ export default function Account() {
         <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
           <Field>
             <Label>First Name</Label>
-
-            <Input
-              name="first_name"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              invalid={formErrors.first_name}
-            />
-
+            <Input value={firstName} onChange={(e) => setFirstName(e.target.value)} invalid={formErrors.first_name} />
             {formErrors.first_name && <ErrorMessage>This field is required.</ErrorMessage>}
           </Field>
 
           <Field>
             <Label>Last Name</Label>
-
-            <Input
-              name="last_name"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              invalid={formErrors.last_name}
-            />
-
+            <Input value={lastName} onChange={(e) => setLastName(e.target.value)} invalid={formErrors.last_name} />
             {formErrors.last_name && <ErrorMessage>This field is required.</ErrorMessage>}
           </Field>
         </section>
@@ -168,7 +154,6 @@ export default function Account() {
             <Input
               type="email"
               aria-label="Email"
-              name="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               invalid={formErrors.email}

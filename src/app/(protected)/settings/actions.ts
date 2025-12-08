@@ -23,7 +23,7 @@ export async function updateCompany(company: CompanyType) {
     .update({
       name: company.name,
       slug: company.slug,
-      country: company.country,
+      timezone: company.timezone,
     })
     .eq("id", company.id);
 

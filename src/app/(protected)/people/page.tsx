@@ -101,7 +101,7 @@ export default function People() {
 
       <Fieldset className="mt-8" disabled={disabled}>
         <Field>
-          <Label className="flex items-center gap-1">
+          <Label className="inline-flex items-center gap-1">
             Email addresses or mobile numbers
             <HelperTooltip text="Group email addresses (like team@company.com) are recommended for larger organisations" />
           </Label>

@@ -4,19 +4,29 @@ import { QuestionMarkCircleIcon } from "@heroicons/react/20/solid";
 export default function HelperTooltip({ text }: { text: string }) {
   return (
     <>
-      <QuestionMarkCircleIcon
+      {/* Light mode version */}
+      <span
         className="hidden size-5 not-dark:sm:inline"
+        tabIndex={0}
+        aria-label={text}
         data-tooltip-id="my-tooltip"
         data-tooltip-content={text}
-        data-tooltip-variant={"dark"}
-      />
+        data-tooltip-variant="dark"
+      >
+        <QuestionMarkCircleIcon aria-hidden="true" />
+      </span>
 
-      <QuestionMarkCircleIcon
+      {/* Dark mode version */}
+      <span
         className="hidden size-5 dark:sm:inline"
+        tabIndex={0}
+        aria-label={text}
         data-tooltip-id="my-tooltip"
         data-tooltip-content={text}
-        data-tooltip-variant={"light"}
-      />
+        data-tooltip-variant="light"
+      >
+        <QuestionMarkCircleIcon aria-hidden="true" />
+      </span>
 
       <Tooltip id="my-tooltip" />
     </>
