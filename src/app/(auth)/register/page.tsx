@@ -52,6 +52,10 @@ function RegisterForm() {
     // Sign up
     setDisabled(true);
 
+    // Detect browser timezone
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    formData.set("timezone", timezone);
+
     if (isInvite) {
       formData.set("email", inviteEmail);
       formData.set("company", inviteCompany);

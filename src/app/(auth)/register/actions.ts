@@ -15,6 +15,7 @@ export async function signUp(formData: FormData) {
   let company = formData.get("company") as string;
   company = company.trim();
   if (!isValidEmail(email) || !first_name || !last_name || !company) return { error: "Form is invalid." };
+  const timezone = (formData.get("timezone") as string) || "Australia/Sydney"; // Fallback to Sydney
 
   // Generate a random password since users will only sign in via magic link
   const password = Array.from(crypto.getRandomValues(new Uint8Array(32)))
@@ -29,6 +30,7 @@ export async function signUp(formData: FormData) {
         first_name,
         last_name,
         company,
+        timezone,
       },
     },
   };
