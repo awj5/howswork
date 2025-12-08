@@ -16,6 +16,7 @@
     "@supabase/supabase-js": "^2.86.2",
     "clsx": "^2.1.1",
     "country-flag-icons": "^1.6.4",
+    "luxon": "^3.7.2",
     "motion": "^12.23.25",
     "next": "16.0.7",
     "react": "19.2.1",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/luxon": "^3.7.1",
     "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",

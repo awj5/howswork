@@ -100,5 +100,5 @@ export async function removeUser(user: UserType, companyID: number) {
     .eq("company_id", companyID);
 
   if (deleteCompanyUserError) return { error: deleteCompanyUserError.message };
-  return { success: "Admin removed." };
+  return { success: true };
 }

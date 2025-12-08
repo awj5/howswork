@@ -32,6 +32,7 @@ export default function Admins() {
   const inviteClick = async () => {
     setInviteEmailError(false);
 
+    // Validate
     if (!isValidEmail(inviteEmail)) {
       setInviteEmailError(true);
       return;
@@ -66,7 +67,7 @@ export default function Admins() {
     }
 
     // Success
-    toast.success(result.success);
+    toast.success("Admin removed.");
     if (userToRemove.user_id === user?.user_id) window.location.reload(); // Refresh page if auth user
   };
 
@@ -124,7 +125,7 @@ export default function Admins() {
       <div className="flex items-end justify-between gap-4">
         <Heading>Admins</Heading>
 
-        <Button onClick={() => setDialogOpen(true)} color="indigo">
+        <Button onClick={() => setDialogOpen(true)} color="indigo" disabled={disabled || !companies.length}>
           <EnvelopeIcon />
           Invite admin
         </Button>

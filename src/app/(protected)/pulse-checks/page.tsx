@@ -2,20 +2,51 @@
 
 import { useState } from "react";
 import { ClockIcon } from "@heroicons/react/16/solid";
+import { toast } from "sonner";
+import { useCompanies } from "@/hooks/useCompanies";
 import { Button } from "@/components/button";
 import { Heading } from "@/components/heading";
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from "@/components/dialog";
-import { Field, FieldGroup, Label } from "@/components/fieldset";
+import { ErrorMessage, Field, FieldGroup, Fieldset, Label } from "@/components/fieldset";
 import { Input } from "@/components/input";
 import { Select } from "@/components/select";
+import { addPulseCheck } from "./actions";
+
+export type PulseCheckType = {
+  company_id: number;
+  scheduled: string;
+  repeat: number;
+};
 
 export default function PulseChecks() {
+  const companies = useCompanies();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [scheduled, setScheduled] = useState("");
   const [repeat, setRepeat] = useState("");
+  const [scheduledError, setScheduledError] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
   const scheduleClick = async () => {
-    console.log(scheduled);
+    setScheduledError(false);
+
+    // Validate
+    if (!scheduled) {
+      setScheduledError(true);
+      return;
+    }
+
+    // Add
+    setDisabled(true);
+    const result = await addPulseCheck({ company_id: companies[0].id, scheduled, repeat: Number(repeat) });
+    setDisabled(false);
+
+    if (result.error) {
+      toast.error(result.error);
+      return;
+    }
+
+    // Success
+    toast.success("Pulse check scheduled!");
     setDialogOpen(false);
   };
 
@@ -24,7 +55,7 @@ export default function PulseChecks() {
       <div className="flex items-end justify-between gap-4">
         <Heading>Pulse Checks</Heading>
 
-        <Button onClick={() => setDialogOpen(true)} color="indigo">
+        <Button onClick={() => setDialogOpen(true)} color="indigo" disabled={disabled || !companies.length}>
           <ClockIcon />
           Schedule
         </Button>
@@ -38,24 +69,33 @@ export default function PulseChecks() {
         </DialogDescription>
 
         <DialogBody>
-          <FieldGroup>
-            <Field>
-              <Label>Start date & time</Label>
+          <Fieldset disabled={disabled}>
+            <FieldGroup>
+              <Field>
+                <Label>Start date & time</Label>
 
-              <Input type="datetime-local" value={scheduled} onChange={(e) => setScheduled(e.target.value)} />
-            </Field>
+                <Input
+                  type="datetime-local"
+                  value={scheduled}
+                  onChange={(e) => setScheduled(e.target.value)}
+                  invalid={scheduledError}
+                />
 
-            <Field>
-              <Label>Repeat</Label>
+                {scheduledError && <ErrorMessage>This field is required.</ErrorMessage>}
+              </Field>
 
-              <Select value={repeat} onChange={(e) => setRepeat(e.target.value)}>
-                <option value="14">Every 2 weeks</option>
-                <option value="28">Every 4 weeks</option>
-                <option value="7">Every week</option>
-                <option value="0">Never</option>
-              </Select>
-            </Field>
-          </FieldGroup>
+              <Field>
+                <Label>Repeat</Label>
+
+                <Select value={repeat} onChange={(e) => setRepeat(e.target.value)}>
+                  <option value="14">Every 2 weeks</option>
+                  <option value="28">Every 4 weeks</option>
+                  <option value="7">Every week</option>
+                  <option value="0">Never</option>
+                </Select>
+              </Field>
+            </FieldGroup>
+          </Fieldset>
         </DialogBody>
 
         <DialogActions>
