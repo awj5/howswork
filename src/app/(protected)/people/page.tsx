@@ -13,6 +13,7 @@ import { Heading } from "@/components/heading";
 import { Textarea } from "@/components/textarea";
 import { Description, ErrorMessage, Field, Fieldset, Label } from "@/components/fieldset";
 import { Text } from "@/components/text";
+import HelperTooltip from "@/components/HelperTooltip";
 import { updateStaff } from "./actions";
 
 export default function People() {
@@ -100,7 +101,10 @@ export default function People() {
 
       <Fieldset className="mt-8" disabled={disabled}>
         <Field>
-          <Label>Email addresses or mobile numbers</Label>
+          <Label className="flex items-center gap-1">
+            Email addresses or mobile numbers
+            <HelperTooltip text="Group email addresses (like team@company.com) are recommended for larger organisations" />
+          </Label>
 
           <Description>
             Add your staff's email addresses or mobile numbers, separated by commas or line breaks.
