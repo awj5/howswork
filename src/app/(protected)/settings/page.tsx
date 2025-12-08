@@ -209,7 +209,7 @@ export default function Settings() {
         <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
           <div className="flex flex-col gap-1">
             <Subheading>Timezone</Subheading>
-            <Text>Used for language settings and scheduling pulse checks in your local time.</Text>
+            <Text>Used for language settings and scheduling check-ins in your local time.</Text>
           </div>
 
           <Field>

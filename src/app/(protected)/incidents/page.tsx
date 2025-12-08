@@ -2,8 +2,8 @@
 
 import { Heading } from "@/components/heading";
 
-export default function Concerns() {
-  return <Heading>Concerns</Heading>;
+export default function Incidents() {
+  return <Heading>Incidents</Heading>;
 }
 
 /*

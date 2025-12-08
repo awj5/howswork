@@ -10,15 +10,15 @@ import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } fro
 import { ErrorMessage, Field, FieldGroup, Fieldset, Label } from "@/components/fieldset";
 import { Input } from "@/components/input";
 import { Select } from "@/components/select";
-import { addPulseCheck } from "./actions";
+import { addCheckIn } from "./actions";
 
-export type PulseCheckType = {
+export type CheckInType = {
   company_id: number;
   scheduled: string;
   repeat: number;
 };
 
-export default function PulseChecks() {
+export default function CheckIns() {
   const companies = useCompanies();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [scheduled, setScheduled] = useState("");
@@ -37,7 +37,7 @@ export default function PulseChecks() {
 
     // Add
     setDisabled(true);
-    const result = await addPulseCheck({ company_id: companies[0].id, scheduled, repeat: Number(repeat) });
+    const result = await addCheckIn({ company_id: companies[0].id, scheduled, repeat: Number(repeat) });
     setDisabled(false);
 
     if (result.error) {
@@ -46,14 +46,14 @@ export default function PulseChecks() {
     }
 
     // Success
-    toast.success("Pulse check scheduled!");
+    toast.success("Check-in scheduled!");
     setDialogOpen(false);
   };
 
   return (
     <div className="mx-auto max-w-6xl">
       <div className="flex items-end justify-between gap-4">
-        <Heading>Pulse Checks</Heading>
+        <Heading>Check-ins</Heading>
 
         <Button onClick={() => setDialogOpen(true)} color="indigo" disabled={disabled || !companies.length}>
           <ClockIcon />
@@ -62,10 +62,10 @@ export default function PulseChecks() {
       </div>
 
       <Dialog open={dialogOpen} onClose={setDialogOpen}>
-        <DialogTitle>Schedule a pulse check</DialogTitle>
+        <DialogTitle>Schedule a check-in</DialogTitle>
 
         <DialogDescription>
-          Employees will be notified when the pulse check begins and respond anonymously using a shared access pin.
+          Employees will be notified when the check-in begins and respond anonymously using a shared access pin.
         </DialogDescription>
 
         <DialogBody>
@@ -91,7 +91,7 @@ export default function PulseChecks() {
                   <option value="14">Every 2 weeks</option>
                   <option value="28">Every 4 weeks</option>
                   <option value="7">Every week</option>
-                  <option value="0">Never</option>
+                  <option value="0">None</option>
                 </Select>
               </Field>
             </FieldGroup>
