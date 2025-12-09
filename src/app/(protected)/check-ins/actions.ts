@@ -15,8 +15,22 @@ export async function addCheckIn(companyID: number, scheduled: string, repeat: n
     .single();
 
   if (companyError) return { error: companyError.message };
-  const scheduledDT = DateTime.fromISO(scheduled, { zone: companyData.timezone }).toUTC().toISO(); // Convert to UTC using company timezone
+  const scheduledDT = DateTime.fromISO(scheduled, { zone: companyData.timezone }).toUTC(); // Convert to UTC using company timezone
+  const scheduledISO = scheduledDT.toISO();
   const pin = randomInt(100000, 1000000).toString();
+  const scheduledPrevWeek = scheduledDT.minus({ days: 7 }).toISO();
+  const scheduledNextWeek = scheduledDT.plus({ days: 7 }).toISO();
+
+  // Check if check-in is less or greater than a week from another
+  const { data: checkInsData, error: checkInsError } = await supabase
+    .from("check_ins")
+    .select("id")
+    .eq("company_id", companyID)
+    .gte("scheduled", scheduledPrevWeek)
+    .lte("scheduled", scheduledNextWeek);
+
+  if (checkInsError) return { error: checkInsError.message };
+  if (checkInsData.length > 0) return { error: "Check-ins must be more than 7 days apart." };
 
   // Check for check-ins beyond this one (if repeating)
   if (repeat) {
@@ -24,16 +38,16 @@ export async function addCheckIn(companyID: number, scheduled: string, repeat: n
       .from("check_ins")
       .select("id")
       .eq("company_id", companyID)
-      .gt("scheduled", scheduledDT);
+      .gte("scheduled", scheduledISO);
 
     if (checkInsError) return { error: checkInsError.message };
-    if (checkInsData.length > 0) return { error: "You already have a future check-in scheduled." };
+    if (checkInsData.length > 0) return { error: "A future check-in is already scheduled." };
   }
 
   // Add check-in for company
   const { error: insertCheckInError } = await supabase.from("check_ins").insert({
     company_id: companyID,
-    scheduled: scheduledDT, // Stored as UTC
+    scheduled: scheduledISO, // Stored as UTC
     repeat,
     pin,
   });

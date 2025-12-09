@@ -200,7 +200,7 @@ export default function CheckIns() {
                       </TableCell>
 
                       <TableCell className={`${inFuture && "text-zinc-500"}`}>{repeatText}</TableCell>
-                      <TableCell className={`${inFuture && "text-zinc-500"}`}>{c.pin}</TableCell>
+                      <TableCell className={`${inFuture && "text-zinc-500"}`}>{!inFuture ? c.pin : "-"}</TableCell>
 
                       <TableCell>
                         {inProgress ? (
