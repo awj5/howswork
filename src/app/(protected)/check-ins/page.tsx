@@ -11,6 +11,7 @@ import { Heading } from "@/components/heading";
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from "@/components/dialog";
 import { ErrorMessage, Field, FieldGroup, Fieldset, Label } from "@/components/fieldset";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/table";
+import { Alert, AlertActions, AlertDescription, AlertTitle } from "@/components/alert";
 import { Input } from "@/components/input";
 import { Select } from "@/components/select";
 import { Badge } from "@/components/badge";
@@ -22,41 +23,65 @@ import {
   PaginationPage,
   PaginationPrevious,
 } from "@/components/pagination";
-import { addCheckIn } from "./actions";
+import { addCheckIn, removeCheckIn } from "./actions";
 
 export type CheckInType = {
+  id: number;
   scheduled: string;
   repeat: number;
+  pin: number;
 };
 
 export default function CheckIns() {
   const supabase = createClient();
   const companies = useCompanies();
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [alertOpen, setAlertOpen] = useState(false);
   const [scheduled, setScheduled] = useState("");
   const [repeat, setRepeat] = useState("14"); // Default
   const [scheduledError, setScheduledError] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [checkIns, setCheckIns] = useState<CheckInType[]>();
+  const [checkInToRemove, setCheckInToRemove] = useState<CheckInType>();
   const nowUTC = DateTime.utc();
   let foundInProgress = false;
 
+  const removeCheckInClick = async () => {
+    setAlertOpen(false);
+    if (!checkInToRemove) return;
+    setDisabled(true);
+    const result = await removeCheckIn(checkInToRemove.id);
+    setDisabled(false);
+
+    if (result.error) {
+      toast.error(result.error);
+      return;
+    }
+
+    // Success
+    toast.success("Check-in removed.");
+  };
+
   const confirmCancelClick = (checkIn: CheckInType) => {
-    //
+    setCheckInToRemove(checkIn);
+    setAlertOpen(true);
   };
 
   const scheduleClick = async () => {
     setScheduledError(false);
 
     // Validate
-    if (!scheduled) {
+    const selectedDT = DateTime.fromISO(scheduled, { zone: companies[0].timezone }).toUTC(); // Convert to UTC date object
+
+    // Check if in past
+    if (!scheduled || selectedDT <= nowUTC) {
       setScheduledError(true);
       return;
     }
 
     // Add
     setDisabled(true);
-    const result = await addCheckIn(companies[0].id, { scheduled, repeat: Number(repeat) });
+    const result = await addCheckIn(companies[0].id, scheduled, Number(repeat));
     setDisabled(false);
 
     if (result.error) {
@@ -75,7 +100,7 @@ export default function CheckIns() {
     const getCheckIns = async () => {
       const { data: checkInsData, error: checkInsError } = await supabase
         .from("check_ins")
-        .select("scheduled, repeat")
+        .select("id, scheduled, repeat, pin")
         .eq("company_id", companies[0].id)
         .order("scheduled", { ascending: false });
 
@@ -112,6 +137,7 @@ export default function CheckIns() {
             <TableHead>
               <TableRow>
                 <TableHeader>Date &amp; Time</TableHeader>
+                <TableHeader>Pin</TableHeader>
                 <TableHeader>Responses</TableHeader>
                 <TableHeader>Status</TableHeader>
 
@@ -139,6 +165,7 @@ export default function CheckIns() {
                         </TableCell>
 
                         <TableCell className="text-zinc-500">-</TableCell>
+                        <TableCell className="text-zinc-500">-</TableCell>
 
                         <TableCell>
                           <Badge color="zinc">Upcoming</Badge>
@@ -147,7 +174,7 @@ export default function CheckIns() {
                         <TableCell className="text-right">
                           <Button onClick={() => confirmCancelClick(c)} disabled={disabled} outline>
                             <XCircleIcon />
-                            Cancel
+                            Remove
                           </Button>
                         </TableCell>
                       </TableRow>
@@ -158,6 +185,7 @@ export default function CheckIns() {
                         {scheduledDT.setZone(companies[0].timezone).toFormat("dd LLL yyyy, h:mm a")}
                       </TableCell>
 
+                      <TableCell className={`${inFuture && "text-zinc-500"}`}>{c.pin}</TableCell>
                       <TableCell className={`${inFuture && "text-zinc-500"}`}>{inFuture ? "-" : "0"}</TableCell>
 
                       <TableCell>
@@ -178,7 +206,7 @@ export default function CheckIns() {
                           outline
                         >
                           <XCircleIcon />
-                          Cancel
+                          Remove
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -226,7 +254,7 @@ export default function CheckIns() {
                   invalid={scheduledError}
                 />
 
-                {scheduledError && <ErrorMessage>This field is required.</ErrorMessage>}
+                {scheduledError && <ErrorMessage>Start date &amp; time must be in the future.</ErrorMessage>}
               </Field>
 
               <Field>
@@ -253,14 +281,21 @@ export default function CheckIns() {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Alert open={alertOpen} onClose={setAlertOpen}>
+        <AlertTitle>Are you sure you want to remove this check-in?</AlertTitle>
+        <AlertDescription>This action cannot be undone.</AlertDescription>
+
+        <AlertActions>
+          <Button plain onClick={() => setAlertOpen(false)}>
+            Cancel
+          </Button>
+
+          <Button onClick={removeCheckInClick} color="red">
+            Remove
+          </Button>
+        </AlertActions>
+      </Alert>
     </div>
   );
 }
-
-/*
-- Cycles
-- Show access pin for each cycle
-- Up next and in progress badges
-- Participation stats
-- Cadence settings (fortnightly or monthly)
-*/
