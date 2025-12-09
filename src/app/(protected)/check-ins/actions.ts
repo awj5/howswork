@@ -4,23 +4,23 @@ import { DateTime } from "luxon";
 import { createClient } from "@/utils/supabase/server";
 import { CheckInType } from "./page";
 
-export async function addCheckIn(checkIn: CheckInType) {
+export async function addCheckIn(companyID: number, checkIn: CheckInType) {
   const supabase = await createClient();
 
   // Get company timezone
   const { data: companyData, error: companyError } = await supabase
     .from("companies")
     .select("timezone")
-    .eq("id", checkIn.company_id)
+    .eq("id", companyID)
     .single();
 
   if (companyError) return { error: companyError.message };
-  const scheduledUTC = DateTime.fromISO(checkIn.scheduled, { zone: companyData.timezone }).toUTC().toISO(); // Convert to UTC using company timezone
+  const scheduledDT = DateTime.fromISO(checkIn.scheduled, { zone: companyData.timezone }).toUTC().toISO(); // Convert to UTC using company timezone
 
   // Add check-in for company
   const { error: insertCheckInError } = await supabase.from("check_ins").insert({
-    company_id: checkIn.company_id,
-    scheduled: scheduledUTC,
+    company_id: companyID,
+    scheduled: scheduledDT, // Stored as UTC
     repeat: checkIn.repeat,
   });
 
