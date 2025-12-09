@@ -2,6 +2,7 @@
 
 import { Fragment, useEffect, useState } from "react";
 import { ClockIcon, XCircleIcon } from "@heroicons/react/16/solid";
+import { ArrowPathIcon } from "@heroicons/react/20/solid";
 import { toast } from "sonner";
 import { DateTime } from "luxon";
 import { useCompanies } from "@/hooks/useCompanies";
@@ -161,7 +162,10 @@ export default function CheckIns() {
                     {inProgress && nextScheduledDT && (
                       <TableRow>
                         <TableCell className="font-medium text-zinc-500">
-                          {nextScheduledDT.setZone(companies[0].timezone).toFormat("dd LLL yyyy, h:mm a")}
+                          <div className="flex items-center gap-1.5">
+                            {nextScheduledDT.setZone(companies[0].timezone).toFormat("dd LLL yyyy, h:mm a")}
+                            <ArrowPathIcon className="size-5" />
+                          </div>
                         </TableCell>
 
                         <TableCell className="text-zinc-500">-</TableCell>
@@ -182,7 +186,10 @@ export default function CheckIns() {
 
                     <TableRow href={inFuture ? undefined : "#"}>
                       <TableCell className={`font-medium ${inFuture && "text-zinc-500"}`}>
-                        {scheduledDT.setZone(companies[0].timezone).toFormat("dd LLL yyyy, h:mm a")}
+                        <div className="flex items-center gap-1.5">
+                          {scheduledDT.setZone(companies[0].timezone).toFormat("dd LLL yyyy, h:mm a")}
+                          <ArrowPathIcon className="size-5" />
+                        </div>
                       </TableCell>
 
                       <TableCell className={`${inFuture && "text-zinc-500"}`}>{c.pin}</TableCell>
