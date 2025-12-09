@@ -24,7 +24,7 @@ import {
   PaginationPage,
   PaginationPrevious,
 } from "@/components/pagination";
-import { addCheckIn, removeCheckIn } from "./actions";
+import { addCheckIn, removeCheckIn, updateCheckIn } from "./actions";
 
 export type CheckInType = {
   id: number;
@@ -43,7 +43,7 @@ export default function CheckIns() {
   const [scheduledError, setScheduledError] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [checkIns, setCheckIns] = useState<CheckInType[]>();
-  const [checkInToRemove, setCheckInToRemove] = useState<CheckInType>();
+  const [checkInToRemove, setCheckInToRemove] = useState({ id: 0, cancelRepeat: false });
   const nowUTC = DateTime.utc();
   let foundInProgress = false;
 
@@ -51,7 +51,12 @@ export default function CheckIns() {
     setAlertOpen(false);
     if (!checkInToRemove) return;
     setDisabled(true);
-    const result = await removeCheckIn(checkInToRemove.id);
+
+    // Update (remove repeat) if upcoming check-in
+    const result = checkInToRemove.cancelRepeat
+      ? await updateCheckIn(checkInToRemove.id)
+      : await removeCheckIn(checkInToRemove.id);
+
     setDisabled(false);
 
     if (result.error) {
@@ -63,8 +68,8 @@ export default function CheckIns() {
     toast.success("Check-in removed.");
   };
 
-  const confirmCancelClick = (checkIn: CheckInType) => {
-    setCheckInToRemove(checkIn);
+  const confirmCancelClick = (checkIn: CheckInType, cancelRepeat?: boolean) => {
+    setCheckInToRemove({ id: checkIn.id, cancelRepeat: !!cancelRepeat });
     setAlertOpen(true);
   };
 
@@ -138,8 +143,8 @@ export default function CheckIns() {
             <TableHead>
               <TableRow>
                 <TableHeader>Date &amp; Time</TableHeader>
+                <TableHeader>Repeats</TableHeader>
                 <TableHeader>Pin</TableHeader>
-                <TableHeader>Responses</TableHeader>
                 <TableHeader>Status</TableHeader>
 
                 <TableHeader className="relative w-0">
@@ -155,6 +160,8 @@ export default function CheckIns() {
                 const inProgress = !foundInProgress && !inFuture; // Check if currently in progress
                 if (inProgress) foundInProgress = true; // Only one check-in can be in progress
                 const nextScheduledDT = c.repeat ? scheduledDT.plus({ days: c.repeat }) : null;
+                const repeatWeeks = c.repeat / 7;
+                const repeatText = repeatWeeks === 1 ? "Weekly" : repeatWeeks ? `${repeatWeeks} weeks` : "None";
 
                 return (
                   <Fragment key={`${c.scheduled}-${index}`}>
@@ -168,7 +175,7 @@ export default function CheckIns() {
                           </div>
                         </TableCell>
 
-                        <TableCell className="text-zinc-500">-</TableCell>
+                        <TableCell className="text-zinc-500">{repeatText}</TableCell>
                         <TableCell className="text-zinc-500">-</TableCell>
 
                         <TableCell>
@@ -176,7 +183,7 @@ export default function CheckIns() {
                         </TableCell>
 
                         <TableCell className="text-right">
-                          <Button onClick={() => confirmCancelClick(c)} disabled={disabled} outline>
+                          <Button onClick={() => confirmCancelClick(c, true)} disabled={disabled} outline>
                             <XCircleIcon />
                             Remove
                           </Button>
@@ -188,12 +195,12 @@ export default function CheckIns() {
                       <TableCell className={`font-medium ${inFuture && "text-zinc-500"}`}>
                         <div className="flex items-center gap-1.5">
                           {scheduledDT.setZone(companies[0].timezone).toFormat("dd LLL yyyy, h:mm a")}
-                          <ArrowPathIcon className="size-5" />
+                          {c.repeat && inFuture ? <ArrowPathIcon className="size-5" /> : null}
                         </div>
                       </TableCell>
 
+                      <TableCell className={`${inFuture && "text-zinc-500"}`}>{repeatText}</TableCell>
                       <TableCell className={`${inFuture && "text-zinc-500"}`}>{c.pin}</TableCell>
-                      <TableCell className={`${inFuture && "text-zinc-500"}`}>{inFuture ? "-" : "0"}</TableCell>
 
                       <TableCell>
                         {inProgress ? (
