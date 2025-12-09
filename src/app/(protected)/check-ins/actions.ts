@@ -4,7 +4,7 @@ import { DateTime } from "luxon";
 import { randomInt } from "node:crypto";
 import { createClient } from "@/utils/supabase/server";
 
-export async function addCheckIn(companyID: number, scheduled: string, repeat: number) {
+export async function scheduleCheckIn(companyID: number, scheduled: string, repeat: number) {
   const supabase = await createClient();
 
   // Get company timezone
@@ -16,12 +16,12 @@ export async function addCheckIn(companyID: number, scheduled: string, repeat: n
 
   if (companyError) return { error: companyError.message };
   const scheduledDT = DateTime.fromISO(scheduled, { zone: companyData.timezone }).toUTC(); // Convert to UTC using company timezone
-  const scheduledISO = scheduledDT.toISO();
-  const pin = randomInt(100000, 1000000).toString();
+  const scheduledISO = scheduledDT.toISO(); // Convert to ISO to store in Supabase
+  const pin = randomInt(100000, 1000000).toString(); // Generate random pin
   const scheduledPrevWeek = scheduledDT.minus({ days: 7 }).toISO();
   const scheduledNextWeek = scheduledDT.plus({ days: 7 }).toISO();
 
-  // Check if check-in is less or greater than a week from another
+  // Check if new check-in is less or greater than a week from an existing check-in
   const { data: checkInsData, error: checkInsError } = await supabase
     .from("check_ins")
     .select("id")

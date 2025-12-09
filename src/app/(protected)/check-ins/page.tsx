@@ -24,7 +24,7 @@ import {
   PaginationPage,
   PaginationPrevious,
 } from "@/components/pagination";
-import { addCheckIn, removeCheckIn, updateCheckIn } from "./actions";
+import { scheduleCheckIn, removeCheckIn, updateCheckIn } from "./actions";
 
 export type CheckInType = {
   id: number;
@@ -49,7 +49,6 @@ export default function CheckIns() {
 
   const removeCheckInClick = async () => {
     setAlertOpen(false);
-    if (!checkInToRemove) return;
     setDisabled(true);
 
     // Update (remove repeat) if upcoming check-in
@@ -68,7 +67,7 @@ export default function CheckIns() {
     toast.success("Check-in removed.");
   };
 
-  const confirmCancelClick = (checkIn: CheckInType, cancelRepeat?: boolean) => {
+  const confirmRemoveClick = (checkIn: CheckInType, cancelRepeat?: boolean) => {
     setCheckInToRemove({ id: checkIn.id, cancelRepeat: !!cancelRepeat });
     setAlertOpen(true);
   };
@@ -85,9 +84,9 @@ export default function CheckIns() {
       return;
     }
 
-    // Add
+    // Schedule
     setDisabled(true);
-    const result = await addCheckIn(companies[0].id, scheduled, Number(repeat));
+    const result = await scheduleCheckIn(companies[0].id, scheduled, Number(repeat));
     setDisabled(false);
 
     if (result.error) {
@@ -165,7 +164,7 @@ export default function CheckIns() {
 
                 return (
                   <Fragment key={`${c.scheduled}-${index}`}>
-                    {/* Extra row showing next check-in when in progress repeats */}
+                    {/* Extra row previewing next check-in when in progress repeats */}
                     {inProgress && nextScheduledDT && (
                       <TableRow>
                         <TableCell className="font-medium text-zinc-500">
@@ -183,7 +182,7 @@ export default function CheckIns() {
                         </TableCell>
 
                         <TableCell className="text-right">
-                          <Button onClick={() => confirmCancelClick(c, true)} disabled={disabled} outline>
+                          <Button onClick={() => confirmRemoveClick(c, true)} disabled={disabled} outline>
                             <XCircleIcon />
                             Remove
                           </Button>
@@ -191,7 +190,7 @@ export default function CheckIns() {
                       </TableRow>
                     )}
 
-                    <TableRow href={inFuture ? undefined : "#"}>
+                    <TableRow href={inFuture ? undefined : `/check-ins/${c.id}`}>
                       <TableCell className={`font-medium ${inFuture && "text-zinc-500"}`}>
                         <div className="flex items-center gap-1.5">
                           {scheduledDT.setZone(companies[0].timezone).toFormat("dd LLL yyyy, h:mm a")}
@@ -214,7 +213,7 @@ export default function CheckIns() {
 
                       <TableCell className="text-right">
                         <Button
-                          onClick={() => confirmCancelClick(c)}
+                          onClick={() => confirmRemoveClick(c)}
                           className={`${!inFuture && "pointer-events-none invisible"}`}
                           disabled={disabled}
                           outline
@@ -277,6 +276,8 @@ export default function CheckIns() {
                 <Select value={repeat} onChange={(e) => setRepeat(e.target.value)}>
                   <option value="14">Every 2 weeks</option>
                   <option value="28">Every 4 weeks</option>
+                  <option value="56">Every 8 weeks</option>
+                  <option value="84">Every 12 weeks</option>
                   <option value="7">Every week</option>
                   <option value="0">None</option>
                 </Select>
