@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { ClockIcon, XCircleIcon } from "@heroicons/react/16/solid";
 import { ArrowPathIcon } from "@heroicons/react/20/solid";
 import { toast } from "sonner";
@@ -36,6 +37,7 @@ export type CheckInType = {
 export default function CheckIns() {
   const supabase = createClient();
   const companies = useCompanies();
+  const searchParams = useSearchParams();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
   const [scheduled, setScheduled] = useState("");
@@ -44,8 +46,11 @@ export default function CheckIns() {
   const [disabled, setDisabled] = useState(false);
   const [checkIns, setCheckIns] = useState<CheckInType[]>();
   const [checkInToRemove, setCheckInToRemove] = useState({ id: 0, cancelRepeat: false });
+  const [pageCount, setPageCount] = useState(0);
   const nowUTC = DateTime.utc();
   let foundInProgress = false;
+  const pageSize = 5;
+  const page = Number(searchParams.get("page")) || 1; // Default to page 1
 
   const removeCheckInClick = async () => {
     setAlertOpen(false);
@@ -103,11 +108,23 @@ export default function CheckIns() {
     if (!companies.length || disabled) return;
 
     const getCheckIns = async () => {
-      const { data: checkInsData, error: checkInsError } = await supabase
+      // Pagination
+      const from = (page - 1) * pageSize;
+      const to = from + pageSize - 1;
+
+      // Get check-ins
+      const {
+        data: checkInsData,
+        error: checkInsError,
+        count: checkInsCount,
+      } = await supabase
         .from("check_ins")
-        .select("id, scheduled, repeat, pin")
+        .select("id, scheduled, repeat, pin", {
+          count: "exact",
+        })
         .eq("company_id", companies[0].id)
-        .order("scheduled", { ascending: false });
+        .order("scheduled", { ascending: false })
+        .range(from, to);
 
       if (checkInsError) {
         console.error(checkInsError);
@@ -115,10 +132,11 @@ export default function CheckIns() {
       }
 
       setCheckIns(checkInsData);
+      setPageCount(Math.max(1, Math.ceil(checkInsCount! / pageSize)));
     };
 
     getCheckIns();
-  }, [companies, disabled]);
+  }, [companies, disabled, page]);
 
   return (
     <div className="mx-auto max-w-6xl">
@@ -153,7 +171,7 @@ export default function CheckIns() {
             </TableHead>
 
             <TableBody>
-              {checkIns.map((c, index) => {
+              {checkIns.map((c, i) => {
                 const scheduledDT = DateTime.fromISO(c.scheduled).toUTC(); // Convert to date object (UTC)
                 const inFuture = scheduledDT.toMillis() > nowUTC.toMillis(); // Check if scheduled for future
                 const inProgress = !foundInProgress && !inFuture; // Check if currently in progress
@@ -163,7 +181,7 @@ export default function CheckIns() {
                 const repeatText = repeatWeeks === 1 ? "Weekly" : repeatWeeks ? `${repeatWeeks} weeks` : "None";
 
                 return (
-                  <Fragment key={`${c.scheduled}-${index}`}>
+                  <Fragment key={`${c.scheduled}-${i}`}>
                     {/* Extra row previewing next check-in when in progress repeats */}
                     {inProgress && nextScheduledDT && (
                       <TableRow>
@@ -230,19 +248,44 @@ export default function CheckIns() {
           </Table>
 
           <Pagination className="mt-6">
-            <PaginationPrevious href="?page=2" />
+            <PaginationPrevious href={page !== 1 ? `/check-ins?page=${page - 1}` : undefined} />
+
             <PaginationList>
-              <PaginationPage href="?page=1">1</PaginationPage>
-              <PaginationPage href="?page=2">2</PaginationPage>
-              <PaginationPage href="?page=3" current>
-                3
-              </PaginationPage>
-              <PaginationPage href="?page=4">4</PaginationPage>
-              <PaginationGap />
-              <PaginationPage href="?page=65">65</PaginationPage>
-              <PaginationPage href="?page=66">66</PaginationPage>
+              {Array.from({ length: Math.min(4, pageCount) }, (_, i) => {
+                const pageNumber = i + 1;
+
+                return (
+                  <PaginationPage key={pageNumber} href={`/check-ins?page=${pageNumber}`} current={pageNumber === page}>
+                    {pageNumber}
+                  </PaginationPage>
+                );
+              })}
+
+              {pageCount > 4 && (
+                <>
+                  {pageCount > 6 && <PaginationGap />}
+
+                  {pageCount === 5 && (
+                    <PaginationPage href={`/check-ins?page=${pageCount}`} current={page === pageCount}>
+                      {pageCount}
+                    </PaginationPage>
+                  )}
+
+                  {pageCount >= 6 &&
+                    [pageCount - 1, pageCount].map((pageNumber) => (
+                      <PaginationPage
+                        key={pageNumber}
+                        href={`/check-ins?page=${pageNumber}`}
+                        current={pageNumber === page}
+                      >
+                        {pageNumber}
+                      </PaginationPage>
+                    ))}
+                </>
+              )}
             </PaginationList>
-            <PaginationNext href="?page=4" />
+
+            <PaginationNext href={page !== pageCount ? `/check-ins?page=${page + 1}` : undefined} />
           </Pagination>
         </>
       ) : null}
