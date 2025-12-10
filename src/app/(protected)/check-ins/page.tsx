@@ -79,10 +79,9 @@ export default function CheckIns() {
 
   const scheduleClick = async () => {
     setScheduledError(false);
-    if (!companies.length) return;
 
     // Validate
-    const selectedDT = DateTime.fromISO(scheduled, { zone: companies[0].timezone }).toUTC(); // Convert to UTC date object
+    const selectedDT = DateTime.fromISO(scheduled, { zone: companies[0]?.timezone }).toUTC(); // Convert to UTC date object
 
     // Check if in past
     if (!scheduled || selectedDT <= nowUTC) {
@@ -92,7 +91,7 @@ export default function CheckIns() {
 
     // Schedule
     setDisabled(true);
-    const result = await scheduleCheckIn(companies[0].id, scheduled, Number(repeat));
+    const result = await scheduleCheckIn(companies[0]?.id, scheduled, Number(repeat));
     setDisabled(false);
 
     if (result.error) {
@@ -333,7 +332,7 @@ export default function CheckIns() {
             Cancel
           </Button>
 
-          <Button onClick={() => scheduleClick()} color="indigo">
+          <Button onClick={() => scheduleClick()} color="indigo" disabled={disabled}>
             Schedule
           </Button>
         </DialogActions>
