@@ -3,13 +3,14 @@
 import { Fragment, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { ClockIcon, XCircleIcon } from "@heroicons/react/16/solid";
+import { ClockIcon as ClockOutline } from "@heroicons/react/24/outline";
 import { ArrowPathIcon } from "@heroicons/react/20/solid";
 import { toast } from "sonner";
 import { DateTime } from "luxon";
 import { useCompanies } from "@/hooks/useCompanies";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/button";
-import { Heading } from "@/components/heading";
+import { Heading, Subheading } from "@/components/heading";
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from "@/components/dialog";
 import { ErrorMessage, Field, FieldGroup, Fieldset, Label } from "@/components/fieldset";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/table";
@@ -25,6 +26,8 @@ import {
   PaginationPage,
   PaginationPrevious,
 } from "@/components/pagination";
+import { Text } from "@/components/text";
+import EmptyState from "@/components/EmptyState";
 import { scheduleCheckIn, removeCheckIn, updateCheckIn } from "./actions";
 
 export type CheckInType = {
@@ -140,22 +143,22 @@ export default function CheckIns() {
 
   return (
     <div className="mx-auto max-w-6xl">
-      <div className="flex items-end justify-between gap-4">
-        <Heading>Check-ins</Heading>
-
-        <Button
-          onClick={() => setDialogOpen(true)}
-          color="indigo"
-          className={`${(!checkIns || (checkIns && checkIns.length && checkIns[0].repeat !== 0)) && "pointer-events-none invisible"}`}
-          disabled={disabled}
-        >
-          <ClockIcon />
-          Schedule
-        </Button>
-      </div>
-
-      {companies.length && checkIns && checkIns.length ? (
+      {checkIns && checkIns.length ? (
         <>
+          <div className="flex items-end justify-between gap-4">
+            <Heading>Check-ins</Heading>
+
+            <Button
+              onClick={() => setDialogOpen(true)}
+              color="indigo"
+              className={`${(!checkIns || (checkIns && checkIns.length && checkIns[0].repeat !== 0)) && "pointer-events-none invisible"}`}
+              disabled={disabled}
+            >
+              <ClockIcon />
+              Schedule
+            </Button>
+          </div>
+
           <Table className="mt-8 [--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
             <TableHead>
               <TableRow>
@@ -286,7 +289,20 @@ export default function CheckIns() {
             </Pagination>
           )}
         </>
-      ) : null}
+      ) : (
+        checkIns && (
+          <EmptyState>
+            <ClockOutline className="size-12 text-gray-400 dark:text-gray-500" />
+            <Subheading className="mt-2">No check-ins</Subheading>
+            <Text className="mt-1 text-center">Get started by creating a new check-in.</Text>
+
+            <Button onClick={() => setDialogOpen(true)} color="indigo" className="mt-6">
+              <ClockIcon />
+              Schedule
+            </Button>
+          </EmptyState>
+        )
+      )}
 
       <Dialog open={dialogOpen} onClose={setDialogOpen}>
         <DialogTitle>Schedule a check-in</DialogTitle>
