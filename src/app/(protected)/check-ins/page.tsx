@@ -1,42 +1,27 @@
 "use client";
 
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { ClockIcon, XCircleIcon } from "@heroicons/react/16/solid";
+import { ClockIcon } from "@heroicons/react/16/solid";
 import { ClockIcon as ClockOutline } from "@heroicons/react/24/outline";
-import { ArrowPathIcon } from "@heroicons/react/20/solid";
 import { toast } from "sonner";
 import { DateTime } from "luxon";
+import type { CheckInType } from "@/types";
 import { useCompanies } from "@/hooks/useCompanies";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/button";
 import { Heading, Subheading } from "@/components/heading";
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from "@/components/dialog";
 import { ErrorMessage, Field, FieldGroup, Fieldset, Label } from "@/components/fieldset";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/table";
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/table";
 import { Alert, AlertActions, AlertDescription, AlertTitle } from "@/components/alert";
 import { Input } from "@/components/input";
 import { Select } from "@/components/select";
-import { Badge } from "@/components/badge";
-import {
-  Pagination,
-  PaginationGap,
-  PaginationList,
-  PaginationNext,
-  PaginationPage,
-  PaginationPrevious,
-} from "@/components/pagination";
 import { Text } from "@/components/text";
 import EmptyState from "@/components/EmptyState";
+import { TablePagination } from "@/components/TablePagination";
+import CheckIn from "@/components/check-ins/CheckIn";
 import { scheduleCheckIn, removeCheckIn, updateCheckIn } from "./actions";
-
-export type CheckInType = {
-  id: number;
-  start: string;
-  repeat: number;
-  pin: number;
-  status: string;
-};
 
 export default function CheckIns() {
   const supabase = createClient();
@@ -51,7 +36,6 @@ export default function CheckIns() {
   const [checkIns, setCheckIns] = useState<CheckInType[]>();
   const [checkInToRemove, setCheckInToRemove] = useState({ id: 0, cancelRepeat: false });
   const [pageCount, setPageCount] = useState(0);
-  const nowUTC = DateTime.utc();
   const pageSize = 10;
   const page = Number(searchParams.get("page")) || 1; // Default to page 1
 
@@ -84,6 +68,7 @@ export default function CheckIns() {
     setScheduledError(false);
 
     // Validate
+    const nowUTC = DateTime.utc();
     const selectedDT = DateTime.fromISO(scheduled, { zone: companies[0]?.timezone }).toUTC(); // Convert to UTC date object
 
     // Check if in past
@@ -174,127 +159,26 @@ export default function CheckIns() {
             </TableHead>
 
             <TableBody>
-              {checkIns.map((c, i) => {
-                const startDT = DateTime.fromISO(c.start).toUTC(); // Convert to date object (UTC)
-                const inFuture = startDT.toMillis() > nowUTC.toMillis(); // Check if scheduled for future
-                const nextStartDT = startDT.plus({ days: c.repeat });
-                const repeatWeeks = c.repeat / 7;
-                const repeatText = repeatWeeks === 1 ? "Weekly" : repeatWeeks ? `${repeatWeeks} weeks` : "None";
-
-                return (
-                  <Fragment key={`${c.start}-${i}`}>
-                    {/* Extra row previewing next check-in when in progress repeats */}
-                    {c.status === "Open" && c.repeat && (
-                      <TableRow>
-                        <TableCell className="font-medium text-zinc-500">
-                          <div className="flex items-center gap-1.5">
-                            {nextStartDT.setZone(companies[0].timezone).toFormat("dd LLL yyyy, h:mm a")}
-                            <ArrowPathIcon className="size-5" />
-                          </div>
-                        </TableCell>
-
-                        <TableCell className="text-zinc-500">{repeatText}</TableCell>
-                        <TableCell className="text-zinc-500">-</TableCell>
-
-                        <TableCell>
-                          <Badge color="zinc">Upcoming</Badge>
-                        </TableCell>
-
-                        <TableCell className="text-right">
-                          <Button onClick={() => confirmRemoveClick(c, true)} disabled={disabled} outline>
-                            <XCircleIcon />
-                            Remove
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    )}
-
-                    <TableRow href={inFuture ? undefined : `/check-ins/${c.id}`}>
-                      <TableCell className={`font-medium ${inFuture && "text-zinc-500"}`}>
-                        <div className="flex items-center gap-1.5">
-                          {startDT.setZone(companies[0].timezone).toFormat("dd LLL yyyy, h:mm a")}
-                          {c.repeat && inFuture ? <ArrowPathIcon className="size-5" /> : null}
-                        </div>
-                      </TableCell>
-
-                      <TableCell className={`${inFuture && "text-zinc-500"}`}>{repeatText}</TableCell>
-                      <TableCell className={`${inFuture && "text-zinc-500"}`}>{!inFuture ? c.pin : "-"}</TableCell>
-
-                      <TableCell>
-                        <Badge color={c.status === "Open" ? "amber" : inFuture ? "zinc" : "green"}>{c.status}</Badge>
-                      </TableCell>
-
-                      <TableCell className="text-right">
-                        <Button
-                          onClick={() => confirmRemoveClick(c)}
-                          className={`${!inFuture && "pointer-events-none invisible"}`}
-                          disabled={disabled}
-                          outline
-                        >
-                          <XCircleIcon />
-                          Remove
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  </Fragment>
-                );
-              })}
+              {checkIns.map((c) => (
+                <CheckIn
+                  key={c.start}
+                  data={c}
+                  timezone={companies[0].timezone}
+                  disabled={disabled}
+                  confirmRemoveClick={confirmRemoveClick}
+                />
+              ))}
             </TableBody>
           </Table>
 
-          {pageCount > 1 && (
-            <Pagination className="mt-6">
-              <PaginationPrevious href={page !== 1 ? `/check-ins?page=${page - 1}` : undefined} />
-
-              <PaginationList>
-                {Array.from({ length: Math.min(4, pageCount) }, (_, i) => {
-                  const pageNumber = i + 1;
-
-                  return (
-                    <PaginationPage
-                      key={pageNumber}
-                      href={`/check-ins?page=${pageNumber}`}
-                      current={pageNumber === page}
-                    >
-                      {pageNumber}
-                    </PaginationPage>
-                  );
-                })}
-
-                {pageCount > 4 && (
-                  <>
-                    {pageCount > 6 && <PaginationGap />}
-
-                    {pageCount === 5 && (
-                      <PaginationPage href={`/check-ins?page=${pageCount}`} current={page === pageCount}>
-                        {pageCount}
-                      </PaginationPage>
-                    )}
-
-                    {pageCount >= 6 &&
-                      [pageCount - 1, pageCount].map((pageNumber) => (
-                        <PaginationPage
-                          key={pageNumber}
-                          href={`/check-ins?page=${pageNumber}`}
-                          current={pageNumber === page}
-                        >
-                          {pageNumber}
-                        </PaginationPage>
-                      ))}
-                  </>
-                )}
-              </PaginationList>
-
-              <PaginationNext href={page !== pageCount ? `/check-ins?page=${page + 1}` : undefined} />
-            </Pagination>
-          )}
+          <TablePagination page={page} pageCount={pageCount} route="/check-ins" />
         </>
       ) : (
         checkIns && (
           <EmptyState>
             <ClockOutline className="size-12 text-gray-400 dark:text-gray-500" />
             <Subheading className="mt-2">No check-ins</Subheading>
-            <Text className="mt-1 text-center">Get started by creating a new check-in.</Text>
+            <Text className="mt-1 text-center">Get started by scheduling a check-in.</Text>
 
             <Button onClick={() => setDialogOpen(true)} color="indigo" className="mt-6">
               <ClockIcon />
