@@ -29,9 +29,10 @@ import { scheduleCheckIn, removeCheckIn, updateCheckIn } from "./actions";
 
 export type CheckInType = {
   id: number;
-  scheduled: string;
+  start: string;
   repeat: number;
   pin: number;
+  status: string;
 };
 
 export default function CheckIns() {
@@ -48,8 +49,7 @@ export default function CheckIns() {
   const [checkInToRemove, setCheckInToRemove] = useState({ id: 0, cancelRepeat: false });
   const [pageCount, setPageCount] = useState(0);
   const nowUTC = DateTime.utc();
-  let foundInProgress = false;
-  const pageSize = 5;
+  const pageSize = 10;
   const page = Number(searchParams.get("page")) || 1; // Default to page 1
 
   const removeCheckInClick = async () => {
@@ -79,6 +79,7 @@ export default function CheckIns() {
 
   const scheduleClick = async () => {
     setScheduledError(false);
+    if (!companies.length) return;
 
     // Validate
     const selectedDT = DateTime.fromISO(scheduled, { zone: companies[0].timezone }).toUTC(); // Convert to UTC date object
@@ -119,11 +120,11 @@ export default function CheckIns() {
         count: checkInsCount,
       } = await supabase
         .from("check_ins")
-        .select("id, scheduled, repeat, pin", {
+        .select("id, start, repeat, pin, status", {
           count: "exact",
         })
         .eq("company_id", companies[0].id)
-        .order("scheduled", { ascending: false })
+        .order("start", { ascending: false })
         .range(from, to);
 
       if (checkInsError) {
@@ -154,7 +155,7 @@ export default function CheckIns() {
         </Button>
       </div>
 
-      {checkIns && checkIns.length ? (
+      {companies.length && checkIns && checkIns.length ? (
         <>
           <Table className="mt-8 [--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
             <TableHead>
@@ -172,22 +173,20 @@ export default function CheckIns() {
 
             <TableBody>
               {checkIns.map((c, i) => {
-                const scheduledDT = DateTime.fromISO(c.scheduled).toUTC(); // Convert to date object (UTC)
-                const inFuture = scheduledDT.toMillis() > nowUTC.toMillis(); // Check if scheduled for future
-                const inProgress = !foundInProgress && !inFuture; // Check if currently in progress
-                if (inProgress) foundInProgress = true; // Only one check-in can be in progress
-                const nextScheduledDT = c.repeat ? scheduledDT.plus({ days: c.repeat }) : null;
+                const startDT = DateTime.fromISO(c.start).toUTC(); // Convert to date object (UTC)
+                const inFuture = startDT.toMillis() > nowUTC.toMillis(); // Check if scheduled for future
+                const nextStartDT = startDT.plus({ days: c.repeat });
                 const repeatWeeks = c.repeat / 7;
                 const repeatText = repeatWeeks === 1 ? "Weekly" : repeatWeeks ? `${repeatWeeks} weeks` : "None";
 
                 return (
-                  <Fragment key={`${c.scheduled}-${i}`}>
+                  <Fragment key={`${c.start}-${i}`}>
                     {/* Extra row previewing next check-in when in progress repeats */}
-                    {inProgress && nextScheduledDT && (
+                    {c.status === "Open" && c.repeat && (
                       <TableRow>
                         <TableCell className="font-medium text-zinc-500">
                           <div className="flex items-center gap-1.5">
-                            {nextScheduledDT.setZone(companies[0].timezone).toFormat("dd LLL yyyy, h:mm a")}
+                            {nextStartDT.setZone(companies[0].timezone).toFormat("dd LLL yyyy, h:mm a")}
                             <ArrowPathIcon className="size-5" />
                           </div>
                         </TableCell>
@@ -211,7 +210,7 @@ export default function CheckIns() {
                     <TableRow href={inFuture ? undefined : `/check-ins/${c.id}`}>
                       <TableCell className={`font-medium ${inFuture && "text-zinc-500"}`}>
                         <div className="flex items-center gap-1.5">
-                          {scheduledDT.setZone(companies[0].timezone).toFormat("dd LLL yyyy, h:mm a")}
+                          {startDT.setZone(companies[0].timezone).toFormat("dd LLL yyyy, h:mm a")}
                           {c.repeat && inFuture ? <ArrowPathIcon className="size-5" /> : null}
                         </div>
                       </TableCell>
@@ -220,13 +219,7 @@ export default function CheckIns() {
                       <TableCell className={`${inFuture && "text-zinc-500"}`}>{!inFuture ? c.pin : "-"}</TableCell>
 
                       <TableCell>
-                        {inProgress ? (
-                          <Badge color="amber">Open</Badge>
-                        ) : inFuture ? (
-                          <Badge color="zinc">Scheduled</Badge>
-                        ) : (
-                          <Badge color="green">Closed</Badge>
-                        )}
+                        <Badge color={c.status === "Open" ? "amber" : inFuture ? "zinc" : "green"}>{c.status}</Badge>
                       </TableCell>
 
                       <TableCell className="text-right">
@@ -247,46 +240,52 @@ export default function CheckIns() {
             </TableBody>
           </Table>
 
-          <Pagination className="mt-6">
-            <PaginationPrevious href={page !== 1 ? `/check-ins?page=${page - 1}` : undefined} />
+          {pageCount > 1 && (
+            <Pagination className="mt-6">
+              <PaginationPrevious href={page !== 1 ? `/check-ins?page=${page - 1}` : undefined} />
 
-            <PaginationList>
-              {Array.from({ length: Math.min(4, pageCount) }, (_, i) => {
-                const pageNumber = i + 1;
+              <PaginationList>
+                {Array.from({ length: Math.min(4, pageCount) }, (_, i) => {
+                  const pageNumber = i + 1;
 
-                return (
-                  <PaginationPage key={pageNumber} href={`/check-ins?page=${pageNumber}`} current={pageNumber === page}>
-                    {pageNumber}
-                  </PaginationPage>
-                );
-              })}
-
-              {pageCount > 4 && (
-                <>
-                  {pageCount > 6 && <PaginationGap />}
-
-                  {pageCount === 5 && (
-                    <PaginationPage href={`/check-ins?page=${pageCount}`} current={page === pageCount}>
-                      {pageCount}
+                  return (
+                    <PaginationPage
+                      key={pageNumber}
+                      href={`/check-ins?page=${pageNumber}`}
+                      current={pageNumber === page}
+                    >
+                      {pageNumber}
                     </PaginationPage>
-                  )}
+                  );
+                })}
 
-                  {pageCount >= 6 &&
-                    [pageCount - 1, pageCount].map((pageNumber) => (
-                      <PaginationPage
-                        key={pageNumber}
-                        href={`/check-ins?page=${pageNumber}`}
-                        current={pageNumber === page}
-                      >
-                        {pageNumber}
+                {pageCount > 4 && (
+                  <>
+                    {pageCount > 6 && <PaginationGap />}
+
+                    {pageCount === 5 && (
+                      <PaginationPage href={`/check-ins?page=${pageCount}`} current={page === pageCount}>
+                        {pageCount}
                       </PaginationPage>
-                    ))}
-                </>
-              )}
-            </PaginationList>
+                    )}
 
-            <PaginationNext href={page !== pageCount ? `/check-ins?page=${page + 1}` : undefined} />
-          </Pagination>
+                    {pageCount >= 6 &&
+                      [pageCount - 1, pageCount].map((pageNumber) => (
+                        <PaginationPage
+                          key={pageNumber}
+                          href={`/check-ins?page=${pageNumber}`}
+                          current={pageNumber === page}
+                        >
+                          {pageNumber}
+                        </PaginationPage>
+                      ))}
+                  </>
+                )}
+              </PaginationList>
+
+              <PaginationNext href={page !== pageCount ? `/check-ins?page=${page + 1}` : undefined} />
+            </Pagination>
+          )}
         </>
       ) : null}
 
