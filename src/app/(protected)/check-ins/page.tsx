@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import { ClockIcon } from "@heroicons/react/16/solid";
-import { ClockIcon as ClockOutline } from "@heroicons/react/24/outline";
+import { useRouter, useSearchParams } from "next/navigation";
+import { ClockIcon, UsersIcon } from "@heroicons/react/16/solid";
+import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import { toast } from "sonner";
 import { DateTime } from "luxon";
 import type { CheckInType } from "@/types";
@@ -25,6 +25,7 @@ import { scheduleCheckIn, removeCheckIn, updateCheckIn } from "./actions";
 
 export default function CheckIns() {
   const supabase = createClient();
+  const router = useRouter();
   const companies = useCompanies();
   const searchParams = useSearchParams();
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -36,6 +37,7 @@ export default function CheckIns() {
   const [checkIns, setCheckIns] = useState<CheckInType[]>();
   const [checkInToRemove, setCheckInToRemove] = useState({ id: 0, cancelRepeat: false });
   const [pageCount, setPageCount] = useState(0);
+  const [noStaffContacts, setNoStaffContacts] = useState(false);
   const pageSize = 10;
   const page = Number(searchParams.get("page")) || 1; // Default to page 1
 
@@ -119,6 +121,25 @@ export default function CheckIns() {
         return;
       }
 
+      if (!checkInsData.length) {
+        // Check if company has staff contacts
+        const { data: peopleData, error: peopleError } = await supabase
+          .from("people")
+          .select("contacts")
+          .eq("company_id", companies[0].id)
+          .single();
+
+        if (peopleError) {
+          console.error(peopleError);
+          return;
+        }
+
+        if (!peopleData.contacts || !peopleData.contacts.length) {
+          setNoStaffContacts(true);
+          return;
+        }
+      }
+
       setCheckIns(checkInsData);
       setPageCount(Math.max(1, Math.ceil(checkInsCount! / pageSize)));
     };
@@ -173,16 +194,26 @@ export default function CheckIns() {
 
           <TablePagination page={page} pageCount={pageCount} route="/check-ins" />
         </>
-      ) : (
-        checkIns && (
-          <EmptyState>
-            <ClockOutline className="size-12 text-gray-400 dark:text-gray-500" />
-            <Subheading className="mt-2">No check-ins</Subheading>
-            <Text className="mt-1 text-center">Get started by scheduling a check-in.</Text>
+      ) : checkIns ? (
+        <EmptyState>
+          <CheckCircleIcon className="size-16 text-gray-400 sm:size-12 dark:text-gray-500" />
+          <Subheading className="mt-2">No check-ins</Subheading>
+          <Text className="mt-1 text-center">Get started by scheduling a check-in.</Text>
 
-            <Button onClick={() => setDialogOpen(true)} color="indigo" className="mt-6">
-              <ClockIcon />
-              Schedule
+          <Button onClick={() => setDialogOpen(true)} color="indigo" className="mt-6" disabled={disabled}>
+            <ClockIcon />
+            Schedule
+          </Button>
+        </EmptyState>
+      ) : (
+        noStaffContacts && (
+          <EmptyState>
+            <Subheading className="mt-2">No staff contacts</Subheading>
+            <Text className="mt-1 text-center">Add staff contacts before scheduling a check-in.</Text>
+
+            <Button onClick={() => router.push("/people")} outline className="mt-6">
+              <UsersIcon />
+              Add staff contacts
             </Button>
           </EmptyState>
         )

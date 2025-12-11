@@ -103,13 +103,13 @@ export default function People() {
         <Field>
           <Label>Staff Contacts</Label>
 
-          <Description className="flex items-center gap-1.5">
-            <span>
+          <div data-slot="description" className="flex items-center gap-1.5">
+            <Description>
               Enter one email <Strong>OR</Strong> mobile number per staff member. Separate by comma or line break.
-            </span>
+            </Description>
 
             <HelperTooltip text="Group email addresses (like team@company.com) are recommended for larger organisations" />
-          </Description>
+          </div>
 
           <Textarea
             rows={15}
@@ -126,7 +126,7 @@ alice@company.com, bob@company.com`}
         </Field>
 
         <div className="mt-8 flex items-start justify-between gap-10">
-          <Text>{members} members</Text>
+          <Text>{`${members} member${!members || members > 1 ? "s" : ""}`}</Text>
 
           <Button type="submit" color="indigo" disabled={disabled}>
             Save changes
