@@ -14,17 +14,16 @@ type CheckInProps = {
 };
 
 export default function CheckIn(props: CheckInProps) {
-  const nowUTC = DateTime.utc();
   const startDT = DateTime.fromISO(props.data.start).toUTC(); // Convert to date object (UTC)
-  const inFuture = startDT.toMillis() > nowUTC.toMillis(); // Check if scheduled for future
   const nextStartDT = startDT.plus({ days: props.data.repeat });
+  const isScheduled = props.data.status === "Scheduled";
   const repeatWeeks = props.data.repeat / 7;
   const repeatText = repeatWeeks === 1 ? "Weekly" : repeatWeeks ? `${repeatWeeks} weeks` : "None";
 
   return (
     <>
       {/* Extra row previewing next when open check-in repeats */}
-      {props.data.status === "Open" && props.data.repeat && (
+      {props.data.status === "Open" && props.data.repeat ? (
         <TableRow>
           <TableCell className="font-medium text-zinc-500">
             <div className="flex items-center gap-1.5">
@@ -47,21 +46,21 @@ export default function CheckIn(props: CheckInProps) {
             </Button>
           </TableCell>
         </TableRow>
-      )}
+      ) : null}
 
-      <TableRow href={inFuture ? undefined : `/check-ins/${props.data.id}`}>
-        <TableCell className={`font-medium ${inFuture && "text-zinc-500"}`}>
+      <TableRow href={isScheduled ? undefined : `/check-ins/${props.data.id}`}>
+        <TableCell className={`font-medium ${isScheduled && "text-zinc-500"}`}>
           <div className="flex items-center gap-1.5">
             {startDT.setZone(props.timezone).toFormat("dd LLL yyyy, h:mm a")}
-            {props.data.repeat && inFuture ? <ArrowPathIcon className="size-5" /> : null}
+            {props.data.repeat && isScheduled ? <ArrowPathIcon className="size-5" /> : null}
           </div>
         </TableCell>
 
-        <TableCell className={`${inFuture && "text-zinc-500"}`}>{repeatText}</TableCell>
-        <TableCell className={`${inFuture && "text-zinc-500"}`}>{!inFuture ? props.data.pin : "-"}</TableCell>
+        <TableCell className={`${isScheduled && "text-zinc-500"}`}>{repeatText}</TableCell>
+        <TableCell className={`${isScheduled && "text-zinc-500"}`}>{!isScheduled ? props.data.pin : "-"}</TableCell>
 
         <TableCell>
-          <Badge color={props.data.status === "Open" ? "amber" : inFuture ? "zinc" : "green"}>
+          <Badge color={props.data.status === "Closed" ? "green" : isScheduled ? "zinc" : "amber"}>
             {props.data.status}
           </Badge>
         </TableCell>
@@ -69,7 +68,7 @@ export default function CheckIn(props: CheckInProps) {
         <TableCell className="text-right">
           <Button
             onClick={() => props.confirmRemoveClick(props.data)}
-            className={`${!inFuture && "pointer-events-none invisible"}`}
+            className={`${!isScheduled && "pointer-events-none invisible"}`}
             disabled={props.disabled}
             outline
           >
