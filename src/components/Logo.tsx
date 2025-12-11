@@ -11,6 +11,7 @@ export function Logo(props: LogoProps) {
     <>
       {props.iconOnly ? (
         <>
+          {/* Light mode version */}
           <Image
             src="/img/icon.svg"
             width={128}
@@ -20,6 +21,7 @@ export function Logo(props: LogoProps) {
             priority
           />
 
+          {/* Dark mode version */}
           <Image
             src="/img/icon-dark.svg"
             width={128}
@@ -31,6 +33,7 @@ export function Logo(props: LogoProps) {
         </>
       ) : (
         <>
+          {/* Light mode version */}
           <Image
             src="/img/logo.svg"
             width={728}
@@ -40,6 +43,7 @@ export function Logo(props: LogoProps) {
             priority
           />
 
+          {/* Dark mode version */}
           <Image
             src="/img/logo-dark.svg"
             width={728}
