@@ -6,7 +6,11 @@ import { Heading } from "@/components/heading";
 export default function Home() {
   const companies = useCompanies();
 
-  return <Heading>{companies[0]?.name}</Heading>;
+  return (
+    <div className="flex h-12 items-end sm:h-10">
+      <Heading>{companies[0]?.name}</Heading>
+    </div>
+  );
 }
 
 /*

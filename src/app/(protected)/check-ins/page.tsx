@@ -130,7 +130,7 @@ export default function CheckIns() {
     <div className="mx-auto max-w-6xl">
       {checkIns && checkIns.length ? (
         <>
-          <div className="flex items-end justify-between gap-4">
+          <div className="flex h-12 items-end justify-between gap-4 sm:h-10">
             <Heading>Check-ins</Heading>
 
             <Button

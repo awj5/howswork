@@ -122,7 +122,7 @@ export default function Admins() {
 
   return (
     <div className="mx-auto max-w-6xl">
-      <div className="flex items-end justify-between gap-4">
+      <div className="flex h-12 items-end justify-between gap-4 sm:h-10">
         <Heading>Admins</Heading>
 
         <Button onClick={() => setDialogOpen(true)} color="indigo" disabled={disabled || !companies.length}>

@@ -153,7 +153,10 @@ export default function Settings() {
 
   return (
     <form onSubmit={submitForm} className="mx-auto max-w-4xl">
-      <Heading>Settings</Heading>
+      <div className="flex h-12 items-end sm:h-10">
+        <Heading>Settings</Heading>
+      </div>
+
       <Divider className="mt-6 mb-10" />
 
       <Fieldset disabled={disabled}>

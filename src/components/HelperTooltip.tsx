@@ -6,7 +6,7 @@ export default function HelperTooltip({ text }: { text: string }) {
     <>
       {/* Light mode version */}
       <span
-        className="hidden size-5 not-dark:sm:inline"
+        className="hidden size-5 text-zinc-950 not-dark:md:inline"
         tabIndex={0}
         aria-label={text}
         data-tooltip-id="my-tooltip"
@@ -18,7 +18,7 @@ export default function HelperTooltip({ text }: { text: string }) {
 
       {/* Dark mode version */}
       <span
-        className="hidden size-5 dark:sm:inline"
+        className="hidden size-5 text-white dark:md:inline"
         tabIndex={0}
         aria-label={text}
         data-tooltip-id="my-tooltip"

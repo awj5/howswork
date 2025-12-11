@@ -3,7 +3,11 @@
 import { Heading } from "@/components/heading";
 
 export default function RiskRegister() {
-  return <Heading>Risk Register</Heading>;
+  return (
+    <div className="flex h-12 items-end sm:h-10">
+      <Heading>Risk Register</Heading>
+    </div>
+  );
 }
 
 /*

@@ -12,7 +12,7 @@ import { Button } from "@/components/button";
 import { Heading } from "@/components/heading";
 import { Textarea } from "@/components/textarea";
 import { Description, ErrorMessage, Field, Fieldset, Label } from "@/components/fieldset";
-import { Text } from "@/components/text";
+import { Strong, Text } from "@/components/text";
 import HelperTooltip from "@/components/HelperTooltip";
 import { updateStaff } from "./actions";
 
@@ -66,18 +66,18 @@ export default function People() {
     if (!companies.length) return;
 
     const getStaff = async () => {
-      const { data: staffContactsData, error: staffContactsError } = await supabase
-        .from("staff_contacts")
+      const { data: peopleData, error: peopleError } = await supabase
+        .from("people")
         .select("contacts")
         .eq("company_id", companies[0].id)
         .single();
 
-      if (staffContactsError) {
-        console.error(staffContactsError);
+      if (peopleError) {
+        console.error(peopleError);
         return;
       }
 
-      const contacts = staffContactsData.contacts ?? [];
+      const contacts = peopleData.contacts ?? [];
       const text = contacts.join("\n"); // One contact per line
       setStaff(text);
       staffRef.current = text;
@@ -90,7 +90,7 @@ export default function People() {
 
   return (
     <form onSubmit={submitForm} className="mx-auto max-w-4xl">
-      <div className="flex items-end justify-between gap-4">
+      <div className="flex h-12 items-end justify-between gap-4 sm:h-10">
         <Heading>People</Heading>
 
         <Button onClick={() => router.push("/people/admins")} outline>
@@ -101,13 +101,14 @@ export default function People() {
 
       <Fieldset className="mt-8" disabled={disabled}>
         <Field>
-          <Label className="inline-flex items-center gap-1.5">
-            Email addresses or mobile numbers
-            <HelperTooltip text="Group email addresses (like team@company.com) are recommended for larger organisations" />
-          </Label>
+          <Label>Staff Contacts</Label>
 
-          <Description>
-            Add your staff's email addresses or mobile numbers, separated by commas or line breaks.
+          <Description className="flex items-center gap-1.5">
+            <span>
+              Enter one email <Strong>OR</Strong> mobile number per staff member. Separate by comma or line break.
+            </span>
+
+            <HelperTooltip text="Group email addresses (like team@company.com) are recommended for larger organisations" />
           </Description>
 
           <Textarea
