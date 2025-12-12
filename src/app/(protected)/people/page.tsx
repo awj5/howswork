@@ -137,7 +137,7 @@ alice@company.com, bob@company.com`}
   );
 }
 
-const parseContacts = (val: string) => {
+function parseContacts(val: string) {
   return Array.from(
     new Set(
       val
@@ -146,8 +146,8 @@ const parseContacts = (val: string) => {
         .filter(Boolean)
     )
   );
-};
+}
 
-const isValidContact = (val: string) => {
+function isValidContact(val: string) {
   return isValidEmail(val) || isValidPhone(val);
-};
+}
