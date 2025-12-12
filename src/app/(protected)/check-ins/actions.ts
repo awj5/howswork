@@ -24,7 +24,7 @@ export async function scheduleCheckIn(companyID: number, start: string, repeat: 
   // Check if new check-in is less or greater than a week from an existing check-in
   const { data: checkInsData, error: checkInsError } = await supabase
     .from("check_ins")
-    .select("id")
+    .select("*")
     .eq("company_id", companyID)
     .gte("start", startPrevWeek)
     .lte("start", startNextWeek);
@@ -36,7 +36,7 @@ export async function scheduleCheckIn(companyID: number, start: string, repeat: 
   if (repeat) {
     const { data: checkInsData, error: checkInsError } = await supabase
       .from("check_ins")
-      .select("id")
+      .select("*")
       .eq("company_id", companyID)
       .gte("start", startISO);
 

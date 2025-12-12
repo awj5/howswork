@@ -10,7 +10,7 @@ export async function updateCompany(company: CompanyType) {
   // Check if slug already exists (use Supabase admin to get around RLS)
   const { data: companiesData, error: companiesError } = await supabaseAdmin
     .from("companies")
-    .select("id")
+    .select("*")
     .eq("slug", company.slug)
     .neq("id", company.id);
 
@@ -37,7 +37,7 @@ export async function deleteCompany(companyID: number) {
   // Get company users
   const { data: companyUsersData, error: companyUsersError } = await supabase
     .from("company_users")
-    .select("id")
+    .select("*")
     .eq("company_id", companyID);
 
   if (companyUsersError) return { error: companyUsersError.message };
