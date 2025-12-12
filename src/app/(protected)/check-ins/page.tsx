@@ -21,7 +21,7 @@ import { Text } from "@/components/text";
 import EmptyState from "@/components/EmptyState";
 import { TablePagination } from "@/components/TablePagination";
 import CheckIn from "@/components/check-ins/CheckIn";
-import { scheduleCheckIn, removeCheckIn, updateCheckIn } from "./actions";
+import { scheduleCheckIn, removeCheckIn } from "./actions";
 
 export default function CheckIns() {
   const supabase = createClient();
@@ -35,7 +35,7 @@ export default function CheckIns() {
   const [scheduledError, setScheduledError] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [checkIns, setCheckIns] = useState<CheckInType[]>();
-  const [checkInToRemove, setCheckInToRemove] = useState({ id: 0, cancelRepeat: false });
+  const [checkInToRemove, setCheckInToRemove] = useState<CheckInType>();
   const [pageCount, setPageCount] = useState(0);
   const [noStaffContacts, setNoStaffContacts] = useState(false);
   const pageSize = 10;
@@ -43,13 +43,9 @@ export default function CheckIns() {
 
   const removeCheckInClick = async () => {
     setAlertOpen(false);
+    if (!checkInToRemove) return;
     setDisabled(true);
-
-    // Update (remove repeat) if upcoming check-in
-    const result = checkInToRemove.cancelRepeat
-      ? await updateCheckIn(checkInToRemove.id)
-      : await removeCheckIn(checkInToRemove.id);
-
+    const result = await removeCheckIn(checkInToRemove, companies[0].id);
     setDisabled(false);
 
     if (result.error) {
@@ -61,8 +57,8 @@ export default function CheckIns() {
     toast.success("Check-in removed.");
   };
 
-  const confirmRemoveClick = (checkIn: CheckInType, cancelRepeat?: boolean) => {
-    setCheckInToRemove({ id: checkIn.id, cancelRepeat: !!cancelRepeat });
+  const confirmRemoveClick = (checkIn: CheckInType) => {
+    setCheckInToRemove(checkIn);
     setAlertOpen(true);
   };
 
