@@ -2,10 +2,10 @@
 
 import { Heading } from "@/components/heading";
 
-export default function Incidents() {
+export default function Concerns() {
   return (
     <div className="flex h-12 items-end sm:h-10">
-      <Heading>Incidents</Heading>
+      <Heading>Concerns</Heading>
     </div>
   );
 }

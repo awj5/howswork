@@ -52,7 +52,7 @@ function LoginForm() {
   return (
     <AuthLayout>
       <form onSubmit={submitForm} className="grid w-full max-w-sm grid-cols-1 gap-8">
-        <Logo className="h-7" />
+        <Logo className="h-6" />
 
         <div className="flex flex-col gap-1">
           <Heading>{submitted ? "Check your email" : "Sign in to your dashboard"}</Heading>
