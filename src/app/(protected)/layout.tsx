@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import type { UserType } from "@/types";
 import UserProvider from "@/components/protected-layout/UserProvider";
-import { SidebarLayout } from "@/components/sidebar-layout";
+import { SidebarLayout } from "@/components/ui/sidebar-layout";
 import Nav from "@/components/protected-layout/Nav";
 import Header from "@/components/protected-layout/Header";
 

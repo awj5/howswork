@@ -8,11 +8,11 @@ import { useCompanies } from "@/hooks/useCompanies";
 import { useUnsavedWarning } from "@/hooks/useUnsavedWarning";
 import { createClient } from "@/utils/supabase/client";
 import { isValidEmail, isValidPhone } from "@/utils/helpers";
-import { Button } from "@/components/button";
-import { Heading } from "@/components/heading";
-import { Textarea } from "@/components/textarea";
-import { Description, ErrorMessage, Field, Fieldset, Label } from "@/components/fieldset";
-import { Strong, Text } from "@/components/text";
+import { Button } from "@/components/ui/button";
+import { Heading } from "@/components/ui/heading";
+import { Textarea } from "@/components/ui/textarea";
+import { Description, ErrorMessage, Field, Fieldset, Label } from "@/components/ui/fieldset";
+import { Strong, Text } from "@/components/ui/text";
 import HelperTooltip from "@/components/HelperTooltip";
 import { updateStaff } from "./actions";
 

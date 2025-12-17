@@ -8,7 +8,7 @@ import {
   UserCircleIcon,
 } from "@heroicons/react/16/solid";
 import { createClient } from "@/utils/supabase/client";
-import { DropdownDivider, DropdownItem, DropdownLabel } from "@/components/dropdown";
+import { DropdownDivider, DropdownItem, DropdownLabel } from "@/components/ui/dropdown";
 
 export default function AccountMenu() {
   const router = useRouter();

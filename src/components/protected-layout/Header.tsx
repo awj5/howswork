@@ -1,9 +1,9 @@
 "use client";
 
 import { useUserContext } from "@/hooks/useUserContext";
-import { Navbar, NavbarItem, NavbarSection, NavbarSpacer } from "@/components/navbar";
-import { Dropdown, DropdownButton, DropdownMenu } from "@/components/dropdown";
-import { Avatar } from "@/components/avatar";
+import { Navbar, NavbarItem, NavbarSection, NavbarSpacer } from "@/components/ui/navbar";
+import { Dropdown, DropdownButton, DropdownMenu } from "@/components/ui/dropdown";
+import { Avatar } from "@/components/ui/avatar";
 import AccountMenu from "./AccountMenu";
 import CompanySwitcher from "./CompanySwitcher";
 

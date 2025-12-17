@@ -1,4 +1,4 @@
-import { Text } from "@/components/text";
+import { Text } from "@/components/ui/text";
 
 export default function NotFound() {
   return (

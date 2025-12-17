@@ -2,9 +2,9 @@ import { XCircleIcon } from "@heroicons/react/16/solid";
 import { ArrowPathIcon } from "@heroicons/react/20/solid";
 import { DateTime } from "luxon";
 import type { CheckInType } from "@/types";
-import { Button } from "@/components/button";
-import { TableCell, TableRow } from "@/components/table";
-import { Badge } from "@/components/badge";
+import { Button } from "@/components/ui/button";
+import { TableCell, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 
 type CheckInProps = {
   data: CheckInType;

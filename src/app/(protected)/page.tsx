@@ -1,7 +1,7 @@
 "use client";
 
 import { useCompanies } from "@/hooks/useCompanies";
-import { Heading } from "@/components/heading";
+import { Heading } from "@/components/ui/heading";
 
 export default function Home() {
   const companies = useCompanies();

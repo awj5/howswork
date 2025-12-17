@@ -8,13 +8,13 @@ import { isValidEmail } from "@/utils/helpers";
 import { useUserContext } from "@/hooks/useUserContext";
 import type { UserType } from "@/types";
 import { createClient } from "@/utils/supabase/client";
-import { Heading } from "@/components/heading";
-import { Button } from "@/components/button";
-import { Alert, AlertActions, AlertDescription, AlertTitle } from "@/components/alert";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/table";
-import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from "@/components/dialog";
-import { ErrorMessage, Field, Label } from "@/components/fieldset";
-import { Input } from "@/components/input";
+import { Heading } from "@/components/ui/heading";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertActions, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import { ErrorMessage, Field, Label } from "@/components/ui/fieldset";
+import { Input } from "@/components/ui/input";
 import { removeUser, inviteUser } from "./actions";
 
 export default function Admins() {

@@ -11,8 +11,15 @@ import {
   ClipboardIcon,
   LifebuoyIcon,
 } from "@heroicons/react/20/solid";
-import { Sidebar, SidebarBody, SidebarItem, SidebarLabel, SidebarSection, SidebarSpacer } from "@/components/sidebar";
-import { Link } from "@/components/link";
+import {
+  Sidebar,
+  SidebarBody,
+  SidebarItem,
+  SidebarLabel,
+  SidebarSection,
+  SidebarSpacer,
+} from "@/components/ui/sidebar";
+import { Link } from "@/components/ui/link";
 import { Logo } from "@/components/Logo";
 import Footer from "./nav/Footer";
 

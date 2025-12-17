@@ -1,7 +1,7 @@
 import { useUserContext } from "@/hooks/useUserContext";
-import { SidebarFooter, SidebarItem } from "@/components/sidebar";
-import { Dropdown, DropdownButton, DropdownMenu } from "@/components/dropdown";
-import { Avatar } from "@/components/avatar";
+import { SidebarFooter, SidebarItem } from "@/components/ui/sidebar";
+import { Dropdown, DropdownButton, DropdownMenu } from "@/components/ui/dropdown";
+import { Avatar } from "@/components/ui/avatar";
 import AccountMenu from "../AccountMenu";
 import CompanySwitcher from "../CompanySwitcher";
 

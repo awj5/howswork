@@ -4,12 +4,12 @@ import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { isValidEmail } from "@/utils/helpers";
-import { AuthLayout } from "@/components/auth-layout";
-import { Button } from "@/components/button";
-import { ErrorMessage, Field, Fieldset, Label } from "@/components/fieldset";
-import { Heading } from "@/components/heading";
-import { Input } from "@/components/input";
-import { Strong, Text, TextLink } from "@/components/text";
+import { AuthLayout } from "@/components/ui/auth-layout";
+import { Button } from "@/components/ui/button";
+import { ErrorMessage, Field, Fieldset, Label } from "@/components/ui/fieldset";
+import { Heading } from "@/components/ui/heading";
+import { Input } from "@/components/ui/input";
+import { Strong, Text, TextLink } from "@/components/ui/text";
 import { Logo } from "@/components/Logo";
 import { login } from "./actions";
 

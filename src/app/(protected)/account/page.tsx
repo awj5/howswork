@@ -7,13 +7,13 @@ import { createClient } from "@/utils/supabase/client";
 import { isValidEmail } from "@/utils/helpers";
 import { useUserContext } from "@/hooks/useUserContext";
 import { useUnsavedWarning } from "@/hooks/useUnsavedWarning";
-import { Heading, Subheading } from "@/components/heading";
-import { Alert, AlertActions, AlertDescription, AlertTitle } from "@/components/alert";
-import { Text } from "@/components/text";
-import { Divider } from "@/components/divider";
-import { Input } from "@/components/input";
-import { ErrorMessage, Field, Fieldset, Label } from "@/components/fieldset";
-import { Button } from "@/components/button";
+import { Heading, Subheading } from "@/components/ui/heading";
+import { Alert, AlertActions, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Text } from "@/components/ui/text";
+import { Divider } from "@/components/ui/divider";
+import { Input } from "@/components/ui/input";
+import { ErrorMessage, Field, Fieldset, Label } from "@/components/ui/fieldset";
+import { Button } from "@/components/ui/button";
 import { updateAccount, deleteAccount } from "./actions";
 
 type FormErrorsType = {

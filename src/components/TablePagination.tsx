@@ -5,7 +5,7 @@ import {
   PaginationNext,
   PaginationPage,
   PaginationPrevious,
-} from "@/components/pagination";
+} from "@/components/ui/pagination";
 
 type TablePaginationProps = {
   page: number;

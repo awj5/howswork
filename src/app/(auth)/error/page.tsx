@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Text, TextLink } from "@/components/text";
+import { Text, TextLink } from "@/components/ui/text";
 
 export default function Error() {
   const [error, setError] = useState("");

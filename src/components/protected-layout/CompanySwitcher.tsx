@@ -1,6 +1,6 @@
 import { BuildingOffice2Icon } from "@heroicons/react/16/solid";
 import { useCompanies } from "@/hooks/useCompanies";
-import { Listbox, ListboxLabel, ListboxOption } from "@/components/listbox";
+import { Listbox, ListboxLabel, ListboxOption } from "@/components/ui/listbox";
 
 export default function CompanySwitcher() {
   const companies = useCompanies();
