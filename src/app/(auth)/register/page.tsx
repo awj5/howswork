@@ -90,7 +90,7 @@ function RegisterForm() {
                 : "Set up your company"}
         </Heading>
 
-        {submitted && <Text>We've sent a secure sign-in link to your email.</Text>}
+        {submitted && <Text>We&apos;ve sent a secure sign-in link to your email.</Text>}
 
         {!submitted && (
           <Fieldset className="flex flex-col gap-8" disabled={disabled}>

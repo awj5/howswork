@@ -185,7 +185,7 @@ export default function Settings() {
             <Subheading>Company URL</Subheading>
 
             <Text>
-              This is your company's unique URL:
+              This is your company&apos;s unique URL:
               <br />
               <TextLink href={`https://howswork.app/${slug}`} target="_blank">
                 {`https://howswork.app/${slug}`}

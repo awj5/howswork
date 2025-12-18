@@ -54,7 +54,7 @@ function LoginForm() {
       <form onSubmit={submitForm} className="grid w-full max-w-sm grid-cols-1 gap-8">
         <Logo className="h-6" />
         <Heading>{submitted ? "Check your email" : "Sign in to your dashboard"}</Heading>
-        {submitted && <Text>We've sent you a secure sign-in link.</Text>}
+        {submitted && <Text>We&apos;ve sent you a secure sign-in link.</Text>}
 
         {!submitted && (
           <Fieldset className="flex flex-col gap-8" disabled={disabled}>

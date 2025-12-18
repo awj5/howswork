@@ -169,8 +169,8 @@ export default function Admins() {
         <DialogTitle>Invite administrator</DialogTitle>
 
         <DialogDescription>
-          We'll email this person an invite to join your dashboard as an admin. Only invite people you trust to have
-          full access.
+          We&apos;ll email this person an invite to join your dashboard as an admin. Only invite people you trust to
+          have full access.
         </DialogDescription>
 
         <DialogBody>
