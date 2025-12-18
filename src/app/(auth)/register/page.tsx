@@ -80,19 +80,17 @@ function RegisterForm() {
       <form onSubmit={submitForm} className="grid w-full max-w-sm grid-cols-1 gap-8">
         <Logo className="h-6" />
 
-        <div className="flex flex-col gap-1">
-          <Heading>
-            {submitted && isInvite
-              ? "Invite accepted!"
-              : submitted
-                ? "Set up complete!"
-                : isInvite
-                  ? `Access your ${inviteCompany} dashboard`
-                  : "Set up your company"}
-          </Heading>
+        <Heading>
+          {submitted && isInvite
+            ? "Invite accepted!"
+            : submitted
+              ? "Set up complete!"
+              : isInvite
+                ? `Access your ${inviteCompany} dashboard`
+                : "Set up your company"}
+        </Heading>
 
-          {submitted && <Text>We've sent a secure sign-in link to your email.</Text>}
-        </div>
+        {submitted && <Text>We've sent a secure sign-in link to your email.</Text>}
 
         {!submitted && (
           <Fieldset className="flex flex-col gap-8" disabled={disabled}>
