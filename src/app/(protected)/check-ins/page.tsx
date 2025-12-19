@@ -31,7 +31,7 @@ export default function CheckIns() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
   const [scheduled, setScheduled] = useState("");
-  const [repeat, setRepeat] = useState("14"); // Default
+  const [repeat, setRepeat] = useState("28"); // Default
   const [scheduledError, setScheduledError] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [checkIns, setCheckIns] = useState<CheckInType[]>();
@@ -242,11 +242,11 @@ export default function CheckIns() {
                 <Label>Repeat</Label>
 
                 <Select value={repeat} onChange={(e) => setRepeat(e.target.value)}>
+                  <option value="7">Every week</option>
                   <option value="14">Every 2 weeks</option>
                   <option value="28">Every 4 weeks</option>
                   <option value="56">Every 8 weeks</option>
                   <option value="84">Every 12 weeks</option>
-                  <option value="7">Every week</option>
                   <option value="0">None</option>
                 </Select>
               </Field>
