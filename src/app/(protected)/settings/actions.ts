@@ -12,7 +12,8 @@ export async function updateCompany(company: CompanyType) {
     .from("companies")
     .select("*")
     .eq("slug", company.slug)
-    .neq("id", company.id);
+    .neq("id", company.id)
+    .limit(1);
 
   if (companiesError) return { error: companiesError.message };
   if (companiesData.length) return { error: "This URL is already in use. Please choose a different one." };
