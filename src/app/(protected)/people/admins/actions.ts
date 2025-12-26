@@ -3,7 +3,7 @@
 import { baseURL, isValidEmail } from "@/utils/helpers";
 import { createClient } from "@/utils/supabase/server";
 import supabaseAdmin from "@/utils/supabase/admin";
-import { resend } from "@/utils/resend";
+import resend from "@/utils/resend";
 import type { CompanyType, UserType } from "@/types";
 
 export async function inviteUser(email: string, company: CompanyType) {
