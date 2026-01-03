@@ -94,11 +94,11 @@ function RegisterForm() {
           <>
             <Text>
               <Strong>
-                We&apos;ve sent a secure sign-in link to your email to access {isInvite ? "the" : "your"} dashboard.
+                We've sent a secure sign-in link to your email to access {isInvite ? "the" : "your"} dashboard.
               </Strong>
             </Text>
 
-            <Text>If you don&apos;t see the email, check your spam folder.</Text>
+            <Text>If you don't see the email, check your spam folder.</Text>
           </>
         )}
 
@@ -120,7 +120,7 @@ function RegisterForm() {
 
             <Field>
               <Label>Email</Label>
-              {!isInvite && <Description>Used to manage your organisation&apos;s dashboard.</Description>}
+              {!isInvite && <Description>Used to manage your organisation's dashboard.</Description>}
 
               <Input
                 type="email"

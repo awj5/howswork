@@ -148,8 +148,8 @@ export default function Account() {
             <Subheading>Email</Subheading>
 
             <Text>
-              Changing your email will log you out. You&apos;ll need to confirm your new email address before signing
-              back in.
+              Changing your email will log you out. You'll need to confirm your new email address before signing back
+              in.
             </Text>
           </div>
 

@@ -58,10 +58,10 @@ function LoginForm() {
         {submitted && (
           <>
             <Text>
-              <Strong>We&apos;ve sent a secure sign-in link to your email to access your dashboard.</Strong>
+              <Strong>We've sent a secure sign-in link to your email to access your dashboard.</Strong>
             </Text>
 
-            <Text>If you don&apos;t see the email, check your spam folder.</Text>
+            <Text>If you don't see the email, check your spam folder.</Text>
           </>
         )}
 
