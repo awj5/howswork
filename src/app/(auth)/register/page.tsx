@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { isValidEmail } from "@/utils/helpers";
 import { AuthLayout } from "@/components/ui/auth-layout";
 import { Button } from "@/components/ui/button";
-import { Field, Label, Fieldset, ErrorMessage } from "@/components/ui/fieldset";
+import { Field, Label, Fieldset, ErrorMessage, Description } from "@/components/ui/fieldset";
 import { Heading } from "@/components/ui/heading";
 import { Input } from "@/components/ui/input";
 import { Strong, Text, TextLink } from "@/components/ui/text";
@@ -86,11 +86,21 @@ function RegisterForm() {
             : submitted
               ? "Set up complete!"
               : isInvite
-                ? `Access your ${inviteCompany} dashboard`
+                ? `Access the ${inviteCompany} dashboard`
                 : "Set up your company"}
         </Heading>
 
-        {submitted && <Text>We&apos;ve sent a secure sign-in link to your email.</Text>}
+        {submitted && (
+          <>
+            <Text>
+              <Strong>
+                We&apos;ve sent a secure sign-in link to your email to access {isInvite ? "the" : "your"} dashboard.
+              </Strong>
+            </Text>
+
+            <Text>If you don&apos;t see the email, check your spam folder.</Text>
+          </>
+        )}
 
         {!submitted && (
           <Fieldset className="flex flex-col gap-8" disabled={disabled}>
@@ -110,6 +120,7 @@ function RegisterForm() {
 
             <Field>
               <Label>Email</Label>
+              {!isInvite && <Description>Used to manage your organisation&apos;s dashboard.</Description>}
 
               <Input
                 type="email"
@@ -119,7 +130,7 @@ function RegisterForm() {
                 disabled={isInvite}
               />
 
-              {formErrors.email && <ErrorMessage>This field is required.</ErrorMessage>}
+              {formErrors.email && <ErrorMessage>Enter a valid email address.</ErrorMessage>}
             </Field>
 
             {!isInvite && (
@@ -131,7 +142,7 @@ function RegisterForm() {
             )}
 
             <Button type="submit" className="w-full" color="indigo">
-              {isInvite ? "Accept invite" : "Create account"}
+              {isInvite ? "Accept invite" : "Create company"}
             </Button>
 
             {!isInvite && (

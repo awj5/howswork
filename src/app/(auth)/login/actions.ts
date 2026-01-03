@@ -19,6 +19,10 @@ export async function login(formData: FormData) {
     },
   });
 
-  if (error) return { error: error.message };
+  if (error) {
+    console.error(error.message);
+    return { error: "No account found for this email." };
+  }
+
   return { success: true };
 }

@@ -54,14 +54,23 @@ function LoginForm() {
       <form onSubmit={submitForm} className="grid w-full max-w-sm grid-cols-1 gap-8">
         <Logo className="h-6" />
         <Heading>{submitted ? "Check your email" : "Sign in to your dashboard"}</Heading>
-        {submitted && <Text>We&apos;ve sent you a secure sign-in link.</Text>}
+
+        {submitted && (
+          <>
+            <Text>
+              <Strong>We&apos;ve sent a secure sign-in link to your email to access your dashboard.</Strong>
+            </Text>
+
+            <Text>If you don&apos;t see the email, check your spam folder.</Text>
+          </>
+        )}
 
         {!submitted && (
           <Fieldset className="flex flex-col gap-8" disabled={disabled}>
             <Field>
               <Label>Email</Label>
               <Input type="email" name="email" invalid={emailError} />
-              {emailError && <ErrorMessage>This field is required.</ErrorMessage>}
+              {emailError && <ErrorMessage>Enter a valid email address.</ErrorMessage>}
             </Field>
 
             <Button type="submit" className="w-full" color="indigo">

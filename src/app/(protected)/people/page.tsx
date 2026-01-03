@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Textarea } from "@/components/ui/textarea";
 import { Description, ErrorMessage, Field, Fieldset, Label } from "@/components/ui/fieldset";
-import { Strong, Text } from "@/components/ui/text";
+import { Text } from "@/components/ui/text";
 import HelperTooltip from "@/components/HelperTooltip";
 import { updateStaff } from "./actions";
 
@@ -105,10 +105,10 @@ export default function People() {
 
           <div data-slot="description" className="flex items-center gap-1.5">
             <Description>
-              Enter one email <Strong>OR</Strong> mobile number per staff member. Separate by comma or line break.
+              Enter either an email or a mobile number per staff member. Separate by comma or line break.
             </Description>
 
-            <HelperTooltip text="Group email addresses (like team@company.com) are recommended for larger organisations" />
+            <HelperTooltip text="Group email addresses (e.g. team@company.com) work well for larger organisations." />
           </div>
 
           <Textarea
@@ -122,7 +122,11 @@ alice@company.com, bob@company.com`}
             invalid={staffError}
           />
 
-          {staffError && <ErrorMessage>Some email addresses or mobile numbers are invalid.</ErrorMessage>}
+          {staffError && (
+            <ErrorMessage>
+              One or more email addresses or mobile numbers appear to be invalid. Please check the list and try again.
+            </ErrorMessage>
+          )}
         </Field>
 
         <div className="mt-8 flex items-start justify-between gap-10">

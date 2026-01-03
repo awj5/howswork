@@ -169,8 +169,7 @@ export default function Admins() {
         <DialogTitle>Invite administrator</DialogTitle>
 
         <DialogDescription>
-          We&apos;ll email this person an invite to join your dashboard as an admin. Only invite people you trust to
-          have full access.
+          We&apos;ll give this person admin access to your dashboard. Only invite people you trust with full access.
         </DialogDescription>
 
         <DialogBody>
@@ -185,7 +184,7 @@ export default function Admins() {
               disabled={disabled}
             />
 
-            {inviteEmailError && <ErrorMessage>This field is required.</ErrorMessage>}
+            {inviteEmailError && <ErrorMessage>Enter a valid email address.</ErrorMessage>}
           </Field>
         </DialogBody>
 

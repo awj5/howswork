@@ -45,7 +45,7 @@ export async function inviteUser(email: string, company: CompanyType) {
   });
 
   if (insertCompanyUserError) return { error: insertCompanyUserError.message };
-  if (profileData) return { success: "User added!" };
+  if (profileData) return { success: "Admin access granted." };
 
   // Send email invite (if user doesn't already exist)
   const inviteUrl = `${baseURL}/register?email=${encodeURIComponent(email)}&company=${encodeURIComponent(company.name)}`;
@@ -64,7 +64,7 @@ export async function inviteUser(email: string, company: CompanyType) {
     });
 
     if (sendInviteError) return { error: sendInviteError.message };
-    return { success: "Invite sent!" };
+    return { success: "Admin invite sent." };
   } catch (error) {
     console.error(error);
     return { error: "Unexpected error sending email." };
