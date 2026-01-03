@@ -16,7 +16,7 @@ export async function updateCompany(company: CompanyType) {
     .limit(1);
 
   if (companiesError) return { error: companiesError.message };
-  if (companiesData.length) return { error: "This URL is already in use. Please choose a different one." };
+  if (companiesData.length) return { error: "This URL is already in use. Choose a different URL." };
 
   // Update company (RLS only allows users in company to update it)
   const { error: updateCompanyError } = await supabase
@@ -42,7 +42,7 @@ export async function deleteCompany(companyID: number) {
     .eq("company_id", companyID);
 
   if (companyUsersError) return { error: companyUsersError.message };
-  if (companyUsersData.length > 1) return { error: "Remove all admins before deleting a company." };
+  if (companyUsersData.length > 1) return { error: "All admins must be removed before this company can be deleted." };
 
   // There is only one user left so delete the company
   const { error: deleteCompanyError } = await supabase.from("companies").delete().eq("id", companyID);

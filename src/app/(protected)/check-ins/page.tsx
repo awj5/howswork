@@ -166,7 +166,7 @@ export default function CheckIns() {
               <TableRow>
                 <TableHeader>Date &amp; Time</TableHeader>
                 <TableHeader>Repeats</TableHeader>
-                <TableHeader>Pin</TableHeader>
+                <TableHeader>PIN</TableHeader>
                 <TableHeader>Status</TableHeader>
 
                 <TableHeader className="relative w-0">
@@ -219,7 +219,7 @@ export default function CheckIns() {
         <DialogTitle>Schedule a check-in</DialogTitle>
 
         <DialogDescription>
-          Employees will be notified when the check-in begins and respond anonymously using a shared access pin.
+          Employees will be notified when the check-in begins and can respond anonymously using a shared access PIN.
         </DialogDescription>
 
         <DialogBody>

@@ -162,7 +162,7 @@ export default function Account() {
               invalid={formErrors.email}
             />
 
-            {formErrors.email && <ErrorMessage>This field is required.</ErrorMessage>}
+            {formErrors.email && <ErrorMessage>Enter a valid email address.</ErrorMessage>}
           </Field>
         </section>
 
@@ -171,7 +171,7 @@ export default function Account() {
         <div className="flex flex-col-reverse items-end justify-between gap-10 sm:flex-row">
           <Button type="button" onClick={() => setAlertOpen(true)} outline>
             <TrashIcon />
-            Delete account
+            Delete my account
           </Button>
 
           <Button type="submit" color="indigo">

@@ -236,7 +236,7 @@ export default function Settings() {
         <div className="flex flex-col-reverse items-end justify-between gap-10 sm:flex-row">
           <Button type="button" onClick={() => setAlertOpen(true)} outline>
             <TrashIcon />
-            Delete company
+            Delete this company
           </Button>
 
           <Button type="submit" color="indigo">
@@ -247,7 +247,10 @@ export default function Settings() {
 
       <Alert open={alertOpen} onClose={setAlertOpen}>
         <AlertTitle>Are you sure you want to delete your company?</AlertTitle>
-        <AlertDescription>This action cannot be undone. Your company will be permanently deleted.</AlertDescription>
+
+        <AlertDescription>
+          This action cannot be undone. Your company and all associated records will be permanently deleted.
+        </AlertDescription>
 
         <AlertActions>
           <Button plain onClick={() => setAlertOpen(false)}>
