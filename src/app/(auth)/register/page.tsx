@@ -94,11 +94,11 @@ function RegisterForm() {
           <>
             <Text>
               <Strong>
-                We've sent a secure sign-in link to your email to access {isInvite ? "the" : "your"} dashboard.
+                We've sent a sign-in link to your email address to access {isInvite ? "the" : "your"} dashboard.
               </Strong>
             </Text>
 
-            <Text>If you don't see the email, check your spam folder.</Text>
+            <Text>If you don't see the email, check your spam or junk folder.</Text>
           </>
         )}
 

@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Strong, Text, TextLink } from "@/components/ui/text";
+import { Text, TextLink } from "@/components/ui/text";
+import { Heading } from "@/components/ui/heading";
 
 export default function Error() {
   const [error, setError] = useState("");
@@ -18,12 +19,10 @@ export default function Error() {
       <div className="flex grow flex-col items-center justify-center p-6 lg:rounded-lg lg:bg-white lg:p-10 lg:shadow-xs lg:ring-1 lg:ring-zinc-950/5 dark:lg:bg-zinc-900 dark:lg:ring-white/10">
         {error && (
           <>
-            <Text className="text-center">
-              <Strong className="text-red-600! dark:text-red-500!">{error}.</Strong>
-            </Text>
+            <Heading className="text-red-600! dark:text-red-500!">{error}</Heading>
 
             <Text>
-              Please <TextLink href="/login">sign in again</TextLink> to get a new link.
+              Please <TextLink href="/login">sign in</TextLink> again.
             </Text>
           </>
         )}
