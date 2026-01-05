@@ -105,7 +105,7 @@ export default function People() {
 
           <div data-slot="description" className="flex items-center gap-1.5">
             <Description>
-              Enter either an email or a mobile number per staff member. Separate by comma or line break.
+              One contact per staff member: email or mobile (not both). Separate by comma or line break.
             </Description>
 
             <HelperTooltip text="Group email addresses (e.g. team@company.com) work well for larger organisations." />

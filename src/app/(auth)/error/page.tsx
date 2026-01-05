@@ -1,10 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Text, TextLink } from "@/components/ui/text";
-import { Heading } from "@/components/ui/heading";
+import { useRouter } from "next/navigation";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { Subheading } from "@/components/ui/heading";
+import { Button } from "@/components/ui/button";
 
 export default function Error() {
+  const router = useRouter();
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -19,11 +22,12 @@ export default function Error() {
       <div className="flex grow flex-col items-center justify-center p-6 lg:rounded-lg lg:bg-white lg:p-10 lg:shadow-xs lg:ring-1 lg:ring-zinc-950/5 dark:lg:bg-zinc-900 dark:lg:ring-white/10">
         {error && (
           <>
-            <Heading className="text-red-600! dark:text-red-500!">{error}</Heading>
+            <ExclamationTriangleIcon className="size-16 text-red-600 sm:size-12 dark:text-red-500" />
+            <Subheading className="mt-2 text-center text-red-600! dark:text-red-500!">{error}</Subheading>
 
-            <Text>
-              Please <TextLink href="/login">sign in</TextLink> again.
-            </Text>
+            <Button onClick={() => router.push("/login")} className="mt-6" outline>
+              Sign in again
+            </Button>
           </>
         )}
       </div>

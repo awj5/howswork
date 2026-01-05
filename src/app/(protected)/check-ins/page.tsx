@@ -194,18 +194,18 @@ export default function CheckIns() {
         <EmptyState>
           <CheckCircleIcon className="size-16 text-gray-400 sm:size-12 dark:text-gray-500" />
           <Subheading className="mt-2">No check-ins</Subheading>
-          <Text className="mt-1 text-center">Get started by scheduling a check-in.</Text>
+          <Text className="mt-1 text-center">Schedule a check-in to start collecting early risk signals.</Text>
 
           <Button onClick={() => setDialogOpen(true)} color="indigo" className="mt-6" disabled={disabled}>
             <ClockIcon />
-            Schedule
+            Schedule check-in
           </Button>
         </EmptyState>
       ) : (
         noStaffContacts && (
           <EmptyState>
             <Subheading className="mt-2">No staff contacts</Subheading>
-            <Text className="mt-1 text-center">Add staff contacts before scheduling a check-in.</Text>
+            <Text className="mt-1 text-center">Add staff contacts to enable check-ins.</Text>
 
             <Button onClick={() => router.push("/people")} outline className="mt-6">
               <UsersIcon />
