@@ -5,6 +5,7 @@ import { createClient } from "@/utils/supabase/server";
 import supabaseAdmin from "@/utils/supabase/admin";
 import resend from "@/utils/resend";
 import type { CompanyType, UserType } from "@/types";
+import { adminInviteEmail } from "@/utils/emails/admin-invite";
 
 export async function inviteUser(email: string, company: CompanyType) {
   const supabase = await createClient();
@@ -54,13 +55,8 @@ export async function inviteUser(email: string, company: CompanyType) {
     const { error: sendInviteError } = await resend.emails.send({
       from: "HowsWork <no-reply@updates.howswork.app>",
       to: email,
-      subject: `You have been invited by ${company.name}`,
-      html: `
-      <h2>${company.name} has invited you to HowsWork</h2>
-      
-      <p>Follow this link to sign up and accept the invite:</p>
-      <p><a href="${inviteUrl}">Accept the invite</a></p>
-      `,
+      subject: "You've been invited to access HowsWork",
+      html: adminInviteEmail(company.name, inviteUrl),
     });
 
     if (sendInviteError) return { error: sendInviteError.message };
