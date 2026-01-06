@@ -15,7 +15,7 @@ export default function MagicLink(props: MagicLinkProps) {
             <Text className="text-[16px]">Hi {props.name},</Text>
 
             <Text className="text-[16px]">
-              Use the secure link below to sign in to your <strong>HowsWork</strong> dashboard.
+              Use the secure link below to access your <strong>HowsWork</strong> dashboard.
             </Text>
 
             <Button

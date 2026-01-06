@@ -16,6 +16,7 @@ import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } fro
 import { ErrorMessage, Field, Label } from "@/components/ui/fieldset";
 import { Input } from "@/components/ui/input";
 import { removeUser, inviteUser } from "./actions";
+import { Strong } from "@/components/ui/text";
 
 export default function Admins() {
   const supabase = createClient();
@@ -175,8 +176,8 @@ export default function Admins() {
         <DialogTitle>Invite administrator</DialogTitle>
 
         <DialogDescription>
-          We'll give this person admin access to the {companies[0]?.name} dashboard. Only invite people you trust with
-          full access.
+          We'll give this person admin access to <Strong>{companies[0]?.name.replace(/\.$/, "")}</Strong>. Only invite
+          people you trust with full access.
         </DialogDescription>
 
         <DialogBody>
@@ -214,7 +215,7 @@ export default function Admins() {
 
         <AlertDescription>
           {`${userToRemove?.user_id === user?.user_id ? "You" : !userToRemove?.user_id ? "They" : `${userToRemove?.first_name} ${userToRemove?.last_name}`}`}{" "}
-          will no longer have access to the {companies[0]?.name} dashboard.
+          will no longer have admin access to <Strong>{companies[0]?.name.replace(/\.$/, "")}</Strong>.
         </AlertDescription>
 
         <AlertActions>

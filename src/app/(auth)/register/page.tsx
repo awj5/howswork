@@ -86,16 +86,14 @@ function RegisterForm() {
             : submitted
               ? "Set up complete!"
               : isInvite
-                ? `Access the ${inviteCompany} dashboard`
+                ? `Join ${inviteCompany}`
                 : "Set up your company"}
         </Heading>
 
         {submitted && (
           <>
             <Text>
-              <Strong>
-                We've sent a secure sign-in link to your email to access {isInvite ? "the" : "your"} dashboard.
-              </Strong>
+              <Strong>We've sent a secure sign-in link to your email to access your dashboard.</Strong>
             </Text>
 
             <Text>If you don't see the email, check your spam or junk folder.</Text>
@@ -120,7 +118,6 @@ function RegisterForm() {
 
             <Field>
               <Label>Email</Label>
-              {!isInvite && <Description>Used to manage your organisation's dashboard.</Description>}
 
               <Input
                 type="email"

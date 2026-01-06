@@ -34,7 +34,8 @@ export default function ChangeEmailAddress(props: ChangeEmailAddressProps) {
             </Text>
 
             <Text className="text-[14px] text-gray-600">
-              If you did not request this change, do not click the link. Your existing email address will remain active.
+              If you did not request this change, <strong>do not click the link</strong>. Your existing email address
+              will remain active.
             </Text>
 
             <Hr className="border-gray-900/10" />

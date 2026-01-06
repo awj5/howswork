@@ -244,7 +244,7 @@ export default function Settings() {
       </Fieldset>
 
       <Alert open={alertOpen} onClose={setAlertOpen}>
-        <AlertTitle>Are you sure you want to delete {companies[0]?.name}?</AlertTitle>
+        <AlertTitle>Are you sure you want to delete {companies[0]?.name.replace(/\.$/, "")}?</AlertTitle>
 
         <AlertDescription>
           This action cannot be undone. The company and all associated records will be permanently deleted.

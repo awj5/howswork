@@ -56,7 +56,7 @@ export default function Nav() {
         <SidebarSpacer />
 
         <SidebarSection>
-          <SidebarItem href="mailto:support@howswork.app?subject=Dashboard Support Request">
+          <SidebarItem href="mailto:support@howswork.app?subject=Dashboard support request">
             <LifebuoyIcon />
             <SidebarLabel>Contact Support</SidebarLabel>
           </SidebarItem>
