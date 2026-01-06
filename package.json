@@ -6,12 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "email:dev": "email dev --dir ./src/emails"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",
     "@heroicons/react": "^2.2.0",
     "@netlify/plugin-nextjs": "^5.15.1",
+    "@react-email/components": "1.0.3",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.87.1",
     "clsx": "^2.1.1",
@@ -26,6 +28,7 @@
     "sonner": "^2.0.7"
   },
   "devDependencies": {
+    "@react-email/preview-server": "5.1.1",
     "@tailwindcss/postcss": "^4",
     "@types/luxon": "^3.7.1",
     "@types/node": "^25",
@@ -36,6 +39,7 @@
     "eslint-config-next": "16.0.10",
     "prettier": "^3.7.4",
     "prettier-plugin-tailwindcss": "^0.7.2",
+    "react-email": "5.1.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
