@@ -61,12 +61,20 @@ export default function Account() {
 
     // Update
     setDisabled(true);
+
     const result = await updateAccount({
       user_id: user?.user_id ?? "",
       first_name: firstName,
       last_name: lastName,
       email,
     });
+
+    // Logout and reload if email changed
+    if (result.emailChanged) {
+      logout();
+      return;
+    }
+
     setDisabled(false);
 
     if (result.error) {
@@ -85,12 +93,6 @@ export default function Account() {
           }
         : prev
     );
-
-    // Logout and reload if email changed
-    if (result.emailChanged) {
-      logout();
-      return;
-    }
 
     // Success
     toast.success("Changes saved!");

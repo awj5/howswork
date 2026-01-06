@@ -59,6 +59,13 @@ export default function Admins() {
     if (!userToRemove) return;
     setDisabled(true);
     const result = await removeUser(userToRemove, companies[0].id);
+
+    // Refresh page if auth user
+    if (!result.error && userToRemove.user_id === user?.user_id) {
+      window.location.reload();
+      return;
+    }
+
     setDisabled(false);
 
     if (result.error) {
@@ -68,7 +75,6 @@ export default function Admins() {
 
     // Success
     toast.success("Admin removed.");
-    if (userToRemove.user_id === user?.user_id) window.location.reload(); // Refresh page if auth user
   };
 
   const confirmRemoveClick = (user: UserType) => {
@@ -148,7 +154,7 @@ export default function Admins() {
             {users.map((u) => (
               <TableRow key={u.email}>
                 <TableCell className={`font-medium ${!u.user_id && "text-zinc-500"}`}>
-                  {u.user_id ? `${u.first_name} ${u.last_name}` : "Pending"}
+                  {u.user_id ? `${u.first_name} ${u.last_name}` : "Invite sent"}
                 </TableCell>
 
                 <TableCell className={`${!u.user_id && "text-zinc-500"}`}>{u.email}</TableCell>

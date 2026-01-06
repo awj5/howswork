@@ -9,29 +9,32 @@ export default function MagicLink(props: MagicLinkProps) {
     <Html>
       <Tailwind>
         <Body className="font-sans">
-          <Container className="py-6">
+          <Container className="py-[24px]">
             <Img src="https://www.howswork.app/img/email-icon.png" width="32" height="32" alt="HowsWork" />
 
-            <Text className="text-base">Hi {props.name},</Text>
+            <Text className="text-[16px]">Hi {props.name},</Text>
 
-            <Text className="text-base">
+            <Text className="text-[16px]">
               Use the secure link below to sign in to your <strong>HowsWork</strong> dashboard.
             </Text>
 
             <Button
               href="{{ .ConfirmationURL }}"
-              className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white"
+              className="rounded-[6px] bg-indigo-600 px-[14px] py-[10px] text-[14px] font-semibold text-white"
             >
               Sign in to HowsWork
             </Button>
 
-            <Text className="text-sm text-gray-600">
+            <Text className="text-[14px] text-gray-600">
               This link is unique to you and will expire shortly for security reasons.
             </Text>
 
-            <Text className="text-sm text-gray-600">If you didn't request this email, you can safely ignore it.</Text>
+            <Text className="text-[14px] text-gray-600">
+              If you didn't request this email, you can safely ignore it.
+            </Text>
+
             <Hr className="border-gray-900/10" />
-            <Text className="text-xs text-gray-600">HowsWork Pty Ltd, 32 York St, Sydney 2000</Text>
+            <Text className="text-[12px] text-gray-600">HowsWork Pty Ltd, 32 York St, Sydney 2000</Text>
           </Container>
         </Body>
       </Tailwind>
