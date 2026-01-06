@@ -17,7 +17,6 @@ export async function updateAccount(user: UserType) {
     .update({
       first_name: user.first_name,
       last_name: user.last_name,
-      email: user.email,
     })
     .eq("user_id", authData.user.id);
 
@@ -25,11 +24,22 @@ export async function updateAccount(user: UserType) {
 
   // Update auth email if changed
   if (user.email !== authData.user.email) {
+    // Auth
     const { error: updateAuthUserError } = await supabase.auth.updateUser({
       email: user.email,
     });
 
     if (updateAuthUserError) return { error: updateAuthUserError.message };
+
+    // Profile
+    const { error: updateProfileError } = await supabaseAdmin
+      .from("profiles")
+      .update({
+        email: user.email,
+      })
+      .eq("user_id", authData.user.id);
+
+    if (updateProfileError) return { error: updateProfileError.message };
     return { emailChanged: true };
   }
 

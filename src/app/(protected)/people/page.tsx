@@ -105,7 +105,7 @@ export default function People() {
 
           <div data-slot="description" className="flex items-center gap-1.5">
             <Description>
-              One contact per staff member: email or mobile (not both). Separate by comma or line break.
+              Enter one contact per person (email or mobile, not both). Separate by comma or line break.
             </Description>
 
             <HelperTooltip text="Group email addresses (e.g. team@company.com) work well for larger organisations." />
@@ -115,16 +115,16 @@ export default function People() {
             rows={15}
             value={staff}
             onChange={(e) => changeStaff(e.target.value)}
-            placeholder={`jane@company.com
-john.doe@company.com
-+61 412 345 678
-alice@company.com, bob@company.com`}
+            placeholder={`name@company.com
+name@company.com
++61 4XX XXX XXX
+name@company.com, name@company.com`}
             invalid={staffError}
           />
 
           {staffError && (
             <ErrorMessage>
-              One or more email addresses or mobile numbers appear to be invalid. Please check the list and try again.
+              One or more email addresses or mobile numbers are invalid. Please check the list and try again.
             </ErrorMessage>
           )}
         </Field>
@@ -132,9 +132,15 @@ alice@company.com, bob@company.com`}
         <div className="mt-8 flex items-start justify-between gap-10">
           <Text>{`${members} member${!members || members > 1 ? "s" : ""}`}</Text>
 
-          <Button type="submit" color="indigo" disabled={disabled}>
-            Save changes
-          </Button>
+          <div className="flex gap-4">
+            <Button type="button" onClick={() => setStaff("")} plain disabled={disabled} className="hidden! sm:inline!">
+              Clear
+            </Button>
+
+            <Button type="submit" color="indigo" disabled={disabled}>
+              Save changes
+            </Button>
+          </div>
         </div>
       </Fieldset>
     </form>

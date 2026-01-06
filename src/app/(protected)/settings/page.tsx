@@ -201,9 +201,7 @@ export default function Settings() {
               invalid={formErrors.slug}
             />
 
-            {formErrors.slug && (
-              <ErrorMessage>Field can only contain lowercase letters, numbers, and hyphens.</ErrorMessage>
-            )}
+            {formErrors.slug && <ErrorMessage>Use only lowercase letters, numbers, and hyphens.</ErrorMessage>}
           </Field>
         </section>
 
