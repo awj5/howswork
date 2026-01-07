@@ -25,7 +25,7 @@ export default function MagicLink(props: MagicLinkProps) {
               Sign in to HowsWork
             </Button>
 
-            <Text className="text-[14px] text-gray-600">This link is unique to you and expires in 1 hour.</Text>
+            <Text className="text-[14px] text-gray-600">This link expires in 1 hour.</Text>
 
             <Text className="text-[14px] text-gray-600">
               If you didn't request this email, you can safely ignore it.

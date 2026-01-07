@@ -1,7 +1,9 @@
-import { Body, Button, Container, Html, Tailwind, Img, Text, Hr } from "@react-email/components";
+import { Body, Button, Container, Html, Tailwind, Img, Text, Hr, CodeInline, Link } from "@react-email/components";
 
 type CheckInProps = {
   company: string;
+  code: number;
+  slug: string;
 };
 
 export default function CheckIn(props: CheckInProps) {
@@ -15,26 +17,50 @@ export default function CheckIn(props: CheckInProps) {
             <Text className="text-[16px]">Hi there,</Text>
 
             <Text className="text-[16px]">
-              Your organisation has requested a <strong>HowsWork</strong> check-in.
+              <strong>{props.company}</strong> is using <strong>HowsWork</strong>, an anonymous way to share how you're
+              really doing at work and raise concerns safely.
+            </Text>
+
+            <Text className="text-[16px]">
+              Access code for all <strong>{props.company}</strong> employees:
+            </Text>
+
+            <CodeInline className="rounded-[6px] bg-gray-300 px-[4px] py-[2px] text-[20px]">{props.code}</CodeInline>
+
+            <Text className="text-[16px] text-indigo-600">
+              <strong>No login, no tracking, fully encrypted.</strong>
+            </Text>
+
+            <Text className="text-[16px]">
+              <strong>{props.company}</strong> has requested a check-in to understand how things are going.
             </Text>
 
             <Button
-              href="{{ .ConfirmationURL }}"
-              className="rounded-[6px] bg-indigo-600 px-[14px] py-[10px] text-[14px] font-semibold text-white"
+              href=""
+              className="block rounded-[6px] bg-indigo-600 px-[14px] py-[10px] text-center text-[14px] font-semibold text-white"
             >
-              Sign in to HowsWork
+              Complete check-in
             </Button>
 
-            <Text className="text-[14px] text-gray-600">
-              This link is unique to you and will expire shortly for security reasons.
+            <Text className="text-[16px]">
+              You can also visit https://howswork.app/{props.slug} anytime to raise concerns anonymously.
+            </Text>
+
+            <Text className="text-[14px]">
+              <Link href="https://howswork.app">Learn more about how HowsWork protects your privacy</Link>
             </Text>
 
             <Text className="text-[14px] text-gray-600">
-              If you didn't request this email, you can safely ignore it.
+              Please keep this code within your organisation. A new code is sent with each check-in.
             </Text>
 
             <Hr className="border-gray-900/10" />
-            <Text className="text-[12px] text-gray-600">HowsWork Pty Ltd, 32 York St, Sydney 2000</Text>
+
+            <Text className="text-[12px] text-gray-600">
+              HowsWork Pty Ltd, 32 York St, Sydney 2000
+              <br />
+              Questions? Contact us at support@howswork.app
+            </Text>
           </Container>
         </Body>
       </Tailwind>
@@ -45,4 +71,6 @@ export default function CheckIn(props: CheckInProps) {
 // eslint-disable-next-line
 (CheckIn as any).PreviewProps = {
   company: "Acme, Inc.",
+  code: 123456,
+  slug: "acmeinc",
 } as CheckInProps;
