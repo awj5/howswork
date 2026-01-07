@@ -15,7 +15,7 @@ export default function MagicLink(props: MagicLinkProps) {
             <Text className="text-[16px]">Hi {props.name},</Text>
 
             <Text className="text-[16px]">
-              Use the secure link below to access your <strong>HowsWork</strong> dashboard.
+              Click the link below to access your <strong>HowsWork</strong> dashboard.
             </Text>
 
             <Button
@@ -25,16 +25,19 @@ export default function MagicLink(props: MagicLinkProps) {
               Sign in to HowsWork
             </Button>
 
-            <Text className="text-[14px] text-gray-600">
-              This link is unique to you and will expire shortly for security reasons.
-            </Text>
+            <Text className="text-[14px] text-gray-600">This link is unique to you and expires in 1 hour.</Text>
 
             <Text className="text-[14px] text-gray-600">
               If you didn't request this email, you can safely ignore it.
             </Text>
 
             <Hr className="border-gray-900/10" />
-            <Text className="text-[12px] text-gray-600">HowsWork Pty Ltd, 32 York St, Sydney 2000</Text>
+
+            <Text className="text-[12px] text-gray-600">
+              HowsWork
+              <br />
+              Questions? Contact us at support@howswork.app
+            </Text>
           </Container>
         </Body>
       </Tailwind>

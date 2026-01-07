@@ -19,9 +19,7 @@ export default function InviteAdmin(props: InviteAdminProps) {
               <strong>{props.company}</strong> has invited you to access <strong>HowsWork</strong> as an administrator.
             </Text>
 
-            <Text className="text-[16px]">
-              To accept the invitation and set up your account, use the secure link below:
-            </Text>
+            <Text className="text-[16px]">Use the link below to get started:</Text>
 
             <Button
               href={props.url}
@@ -30,12 +28,14 @@ export default function InviteAdmin(props: InviteAdminProps) {
               Accept the invitation
             </Button>
 
-            <Text className="text-[14px] text-gray-600">
-              If you were not expecting this invitation, you can safely ignore this email.
-            </Text>
-
+            <Text className="text-[14px] text-gray-600">Didn't expect this invitation? Ignore this email.</Text>
             <Hr className="border-gray-900/10" />
-            <Text className="text-[12px] text-gray-600">HowsWork Pty Ltd, 32 York St, Sydney 2000</Text>
+
+            <Text className="text-[12px] text-gray-600">
+              HowsWork
+              <br />
+              Questions? Contact us at support@howswork.app
+            </Text>
           </Container>
         </Body>
       </Tailwind>

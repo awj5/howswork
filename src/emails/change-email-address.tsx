@@ -17,10 +17,10 @@ export default function ChangeEmailAddress(props: ChangeEmailAddressProps) {
             <Text className="text-[16px]">Hi {props.name},</Text>
 
             <Text className="text-[16px]">
-              We received a request to change the email address associated with your <strong>HowsWork</strong> account.
+              We received a request to change the email address for your <strong>HowsWork</strong> account.
             </Text>
 
-            <Text className="text-[16px]">To confirm this change, use the secure link below:</Text>
+            <Text className="text-[16px]">To confirm this change, click the button below:</Text>
 
             <Button
               href="{{ .ConfirmationURL }}"
@@ -33,13 +33,20 @@ export default function ChangeEmailAddress(props: ChangeEmailAddressProps) {
               This will update your email from <strong>{props.email}</strong> to <strong>{props.newEmail}</strong>.
             </Text>
 
+            <Text className="text-[14px] text-gray-600">This link expires in 1 hour.</Text>
+
             <Text className="text-[14px] text-gray-600">
-              If you did not request this change, <strong>do not click the link</strong>. Your existing email address
-              will remain active.
+              If you didn't request this change, you can safely ignore this email. Your existing email address will
+              remain active.
             </Text>
 
             <Hr className="border-gray-900/10" />
-            <Text className="text-[12px] text-gray-600">HowsWork Pty Ltd, 32 York St, Sydney 2000</Text>
+
+            <Text className="text-[12px] text-gray-600">
+              HowsWork
+              <br />
+              Questions? Contact us at support@howswork.app
+            </Text>
           </Container>
         </Body>
       </Tailwind>
