@@ -163,7 +163,7 @@ export default function Settings() {
         <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
           <div className="flex flex-col gap-1">
             <Subheading>Company Name</Subheading>
-            <Text>This name will appear to everyone in your organisation.</Text>
+            <Text>This name appears to employees when they access HowsWork.</Text>
           </div>
 
           <Field>
@@ -187,8 +187,11 @@ export default function Settings() {
             <Text>
               This is your company's unique URL:
               <br />
-              <TextLink href={`https://howswork.app/${slug}`} target="_blank">
-                {`https://howswork.app/${slug}`}
+              <TextLink
+                href={`https://howswork.${timezone.includes("Australia") ? "com.au" : "app"}/${slug}`}
+                target="_blank"
+              >
+                {`https://howswork.${timezone.includes("Australia") ? "com.au" : "app"}/${slug}`}
               </TextLink>
             </Text>
           </div>
@@ -234,7 +237,7 @@ export default function Settings() {
         <div className="flex flex-col-reverse items-end justify-between gap-10 sm:flex-row">
           <Button type="button" onClick={() => setAlertOpen(true)} outline>
             <TrashIcon />
-            Delete this company
+            Delete company
           </Button>
 
           <Button type="submit" color="indigo">

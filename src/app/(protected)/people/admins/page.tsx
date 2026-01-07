@@ -215,7 +215,7 @@ export default function Admins() {
 
         <AlertDescription>
           {`${userToRemove?.user_id === user?.user_id ? "You" : !userToRemove?.user_id ? "They" : `${userToRemove?.first_name} ${userToRemove?.last_name}`}`}{" "}
-          will no longer have admin access to <Strong>{companies[0]?.name.replace(/\.$/, "")}</Strong>.
+          will no longer have access to <Strong>{companies[0]?.name.replace(/\.$/, "")}</Strong>.
         </AlertDescription>
 
         <AlertActions>

@@ -105,7 +105,7 @@ export default function People() {
 
           <div data-slot="description" className="flex items-center gap-1.5">
             <Description>
-              Enter one contact per person (email or mobile, not both). Separate by comma or line break.
+              Enter one contact per employee (email OR mobile, not both). Separate by comma or line break.
             </Description>
 
             <HelperTooltip text="Group email addresses (e.g. team@company.com) work well for larger organisations." />
@@ -116,17 +116,12 @@ export default function People() {
             value={staff}
             onChange={(e) => changeStaff(e.target.value)}
             placeholder={`name@company.com
-name@company.com
-+61 4XX XXX XXX
-name@company.com, name@company.com`}
+anothername@company.com
++61 4XX XXX XXX`}
             invalid={staffError}
           />
 
-          {staffError && (
-            <ErrorMessage>
-              One or more email addresses or mobile numbers are invalid. Please check the list and try again.
-            </ErrorMessage>
-          )}
+          {staffError && <ErrorMessage>One or more contacts are invalid. Please check and try again.</ErrorMessage>}
         </Field>
 
         <div className="mt-8 flex items-start justify-between gap-10">
