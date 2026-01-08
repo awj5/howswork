@@ -36,7 +36,7 @@ export default function CheckIn(props: CheckInProps) {
             </Text>
 
             <Button
-              href=""
+              href={`https://howswork.app/${props.slug}`}
               className="block rounded-[6px] bg-indigo-600 px-[14px] py-[10px] text-center text-[14px] font-semibold text-white"
             >
               Complete check-in
