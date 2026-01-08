@@ -203,7 +203,7 @@ export default function Settings() {
               value={slug}
               onChange={(e) => setSlug(e.target.value)}
               invalid={formErrors.slug}
-              maxLength={20}
+              maxLength={15}
             />
 
             {formErrors.slug && <ErrorMessage>Use only lowercase letters, numbers, and hyphens.</ErrorMessage>}

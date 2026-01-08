@@ -6,7 +6,7 @@ import { type CompanyType } from "@/types";
 
 export async function updateCompany(company: CompanyType) {
   const supabase = await createClient();
-  const slug = company.slug.slice(0, 20);
+  const slug = company.slug.slice(0, 15);
 
   // Check if slug already exists (use Supabase admin to get around RLS)
   const { data: companiesData, error: companiesError } = await supabaseAdmin

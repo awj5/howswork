@@ -53,7 +53,7 @@ export default function CheckIn(props: CheckInProps) {
             </Text>
 
             <Text className="text-[14px] text-gray-600">
-              Please do not share this access code externally. A new code is sent with each check-in.
+              Please do not share externally. A new access code is sent with each check-in request.
             </Text>
 
             <Hr className="border-gray-900/10" />
