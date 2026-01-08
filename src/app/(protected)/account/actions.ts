@@ -6,6 +6,7 @@ import { type UserType } from "@/types";
 
 export async function updateAccount(user: UserType) {
   const supabase = await createClient();
+  const email = user.email.trim().toLowerCase();
 
   // Get auth user
   const { data: authData, error: authError } = await supabase.auth.getUser();
@@ -15,18 +16,18 @@ export async function updateAccount(user: UserType) {
   const { error: updateProfileError } = await supabaseAdmin
     .from("profiles")
     .update({
-      first_name: user.first_name,
-      last_name: user.last_name,
+      first_name: user.first_name.trim(),
+      last_name: user.last_name.trim(),
     })
     .eq("user_id", authData.user.id);
 
   if (updateProfileError) return { error: updateProfileError.message };
 
   // Update auth email if changed
-  if (user.email !== authData.user.email) {
+  if (email !== authData.user.email) {
     // Auth
     const { error: updateAuthUserError } = await supabase.auth.updateUser({
-      email: user.email,
+      email,
     });
 
     if (updateAuthUserError) return { error: updateAuthUserError.message };
@@ -35,7 +36,7 @@ export async function updateAccount(user: UserType) {
     const { error: updateProfileError } = await supabaseAdmin
       .from("profiles")
       .update({
-        email: user.email,
+        email,
       })
       .eq("user_id", authData.user.id);
 

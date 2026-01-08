@@ -13,7 +13,7 @@ export async function signUp(formData: FormData) {
   let last_name = formData.get("last_name") as string;
   last_name = last_name.trim();
   let company = formData.get("company") as string;
-  company = company.trim();
+  company = company.trim().slice(0, 20);
   if (!isValidEmail(email) || !first_name || !last_name || !company) return { error: "Form is invalid." };
   const timezone = (formData.get("timezone") as string) || "Australia/Sydney"; // Fallback to Sydney
 

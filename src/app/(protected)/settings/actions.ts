@@ -6,12 +6,13 @@ import { type CompanyType } from "@/types";
 
 export async function updateCompany(company: CompanyType) {
   const supabase = await createClient();
+  const slug = company.slug.slice(0, 20);
 
   // Check if slug already exists (use Supabase admin to get around RLS)
   const { data: companiesData, error: companiesError } = await supabaseAdmin
     .from("companies")
     .select("*")
-    .eq("slug", company.slug)
+    .eq("slug", slug)
     .neq("id", company.id)
     .limit(1);
 
@@ -22,8 +23,8 @@ export async function updateCompany(company: CompanyType) {
   const { error: updateCompanyError } = await supabase
     .from("companies")
     .update({
-      name: company.name,
-      slug: company.slug,
+      name: company.name.trim().slice(0, 20),
+      slug,
       timezone: company.timezone,
     })
     .eq("id", company.id);

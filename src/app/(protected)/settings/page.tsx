@@ -172,6 +172,7 @@ export default function Settings() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               invalid={formErrors.name}
+              maxLength={20}
             />
 
             {formErrors.name && <ErrorMessage>This field is required.</ErrorMessage>}
@@ -202,6 +203,7 @@ export default function Settings() {
               value={slug}
               onChange={(e) => setSlug(e.target.value)}
               invalid={formErrors.slug}
+              maxLength={20}
             />
 
             {formErrors.slug && <ErrorMessage>Use only lowercase letters, numbers, and hyphens.</ErrorMessage>}

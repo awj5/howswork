@@ -133,7 +133,7 @@ function RegisterForm() {
             {!isInvite && (
               <Field>
                 <Label>Company Name</Label>
-                <Input name="company" invalid={formErrors.company} />
+                <Input name="company" invalid={formErrors.company} maxLength={20} />
                 {formErrors.company && <ErrorMessage>This field is required.</ErrorMessage>}
               </Field>
             )}

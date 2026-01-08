@@ -1,6 +1,6 @@
 "use server";
 
-import { baseURL, isValidEmail } from "@/utils/helpers";
+import { baseURL } from "@/utils/helpers";
 import { createClient } from "@/utils/supabase/server";
 import supabaseAdmin from "@/utils/supabase/admin";
 import resend from "@/utils/resend";
@@ -10,7 +10,6 @@ import InviteAdmin from "@/emails/invite-admin";
 export async function inviteUser(email: string, company: CompanyType) {
   const supabase = await createClient();
   email = email.trim().toLowerCase();
-  if (!isValidEmail(email)) return { error: "Email is invalid." };
 
   // Get auth user
   const { data: authData, error: authError } = await supabase.auth.getUser();

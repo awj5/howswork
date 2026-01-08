@@ -25,7 +25,7 @@ export default function CheckIn(props: CheckInProps) {
               Access code for all <strong>{props.company}</strong> employees:
             </Text>
 
-            <CodeInline className="rounded-[6px] bg-gray-300 px-[4px] py-[2px] text-[20px]">{props.code}</CodeInline>
+            <CodeInline className="rounded-[6px] bg-gray-200 px-[4px] py-[2px] text-[20px]">{props.code}</CodeInline>
 
             <Text className="text-[16px] text-indigo-600">
               <strong>No login, no tracking, fully encrypted.</strong>
@@ -47,11 +47,13 @@ export default function CheckIn(props: CheckInProps) {
             </Text>
 
             <Text className="text-[14px]">
-              <Link href="https://howswork.app">Learn more about how HowsWork protects your privacy</Link>
+              <Link href="https://articles.howswork.app/how-howswork-protects-your-privacy/">
+                Learn more about how HowsWork protects your privacy
+              </Link>
             </Text>
 
             <Text className="text-[14px] text-gray-600">
-              Please keep this code within your organisation. A new code is sent with each check-in.
+              Please do not share this access code externally. A new code is sent with each check-in.
             </Text>
 
             <Hr className="border-gray-900/10" />
