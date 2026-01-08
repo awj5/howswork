@@ -17,8 +17,8 @@ export default function CheckIn(props: CheckInProps) {
             <Text className="text-[16px]">Hi there,</Text>
 
             <Text className="text-[16px]">
-              <strong>{props.company}</strong> is using <strong>HowsWork</strong>, an anonymous way to share how you're
-              really doing at work and raise concerns safely.
+              <strong>{props.company}</strong> is using <strong>HowsWork</strong>, a safe, anonymous way to share how
+              you're really doing and raise workplace concerns.
             </Text>
 
             <Text className="text-[16px]">
