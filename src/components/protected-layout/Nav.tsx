@@ -3,7 +3,6 @@
 import { usePathname } from "next/navigation";
 import {
   HomeIcon,
-  ExclamationTriangleIcon,
   HandRaisedIcon,
   CheckCircleIcon,
   UsersIcon,

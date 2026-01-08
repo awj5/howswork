@@ -176,10 +176,10 @@ export default function CheckIns() {
             </TableHead>
 
             <TableBody>
-              {checkIns.map((c) => (
+              {checkIns.map((checkIn) => (
                 <CheckIn
-                  key={c.start}
-                  data={c}
+                  key={checkIn.start}
+                  data={checkIn}
                   timezone={companies[0].timezone}
                   disabled={disabled}
                   confirmRemoveClick={confirmRemoveClick}

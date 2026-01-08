@@ -55,9 +55,9 @@ export default function Settings() {
   };
 
   const timezones = Object.entries(timezonesByCountry).flatMap(([code, zones]) =>
-    zones.map((z) => ({
-      value: z,
-      name: z.replace("_", " "),
+    zones.map((zone) => ({
+      value: zone,
+      name: zone.replace("_", " "),
       code: code.toLowerCase(),
     }))
   );
@@ -221,13 +221,13 @@ export default function Settings() {
                 </ListboxOption>
               )}
 
-              {timezones.map((t) => {
-                const Flag = flagMap[t.code];
+              {timezones.map((tz) => {
+                const Flag = flagMap[tz.code];
 
                 return (
-                  <ListboxOption key={t.value} value={t.value}>
+                  <ListboxOption key={tz.value} value={tz.value}>
                     <Flag className="w-5 sm:w-4" />
-                    <ListboxLabel>{t.name}</ListboxLabel>
+                    <ListboxLabel>{tz.name}</ListboxLabel>
                   </ListboxOption>
                 );
               })}

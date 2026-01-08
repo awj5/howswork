@@ -19,7 +19,7 @@ export async function signUp(formData: FormData) {
 
   // Generate a random password since users will only sign in via magic link
   const password = Array.from(crypto.getRandomValues(new Uint8Array(32)))
-    .map((b) => b.toString(16).padStart(2, "0"))
+    .map((byte) => byte.toString(16).padStart(2, "0"))
     .join("");
 
   const data = {

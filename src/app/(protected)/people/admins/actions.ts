@@ -22,8 +22,8 @@ export async function inviteUser(email: string, company: CompanyType) {
     .eq("company_id", company.id);
 
   if (companyUsersError) return { error: companyUsersError.message };
-  const userIDs = companyUsersData.map((u) => u.user_id).filter(Boolean); // Registered user IDs
-  const inviteEmails = companyUsersData.map((u) => u.invite_email).filter(Boolean); // Invited user emails
+  const userIDs = companyUsersData.map((item) => item.user_id).filter(Boolean); // Registered user IDs
+  const inviteEmails = companyUsersData.map((item) => item.invite_email).filter(Boolean); // Invited user emails
   if (!userIDs.includes(authData.user.id)) return { error: "You do not have permission to modify this company." };
 
   // Check if user already exists
@@ -83,8 +83,8 @@ export async function removeUser(user: UserType, companyID: number) {
     .eq("company_id", companyID);
 
   if (companyUsersError) return { error: companyUsersError.message };
-  const userIDs = companyUsersData.map((u) => u.user_id).filter(Boolean); // Registered user IDs
-  const inviteEmails = companyUsersData.map((u) => u.invite_email).filter(Boolean); // Invited user emails
+  const userIDs = companyUsersData.map((item) => item.user_id).filter(Boolean); // Registered user IDs
+  const inviteEmails = companyUsersData.map((item) => item.invite_email).filter(Boolean); // Invited user emails
   if (!userIDs.includes(authData.user.id)) return { error: "You do not have permission to modify this company." };
 
   if ((user.user_id && !userIDs.includes(user.user_id)) || (!user.user_id && !inviteEmails.includes(user.email)))
