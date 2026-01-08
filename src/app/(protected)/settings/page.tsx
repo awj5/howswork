@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { TrashIcon } from "@heroicons/react/16/solid";
-import { AU, CA, IE, NZ, GB, US } from "country-flag-icons/react/3x2";
+import { GlobeAltIcon } from "@heroicons/react/20/solid";
+import { AU, CA, IE, NZ, GB, US, SG, HK, ZA } from "country-flag-icons/react/3x2";
 import { useCompanies } from "@/hooks/useCompanies";
 import { useUnsavedWarning } from "@/hooks/useUnsavedWarning";
 import { Heading, Subheading } from "@/components/ui/heading";
@@ -43,25 +44,14 @@ export default function Settings() {
       "Australia/Hobart",
       "Australia/Darwin",
     ],
-    NZ: ["Pacific/Auckland", "Pacific/Chatham"],
+    NZ: ["Pacific/Auckland"],
     GB: ["Europe/London"],
     IE: ["Europe/Dublin"],
-    CA: [
-      "America/Vancouver",
-      "America/Edmonton",
-      "America/Winnipeg",
-      "America/Toronto",
-      "America/Halifax",
-      "America/St_Johns",
-    ],
-    US: [
-      "America/Los_Angeles",
-      "America/Denver",
-      "America/Chicago",
-      "America/New_York",
-      "America/Anchorage",
-      "Pacific/Honolulu",
-    ],
+    US: ["America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles", "Pacific/Honolulu"],
+    CA: ["America/Vancouver", "America/Edmonton", "America/Toronto", "America/Halifax"],
+    SG: ["Asia/Singapore"],
+    HK: ["Asia/Hong_Kong"],
+    ZA: ["Africa/Johannesburg"],
   };
 
   const timezones = Object.entries(timezonesByCountry).flatMap(([code, zones]) =>
@@ -79,6 +69,9 @@ export default function Settings() {
     nz: NZ,
     gb: GB,
     us: US,
+    sg: SG,
+    hk: HK,
+    za: ZA,
   };
 
   useUnsavedWarning([
@@ -220,6 +213,14 @@ export default function Settings() {
 
           <Field>
             <Listbox value={timezone} onChange={(e) => setTimezone(e)}>
+              {/* Display company timezone if not included in list */}
+              {timezoneRef.current && !timezones.some((t) => t.value === timezoneRef.current) && (
+                <ListboxOption value={timezoneRef.current}>
+                  <GlobeAltIcon />
+                  <ListboxLabel>{timezoneRef.current}</ListboxLabel>
+                </ListboxOption>
+              )}
+
               {timezones.map((t) => {
                 const Flag = flagMap[t.code];
 
