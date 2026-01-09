@@ -1,2 +1,2 @@
 # .prettierignore
-src/components/sidebar-layout.tsx
+src/components/ui/sidebar-layout.tsx
