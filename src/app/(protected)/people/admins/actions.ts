@@ -6,6 +6,7 @@ import supabaseAdmin from "@/utils/supabase/admin";
 import resend from "@/utils/resend";
 import type { CompanyType, UserType } from "@/types";
 import InviteAdmin from "@/emails/invite-admin";
+import ConfirmAdmin from "@/emails/confirm-admin";
 
 export async function inviteUser(email: string, company: CompanyType) {
   const supabase = await createClient();
@@ -29,7 +30,7 @@ export async function inviteUser(email: string, company: CompanyType) {
   // Check if user already exists
   const { data: profileData, error: profileError } = await supabaseAdmin
     .from("profiles")
-    .select("user_id")
+    .select("user_id, first_name")
     .eq("email", email)
     .maybeSingle();
 
@@ -45,24 +46,30 @@ export async function inviteUser(email: string, company: CompanyType) {
   });
 
   if (insertCompanyUserError) return { error: insertCompanyUserError.message };
-  if (profileData) return { success: "Admin access granted." };
 
-  // Send email invite (if user doesn't already exist)
-  const inviteUrl = `${baseURL}/register?email=${encodeURIComponent(email)}&company=${encodeURIComponent(company.name)}`;
-
+  // Send email invite or alert existing user
   try {
+    const inviteUrl = `${baseURL}/register?email=${encodeURIComponent(email)}&company=${encodeURIComponent(company.name)}`;
+
     const { error: sendInviteError } = await resend.emails.send({
       from: "HowsWork <no-reply@updates.howswork.app>",
       to: email,
-      subject: `${company.name} has invited you to HowsWork`,
-      react: InviteAdmin({
-        company: company.name,
-        url: inviteUrl,
-      }),
+      subject: profileData
+        ? `Administrator access granted for ${company.name}`
+        : `${company.name} has invited you to HowsWork`,
+      react: profileData
+        ? ConfirmAdmin({
+            company: company.name,
+            name: profileData.first_name,
+          })
+        : InviteAdmin({
+            company: company.name,
+            url: inviteUrl,
+          }),
     });
 
     if (sendInviteError) return { error: sendInviteError.message };
-    return { success: "Admin invite sent." };
+    return { success: profileData ? "Admin access granted" : "Admin invite sent." };
   } catch (error) {
     console.error(error);
     return { error: "Unexpected error sending email." };
