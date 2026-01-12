@@ -29,7 +29,11 @@ export default function CheckIn(props: CheckInProps) {
       </TableCell>
 
       <TableCell className={`${isScheduled && "text-zinc-500"}`}>{repeatText}</TableCell>
-      <TableCell className={`${isScheduled && "text-zinc-500"}`}>{!isScheduled ? props.data.pin : "-"}</TableCell>
+
+      <TableCell className={`${isScheduled && "text-zinc-500"}`}>
+        {/* Hack to make pin selectable */}
+        <span className="relative -ml-2 inline-block px-2 select-text">{!isScheduled ? props.data.pin : "-"}</span>
+      </TableCell>
 
       <TableCell>
         <Badge color={props.data.status === "Closed" ? "green" : isScheduled ? "zinc" : "amber"}>
