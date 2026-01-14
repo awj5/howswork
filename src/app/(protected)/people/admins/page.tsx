@@ -175,7 +175,7 @@ export default function Admins() {
       <Dialog open={dialogOpen} onClose={setDialogOpen}>
         <DialogTitle>Invite administrator</DialogTitle>
 
-        <DialogDescription>
+        <DialogDescription className="text-wrap!">
           We'll give this person admin access to <Strong>{companies[0]?.name.replace(/\.$/, "")}</Strong>. Only invite
           people you trust with full access.
         </DialogDescription>

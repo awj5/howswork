@@ -16,7 +16,7 @@ export function Logo(props: LogoProps) {
             src="/img/icon.svg"
             width={128}
             height={128}
-            alt="How's Work"
+            alt="HowsWork"
             className={clsx("inline w-auto dark:hidden", props.className)}
             priority
           />
@@ -26,7 +26,7 @@ export function Logo(props: LogoProps) {
             src="/img/icon-dark.svg"
             width={128}
             height={128}
-            alt="How's Work"
+            alt="HowsWork"
             className={clsx("w-auto not-dark:hidden", props.className)}
             priority
           />
@@ -38,7 +38,7 @@ export function Logo(props: LogoProps) {
             src="/img/logo.svg"
             width={728}
             height={128}
-            alt="How's Work"
+            alt="HowsWork"
             className={clsx("inline w-auto dark:hidden", props.className)}
             priority
           />
@@ -48,7 +48,7 @@ export function Logo(props: LogoProps) {
             src="/img/logo-dark.svg"
             width={728}
             height={128}
-            alt="How's Work"
+            alt="HowsWork"
             className={clsx("w-auto not-dark:hidden", props.className)}
             priority
           />

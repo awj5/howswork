@@ -18,7 +18,6 @@ import {
   SidebarSection,
   SidebarSpacer,
 } from "@/components/ui/sidebar";
-import { Link } from "@/components/ui/link";
 import { Logo } from "@/components/Logo";
 import Footer from "./nav/Footer";
 
@@ -38,9 +37,7 @@ export default function Nav() {
     <Sidebar>
       <SidebarBody>
         <div className="m-2 mb-4 w-fit">
-          <Link href="/" aria-label="Dashboard">
-            <Logo className="h-7" iconOnly />
-          </Link>
+          <Logo className="h-7" iconOnly />
         </div>
 
         <SidebarSection>

@@ -218,7 +218,7 @@ export default function CheckIns() {
       <Dialog open={dialogOpen} onClose={setDialogOpen}>
         <DialogTitle>Schedule a check-in</DialogTitle>
 
-        <DialogDescription>
+        <DialogDescription className="text-wrap!">
           Employees will be notified when the check-in begins and can respond anonymously using a shared access PIN.
         </DialogDescription>
 
