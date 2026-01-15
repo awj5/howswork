@@ -147,7 +147,7 @@ function parseContacts(val: string) {
     new Set(
       val
         .split(/[\n,]/) // split on commas OR line breaks
-        .map((contact) => contact.trim())
+        .map((c) => c.trim())
         .filter(Boolean)
     )
   );

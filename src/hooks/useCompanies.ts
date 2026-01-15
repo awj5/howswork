@@ -26,7 +26,7 @@ export function useCompanies() {
       }
 
       if (!companyUsersData.length) return; // User not in any companies
-      const companyIDs = companyUsersData.map((item) => item.company_id);
+      const companyIDs = companyUsersData.map((r) => r.company_id);
 
       // Get companies
       const { data: companiesData, error: companiesError } = await supabase

@@ -97,8 +97,8 @@ export default function Admins() {
         return;
       }
 
-      const userIDs = companyUsersData.map((item) => item.user_id).filter(Boolean); // Registered user IDs
-      const inviteEmails = companyUsersData.map((item) => item.invite_email).filter(Boolean); // Invited user emails
+      const userIDs = companyUsersData.map((r) => r.user_id).filter(Boolean); // Registered user IDs
+      const inviteEmails = companyUsersData.map((r) => r.invite_email).filter(Boolean); // Invited user emails
 
       // Get profiles (don't show super admins unless it's their company)
       const { data: profilesData, error: profilesError } = await supabase

@@ -32,7 +32,8 @@ export default function CheckIn(props: CheckInProps) {
             </Text>
 
             <Text className="text-[16px]">
-              <strong>{props.company}</strong> has requested a quick check-in to understand how things are going.
+              <strong>{props.company}</strong> has requested a quick check-in to understand how things are going. It
+              takes less than a minute.
             </Text>
 
             <Button
