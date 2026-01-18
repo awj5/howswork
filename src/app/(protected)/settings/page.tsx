@@ -107,7 +107,7 @@ export default function Settings() {
     }
 
     // Success
-    toast.success("Changes saved!");
+    toast.success("Changes saved.");
     nameRef.current = name;
     slugRef.current = slug;
     timezoneRef.current = timezone;

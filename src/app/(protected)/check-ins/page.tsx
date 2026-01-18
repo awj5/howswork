@@ -86,7 +86,7 @@ export default function CheckIns() {
     }
 
     // Success
-    toast.success("Check-in scheduled!");
+    toast.success("Check-in scheduled.");
     setDialogOpen(false);
   };
 

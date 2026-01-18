@@ -82,9 +82,9 @@ function RegisterForm() {
 
         <Heading>
           {submitted && isInvite
-            ? "Invite accepted!"
+            ? "Invite accepted"
             : submitted
-              ? "Set up complete!"
+              ? "Set up complete"
               : isInvite
                 ? `Join ${inviteCompany}`
                 : "Set up your company"}
