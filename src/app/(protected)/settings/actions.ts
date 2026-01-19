@@ -11,7 +11,7 @@ export async function updateCompany(company: CompanyType) {
   // Check if slug already exists (use Supabase admin to get around RLS)
   const { data: companiesData, error: companiesError } = await supabaseAdmin
     .from("companies")
-    .select("*")
+    .select("id")
     .eq("slug", slug)
     .neq("id", company.id)
     .limit(1);
