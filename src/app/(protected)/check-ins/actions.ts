@@ -32,7 +32,7 @@ export async function scheduleCheckIn(companyID: number, start: string, repeat: 
     .limit(1);
 
   if (checkInsError) return { error: checkInsError.message };
-  if (checkInsData.length) return { error: "Check-ins must be more than 7 days apart." };
+  if (checkInsData.length) return { error: "Check-ins must be more than 7 days apart" };
 
   // Check for check-ins beyond this one (if repeating)
   if (repeat) {
@@ -44,7 +44,7 @@ export async function scheduleCheckIn(companyID: number, start: string, repeat: 
       .limit(1);
 
     if (checkInsError) return { error: checkInsError.message };
-    if (checkInsData.length) return { error: "A future check-in is already scheduled." };
+    if (checkInsData.length) return { error: "A future check-in is already scheduled" };
   }
 
   // Add check-in for company

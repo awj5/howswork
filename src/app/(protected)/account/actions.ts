@@ -10,7 +10,7 @@ export async function updateAccount(user: UserType) {
 
   // Get auth user
   const { data: authData, error: authError } = await supabase.auth.getUser();
-  if (authError || !authData.user) return { error: "Not authenticated." };
+  if (authError || !authData.user) return { error: "Not authenticated" };
 
   // Update profile (use Supabase admin because no update policy exists (stops user from changing company))
   const { error: updateProfileError } = await supabaseAdmin
@@ -52,7 +52,7 @@ export async function deleteAccount() {
 
   // Get auth user
   const { data: authData, error: authError } = await supabase.auth.getUser();
-  if (authError || !authData.user) return { error: "Not authenticated." };
+  if (authError || !authData.user) return { error: "Not authenticated" };
 
   // Delete (user Supabase admin)
   const { error: deleteAuthUserError } = await supabaseAdmin.auth.admin.deleteUser(authData.user.id);
