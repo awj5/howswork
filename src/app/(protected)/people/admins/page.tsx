@@ -75,7 +75,7 @@ export default function Admins() {
     }
 
     // Success
-    toast.success("Admin removed.");
+    toast.success("Admin removed");
   };
 
   const confirmRemoveClick = (user: UserType) => {

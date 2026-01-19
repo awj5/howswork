@@ -63,7 +63,7 @@ export default function People() {
     }
 
     // Success
-    toast.success("Changes saved.");
+    toast.success("Changes saved");
     staffRef.current = staff;
   };
 

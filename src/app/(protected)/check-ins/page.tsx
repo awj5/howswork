@@ -54,7 +54,7 @@ export default function CheckIns() {
     }
 
     // Success
-    toast.success("Check-in removed.");
+    toast.success("Check-in removed");
   };
 
   const confirmRemoveClick = (checkIn: CheckInType) => {
@@ -86,7 +86,7 @@ export default function CheckIns() {
     }
 
     // Success
-    toast.success("Check-in scheduled.");
+    toast.success("Check-in scheduled");
     setDialogOpen(false);
   };
 

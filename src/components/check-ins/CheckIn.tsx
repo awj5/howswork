@@ -1,10 +1,11 @@
-import { XCircleIcon } from "@heroicons/react/16/solid";
+import Link from "next/link";
+import { EllipsisHorizontalIcon } from "@heroicons/react/16/solid";
 import { ArrowPathIcon } from "@heroicons/react/20/solid";
 import { DateTime } from "luxon";
 import type { CheckInType } from "@/types";
-import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from "@/components/ui/dropdown";
 
 type CheckInProps = {
   data: CheckInType;
@@ -20,20 +21,19 @@ export default function CheckIn(props: CheckInProps) {
   const repeatText = repeatWeeks === 1 ? "Weekly" : repeatWeeks ? `${repeatWeeks} weeks` : "None";
 
   return (
-    <TableRow href={isScheduled ? undefined : `/check-ins/${props.data.id}`}>
+    <TableRow>
       <TableCell className={`font-medium ${isScheduled && "text-zinc-500"}`}>
-        <div className="flex items-center gap-1.5">
+        <Link
+          href={`/check-ins/${props.data.id}`}
+          className={`inline-flex items-center gap-1.5 ${isScheduled && "pointer-events-none"}`}
+        >
           {startDT.setZone(props.timezone).toFormat("dd LLL yyyy, h:mm a")}
           {props.data.repeat && isScheduled ? <ArrowPathIcon className="size-5" /> : null}
-        </div>
+        </Link>
       </TableCell>
 
       <TableCell className={`${isScheduled && "text-zinc-500"}`}>{repeatText}</TableCell>
-
-      <TableCell className={`${isScheduled && "text-zinc-500"}`}>
-        {/* Hack to make pin selectable */}
-        <span className="relative -ml-2 inline-block px-2 select-text">{!isScheduled ? props.data.pin : "-"}</span>
-      </TableCell>
+      <TableCell className={`${isScheduled && "text-zinc-500"}`}>{!isScheduled ? props.data.pin : "-"}</TableCell>
 
       <TableCell>
         <Badge color={props.data.status === "Closed" ? "green" : isScheduled ? "zinc" : "amber"}>
@@ -42,15 +42,22 @@ export default function CheckIn(props: CheckInProps) {
       </TableCell>
 
       <TableCell className="text-right">
-        <Button
-          onClick={() => props.confirmRemoveClick(props.data)}
-          className={`${!isScheduled && "pointer-events-none invisible"}`}
-          disabled={props.disabled}
-          outline
-        >
-          <XCircleIcon />
-          Remove
-        </Button>
+        <div className="-mx-3 -my-1.5 sm:-mx-2.5">
+          <Dropdown>
+            <DropdownButton plain aria-label="More options">
+              <EllipsisHorizontalIcon />
+            </DropdownButton>
+
+            <DropdownMenu anchor="bottom end">
+              {!isScheduled && <DropdownItem href={`/check-ins/${props.data.id}`}>View results</DropdownItem>}
+              {isScheduled && <DropdownItem onClick={() => props.confirmRemoveClick(props.data)}>Remove</DropdownItem>}
+
+              {!isScheduled && props.data.status !== "Closed" && (
+                <DropdownItem onClick={() => null}>Generate QR code</DropdownItem>
+              )}
+            </DropdownMenu>
+          </Dropdown>
+        </div>
       </TableCell>
     </TableRow>
   );
