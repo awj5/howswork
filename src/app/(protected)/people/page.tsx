@@ -22,7 +22,7 @@ export default function People() {
   const companies = useCompanies();
   const staffRef = useRef("");
   const [staff, setStaff] = useState("");
-  const [staffError, setStaffError] = useState(false);
+  const [staffError, setStaffError] = useState("");
   const [disabled, setDisabled] = useState(true);
   const [members, setMembers] = useState(0);
 
@@ -36,14 +36,19 @@ export default function People() {
 
   const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setStaffError(false);
+    setStaffError("");
     const contacts = parseContacts(staff);
 
     // Validate
+    if (contacts.length && contacts.length < 3) {
+      setStaffError("Add at least 3 staff contacts. This helps protect anonymity.");
+      return;
+    }
+
     const invalidContacts = contacts.filter((c) => !isValidContact(c));
 
     if (invalidContacts.length) {
-      setStaffError(true);
+      setStaffError("One or more contacts are invalid. Please check and try again.");
       return;
     }
 
@@ -118,10 +123,10 @@ export default function People() {
             placeholder={`name@company.com
 anothername@company.com
 +61 4XX XXX XXX`}
-            invalid={staffError}
+            invalid={staffError !== ""}
           />
 
-          {staffError && <ErrorMessage>One or more contacts are invalid. Please check and try again.</ErrorMessage>}
+          {staffError && <ErrorMessage>{staffError}</ErrorMessage>}
         </Field>
 
         <div className="mt-8 flex items-start justify-between gap-10">
