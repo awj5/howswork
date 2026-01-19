@@ -42,7 +42,11 @@ export default function Nav() {
 
         <SidebarSection>
           {navItems.map(({ href, label, Icon }) => (
-            <SidebarItem key={href} href={href} current={pathname === href}>
+            <SidebarItem
+              key={href}
+              href={href}
+              current={pathname === href || (href !== "/" && pathname.includes(href))}
+            >
               <Icon />
               <SidebarLabel>{label}</SidebarLabel>
             </SidebarItem>
