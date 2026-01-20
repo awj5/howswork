@@ -27,7 +27,7 @@ export default function CheckIn(props: CheckInProps) {
           href={`/check-ins/${props.data.id}`}
           className={`inline-flex items-center gap-1.5 ${isScheduled && "pointer-events-none"}`}
         >
-          <span className="lg:hidden">{startDT.setZone(props.timezone).toFormat("dd LLL yyyy, h:mm a")}</span>
+          <span className="lg:hidden">{startDT.setZone(props.timezone).toFormat("ccc, dd LLL yyyy, h:mm a")}</span>
 
           <span className="hidden lg:inline">
             {startDT.setZone(props.timezone).toFormat("cccc, dd LLLL yyyy, h:mm a")}
