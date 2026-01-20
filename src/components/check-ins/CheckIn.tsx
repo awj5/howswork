@@ -27,7 +27,12 @@ export default function CheckIn(props: CheckInProps) {
           href={`/check-ins/${props.data.id}`}
           className={`inline-flex items-center gap-1.5 ${isScheduled && "pointer-events-none"}`}
         >
-          {startDT.setZone(props.timezone).toFormat("dd LLL yyyy, h:mm a")}
+          <span className="lg:hidden">{startDT.setZone(props.timezone).toFormat("dd LLL yyyy, h:mm a")}</span>
+
+          <span className="hidden lg:inline">
+            {startDT.setZone(props.timezone).toFormat("cccc, dd LLLL yyyy, h:mm a")}
+          </span>
+
           {props.data.repeat && isScheduled ? <ArrowPathIcon className="size-5" /> : null}
         </Link>
       </TableCell>
@@ -51,10 +56,7 @@ export default function CheckIn(props: CheckInProps) {
             <DropdownMenu anchor="bottom end">
               {!isScheduled && <DropdownItem href={`/check-ins/${props.data.id}`}>View results</DropdownItem>}
               {isScheduled && <DropdownItem onClick={() => props.confirmRemoveClick(props.data)}>Remove</DropdownItem>}
-
-              {!isScheduled && props.data.status !== "Closed" && (
-                <DropdownItem onClick={() => null}>Generate QR code</DropdownItem>
-              )}
+              {props.data.status === "Open" && <DropdownItem onClick={() => null}>Generate QR code</DropdownItem>}
             </DropdownMenu>
           </Dropdown>
         </div>
