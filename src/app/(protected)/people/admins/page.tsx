@@ -201,7 +201,7 @@ export default function Admins() {
             Cancel
           </Button>
 
-          <Button onClick={inviteClick} disabled={disabled} color="indigo">
+          <Button onClick={inviteClick} disabled={disabled || !inviteEmail.trim()} color="indigo">
             Invite
           </Button>
         </DialogActions>

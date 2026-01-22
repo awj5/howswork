@@ -259,7 +259,7 @@ export default function CheckIns() {
             Cancel
           </Button>
 
-          <Button onClick={() => scheduleClick()} color="indigo" disabled={disabled}>
+          <Button onClick={() => scheduleClick()} color="indigo" disabled={disabled || !scheduled}>
             Schedule
           </Button>
         </DialogActions>

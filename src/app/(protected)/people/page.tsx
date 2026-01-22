@@ -137,7 +137,7 @@ anothername@company.com
               Clear
             </Button>
 
-            <Button type="submit" color="indigo" disabled={disabled}>
+            <Button type="submit" color="indigo" disabled={disabled || staff === staffRef.current}>
               Save changes
             </Button>
           </div>
