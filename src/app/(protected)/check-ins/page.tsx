@@ -204,7 +204,7 @@ export default function CheckIns() {
       ) : (
         noStaffContacts && (
           <EmptyState>
-            <Subheading className="mt-2">No staff contacts</Subheading>
+            <Subheading>No staff contacts</Subheading>
             <Text className="mt-1 text-center">Add staff contacts to enable check-ins.</Text>
 
             <Button onClick={() => router.push("/people")} outline className="mt-6">
