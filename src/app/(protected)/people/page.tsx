@@ -117,7 +117,7 @@ export default function People() {
           </div>
 
           <Textarea
-            rows={15}
+            rows={12}
             value={staff}
             onChange={(e) => changeStaff(e.target.value)}
             placeholder={`name@company.com
