@@ -24,15 +24,9 @@ export default function People() {
   const [staff, setStaff] = useState("");
   const [staffError, setStaffError] = useState("");
   const [disabled, setDisabled] = useState(true);
-  const [members, setMembers] = useState(0);
+  const members = parseContacts(staff).length;
 
   useUnsavedWarning([[staff, staffRef.current]]);
-
-  const changeStaff = (val: string) => {
-    setStaff(val);
-    const contacts = parseContacts(val);
-    setMembers(contacts.length);
-  };
 
   const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -86,7 +80,6 @@ export default function People() {
       const text = contacts.join("\n"); // One contact per line
       setStaff(text);
       staffRef.current = text;
-      setMembers(contacts.length);
       setDisabled(false);
     };
 
@@ -119,7 +112,7 @@ export default function People() {
           <Textarea
             rows={12}
             value={staff}
-            onChange={(e) => changeStaff(e.target.value)}
+            onChange={(e) => setStaff(e.target.value)}
             placeholder={`name@company.com
 anothername@company.com
 +61 4XX XXX XXX`}
