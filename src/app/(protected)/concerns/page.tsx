@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CheckCircleIcon } from "@heroicons/react/16/solid";
-import { HandRaisedIcon } from "@heroicons/react/24/outline";
+import { HandRaisedIcon, ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import type { ConcernType } from "@/types";
 import { useCompanies } from "@/hooks/useCompanies";
 import { createClient } from "@/utils/supabase/client";
@@ -141,13 +141,14 @@ export default function Concerns() {
           <Subheading className="mt-2">No concerns reported</Subheading>
 
           <Text className="mt-1 text-center">
-            Employees can raise anonymous concerns anytime using the check-in PIN. All submissions will appear here.
+            Employees can raise anonymous concerns anytime using a check-in PIN. All submissions will appear here.
           </Text>
         </EmptyState>
       ) : (
         noCheckIns && (
           <EmptyState>
-            <Subheading>Concern reporting not active</Subheading>
+            <ExclamationCircleIcon className="size-16 text-gray-400 sm:size-12 dark:text-gray-500" />
+            <Subheading className="mt-2">Concern reporting not active</Subheading>
 
             <Text className="mt-1 text-center">
               Employees need a check-in PIN to raise concerns. Schedule your first check-in to enable reporting.

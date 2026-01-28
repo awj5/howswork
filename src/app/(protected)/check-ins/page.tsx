@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ClockIcon, UsersIcon } from "@heroicons/react/16/solid";
-import { CheckCircleIcon } from "@heroicons/react/24/outline";
+import { CheckCircleIcon, ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { toast } from "sonner";
 import { DateTime } from "luxon";
 import type { CheckInType } from "@/types";
@@ -207,7 +207,8 @@ export default function CheckIns() {
       ) : (
         noStaffContacts && (
           <EmptyState>
-            <Subheading>No staff contacts</Subheading>
+            <ExclamationCircleIcon className="size-16 text-gray-400 sm:size-12 dark:text-gray-500" />
+            <Subheading className="mt-2">No staff contacts</Subheading>
             <Text className="mt-1 text-center">Add staff contacts to enable check-ins.</Text>
 
             <Button onClick={() => router.push("/people")} outline className="mt-6">
