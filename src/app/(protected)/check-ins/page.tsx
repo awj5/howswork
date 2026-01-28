@@ -132,6 +132,7 @@ export default function CheckIns() {
 
         if (!peopleData.contacts || !peopleData.contacts.length) {
           setNoStaffContacts(true);
+          setCheckIns(undefined);
           return;
         }
       }
@@ -193,8 +194,10 @@ export default function CheckIns() {
       ) : checkIns ? (
         <EmptyState>
           <CheckCircleIcon className="size-16 text-gray-400 sm:size-12 dark:text-gray-500" />
-          <Subheading className="mt-2">No check-ins</Subheading>
-          <Text className="mt-1 text-center">Schedule a check-in to start collecting early risk signals.</Text>
+          <Subheading className="mt-2">No check-ins scheduled</Subheading>
+          <Text className="mt-1 text-center">
+            Schedule a check-in to start collecting early risk signals and enable concern reporting.
+          </Text>
 
           <Button onClick={() => setDialogOpen(true)} color="indigo" className="mt-6" disabled={disabled}>
             <ClockIcon />
