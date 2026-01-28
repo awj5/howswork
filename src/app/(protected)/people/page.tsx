@@ -35,6 +35,7 @@ export default function People() {
       return;
     }
 
+    if ("ontouchstart" in window || navigator.maxTouchPoints > 0) return; // Skip on touch screens
     if (staff !== staffRef.current) alert("Your changes are unsaved.");
   };
 
