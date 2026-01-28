@@ -14,6 +14,7 @@ import { Divider } from "@/components/ui/divider";
 import { Input } from "@/components/ui/input";
 import { ErrorMessage, Field, Fieldset, Label } from "@/components/ui/fieldset";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { updateAccount, deleteAccount } from "./actions";
 
 type FormErrorsType = {
@@ -123,7 +124,15 @@ export default function Account() {
   return (
     <form onSubmit={submitForm} className="mx-auto max-w-4xl">
       <div className="flex h-12 items-end sm:h-10">
-        <Heading>My Account</Heading>
+        <div className="flex items-center gap-4">
+          <Heading>My Account</Heading>
+
+          {(firstName !== user?.first_name || lastName !== user?.last_name || email !== user?.email) && (
+            <Badge color="amber" className="max-sm:hidden">
+              Unsaved changes
+            </Badge>
+          )}
+        </div>
       </div>
 
       <Divider className="mt-6 mb-10" />

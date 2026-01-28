@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { ErrorMessage, Field, Fieldset } from "@/components/ui/fieldset";
 import { Button } from "@/components/ui/button";
 import { Listbox, ListboxLabel, ListboxOption } from "@/components/ui/listbox";
+import { Badge } from "@/components/ui/badge";
 import { deleteCompany, updateCompany } from "./actions";
 
 type FormErrorsType = {
@@ -147,7 +148,15 @@ export default function Settings() {
   return (
     <form onSubmit={submitForm} className="mx-auto max-w-4xl">
       <div className="flex h-12 items-end sm:h-10">
-        <Heading>Settings</Heading>
+        <div className="flex items-center gap-4">
+          <Heading>Settings</Heading>
+
+          {(name !== nameRef.current || slug !== slugRef.current || timezone !== timezoneRef.current) && (
+            <Badge color="amber" className="max-sm:hidden">
+              Unsaved changes
+            </Badge>
+          )}
+        </div>
       </div>
 
       <Divider className="mt-6 mb-10" />
