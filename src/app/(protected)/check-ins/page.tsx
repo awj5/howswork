@@ -36,8 +36,8 @@ export default function CheckIns() {
   const [disabled, setDisabled] = useState(false);
   const [checkIns, setCheckIns] = useState<CheckInType[]>();
   const [checkInToRemove, setCheckInToRemove] = useState<CheckInType>();
-  const [pageCount, setPageCount] = useState(0);
   const [noStaffContacts, setNoStaffContacts] = useState(false);
+  const [pageCount, setPageCount] = useState(0);
   const pageSize = 10;
   const page = Number(searchParams.get("page")) || 1; // Default to page 1
 
@@ -178,7 +178,7 @@ export default function CheckIns() {
             <TableBody>
               {checkIns.map((checkIn) => (
                 <CheckIn
-                  key={checkIn.start}
+                  key={checkIn.id}
                   data={checkIn}
                   timezone={companies[0].timezone}
                   disabled={disabled}

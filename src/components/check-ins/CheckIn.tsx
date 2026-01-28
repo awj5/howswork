@@ -15,7 +15,7 @@ type CheckInProps = {
 };
 
 export default function CheckIn(props: CheckInProps) {
-  const startDT = DateTime.fromISO(props.data.start).toUTC(); // Convert to date object (UTC)
+  const startDT = DateTime.fromISO(props.data.start); // Convert to date object
   const isScheduled = props.data.status === "Scheduled" || props.data.status === "Upcoming";
   const repeatWeeks = props.data.repeat / 7;
   const repeatText = repeatWeeks === 1 ? "Weekly" : repeatWeeks ? `${repeatWeeks} weeks` : "None";

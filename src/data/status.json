@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "title": "Awaiting review"
+  },
+  {
+    "id": 2,
+    "title": "Under review"
+  },
+  {
+    "id": 3,
+    "title": "Action planned"
+  },
+  {
+    "id": 4,
+    "title": "Resolved"
+  },
+  {
+    "id": 5,
+    "title": "No further action"
+  }
+]

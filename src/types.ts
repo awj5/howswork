@@ -19,3 +19,20 @@ export type CheckInType = {
   pin: number;
   status: string;
 };
+
+export type ConcernActivityType = {
+  created_at: string;
+  status?: number;
+  comment?: string;
+  admin?: boolean;
+};
+
+export type ConcernType = {
+  id: number;
+  created_at: string;
+  tracking: string;
+  details?: string;
+  issues?: number[];
+  activity?: ConcernActivityType[];
+  status?: number;
+};

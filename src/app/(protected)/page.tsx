@@ -14,7 +14,7 @@ export default function Home() {
 }
 
 /*
-- Add people first and then schedule your pulse checks start date to get started
+- Add people first and then schedule your pulse checks start date to get started (step 1. step 2 etc.)
 - Key insights (no. of concerns reported)
 - Trends (hazard category changes over time and AI insights)
 - Pulse check participation over time
