@@ -21,6 +21,7 @@ export default function People() {
   const router = useRouter();
   const companies = useCompanies();
   const staffRef = useRef("");
+  const isClickingRef = useRef(false);
   const [staff, setStaff] = useState("");
   const [staffError, setStaffError] = useState("");
   const [disabled, setDisabled] = useState(true);
@@ -28,8 +29,23 @@ export default function People() {
 
   useUnsavedWarning([[staff, staffRef.current]]);
 
+  const staffBlur = () => {
+    if (isClickingRef.current) {
+      isClickingRef.current = false;
+      return;
+    }
+
+    if (staff !== staffRef.current) alert("Your changes are unsaved.");
+  };
+
+  const clearStaff = () => {
+    setStaff("");
+    isClickingRef.current = false;
+  };
+
   const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    isClickingRef.current = false;
     setStaffError("");
     const contacts = parseContacts(staff);
 
@@ -113,6 +129,7 @@ export default function People() {
             rows={12}
             value={staff}
             onChange={(e) => setStaff(e.target.value)}
+            onBlur={staffBlur}
             placeholder={`name@company.com
 anothername@company.com
 +61 4XX XXX XXX`}
@@ -126,11 +143,23 @@ anothername@company.com
           <Text>{`${members} member${!members || members > 1 ? "s" : ""}`}</Text>
 
           <div className="flex gap-4">
-            <Button type="button" onClick={() => setStaff("")} plain disabled={disabled} className="hidden! sm:inline!">
+            <Button
+              type="button"
+              onClick={clearStaff}
+              plain
+              disabled={disabled}
+              className="hidden! sm:inline!"
+              onMouseDown={() => (isClickingRef.current = true)}
+            >
               Clear
             </Button>
 
-            <Button type="submit" color="indigo" disabled={disabled || staff === staffRef.current}>
+            <Button
+              type="submit"
+              color="indigo"
+              disabled={disabled || staff === staffRef.current}
+              onMouseDown={() => (isClickingRef.current = true)}
+            >
               Save changes
             </Button>
           </div>
