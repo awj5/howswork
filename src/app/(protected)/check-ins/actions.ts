@@ -2,7 +2,6 @@
 
 import { DateTime } from "luxon";
 import { randomInt } from "node:crypto";
-import type { CheckInType } from "@/types";
 import { createClient } from "@/utils/supabase/server";
 
 export async function scheduleCheckIn(companyID: number, start: string, repeat: number) {
@@ -56,23 +55,5 @@ export async function scheduleCheckIn(companyID: number, start: string, repeat: 
   });
 
   if (insertCheckInError) return { error: insertCheckInError.message };
-  return { success: true };
-}
-
-export async function removeCheckIn(checkIn: CheckInType, companyID: number) {
-  const supabase = await createClient();
-  const { error: deleteCheckInError } = await supabase.from("check_ins").delete().eq("id", checkIn.id);
-  if (deleteCheckInError) return { error: deleteCheckInError.message };
-
-  // Remove repeat from open check-in (if exists)
-  const { error: updateCheckInError } = await supabase
-    .from("check_ins")
-    .update({
-      repeat: 0,
-    })
-    .eq("company_id", companyID)
-    .eq("status", "Open");
-
-  if (updateCheckInError) return { error: updateCheckInError.message };
   return { success: true };
 }

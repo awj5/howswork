@@ -14,14 +14,13 @@ import { Heading, Subheading } from "@/components/ui/heading";
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { ErrorMessage, Field, FieldGroup, Fieldset, Label } from "@/components/ui/fieldset";
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Alert, AlertActions, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Text } from "@/components/ui/text";
 import EmptyState from "@/components/EmptyState";
 import { TablePagination } from "@/components/TablePagination";
 import CheckIn from "@/components/check-ins/CheckIn";
-import { scheduleCheckIn, removeCheckIn } from "./actions";
+import { scheduleCheckIn } from "./actions";
 
 export default function CheckIns() {
   const supabase = createClient();
@@ -29,38 +28,15 @@ export default function CheckIns() {
   const companies = useCompanies();
   const searchParams = useSearchParams();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [alertOpen, setAlertOpen] = useState(false);
   const [scheduled, setScheduled] = useState("");
   const [repeat, setRepeat] = useState("28"); // Default
   const [scheduledError, setScheduledError] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [checkIns, setCheckIns] = useState<CheckInType[]>();
-  const [checkInToRemove, setCheckInToRemove] = useState<CheckInType>();
   const [noStaffContacts, setNoStaffContacts] = useState(false);
   const [pageCount, setPageCount] = useState(0);
   const pageSize = 10;
   const page = Number(searchParams.get("page")) || 1; // Default to page 1
-
-  const removeCheckInClick = async () => {
-    setAlertOpen(false);
-    if (!checkInToRemove) return;
-    setDisabled(true);
-    const result = await removeCheckIn(checkInToRemove, companies[0].id);
-    setDisabled(false);
-
-    if (result.error) {
-      toast.error(result.error);
-      return;
-    }
-
-    // Success
-    toast.success("Check-in removed");
-  };
-
-  const confirmRemoveClick = (checkIn: CheckInType) => {
-    setCheckInToRemove(checkIn);
-    setAlertOpen(true);
-  };
 
   const scheduleClick = async () => {
     setScheduledError(false);
@@ -105,7 +81,7 @@ export default function CheckIns() {
         count: checkInsCount,
       } = await supabase
         .from("check_ins")
-        .select("id, start, repeat, pin, status", {
+        .select("id, start, repeat, status", {
           count: "exact",
         })
         .eq("company_id", companies[0].id)
@@ -167,24 +143,13 @@ export default function CheckIns() {
               <TableRow>
                 <TableHeader>Date &amp; Time</TableHeader>
                 <TableHeader>Repeats</TableHeader>
-                <TableHeader>PIN</TableHeader>
                 <TableHeader>Status</TableHeader>
-
-                <TableHeader className="relative w-0">
-                  <span className="sr-only">Actions</span>
-                </TableHeader>
               </TableRow>
             </TableHead>
 
             <TableBody>
               {checkIns.map((checkIn) => (
-                <CheckIn
-                  key={checkIn.id}
-                  data={checkIn}
-                  timezone={companies[0].timezone}
-                  disabled={disabled}
-                  confirmRemoveClick={confirmRemoveClick}
-                />
+                <CheckIn key={checkIn.id} data={checkIn} timezone={companies[0].timezone} disabled={disabled} />
               ))}
             </TableBody>
           </Table>
@@ -268,21 +233,6 @@ export default function CheckIns() {
           </Button>
         </DialogActions>
       </Dialog>
-
-      <Alert open={alertOpen} onClose={setAlertOpen}>
-        <AlertTitle>Are you sure you want to remove this check-in?</AlertTitle>
-        <AlertDescription>This action cannot be undone.</AlertDescription>
-
-        <AlertActions>
-          <Button plain onClick={() => setAlertOpen(false)}>
-            Cancel
-          </Button>
-
-          <Button onClick={removeCheckInClick} color="red">
-            Remove
-          </Button>
-        </AlertActions>
-      </Alert>
     </div>
   );
 }

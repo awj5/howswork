@@ -16,8 +16,8 @@ export type CheckInType = {
   id: number;
   start: string;
   repeat: number;
-  pin: number;
   status: string;
+  pin?: number;
 };
 
 export type ConcernActivityType = {
