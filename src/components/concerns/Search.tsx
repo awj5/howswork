@@ -21,8 +21,8 @@ export default function Search(props: SearchProps) {
           <Input
             value={props.query ?? ""}
             onChange={(e) => props.setQuery(e.target.value)}
-            placeholder="Search by tracking number&hellip;"
-            aria-label="Search by tracking number"
+            placeholder="Tracking number"
+            aria-label="Tracking number"
           />
         </InputGroup>
       </div>

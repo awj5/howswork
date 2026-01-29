@@ -126,15 +126,7 @@ export default function Concerns() {
         status: statusMap.get(concern.id),
       }));
 
-      // Sort concerns with no status or status 1 to appear first
-      concernsWithStatus.sort((a, b) => {
-        const aPriority = a.status === undefined || a.status === 1;
-        const bPriority = b.status === undefined || b.status === 1;
-        if (aPriority && !bPriority) return -1;
-        if (!aPriority && bPriority) return 1;
-        return 0;
-      });
-
+      concernsWithStatus.sort((a, b) => getPriority(a.status) - getPriority(b.status)); // Sort by status priority, then by date
       setConcerns(concernsWithStatus);
       setPageCount(Math.max(1, Math.ceil(concernsCount! / pageSize)));
     };
@@ -202,4 +194,11 @@ export default function Concerns() {
       )}
     </div>
   );
+}
+
+function getPriority(status: number | undefined) {
+  if (status === undefined || status === 1) return 0;
+  if (status === 2) return 1;
+  if (status === 3) return 2;
+  return 3; // Status 4 or 5
 }
