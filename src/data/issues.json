@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "name": "High job demands",
+    "tag": "excessive workload",
+    "description": "Too much work, unrealistic deadlines, or constant time pressure."
+  },
+  {
+    "id": 2,
+    "name": "Low job demands",
+    "tag": "insufficient work",
+    "description": "Not enough meaningful work, repetitive tasks, or skills going unused."
+  },
+  {
+    "id": 3,
+    "name": "Job control",
+    "tag": "lack of autonomy",
+    "description": "Little say in how you do your work or when tasks get done."
+  },
+  {
+    "id": 4,
+    "name": "Support",
+    "tag": "lack of support",
+    "description": "Not getting the help you need from managers, colleagues, or the company."
+  },
+  {
+    "id": 5,
+    "name": "Role clarity",
+    "tag": "unclear expectations",
+    "description": "Uncertain about your responsibilities or what's expected of you."
+  },
+  {
+    "id": 6,
+    "name": "Change management",
+    "tag": "poor communication",
+    "description": "Changes happening without warning, explanation, or consultation."
+  },
+  {
+    "id": 7,
+    "name": "Recognition and reward",
+    "tag": "lack of recognition",
+    "description": "Your work is rarely acknowledged or rewarded."
+  },
+  {
+    "id": 8,
+    "name": "Fairness",
+    "tag": "unfair treatment",
+    "description": "Inconsistent rules, bias, or unfair decisions."
+  },
+  {
+    "id": 9,
+    "name": "Traumatic events",
+    "tag": "traumatic exposure",
+    "description": "Witnessing or experiencing distressing or traumatic incidents at work."
+  },
+  {
+    "id": 10,
+    "name": "Remote/isolated work",
+    "tag": "isolated work",
+    "description": "Working alone or remotely with limited access to others or support."
+  },
+  {
+    "id": 11,
+    "name": "Physical environment",
+    "tag": "poor or unsafe conditions",
+    "description": "Workplace conditions that negatively affect your safety or comfort."
+  },
+  {
+    "id": 12,
+    "name": "Violence and aggression",
+    "tag": "threats or aggression",
+    "description": "Physical threats, attacks, or aggressive behaviour from others."
+  },
+  {
+    "id": 13,
+    "name": "Bullying",
+    "tag": "bullying",
+    "description": "Repeated unreasonable behaviour that intimidates, humiliates, or undermines you."
+  },
+  {
+    "id": 14,
+    "name": "Harassment",
+    "tag": "harassment",
+    "description": "Unwelcome conduct, including sexual or other forms of harassment."
+  },
+  {
+    "id": 15,
+    "name": "Workplace relationships",
+    "tag": "conflict",
+    "description": "Ongoing tension, disputes, or difficult relationships with colleagues."
+  }
+]

@@ -22,8 +22,10 @@ export default function Concerns() {
   const searchParams = useSearchParams();
   const companies = useCompanies();
   const searchRef = useRef<string>(undefined);
+  const issueFilterRef = useRef<string>(undefined);
   const [search, setSearch] = useState<string>();
   const [debouncedSearch, setDebouncedSearch] = useState<string>();
+  const [issueFilter, setIssueFilter] = useState<string>();
   const [concerns, setConcerns] = useState<ConcernType[]>();
   const [noCheckIns, setNoCheckIns] = useState(false);
   const [pageCount, setPageCount] = useState(0);
@@ -41,20 +43,21 @@ export default function Concerns() {
 
     const getConcerns = async () => {
       // Pagination
-      if (page !== 1 && debouncedSearch !== searchRef.current) {
-        // Reset to page 1 on search
+      if (page !== 1 && (debouncedSearch !== searchRef.current || issueFilter !== issueFilterRef.current)) {
+        // Reset to page 1 on search or filter
         router.replace("/concerns");
         return;
       }
 
       searchRef.current = debouncedSearch;
+      issueFilterRef.current = issueFilter;
       const from = (page - 1) * pageSize;
       const to = from + pageSize - 1;
 
       // Get Concerns
       let concernsQuery = supabase
         .from("concerns")
-        .select("id, tracking, created_at", {
+        .select("id, tracking, created_at, issues", {
           count: "exact",
         })
         .eq("company_id", companies[0].id);
@@ -63,6 +66,8 @@ export default function Concerns() {
         const normalizedSearch = debouncedSearch.replace(/^HW-/i, "").trim(); // Strip HW-
         concernsQuery = concernsQuery.ilike("tracking", `%${normalizedSearch}%`);
       }
+
+      if (issueFilter) concernsQuery = concernsQuery.contains("issues", issueFilter);
 
       const {
         data: concernsData,
@@ -126,17 +131,17 @@ export default function Concerns() {
     };
 
     getConcerns();
-  }, [companies, page, debouncedSearch]);
+  }, [companies, page, debouncedSearch, issueFilter]);
 
   return (
     <div className="mx-auto max-w-6xl">
-      {concerns && (concerns.length || search !== undefined) ? (
+      {concerns && (concerns.length || search !== undefined || issueFilter !== undefined) ? (
         <>
           <div className="flex h-12 items-end sm:h-10">
             <Heading>Concerns</Heading>
           </div>
 
-          <Search query={search} setQuery={setSearch} />
+          <Search query={search} setQuery={setSearch} filter={issueFilter} setFilter={setIssueFilter} />
 
           {concerns.length ? (
             <Table className="mt-8 [--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">

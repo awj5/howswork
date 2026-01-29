@@ -1,11 +1,14 @@
 import { Dispatch, SetStateAction } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/16/solid";
+import IssuesData from "@/data/issues.json";
 import { Input, InputGroup } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 
 type SearchProps = {
   query: string | undefined;
   setQuery: Dispatch<SetStateAction<string | undefined>>;
+  filter: string | undefined;
+  setFilter: Dispatch<SetStateAction<string | undefined>>;
 };
 
 export default function Search(props: SearchProps) {
@@ -25,11 +28,14 @@ export default function Search(props: SearchProps) {
       </div>
 
       <div className="max-sm:hidden">
-        <Select name="status">
-          <option value="all">All issues</option>
-          <option value="needs_attention">Needs attention</option>
-          <option value="in_progress">In progress</option>
-          <option value="closed">Closed</option>
+        <Select value={props.filter} onChange={(e) => props.setFilter(e.target.value)}>
+          <option value="">All issues</option>
+
+          {IssuesData.map((issue) => (
+            <option key={issue.id} value={issue.id}>
+              {issue.name}
+            </option>
+          ))}
         </Select>
       </div>
     </div>

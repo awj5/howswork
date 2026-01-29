@@ -31,8 +31,8 @@ export type ConcernType = {
   id: number;
   created_at: string;
   tracking: string;
+  issues: number[];
   details?: string;
-  issues?: number[];
   activity?: ConcernActivityType[];
   status?: number;
 };
