@@ -126,6 +126,15 @@ export default function Concerns() {
         status: statusMap.get(concern.id),
       }));
 
+      // Sort concerns with no status or status 1 to appear first
+      concernsWithStatus.sort((a, b) => {
+        const aPriority = a.status === undefined || a.status === 1;
+        const bPriority = b.status === undefined || b.status === 1;
+        if (aPriority && !bPriority) return -1;
+        if (!aPriority && bPriority) return 1;
+        return 0;
+      });
+
       setConcerns(concernsWithStatus);
       setPageCount(Math.max(1, Math.ceil(concernsCount! / pageSize)));
     };
