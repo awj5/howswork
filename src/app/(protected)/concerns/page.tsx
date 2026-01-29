@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CheckCircleIcon } from "@heroicons/react/16/solid";
 import { HandRaisedIcon, ExclamationCircleIcon } from "@heroicons/react/24/outline";
@@ -21,34 +21,54 @@ export default function Concerns() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const companies = useCompanies();
+  const searchRef = useRef<string>(undefined);
+  const [search, setSearch] = useState<string>();
+  const [debouncedSearch, setDebouncedSearch] = useState<string>();
   const [concerns, setConcerns] = useState<ConcernType[]>();
   const [noCheckIns, setNoCheckIns] = useState(false);
   const [pageCount, setPageCount] = useState(0);
-  const [search, setSearch] = useState("");
   const pageSize = 10;
   const page = Number(searchParams.get("page")) || 1; // Default to page 1
+
+  useEffect(() => {
+    // Delay API call
+    const timeout = setTimeout(() => setDebouncedSearch(search), 300);
+    return () => clearTimeout(timeout);
+  }, [search]);
 
   useEffect(() => {
     if (!companies.length) return;
 
     const getConcerns = async () => {
       // Pagination
+      if (page !== 1 && debouncedSearch !== searchRef.current) {
+        // Reset to page 1 on search
+        router.replace("/concerns");
+        return;
+      }
+
+      searchRef.current = debouncedSearch;
       const from = (page - 1) * pageSize;
       const to = from + pageSize - 1;
 
       // Get Concerns
-      const {
-        data: concernsData,
-        error: concernsError,
-        count: concernsCount,
-      } = await supabase
+      let concernsQuery = supabase
         .from("concerns")
         .select("id, tracking, created_at", {
           count: "exact",
         })
-        .eq("company_id", companies[0].id)
-        .order("created_at", { ascending: false })
-        .range(from, to);
+        .eq("company_id", companies[0].id);
+
+      if (debouncedSearch) {
+        const normalizedSearch = debouncedSearch.replace(/^HW-/i, "").trim(); // Strip HW-
+        concernsQuery = concernsQuery.ilike("tracking", `%${normalizedSearch}%`);
+      }
+
+      const {
+        data: concernsData,
+        error: concernsError,
+        count: concernsCount,
+      } = await concernsQuery.order("created_at", { ascending: false }).range(from, to);
 
       if (concernsError) {
         console.error(concernsError);
@@ -106,33 +126,37 @@ export default function Concerns() {
     };
 
     getConcerns();
-  }, [companies, page]);
+  }, [companies, page, debouncedSearch]);
 
   return (
     <div className="mx-auto max-w-6xl">
-      {concerns && concerns.length ? (
+      {concerns && (concerns.length || search !== undefined) ? (
         <>
           <div className="flex h-12 items-end sm:h-10">
             <Heading>Concerns</Heading>
           </div>
 
-          <Search />
+          <Search query={search} setQuery={setSearch} />
 
-          <Table className="mt-8 [--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
-            <TableHead>
-              <TableRow>
-                <TableHeader>Tracking</TableHeader>
-                <TableHeader>Date &amp; Time</TableHeader>
-                <TableHeader>Status</TableHeader>
-              </TableRow>
-            </TableHead>
+          {concerns.length ? (
+            <Table className="mt-8 [--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
+              <TableHead>
+                <TableRow>
+                  <TableHeader>Tracking</TableHeader>
+                  <TableHeader>Date &amp; Time</TableHeader>
+                  <TableHeader>Status</TableHeader>
+                </TableRow>
+              </TableHead>
 
-            <TableBody>
-              {concerns.map((concern) => (
-                <Concern key={concern.id} data={concern} timezone={companies[0].timezone} />
-              ))}
-            </TableBody>
-          </Table>
+              <TableBody>
+                {concerns.map((concern) => (
+                  <Concern key={concern.id} data={concern} timezone={companies[0].timezone} />
+                ))}
+              </TableBody>
+            </Table>
+          ) : (
+            <Text className="mt-8">No concerns found</Text>
+          )}
 
           <TablePagination page={page} pageCount={pageCount} route="/concerns" />
         </>
