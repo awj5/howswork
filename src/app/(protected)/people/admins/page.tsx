@@ -97,8 +97,8 @@ export default function Admins() {
         return;
       }
 
-      const userIDs = companyUsersData.map((r) => r.user_id).filter(Boolean); // Registered user IDs
-      const inviteEmails = companyUsersData.map((r) => r.invite_email).filter(Boolean); // Invited user emails
+      const userIDs = companyUsersData.map((i) => i.user_id).filter(Boolean); // Registered user IDs
+      const inviteEmails = companyUsersData.map((i) => i.invite_email).filter(Boolean); // Invited user emails
 
       // Get profiles (don't show super admins unless it's their company)
       const { data: profilesData, error: profilesError } = await supabase
@@ -152,16 +152,16 @@ export default function Admins() {
           </TableHead>
 
           <TableBody>
-            {users.map((u) => (
-              <TableRow key={u.email}>
-                <TableCell className={`font-medium ${!u.user_id && "text-zinc-500"}`}>
-                  {u.user_id ? `${u.first_name} ${u.last_name}` : "Invite sent"}
+            {users.map((admin) => (
+              <TableRow key={admin.email}>
+                <TableCell className={`font-medium ${!admin.user_id && "text-zinc-500"}`}>
+                  {admin.user_id ? `${admin.first_name} ${admin.last_name}` : "Invite sent"}
                 </TableCell>
 
-                <TableCell className={`${!u.user_id && "text-zinc-500"}`}>{u.email}</TableCell>
+                <TableCell className={`${!admin.user_id && "text-zinc-500"}`}>{admin.email}</TableCell>
 
                 <TableCell className="text-right">
-                  <Button onClick={() => confirmRemoveClick(u)} disabled={disabled} outline>
+                  <Button onClick={() => confirmRemoveClick(admin)} disabled={disabled} outline>
                     <XCircleIcon />
                     Remove
                   </Button>

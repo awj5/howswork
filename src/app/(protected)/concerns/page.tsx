@@ -100,7 +100,7 @@ export default function Concerns() {
       }
 
       // Get status of each concern
-      const concernIDs = concernsData.map((c) => c.id);
+      const concernIDs = concernsData.map((i) => i.id);
 
       const { data: concernStatusData, error: concernStatusError } = await supabase
         .from("concern_status")

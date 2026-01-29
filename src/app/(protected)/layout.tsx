@@ -24,7 +24,7 @@ export default async function ProtectedLayout({
     .eq("user_id", authData.user.id)
     .single();
 
-  if (profileError) throw profileError;
+  if (profileError) redirect("/error");
 
   // Pass to context provider
   const user: UserType = {

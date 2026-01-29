@@ -25,7 +25,7 @@ export default function ConcernCount() {
         return;
       }
 
-      const concernIDs = concernsData.map((c) => c.id);
+      const concernIDs = concernsData.map((i) => i.id);
 
       const { data: concernStatusData, error: concernStatusError } = await supabase
         .from("concern_status")
@@ -37,8 +37,8 @@ export default function ConcernCount() {
         return;
       }
 
-      const concernsWithStatus1 = concernStatusData.filter((c) => c.status === 1);
-      const concernIDsWithStatus = new Set(concernStatusData.map((c) => c.concern_id));
+      const concernsWithStatus1 = concernStatusData.filter((i) => i.status === 1);
+      const concernIDsWithStatus = new Set(concernStatusData.map((i) => i.concern_id));
       const concernsWithoutStatus = concernIDs.filter((id) => !concernIDsWithStatus.has(id));
       setCount(concernsWithStatus1.length + concernsWithoutStatus.length);
     };
