@@ -49,8 +49,11 @@ export default function Nav() {
               current={pathname === href || (href !== "/" && pathname.includes(href))}
             >
               <Icon />
-              <SidebarLabel>{label}</SidebarLabel>
-              {href === "/concerns" && <ConcernCount />}
+
+              <span className="flex items-center gap-2">
+                <SidebarLabel>{label}</SidebarLabel>
+                {href === "/concerns" && <ConcernCount />}
+              </span>
             </SidebarItem>
           ))}
         </SidebarSection>

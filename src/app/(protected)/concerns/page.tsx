@@ -145,7 +145,7 @@ export default function Concerns() {
           <Search query={search} setQuery={setSearch} filter={issueFilter} setFilter={setIssueFilter} />
 
           {concerns.length ? (
-            <Table className="mt-8 [--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
+            <Table striped className="mt-8 [--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
               <TableHead>
                 <TableRow>
                   <TableHeader>Tracking</TableHeader>
