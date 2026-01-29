@@ -19,6 +19,7 @@ import {
   SidebarSpacer,
 } from "@/components/ui/sidebar";
 import { Logo } from "@/components/Logo";
+import ConcernCount from "./nav/ConcernCount";
 import Footer from "./nav/Footer";
 
 export default function Nav() {
@@ -49,6 +50,7 @@ export default function Nav() {
             >
               <Icon />
               <SidebarLabel>{label}</SidebarLabel>
+              {href === "/concerns" && <ConcernCount />}
             </SidebarItem>
           ))}
         </SidebarSection>
