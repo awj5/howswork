@@ -26,7 +26,11 @@ export async function updateStaff(companyID: number, contacts: string[]) {
     })
     .eq("company_id", companyID);
 
-  if (updatePeopleError) return { error: updatePeopleError.message };
+  if (updatePeopleError) {
+    console.error(updatePeopleError.message);
+    return { error: "Internal server error" };
+  }
+
   return { success: true };
 }
 

@@ -14,7 +14,11 @@ export async function scheduleCheckIn(companyID: number, start: string, repeat: 
     .eq("id", companyID)
     .single();
 
-  if (companyError) return { error: companyError.message };
+  if (companyError) {
+    console.error(companyError.message);
+    return { error: "Internal server error" };
+  }
+
   const startDT = DateTime.fromISO(start, { zone: companyData.timezone }).toUTC(); // Convert to UTC using company timezone
   const startISO = startDT.toISO(); // Convert to ISO to store in Supabase
   const pin = randomInt(100000, 1000000).toString(); // Generate random pin
@@ -30,7 +34,11 @@ export async function scheduleCheckIn(companyID: number, start: string, repeat: 
     .lte("start", startNextWeek)
     .limit(1);
 
-  if (checkInsError) return { error: checkInsError.message };
+  if (checkInsError) {
+    console.error(checkInsError.message);
+    return { error: "Internal server error" };
+  }
+
   if (checkInsData.length) return { error: "Check-ins must be more than 7 days apart" };
 
   // Check for check-ins beyond this one (if repeating)
@@ -42,7 +50,11 @@ export async function scheduleCheckIn(companyID: number, start: string, repeat: 
       .gte("start", startISO)
       .limit(1);
 
-    if (checkInsError) return { error: checkInsError.message };
+    if (checkInsError) {
+      console.error(checkInsError.message);
+      return { error: "Internal server error" };
+    }
+
     if (checkInsData.length) return { error: "A future check-in is already scheduled" };
   }
 
@@ -54,6 +66,10 @@ export async function scheduleCheckIn(companyID: number, start: string, repeat: 
     pin,
   });
 
-  if (insertCheckInError) return { error: insertCheckInError.message };
+  if (insertCheckInError) {
+    console.error(insertCheckInError.message);
+    return { error: "Internal server error" };
+  }
+
   return { success: true };
 }

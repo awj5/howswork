@@ -21,7 +21,10 @@ export async function updateAccount(user: UserType) {
     })
     .eq("user_id", authData.user.id);
 
-  if (updateProfileError) return { error: updateProfileError.message };
+  if (updateProfileError) {
+    console.error(updateProfileError.message);
+    return { error: "Internal server error" };
+  }
 
   // Update auth email if changed
   if (email !== authData.user.email) {
@@ -40,7 +43,11 @@ export async function updateAccount(user: UserType) {
       })
       .eq("user_id", authData.user.id);
 
-    if (updateProfileError) return { error: updateProfileError.message };
+    if (updateProfileError) {
+      console.error(updateProfileError.message);
+      return { error: "Internal server error" };
+    }
+
     return { emailChanged: true };
   }
 
@@ -57,6 +64,5 @@ export async function deleteAccount() {
   // Delete (user Supabase admin)
   const { error: deleteAuthUserError } = await supabaseAdmin.auth.admin.deleteUser(authData.user.id);
   if (deleteAuthUserError) return { error: deleteAuthUserError.message };
-
   return { success: true };
 }

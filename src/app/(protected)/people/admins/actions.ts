@@ -22,7 +22,11 @@ export async function inviteUser(email: string, company: CompanyType) {
     .select("user_id, invite_email")
     .eq("company_id", company.id);
 
-  if (companyUsersError) return { error: companyUsersError.message };
+  if (companyUsersError) {
+    console.error(companyUsersError.message);
+    return { error: "Internal server error" };
+  }
+
   const userIDs = companyUsersData.map((i) => i.user_id).filter(Boolean); // Registered user IDs
   const inviteEmails = companyUsersData.map((i) => i.invite_email).filter(Boolean); // Invited user emails
   if (!userIDs.includes(authData.user.id)) return { error: "You do not have permission to modify this company" };
@@ -34,7 +38,11 @@ export async function inviteUser(email: string, company: CompanyType) {
     .eq("email", email)
     .maybeSingle();
 
-  if (profileError) return { error: profileError.message };
+  if (profileError) {
+    console.error(profileError.message);
+    return { error: "Internal server error" };
+  }
+
   if (userIDs.includes(profileData?.user_id)) return { error: "User is already in this company" };
   if (inviteEmails.includes(email)) return { error: "User is already invited" };
 
@@ -45,7 +53,10 @@ export async function inviteUser(email: string, company: CompanyType) {
     invite_email: !profileData ? email : null,
   });
 
-  if (insertCompanyUserError) return { error: insertCompanyUserError.message };
+  if (insertCompanyUserError) {
+    console.error(insertCompanyUserError.message);
+    return { error: "Internal server error" };
+  }
 
   // Send email invite or alert existing user
   try {
@@ -68,7 +79,7 @@ export async function inviteUser(email: string, company: CompanyType) {
           }),
     });
 
-    if (sendInviteError) return { error: sendInviteError.message };
+    if (sendInviteError) throw sendInviteError;
     return { success: profileData ? "Admin access granted" : "Admin invite sent" };
   } catch (error) {
     console.error(error);
@@ -89,7 +100,11 @@ export async function removeUser(user: UserType, companyID: number) {
     .select("user_id, invite_email")
     .eq("company_id", companyID);
 
-  if (companyUsersError) return { error: companyUsersError.message };
+  if (companyUsersError) {
+    console.error(companyUsersError.message);
+    return { error: "Internal server error" };
+  }
+
   const userIDs = companyUsersData.map((i) => i.user_id).filter(Boolean); // Registered user IDs
   const inviteEmails = companyUsersData.map((i) => i.invite_email).filter(Boolean); // Invited user emails
   if (!userIDs.includes(authData.user.id)) return { error: "You do not have permission to modify this company" };
@@ -104,6 +119,10 @@ export async function removeUser(user: UserType, companyID: number) {
     .eq(user.user_id ? "user_id" : "invite_email", user.user_id || user.email)
     .eq("company_id", companyID);
 
-  if (deleteCompanyUserError) return { error: deleteCompanyUserError.message };
+  if (deleteCompanyUserError) {
+    console.error(deleteCompanyUserError.message);
+    return { error: "Internal server error" };
+  }
+
   return { success: true };
 }

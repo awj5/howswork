@@ -16,7 +16,11 @@ export async function updateCompany(company: CompanyType) {
     .neq("id", company.id)
     .limit(1);
 
-  if (companiesError) return { error: companiesError.message };
+  if (companiesError) {
+    console.error(companiesError.message);
+    return { error: "Internal server error" };
+  }
+
   if (companiesData.length) return { error: "This URL is already in use. Choose a different URL" };
 
   // Update company (RLS only allows users in company to update it)
@@ -29,7 +33,11 @@ export async function updateCompany(company: CompanyType) {
     })
     .eq("id", company.id);
 
-  if (updateCompanyError) return { error: updateCompanyError.message };
+  if (updateCompanyError) {
+    console.error(updateCompanyError.message);
+    return { error: "Internal server error" };
+  }
+
   return { success: true };
 }
 
@@ -42,11 +50,20 @@ export async function deleteCompany(companyID: number) {
     .select("*")
     .eq("company_id", companyID);
 
-  if (companyUsersError) return { error: companyUsersError.message };
+  if (companyUsersError) {
+    console.error(companyUsersError.message);
+    return { error: "Internal server error" };
+  }
+
   if (companyUsersData.length > 1) return { error: "All admins must be removed before this company can be deleted" };
 
   // There is only one user left so delete the company
   const { error: deleteCompanyError } = await supabase.from("companies").delete().eq("id", companyID);
-  if (deleteCompanyError) return { error: deleteCompanyError.message };
+
+  if (deleteCompanyError) {
+    console.error(deleteCompanyError.message);
+    return { error: "Internal server error" };
+  }
+
   return { success: true };
 }
