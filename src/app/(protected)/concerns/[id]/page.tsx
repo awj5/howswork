@@ -8,6 +8,7 @@ import { CalendarIcon } from "@heroicons/react/16/solid";
 import IssuesData from "@/data/issues.json";
 import StatusData from "@/data/status.json";
 import type { ConcernType } from "@/types";
+import { useCompanies } from "@/hooks/useCompanies";
 import { Heading, Subheading } from "@/components/ui/heading";
 import EmptyState from "@/components/EmptyState";
 import Breadcrumb from "@/components/Breadcrumb";
@@ -21,6 +22,7 @@ import { getConcernData } from "./actions";
 
 export default function Concern() {
   const params = useParams<{ id: string }>();
+  const companies = useCompanies();
   const [concern, setConcern] = useState<ConcernType>();
   const [error, setError] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -28,10 +30,10 @@ export default function Concern() {
   const status = concern?.activity?.find((i) => i.status)?.status ?? 0; // Latest status or default to "Awaiting review"
 
   useEffect(() => {
-    if (dialogOpen) return;
+    if (!companies.length || dialogOpen) return;
 
     const getConcern = async () => {
-      const result = await getConcernData(Number(params.id));
+      const result = await getConcernData(Number(params.id), companies[0].id);
 
       if (result.error) {
         setError(result.error);
@@ -42,7 +44,7 @@ export default function Concern() {
     };
 
     getConcern();
-  }, [dialogOpen]);
+  }, [companies, dialogOpen]);
 
   return (
     <div className="mx-auto max-w-6xl">
