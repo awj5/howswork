@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ClockIcon, UsersIcon } from "@heroicons/react/16/solid";
-import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import { toast } from "sonner";
 import { DateTime } from "luxon";
 import type { CheckInType } from "@/types";
@@ -20,6 +19,7 @@ import { Text } from "@/components/ui/text";
 import EmptyState from "@/components/EmptyState";
 import { TablePagination } from "@/components/TablePagination";
 import CheckIn from "@/components/check-ins/CheckIn";
+import Doodle from "@/components/Doodle";
 import { scheduleCheckIn } from "./actions";
 
 export default function CheckIns() {
@@ -158,8 +158,9 @@ export default function CheckIns() {
         </>
       ) : checkIns ? (
         <EmptyState>
-          <CheckCircleIcon className="size-16 text-gray-400 sm:size-12 dark:text-gray-500" />
-          <Subheading className="mt-2">No check-ins scheduled</Subheading>
+          <Doodle doodles={28} />
+          <Subheading className="mt-4">No check-ins scheduled</Subheading>
+
           <Text className="mt-1 text-center">
             Schedule a check-in to start collecting early risk signals and enable concern reporting.
           </Text>
@@ -172,7 +173,8 @@ export default function CheckIns() {
       ) : (
         noStaffContacts && (
           <EmptyState>
-            <Subheading>No staff contacts</Subheading>
+            <Doodle doodles={25} />
+            <Subheading className="mt-4">No staff contacts</Subheading>
             <Text className="mt-1 text-center">Add staff contacts to enable check-ins.</Text>
 
             <Button onClick={() => router.push("/people")} outline className="mt-6">

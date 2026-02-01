@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CheckCircleIcon } from "@heroicons/react/16/solid";
-import { HandRaisedIcon } from "@heroicons/react/24/outline";
 import type { ConcernType } from "@/types";
 import { useCompanies } from "@/hooks/useCompanies";
 import { createClient } from "@/utils/supabase/client";
@@ -15,6 +14,7 @@ import { Text } from "@/components/ui/text";
 import { TablePagination } from "@/components/TablePagination";
 import Concern from "@/components/concerns/Concern";
 import { Button } from "@/components/ui/button";
+import Doodle from "@/components/Doodle";
 
 export default function Concerns() {
   const supabase = createClient();
@@ -168,8 +168,8 @@ export default function Concerns() {
         </>
       ) : concerns ? (
         <EmptyState>
-          <HandRaisedIcon className="size-16 text-gray-400 sm:size-12 dark:text-gray-500" />
-          <Subheading>No concerns reported</Subheading>
+          <Doodle doodles={13} />
+          <Subheading className="mt-4">No concerns reported</Subheading>
 
           <Text className="mt-1 text-center">
             Employees can raise anonymous concerns anytime using a check-in PIN. All submissions will appear here.
@@ -178,7 +178,8 @@ export default function Concerns() {
       ) : (
         noCheckIns && (
           <EmptyState>
-            <Subheading className="mt-2">Concern reporting not active</Subheading>
+            <Doodle doodles={9} />
+            <Subheading className="mt-4">Concern reporting not active</Subheading>
 
             <Text className="mt-1 text-center">
               Employees need a check-in PIN to raise concerns. Schedule your first check-in to enable reporting.
