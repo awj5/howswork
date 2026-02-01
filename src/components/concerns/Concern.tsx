@@ -11,7 +11,7 @@ type ConcernProps = {
 
 export default function Concern(props: ConcernProps) {
   const date = DateTime.fromISO(props.data.created_at); // Convert to date object
-  const status = props.data.status ?? 1; // Latest status or default to "Awaiting review"
+  const status = props.data.status ?? 0; // Latest status or default to "Awaiting review"
 
   return (
     <TableRow href={`/concerns/${props.data.id}`}>
@@ -23,7 +23,7 @@ export default function Concern(props: ConcernProps) {
       </TableCell>
 
       <TableCell>
-        <Badge color={status === 5 ? "zinc" : status === 4 ? "green" : status === 1 ? "red" : "amber"}>
+        <Badge color={status === 5 ? "zinc" : status === 4 ? "green" : status === 3 || status === 2 ? "amber" : "red"}>
           {StatusData.find((i) => i.id === status)?.title}
         </Badge>
       </TableCell>
