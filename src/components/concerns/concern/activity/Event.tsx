@@ -60,7 +60,7 @@ export default function Event(props: EventProps) {
       <div className="flex flex-1 justify-between gap-4 pt-1">
         <Text>
           {status === 0 ? (
-            "You raised this concern"
+            "Employee raised this concern"
           ) : status ? (
             <>
               Status was updated to{" "}
@@ -71,7 +71,7 @@ export default function Event(props: EventProps) {
           ) : (
             <>
               <span className="block font-medium text-gray-900 dark:text-white">
-                {props.data.admin_name ?? "You"} commented
+                {props.data.admin_name ?? "Employee"} commented
               </span>
 
               <span className="whitespace-pre-line">{props.data.comment}</span>

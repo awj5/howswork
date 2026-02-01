@@ -8,8 +8,6 @@ import { CalendarIcon } from "@heroicons/react/16/solid";
 import IssuesData from "@/data/issues.json";
 import StatusData from "@/data/status.json";
 import type { ConcernType } from "@/types";
-import { createClient } from "@/utils/supabase/client";
-import { useCompanies } from "@/hooks/useCompanies";
 import { Heading, Subheading } from "@/components/ui/heading";
 import EmptyState from "@/components/EmptyState";
 import Breadcrumb from "@/components/Breadcrumb";
@@ -23,8 +21,6 @@ import { getConcernData } from "./actions";
 
 export default function Concern() {
   const params = useParams<{ id: string }>();
-  const supabase = createClient();
-  const companies = useCompanies();
   const [concern, setConcern] = useState<ConcernType>();
   const [error, setError] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -32,13 +28,13 @@ export default function Concern() {
   const status = concern?.activity?.find((i) => i.status)?.status ?? 0; // Latest status or default to "Awaiting review"
 
   useEffect(() => {
-    if (!companies.length || dialogOpen) return;
+    if (dialogOpen) return;
 
     const getConcern = async () => {
       const result = await getConcernData(Number(params.id));
 
       if (result.error) {
-        setError("Concern not found");
+        setError(result.error);
         return;
       }
 
@@ -46,7 +42,7 @@ export default function Concern() {
     };
 
     getConcern();
-  }, [companies, dialogOpen]);
+  }, [dialogOpen]);
 
   return (
     <div className="mx-auto max-w-6xl">
@@ -73,7 +69,7 @@ export default function Concern() {
               </time>
 
               <Button onClick={() => setDialogOpen(true)} className="w-fit">
-                Leave a comment
+                Add a comment
               </Button>
             </div>
           </div>

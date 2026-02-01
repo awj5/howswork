@@ -44,11 +44,11 @@ export default function Comment(props: CommentProps) {
 
   return (
     <Dialog open={props.dialogOpen} onClose={props.setDialogOpen}>
-      <DialogTitle>Leave a comment</DialogTitle>
+      <DialogTitle>Add a comment</DialogTitle>
 
       <DialogDescription className="text-wrap!">
-        Add details or updates to help resolve this concern. Like your original submission, this comment is completely
-        anonymous.
+        Add updates or questions to help resolve this concern. Your comment will be visible to the employee and other
+        admins.
       </DialogDescription>
 
       <DialogBody>
@@ -57,7 +57,7 @@ export default function Comment(props: CommentProps) {
             rows={5}
             value={val}
             onChange={(e) => setVal(e.target.value)}
-            placeholder={"Share additional details&hellip;"}
+            placeholder={"Add your comment&hellip;"}
             disabled={disabled}
             maxLength={800}
           />
