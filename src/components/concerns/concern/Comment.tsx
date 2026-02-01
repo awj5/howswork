@@ -1,0 +1,78 @@
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { toast } from "sonner";
+import { useCompanies } from "@/hooks/useCompanies";
+import { addComment } from "@/app/(protected)/concerns/[id]/actions";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import { Field } from "@/components/ui/fieldset";
+import { Textarea } from "@/components/ui/textarea";
+
+type CommentProps = {
+  concernID: number;
+  dialogOpen: boolean;
+  setDialogOpen: Dispatch<SetStateAction<boolean>>;
+};
+
+export default function Comment(props: CommentProps) {
+  const companies = useCompanies();
+  const [val, setVal] = useState("");
+  const [disabled, setDisabled] = useState(false);
+
+  const submit = async () => {
+    if (!companies.length) return;
+    setDisabled(true);
+    const result = await addComment(props.concernID, val, companies[0].id);
+
+    if (result.error) {
+      toast.error(result.error);
+      setDisabled(false);
+      return;
+    }
+
+    // Success
+    toast.success("Comment added");
+    props.setDialogOpen(false); // Close
+  };
+
+  useEffect(() => {
+    if (!props.dialogOpen) return;
+
+    // Reset on open
+    setDisabled(false);
+    setVal("");
+  }, [props.dialogOpen]);
+
+  return (
+    <Dialog open={props.dialogOpen} onClose={props.setDialogOpen}>
+      <DialogTitle>Leave a comment</DialogTitle>
+
+      <DialogDescription className="text-wrap!">
+        Add details or updates to help resolve this concern. Like your original submission, this comment is completely
+        anonymous.
+      </DialogDescription>
+
+      <DialogBody>
+        <Field>
+          <Textarea
+            rows={5}
+            value={val}
+            onChange={(e) => setVal(e.target.value)}
+            placeholder={"Share additional details&hellip;"}
+            disabled={disabled}
+            maxLength={800}
+          />
+        </Field>
+      </DialogBody>
+
+      <DialogActions>
+        <Button plain onClick={() => props.setDialogOpen(false)}>
+          Cancel
+        </Button>
+
+        <Button onClick={submit} color="indigo" disabled={!val.trim().length || disabled}>
+          Add comment
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
