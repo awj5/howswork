@@ -1,3 +1,4 @@
+import { useSearchParams } from "next/navigation";
 import {
   Pagination,
   PaginationGap,
@@ -11,14 +12,28 @@ type TablePaginationProps = {
   page: number;
   pageCount: number;
   route: string;
+  params?: string[];
 };
 
 export function TablePagination(props: TablePaginationProps) {
+  const searchParams = useSearchParams();
+  let urlParams = "";
+
+  if (props.params) {
+    // Include params with page number
+    for (const param of props.params) {
+      const val = searchParams.get(param);
+      if (val) urlParams = urlParams + `&${param}=${encodeURIComponent(val)}`;
+    }
+  }
+
   return (
     <>
       {props.pageCount > 1 && (
         <Pagination className="mt-6">
-          <PaginationPrevious href={props.page !== 1 ? `${props.route}?page=${props.page - 1}` : undefined} />
+          <PaginationPrevious
+            href={props.page !== 1 ? `${props.route}?page=${props.page - 1}${urlParams}` : undefined}
+          />
 
           <PaginationList>
             {Array.from({ length: Math.min(4, props.pageCount) }, (_, i) => {
@@ -27,7 +42,7 @@ export function TablePagination(props: TablePaginationProps) {
               return (
                 <PaginationPage
                   key={pageNumber}
-                  href={`${props.route}?page=${pageNumber}`}
+                  href={`${props.route}?page=${pageNumber}${urlParams}`}
                   current={pageNumber === props.page}
                 >
                   {pageNumber}
@@ -41,7 +56,7 @@ export function TablePagination(props: TablePaginationProps) {
 
                 {props.pageCount === 5 && (
                   <PaginationPage
-                    href={`${props.route}?page=${props.pageCount}`}
+                    href={`${props.route}?page=${props.pageCount}${urlParams}`}
                     current={props.page === props.pageCount}
                   >
                     {props.pageCount}
@@ -52,7 +67,7 @@ export function TablePagination(props: TablePaginationProps) {
                   [props.pageCount - 1, props.pageCount].map((pageNumber) => (
                     <PaginationPage
                       key={pageNumber}
-                      href={`${props.route}?page=${pageNumber}`}
+                      href={`${props.route}?page=${pageNumber}${urlParams}`}
                       current={pageNumber === props.page}
                     >
                       {pageNumber}
@@ -62,7 +77,9 @@ export function TablePagination(props: TablePaginationProps) {
             )}
           </PaginationList>
 
-          <PaginationNext href={props.page !== props.pageCount ? `${props.route}?page=${props.page + 1}` : undefined} />
+          <PaginationNext
+            href={props.page !== props.pageCount ? `${props.route}?page=${props.page + 1}${urlParams}` : undefined}
+          />
         </Pagination>
       )}
     </>

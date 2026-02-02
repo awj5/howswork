@@ -22,15 +22,14 @@ export default function Concerns() {
   const searchParams = useSearchParams();
   const companies = useCompanies();
   const searchRef = useRef<string>(undefined);
-  const issueFilterRef = useRef<string>(undefined);
   const [search, setSearch] = useState<string>();
   const [debouncedSearch, setDebouncedSearch] = useState<string>();
-  const [issueFilter, setIssueFilter] = useState<string>();
   const [concerns, setConcerns] = useState<ConcernType[]>();
   const [noCheckIns, setNoCheckIns] = useState(false);
   const [pageCount, setPageCount] = useState(0);
-  const pageSize = 25;
+  const pageSize = 1;
   const page = Number(searchParams.get("page")) || 1; // Default to page 1
+  const issue = searchParams.get("issue") || undefined;
 
   useEffect(() => {
     // Delay API call
@@ -43,14 +42,13 @@ export default function Concerns() {
 
     const getConcerns = async () => {
       // Pagination
-      if (page !== 1 && (debouncedSearch !== searchRef.current || issueFilter !== issueFilterRef.current)) {
+      if (page !== 1 && debouncedSearch !== searchRef.current) {
         // Reset to page 1 on search or filter
         router.replace("/concerns");
         return;
       }
 
       searchRef.current = debouncedSearch;
-      issueFilterRef.current = issueFilter;
       const from = (page - 1) * pageSize;
       const to = from + pageSize - 1;
 
@@ -67,7 +65,7 @@ export default function Concerns() {
         concernsQuery = concernsQuery.ilike("tracking", `%${normalizedSearch}%`);
       }
 
-      if (issueFilter) concernsQuery = concernsQuery.contains("issues", issueFilter);
+      if (issue) concernsQuery = concernsQuery.contains("issues", issue);
 
       const {
         data: concernsData,
@@ -132,17 +130,17 @@ export default function Concerns() {
     };
 
     getConcerns();
-  }, [companies, page, debouncedSearch, issueFilter]);
+  }, [companies, page, issue, debouncedSearch]);
 
   return (
     <div className="mx-auto max-w-6xl">
-      {concerns && (concerns.length || search !== undefined || issueFilter !== undefined) ? (
+      {concerns && (concerns.length || search !== undefined || issue !== undefined) ? (
         <>
           <div className="flex h-12 items-end sm:h-10">
             <Heading>Concerns</Heading>
           </div>
 
-          <Search query={search} setQuery={setSearch} filter={issueFilter} setFilter={setIssueFilter} />
+          <Search query={search} setQuery={setSearch} />
 
           {concerns.length ? (
             <Table striped className="mt-8 [--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
@@ -164,7 +162,7 @@ export default function Concerns() {
             <Text className="mt-8">No concerns found</Text>
           )}
 
-          <TablePagination page={page} pageCount={pageCount} route="/concerns" />
+          <TablePagination page={page} pageCount={pageCount} route="/concerns" params={["issue"]} />
         </>
       ) : concerns ? (
         <EmptyState>
