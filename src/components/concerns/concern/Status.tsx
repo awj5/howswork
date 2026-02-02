@@ -40,8 +40,8 @@ export default function Status(props: StatusProps) {
       className="sm:max-w-40"
       disabled={props.disabled}
     >
-      {StatusData.map((status) => (
-        <ListboxOption key={status.id} value={status.id}>
+      {StatusData.map((status, index) => (
+        <ListboxOption key={status.id} value={status.id} disabled={index < 2}>
           <ListboxLabel>{status.title}</ListboxLabel>
         </ListboxOption>
       ))}

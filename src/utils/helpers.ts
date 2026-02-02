@@ -8,3 +8,14 @@ export function isValidPhone(number: string) {
   const digits = number.replace(/\D/g, ""); // Remove non-digits
   return digits.length >= 8 && digits.length <= 16; // Check length
 }
+
+export function statusColor(status: number) {
+  const colors: Record<number, "zinc" | "green" | "yellow" | "orange" | "blue"> = {
+    1: "blue",
+    2: "orange",
+    3: "yellow",
+    4: "green",
+  };
+
+  return colors[status] ?? "zinc";
+}

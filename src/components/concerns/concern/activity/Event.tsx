@@ -40,12 +40,14 @@ export default function Event(props: EventProps) {
 
   const iconBgColor =
     status === 1
-      ? "bg-red-500"
-      : status === 2 || status === 3
-        ? "bg-amber-500"
-        : status === 4
-          ? "bg-green-500"
-          : "bg-gray-100 dark:bg-zinc-800";
+      ? "bg-blue-500"
+      : status === 2
+        ? "bg-orange-500"
+        : status === 3
+          ? "bg-yellow-500"
+          : status === 4
+            ? "bg-green-500"
+            : "bg-gray-100 dark:bg-zinc-800";
 
   const iconColor = status && status < 5 ? "text-white" : "text-gray-500 dark:text-gray-400";
 

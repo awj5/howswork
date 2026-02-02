@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
 import StatusData from "@/data/status.json";
 import type { ConcernType } from "@/types";
+import { statusColor } from "@/utils/helpers";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 
@@ -23,9 +24,7 @@ export default function Concern(props: ConcernProps) {
       </TableCell>
 
       <TableCell>
-        <Badge color={status === 5 ? "zinc" : status === 4 ? "green" : status === 3 || status === 2 ? "amber" : "red"}>
-          {StatusData.find((i) => i.id === status)?.title}
-        </Badge>
+        <Badge color={statusColor(status)}>{StatusData.find((i) => i.id === status)?.title}</Badge>
       </TableCell>
     </TableRow>
   );
