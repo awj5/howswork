@@ -62,7 +62,7 @@ export async function getConcernData(id: number, companyID: number) {
   return { data: response };
 }
 
-export async function addComment(id: number, comment: string, companyID: number) {
+export async function addComment(concernID: number, comment: string, companyID: number) {
   const supabase = await createClient();
 
   // Get auth user
@@ -84,13 +84,30 @@ export async function addComment(id: number, comment: string, companyID: number)
   // Add comment
   const { error: insertConcernCommentError } = await supabase.from("concern_comments").insert({
     comment: encrypt(comment.trim().slice(0, 800)),
-    concern_id: id,
+    concern_id: concernID,
     company_id: companyID,
     admin_name: `${profileData.first_name} ${profileData.last_name}`,
   });
 
   if (insertConcernCommentError) {
     console.error(insertConcernCommentError.message);
+    return { error: "Internal server error" };
+  }
+
+  return { success: true };
+}
+
+export async function addStatus(concernID: number, status: number, companyID: number) {
+  const supabase = await createClient();
+
+  const { error: insertConcernStatusError } = await supabase.from("concern_status").insert({
+    status,
+    concern_id: concernID,
+    company_id: companyID,
+  });
+
+  if (insertConcernStatusError) {
+    console.error(insertConcernStatusError.message);
     return { error: "Internal server error" };
   }
 

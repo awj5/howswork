@@ -18,6 +18,7 @@ import { Divider } from "@/components/ui/divider";
 import { Button } from "@/components/ui/button";
 import Activity from "@/components/concerns/concern/Activity";
 import Comment from "@/components/concerns/concern/Comment";
+import Status from "@/components/concerns/concern/Status";
 import { getConcernData } from "./actions";
 
 export default function Concern() {
@@ -26,8 +27,9 @@ export default function Concern() {
   const [concern, setConcern] = useState<ConcernType>();
   const [error, setError] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [status, setStatus] = useState(0);
+  const [disabled, setDisabled] = useState(false);
   const date = concern ? DateTime.fromISO(concern.created_at) : undefined; // Convert to date object
-  const status = concern?.activity?.find((i) => i.status)?.status ?? 0; // Latest status or default to "Awaiting review"
 
   useEffect(() => {
     if (!companies.length || dialogOpen) return;
@@ -41,10 +43,16 @@ export default function Concern() {
       }
 
       setConcern(result.data);
+
+      setStatus(
+        result.data?.activity.find((i): i is { created_at: string; status: number } => "status" in i)?.status ?? 0
+      ); // Latest status or default to "Awaiting review"
+
+      setDisabled(false);
     };
 
     getConcern();
-  }, [companies, dialogOpen]);
+  }, [companies, dialogOpen, status]);
 
   return (
     <div className="mx-auto max-w-6xl">
@@ -63,16 +71,25 @@ export default function Concern() {
               </Badge>
             </div>
 
-            <div className="mt-4 flex flex-col justify-between gap-4 sm:mt-2.5 sm:flex-row">
+            <div className="mt-4 flex flex-col gap-4 sm:mt-2.5 sm:flex-row">
               <time className="flex items-center gap-3">
                 <CalendarIcon className="size-4 text-gray-400 dark:text-gray-500" />
-
                 <Text className="text-zinc-950! dark:text-white!">{date?.toLocal().toFormat("dd LLL yyyy")}</Text>
               </time>
 
-              <Button onClick={() => setDialogOpen(true)} className="w-fit">
-                Add a comment
-              </Button>
+              <div className="flex flex-1 gap-4 sm:justify-end">
+                <Status
+                  concernID={Number(params.id)}
+                  val={status}
+                  setVal={setStatus}
+                  disabled={disabled}
+                  setDisabled={setDisabled}
+                />
+
+                <Button onClick={() => setDialogOpen(true)} className="whitespace-nowrap" disabled={disabled}>
+                  Add a comment
+                </Button>
+              </div>
             </div>
           </div>
 
@@ -107,7 +124,13 @@ export default function Concern() {
             </div>
           </div>
 
-          <Comment dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} concernID={Number(params.id)} />
+          <Comment
+            dialogOpen={dialogOpen}
+            setDialogOpen={setDialogOpen}
+            concernID={Number(params.id)}
+            disabled={disabled}
+            setDisabled={setDisabled}
+          />
         </>
       ) : (
         error && (

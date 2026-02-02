@@ -11,21 +11,22 @@ type CommentProps = {
   concernID: number;
   dialogOpen: boolean;
   setDialogOpen: Dispatch<SetStateAction<boolean>>;
+  disabled: boolean;
+  setDisabled: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function Comment(props: CommentProps) {
   const companies = useCompanies();
   const [val, setVal] = useState("");
-  const [disabled, setDisabled] = useState(false);
 
   const submit = async () => {
     if (!companies.length) return;
-    setDisabled(true);
+    props.setDisabled(true);
     const result = await addComment(props.concernID, val, companies[0].id);
 
     if (result.error) {
       toast.error(result.error);
-      setDisabled(false);
+      props.setDisabled(false);
       return;
     }
 
@@ -36,10 +37,7 @@ export default function Comment(props: CommentProps) {
 
   useEffect(() => {
     if (!props.dialogOpen) return;
-
-    // Reset on open
-    setDisabled(false);
-    setVal("");
+    setVal(""); // Reset on open
   }, [props.dialogOpen]);
 
   return (
@@ -58,7 +56,7 @@ export default function Comment(props: CommentProps) {
             value={val}
             onChange={(e) => setVal(e.target.value)}
             placeholder={"Add your comment&hellip;"}
-            disabled={disabled}
+            disabled={props.disabled}
             maxLength={800}
           />
         </Field>
@@ -69,7 +67,7 @@ export default function Comment(props: CommentProps) {
           Cancel
         </Button>
 
-        <Button onClick={submit} color="indigo" disabled={!val.trim().length || disabled}>
+        <Button onClick={submit} color="indigo" disabled={!val.trim().length || props.disabled}>
           Add comment
         </Button>
       </DialogActions>
