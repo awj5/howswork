@@ -17,7 +17,7 @@ export default function Status(props: StatusProps) {
   const companies = useCompanies();
 
   const changeStatus = async (id: number) => {
-    if (!companies.length) return;
+    if (!companies.length || id === props.val) return;
     props.setDisabled(true);
     const result = await addStatus(props.concernID, id, companies[0].id);
 
@@ -34,14 +34,15 @@ export default function Status(props: StatusProps) {
 
   return (
     <Listbox
-      value={props.val}
+      value={props.val > 1 ? props.val : undefined}
+      placeholder="Update status&hellip;"
       onChange={(e) => changeStatus(e)}
-      aria-label="Concern status"
-      className="sm:max-w-40"
+      aria-label="Update status"
+      className="min-w-0 sm:max-w-40"
       disabled={props.disabled}
     >
-      {StatusData.map((status, index) => (
-        <ListboxOption key={status.id} value={status.id} disabled={index < 2}>
+      {StatusData.slice(2).map((status) => (
+        <ListboxOption key={status.id} value={status.id}>
           <ListboxLabel>{status.title}</ListboxLabel>
         </ListboxOption>
       ))}
