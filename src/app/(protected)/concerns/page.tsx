@@ -27,7 +27,7 @@ export default function Concerns() {
   const [concerns, setConcerns] = useState<ConcernType[]>();
   const [noCheckIns, setNoCheckIns] = useState(false);
   const [pageCount, setPageCount] = useState(0);
-  const pageSize = 1;
+  const pageSize = 25;
   const page = Number(searchParams.get("page")) || 1; // Default to page 1
   const issue = searchParams.get("issue") || undefined;
 
