@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { useCompanies } from "@/hooks/useCompanies";
 import { Heading } from "@/components/ui/heading";
@@ -12,11 +12,13 @@ import { removeCheckIn } from "./actions";
 
 export default function CheckIn() {
   const params = useParams<{ id: string }>();
+  const searchParams = useSearchParams();
   const companies = useCompanies();
   const [alertOpen, setAlertOpen] = useState(false);
   const [disabled, setDisabled] = useState(false);
 
   const removeCheckInClick = async () => {
+    if (!companies.length) return;
     setAlertOpen(false);
     setDisabled(true);
     const result = await removeCheckIn(Number(params.id), companies[0].id);
@@ -33,7 +35,7 @@ export default function CheckIn() {
 
   return (
     <div className="mx-auto max-w-6xl">
-      <Breadcrumb href="/check-ins">Check-ins</Breadcrumb>
+      <Breadcrumb href={`/check-ins${searchParams.size ? `?${searchParams.toString()}` : ""}`}>Check-ins</Breadcrumb>
 
       <div className="flex h-12 items-end sm:h-auto lg:mt-8">
         <Heading>Check-In {params.id}</Heading>

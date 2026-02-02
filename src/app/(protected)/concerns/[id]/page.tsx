@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { DateTime } from "luxon";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { CalendarIcon } from "@heroicons/react/16/solid";
@@ -24,6 +24,7 @@ import { getConcernData } from "./actions";
 
 export default function Concern() {
   const params = useParams<{ id: string }>();
+  const searchParams = useSearchParams();
   const companies = useCompanies();
   const [concern, setConcern] = useState<ConcernType>();
   const [error, setError] = useState("");
@@ -59,7 +60,7 @@ export default function Concern() {
     <div className="mx-auto max-w-6xl">
       {concern ? (
         <>
-          <Breadcrumb href="/concerns">Concerns</Breadcrumb>
+          <Breadcrumb href={`/concerns${searchParams.size ? `?${searchParams.toString()}` : ""}`}>Concerns</Breadcrumb>
 
           <div className="lg:mt-8">
             <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">

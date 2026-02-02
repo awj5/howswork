@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { CheckCircleIcon } from "@heroicons/react/16/solid";
 import type { ConcernType } from "@/types";
 import { useCompanies } from "@/hooks/useCompanies";
@@ -28,7 +27,6 @@ export default function Concerns() {
   const [concerns, setConcerns] = useState<ConcernType[]>();
   const [noCheckIns, setNoCheckIns] = useState(false);
   const [pageCount, setPageCount] = useState(0);
-  const [error, setError] = useState("");
   const pageSize = 25;
   const page = Number(searchParams.get("page")) || 1; // Default to page 1
   const issue = searchParams.get("issue") || undefined;
@@ -77,7 +75,6 @@ export default function Concerns() {
 
       if (concernsError) {
         console.error(concernsError);
-        setError("No concerns found");
         return;
       }
 
@@ -91,7 +88,6 @@ export default function Concerns() {
 
         if (checkInsError) {
           console.error(checkInsError);
-          setError("Internal server error");
           return;
         }
 
@@ -112,7 +108,6 @@ export default function Concerns() {
 
       if (concernStatusError) {
         console.error(concernStatusError);
-        setError("Internal server error");
         return;
       }
 
@@ -178,25 +173,20 @@ export default function Concerns() {
             Employees can raise anonymous concerns anytime using a check-in PIN. All submissions will appear here.
           </Text>
         </EmptyState>
-      ) : noCheckIns ? (
-        <EmptyState>
-          <Doodle doodles={9} />
-          <Subheading className="mt-4">Concern reporting not active</Subheading>
-
-          <Text className="mt-1 text-center">
-            Employees need a check-in PIN to raise concerns. Schedule your first check-in to enable reporting.
-          </Text>
-
-          <Button onClick={() => router.push("/check-ins")} outline className="mt-6">
-            <CheckCircleIcon />
-            Schedule first check-in
-          </Button>
-        </EmptyState>
       ) : (
-        error && (
+        noCheckIns && (
           <EmptyState>
-            <ExclamationCircleIcon className="size-16 text-gray-400 sm:size-12 dark:text-gray-500" />
-            <Subheading className="mt-2 text-center">{error}</Subheading>
+            <Doodle doodles={9} />
+            <Subheading className="mt-4">Concern reporting not active</Subheading>
+
+            <Text className="mt-1 text-center">
+              Employees need a check-in PIN to raise concerns. Schedule your first check-in to enable reporting.
+            </Text>
+
+            <Button onClick={() => router.push("/check-ins")} outline className="mt-6">
+              <CheckCircleIcon />
+              Schedule first check-in
+            </Button>
           </EmptyState>
         )
       )}
