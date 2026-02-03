@@ -45,8 +45,7 @@ export default function Comment(props: CommentProps) {
       <DialogTitle>Add a comment</DialogTitle>
 
       <DialogDescription className="text-wrap!">
-        Add updates or questions to help resolve this concern. Your comment will be visible to the employee and other
-        admins.
+        Add updates or questions to help resolve this concern. The employee and other admins will be able to see it.
       </DialogDescription>
 
       <DialogBody>
@@ -55,7 +54,7 @@ export default function Comment(props: CommentProps) {
             rows={5}
             value={val}
             onChange={(e) => setVal(e.target.value)}
-            placeholder={"Add your comment&hellip;"}
+            placeholder={"Share your update&hellip;"}
             disabled={props.disabled}
             maxLength={800}
           />

@@ -5,11 +5,9 @@ import { useParams, useSearchParams } from "next/navigation";
 import { DateTime } from "luxon";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { CalendarIcon } from "@heroicons/react/16/solid";
-import IssuesData from "@/data/issues.json";
 import StatusData from "@/data/status.json";
 import type { ConcernType } from "@/types";
 import { statusColor } from "@/utils/helpers";
-import { useCompanies } from "@/hooks/useCompanies";
 import { Heading, Subheading } from "@/components/ui/heading";
 import EmptyState from "@/components/EmptyState";
 import Breadcrumb from "@/components/Breadcrumb";
@@ -20,24 +18,25 @@ import { Button } from "@/components/ui/button";
 import Activity from "@/components/concerns/concern/Activity";
 import Comment from "@/components/concerns/concern/Comment";
 import Status from "@/components/concerns/concern/Status";
+import Issues from "@/components/concerns/concern/Issues";
 import { getConcernData } from "./actions";
 
 export default function Concern() {
   const params = useParams<{ id: string }>();
   const searchParams = useSearchParams();
-  const companies = useCompanies();
   const [concern, setConcern] = useState<ConcernType>();
   const [error, setError] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [status, setStatus] = useState(0);
   const [disabled, setDisabled] = useState(false);
+  const [issues, setIssues] = useState<number[]>([]);
   const date = concern ? DateTime.fromISO(concern.created_at) : undefined; // Convert to date object
 
   useEffect(() => {
-    if (!companies.length || dialogOpen) return;
+    if (dialogOpen) return;
 
     const getConcern = async () => {
-      const result = await getConcernData(Number(params.id), companies[0].id);
+      const result = await getConcernData(Number(params.id));
 
       if (result.error) {
         setError(result.error);
@@ -50,11 +49,12 @@ export default function Concern() {
         result.data?.activity.find((i): i is { created_at: string; status: number } => "status" in i)?.status ?? 0
       ); // Latest status or default to "Awaiting review"
 
+      setIssues(result.data?.issues ?? []);
       setDisabled(false);
     };
 
     getConcern();
-  }, [companies, dialogOpen, status]);
+  }, [dialogOpen, status]);
 
   return (
     <div className="mx-auto max-w-6xl">
@@ -98,20 +98,22 @@ export default function Concern() {
                 <Text className="mt-3 whitespace-pre-line">{concern.details}</Text>
               </div>
 
-              {concern.issues && (
-                <div>
+              <div>
+                <div className="flex items-baseline justify-between">
                   <Subheading>Issues</Subheading>
-                  <Divider className="mt-4" />
-
-                  <div className="mt-5 flex flex-wrap gap-4 sm:gap-3">
-                    {concern.issues.map((issue) => (
-                      <Badge key={issue} color="indigo">
-                        {IssuesData.find((i) => i.id === issue)?.tag}
-                      </Badge>
-                    ))}
-                  </div>
+                  <Text>Select all that apply</Text>
                 </div>
-              )}
+
+                <Divider className="mt-4" />
+
+                <Issues
+                  concernID={Number(params.id)}
+                  val={issues}
+                  setVal={setIssues}
+                  disabled={disabled}
+                  setDisabled={setDisabled}
+                />
+              </div>
             </div>
 
             <div className="w-full">

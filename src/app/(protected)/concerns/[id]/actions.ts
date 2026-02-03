@@ -3,14 +3,13 @@
 import { createClient } from "@/utils/supabase/server";
 import { encrypt, decrypt } from "@/utils/encryption";
 
-export async function getConcernData(id: number, companyID: number) {
+export async function getConcernData(id: number) {
   const supabase = await createClient();
 
   const { data: concernData, error: concernError } = await supabase
     .from("concerns")
     .select("id, tracking, details, created_at, issues")
     .eq("id", id)
-    .eq("company_id", companyID)
     .single();
 
   if (concernError) {
@@ -108,6 +107,24 @@ export async function addStatus(concernID: number, status: number, companyID: nu
 
   if (insertConcernStatusError) {
     console.error(insertConcernStatusError.message);
+    return { error: "Internal server error" };
+  }
+
+  return { success: true };
+}
+
+export async function updateIssues(concernID: number, issues: number[]) {
+  const supabase = await createClient();
+
+  const { error: updateConcernError } = await supabase
+    .from("concerns")
+    .update({
+      issues,
+    })
+    .eq("id", concernID);
+
+  if (updateConcernError) {
+    console.error(updateConcernError.message);
     return { error: "Internal server error" };
   }
 
