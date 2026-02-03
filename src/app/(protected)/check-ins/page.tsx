@@ -130,7 +130,7 @@ export default function CheckIns() {
             <Button
               onClick={() => setDialogOpen(true)}
               color="indigo"
-              className={`${checkIns[0].repeat && "pointer-events-none invisible"}`}
+              className={`${checkIns[0].repeat && "hidden!"}`}
               disabled={disabled}
             >
               <ClockIcon />

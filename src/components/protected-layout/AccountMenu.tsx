@@ -3,9 +3,9 @@
 import { useRouter } from "next/navigation";
 import {
   ArrowRightStartOnRectangleIcon,
-  LightBulbIcon,
   ShieldCheckIcon,
   UserCircleIcon,
+  DocumentTextIcon,
 } from "@heroicons/react/16/solid";
 import { createClient } from "@/utils/supabase/client";
 import { DropdownDivider, DropdownItem, DropdownLabel } from "@/components/ui/dropdown";
@@ -28,14 +28,14 @@ export default function AccountMenu() {
 
       <DropdownDivider />
 
-      <DropdownItem href="/privacy">
+      <DropdownItem href="https://articles.howswork.app/privacy-policy/" target="_blank">
         <ShieldCheckIcon />
         <DropdownLabel>Privacy policy</DropdownLabel>
       </DropdownItem>
 
-      <DropdownItem href="/feedback">
-        <LightBulbIcon />
-        <DropdownLabel>Share feedback</DropdownLabel>
+      <DropdownItem href="https://articles.howswork.app/terms-of-use/" target="_blank">
+        <DocumentTextIcon />
+        <DropdownLabel>Terms of use</DropdownLabel>
       </DropdownItem>
 
       <DropdownDivider />
