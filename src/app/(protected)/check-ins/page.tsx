@@ -74,6 +74,24 @@ export default function CheckIns() {
       const from = (page - 1) * pageSize;
       const to = from + pageSize - 1;
 
+      // Check if company has staff contacts
+      const { data: peopleData, error: peopleError } = await supabase
+        .from("people")
+        .select("contacts")
+        .eq("company_id", companies[0].id)
+        .single();
+
+      if (peopleError) {
+        console.error(peopleError);
+        return;
+      }
+
+      if (!peopleData.contacts || !peopleData.contacts.length) {
+        setNoStaffContacts(true);
+        setCheckIns(undefined);
+        return;
+      }
+
       // Get check-ins
       const {
         data: checkInsData,
@@ -91,26 +109,6 @@ export default function CheckIns() {
       if (checkInsError) {
         console.error(checkInsError);
         return;
-      }
-
-      if (!checkInsData.length) {
-        // Check if company has staff contacts
-        const { data: peopleData, error: peopleError } = await supabase
-          .from("people")
-          .select("contacts")
-          .eq("company_id", companies[0].id)
-          .single();
-
-        if (peopleError) {
-          console.error(peopleError);
-          return;
-        }
-
-        if (!peopleData.contacts || !peopleData.contacts.length) {
-          setNoStaffContacts(true);
-          setCheckIns(undefined);
-          return;
-        }
       }
 
       setCheckIns(checkInsData);
