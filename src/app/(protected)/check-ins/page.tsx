@@ -123,7 +123,7 @@ export default function CheckIns() {
   return (
     <div className="mx-auto max-w-6xl">
       {checkIns && checkIns.length ? (
-        <>
+        <div className="fade-in">
           <div className="flex h-12 items-end justify-between gap-4 sm:h-10">
             <Heading>Check-ins</Heading>
 
@@ -155,9 +155,9 @@ export default function CheckIns() {
           </Table>
 
           <TablePagination page={page} pageCount={pageCount} route="/check-ins" />
-        </>
+        </div>
       ) : checkIns ? (
-        <EmptyState>
+        <EmptyState className="fade-in">
           <Doodle doodles={28} />
           <Subheading className="mt-4">No check-ins scheduled</Subheading>
 
@@ -172,7 +172,7 @@ export default function CheckIns() {
         </EmptyState>
       ) : (
         noStaffContacts && (
-          <EmptyState>
+          <EmptyState className="fade-in">
             <Doodle doodles={25} />
             <Subheading className="mt-4">No staff contacts</Subheading>
             <Text className="mt-1 text-center">Add staff contacts to enable check-ins.</Text>

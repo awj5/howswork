@@ -69,7 +69,7 @@ export default function CheckIn() {
   return (
     <div className="mx-auto max-w-6xl">
       {checkIn && companies.length ? (
-        <>
+        <div className="fade-in">
           <Breadcrumb href={`/check-ins${searchParams.size ? `?${searchParams.toString()}` : ""}`}>
             Check-ins
           </Breadcrumb>
@@ -90,7 +90,7 @@ export default function CheckIn() {
               </time>
             </div>
           </div>
-        </>
+        </div>
       ) : (
         error && (
           <EmptyState>

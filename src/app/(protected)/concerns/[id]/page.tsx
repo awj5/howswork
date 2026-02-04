@@ -59,7 +59,7 @@ export default function Concern() {
   return (
     <div className="mx-auto max-w-6xl">
       {concern ? (
-        <>
+        <div className="fade-in">
           <Breadcrumb href={`/concerns${searchParams.size ? `?${searchParams.toString()}` : ""}`}>Concerns</Breadcrumb>
 
           <div className="lg:mt-8">
@@ -130,7 +130,7 @@ export default function Concern() {
             disabled={disabled}
             setDisabled={setDisabled}
           />
-        </>
+        </div>
       ) : (
         error && (
           <EmptyState>

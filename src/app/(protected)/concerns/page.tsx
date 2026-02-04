@@ -23,19 +23,23 @@ export default function Concerns() {
   const companies = useCompanies();
   const searchRef = useRef<string>(undefined);
   const [search, setSearch] = useState<string>();
+  const [issueFilter, setIssueFilter] = useState<string>();
   const [debouncedSearch, setDebouncedSearch] = useState<string>();
   const [concerns, setConcerns] = useState<ConcernType[]>();
   const [noCheckIns, setNoCheckIns] = useState(false);
   const [pageCount, setPageCount] = useState(0);
   const pageSize = 25;
   const page = Number(searchParams.get("page")) || 1; // Default to page 1
-  const issue = searchParams.get("issue") || undefined;
 
   useEffect(() => {
     // Delay API call
     const timeout = setTimeout(() => setDebouncedSearch(search), 300);
     return () => clearTimeout(timeout);
   }, [search]);
+
+  useEffect(() => {
+    setIssueFilter(searchParams.get("issue") ?? "");
+  }, [searchParams.get("issue")]);
 
   useEffect(() => {
     if (!companies.length) return;
@@ -65,7 +69,7 @@ export default function Concerns() {
         concernsQuery = concernsQuery.ilike("tracking", `%${normalizedSearch}%`);
       }
 
-      if (issue) concernsQuery = concernsQuery.contains("issues", issue);
+      if (issueFilter) concernsQuery = concernsQuery.contains("issues", issueFilter);
 
       const {
         data: concernsData,
@@ -130,12 +134,12 @@ export default function Concerns() {
     };
 
     getConcerns();
-  }, [companies, page, issue, debouncedSearch]);
+  }, [companies, page, issueFilter, debouncedSearch]);
 
   return (
     <div className="mx-auto max-w-6xl">
-      {concerns && (concerns.length || search !== undefined || issue !== undefined) ? (
-        <>
+      {concerns && (concerns.length || search !== undefined || issueFilter !== undefined) ? (
+        <div className="fade-in">
           <div className="flex h-12 items-end sm:h-10">
             <Heading>Concerns</Heading>
           </div>
@@ -163,9 +167,9 @@ export default function Concerns() {
           )}
 
           <TablePagination page={page} pageCount={pageCount} route="/concerns" params={["issue"]} />
-        </>
+        </div>
       ) : concerns ? (
-        <EmptyState>
+        <EmptyState className="fade-in">
           <Doodle doodles={13} />
           <Subheading className="mt-4">No concerns reported</Subheading>
 
@@ -175,7 +179,7 @@ export default function Concerns() {
         </EmptyState>
       ) : (
         noCheckIns && (
-          <EmptyState>
+          <EmptyState className="fade-in">
             <Doodle doodles={9} />
             <Subheading className="mt-4">Concern reporting not active</Subheading>
 

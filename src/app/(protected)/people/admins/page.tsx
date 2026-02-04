@@ -139,7 +139,7 @@ export default function Admins() {
       </div>
 
       {users.length ? (
-        <Table className="mt-8 [--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
+        <Table className="fade-in mt-8 [--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
           <TableHead>
             <TableRow>
               <TableHeader>Name</TableHeader>
