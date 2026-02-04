@@ -135,7 +135,7 @@ export default function Concern() {
         error && (
           <EmptyState>
             <ExclamationCircleIcon className="size-16 text-gray-400 sm:size-12 dark:text-gray-500" />
-            <Subheading className="mt-2 text-center">{error || "Concern not found"}</Subheading>
+            <Subheading className="mt-2 text-center">{error}</Subheading>
           </EmptyState>
         )
       )}
