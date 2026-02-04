@@ -38,7 +38,9 @@ export default function Concerns() {
   }, [search]);
 
   useEffect(() => {
-    setIssueFilter(searchParams.get("issue") ?? "");
+    // Using state to make sure no concerns empty state is not shown when concerns exist
+    const issue = searchParams.get("issue");
+    setIssueFilter(issue ? issue : issueFilter ? "" : undefined);
   }, [searchParams.get("issue")]);
 
   useEffect(() => {
