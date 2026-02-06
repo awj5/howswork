@@ -12,12 +12,21 @@ export type CompanyType = {
   timezone: string;
 };
 
+export type CheckInStatType = {
+  title: string;
+  primary: number;
+  secondary: number;
+  percentage?: boolean;
+  sentiment?: boolean;
+};
+
 export type CheckInType = {
   id: number;
   start: string;
   repeat: number;
   status: string;
   pin?: number;
+  stats?: CheckInStatType[];
 };
 
 export type ConcernActivityType = {

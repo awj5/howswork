@@ -1,0 +1,7 @@
+[
+  { "id": 1, "label": "Terrible" },
+  { "id": 2, "label": "Difficult" },
+  { "id": 3, "label": "Fine" },
+  { "id": 4, "label": "Good" },
+  { "id": 5, "label": "Amazing" }
+]
