@@ -19,7 +19,7 @@ export default function Stat(props: StatProps) {
       <Divider />
       <div className="mt-6 text-lg/6 font-medium sm:text-sm/6">{props.data.title}</div>
 
-      <div className="mt-3 flex gap-2">
+      <div className="mt-3 flex gap-3">
         {sentiment && props.data.primary ? (
           <Image
             src={`/img/emoji-${sentiment.id}.svg`}
