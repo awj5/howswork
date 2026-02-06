@@ -115,7 +115,7 @@ export default function People() {
               Enter one contact per employee (email OR mobile, not both). Separate by comma or line break.
             </Description>
 
-            <HelperTooltip text="Group email addresses (e.g. team@company.com) work well for larger teams." />
+            <HelperTooltip text="Group email addresses (e.g. team@company.com) count as one employee contact." />
           </div>
 
           <Textarea
