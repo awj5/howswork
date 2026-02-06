@@ -48,7 +48,7 @@ export default function ConcernCount() {
 
   return (
     <span
-      className={`${!count && "hidden"} h-4 min-w-4 rounded-full bg-red-500 px-1 py-0.5 text-center text-xs leading-none text-white`}
+      className={`${!count && "hidden"} fade-in h-4 min-w-4 rounded-full bg-red-500 px-1 py-0.5 text-center text-xs leading-none text-white`}
     >
       {count}
     </span>

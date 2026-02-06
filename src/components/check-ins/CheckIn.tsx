@@ -21,7 +21,7 @@ export default function CheckIn(props: CheckInProps) {
   return (
     <TableRow
       href={
-        !isScheduled
+        props.data.status !== "Upcoming"
           ? `/check-ins/${props.data.id}${searchParams.size ? `?${searchParams.toString()}` : ""}`
           : undefined
       }

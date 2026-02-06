@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { DateTime } from "luxon";
-import { CalendarIcon } from "@heroicons/react/16/solid";
+import { CalendarIcon, HashtagIcon, TrashIcon, QrCodeIcon } from "@heroicons/react/16/solid";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { createClient } from "@/utils/supabase/client";
 import type { CheckInType } from "@/types";
@@ -20,6 +20,7 @@ import { removeCheckIn } from "./actions";
 
 export default function CheckIn() {
   const params = useParams<{ id: string }>();
+  const router = useRouter();
   const supabase = createClient();
   const searchParams = useSearchParams();
   const companies = useCompanies();
@@ -29,7 +30,7 @@ export default function CheckIn() {
   const [error, setError] = useState("");
   const date = checkIn ? DateTime.fromISO(checkIn.start).toUTC() : undefined;
 
-  const removeCheckInClick = async () => {
+  const removeClick = async () => {
     if (!companies.length) return;
     setAlertOpen(false);
     setDisabled(true);
@@ -42,7 +43,8 @@ export default function CheckIn() {
     }
 
     // Success
-    //toast.success("Check-in removed"); // Will change to redirect
+    toast.success("Check-in removed");
+    router.push(`/check-ins${searchParams.size ? `?${searchParams.toString()}` : ""}`);
   };
 
   useEffect(() => {
@@ -51,7 +53,7 @@ export default function CheckIn() {
         .from("check_ins")
         .select("id, start, status, repeat, pin")
         .eq("id", Number(params.id))
-        .in("status", ["Open", "Closed"])
+        .neq("status", "Upcoming")
         .single();
 
       if (checkInError) {
@@ -77,17 +79,43 @@ export default function CheckIn() {
           <div className="lg:mt-8">
             <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
               <Heading>Check-in with {companies[0].name}</Heading>
-              <Badge color={checkIn.status === "Closed" ? "green" : "amber"}>{checkIn.status}</Badge>
+
+              <Badge color={checkIn.status === "Closed" ? "green" : checkIn.status === "Open" ? "amber" : "zinc"}>
+                {checkIn.status}
+              </Badge>
             </div>
 
-            <div className="mt-4 flex flex-col justify-between gap-4 sm:mt-2.5 sm:flex-row">
-              <time className="flex items-center gap-3">
-                <CalendarIcon className="size-4 text-gray-400 dark:text-gray-500" />
+            <div className="mt-2.5 flex flex-col justify-between gap-4 sm:flex-row">
+              <div className="flex gap-10 py-1.5">
+                <time className="flex items-center gap-3">
+                  <CalendarIcon className="size-4 text-gray-400 dark:text-gray-500" />
 
-                <Text className="text-zinc-950! dark:text-white!">
-                  {date?.setZone(companies[0].timezone).toFormat("dd LLL yyyy")}
-                </Text>
-              </time>
+                  <Text className="text-zinc-950! dark:text-white!">
+                    {date?.setZone(companies[0].timezone).toFormat("dd LLL yyyy")}
+                  </Text>
+                </time>
+
+                {checkIn.status !== "Scheduled" && (
+                  <div className="flex items-center gap-3">
+                    <HashtagIcon className="size-4 text-gray-400 dark:text-gray-500" />
+                    <Text className="text-zinc-950! dark:text-white!">PIN: {checkIn.pin}</Text>
+                  </div>
+                )}
+              </div>
+
+              {checkIn.status === "Open" ? (
+                <Button onClick={() => null} color="indigo">
+                  <QrCodeIcon />
+                  Generate QR code
+                </Button>
+              ) : (
+                checkIn.status === "Scheduled" && (
+                  <Button onClick={() => setAlertOpen(true)} outline disabled={disabled}>
+                    <TrashIcon />
+                    Remove
+                  </Button>
+                )
+              )}
             </div>
           </div>
         </div>
@@ -109,7 +137,7 @@ export default function CheckIn() {
             Cancel
           </Button>
 
-          <Button onClick={removeCheckInClick} color="red">
+          <Button onClick={removeClick} color="red">
             Remove
           </Button>
         </AlertActions>
