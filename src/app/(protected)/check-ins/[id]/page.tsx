@@ -7,6 +7,7 @@ import { DateTime } from "luxon";
 import { CalendarIcon, HashtagIcon, TrashIcon, QrCodeIcon } from "@heroicons/react/16/solid";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { createClient } from "@/utils/supabase/client";
+import { checkInStatusText } from "@/utils/helpers";
 import SentimentsData from "@/data/sentiments.json";
 import type { CheckInStatType, CheckInType } from "@/types";
 import { useCompanies } from "@/hooks/useCompanies";
@@ -56,7 +57,7 @@ export default function CheckIn() {
         .from("check_ins")
         .select("id, start, status, repeat, pin, contact_count")
         .eq("id", Number(params.id))
-        .neq("status", "Upcoming")
+        .neq("status", 1)
         .single();
 
       if (checkInError) {
@@ -210,8 +211,8 @@ export default function CheckIn() {
             <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
               <Heading>Check-in with {companies[0].name}</Heading>
 
-              <Badge color={checkIn.status === "Closed" ? "green" : checkIn.status === "Open" ? "amber" : "zinc"}>
-                {checkIn.status}
+              <Badge color={checkIn.status === 4 ? "green" : checkIn.status === 3 ? "amber" : "zinc"}>
+                {checkInStatusText(checkIn.status)}
               </Badge>
             </div>
 
@@ -225,7 +226,7 @@ export default function CheckIn() {
                   </Text>
                 </time>
 
-                {checkIn.status !== "Scheduled" && (
+                {checkIn.status !== 2 && (
                   <div className="flex items-center gap-3">
                     <HashtagIcon className="size-4 text-gray-400 dark:text-gray-500" />
                     <Text className="text-zinc-950! dark:text-white!">PIN: {checkIn.pin}</Text>
@@ -233,13 +234,13 @@ export default function CheckIn() {
                 )}
               </div>
 
-              {checkIn.status === "Open" ? (
+              {checkIn.status === 3 ? (
                 <Button onClick={() => null} color="indigo">
                   <QrCodeIcon />
                   Generate QR code
                 </Button>
               ) : (
-                checkIn.status === "Scheduled" && (
+                checkIn.status === 2 && (
                   <Button onClick={() => setAlertOpen(true)} outline disabled={disabled}>
                     <TrashIcon />
                     Remove
@@ -251,7 +252,7 @@ export default function CheckIn() {
 
           <div className="mt-8 grid gap-8 sm:grid-cols-3">
             {checkIn.stats?.map((stat) => (
-              <Stat key={stat.title} data={stat} />
+              <Stat key={stat.title} data={stat} status={checkIn.status} />
             ))}
           </div>
         </div>

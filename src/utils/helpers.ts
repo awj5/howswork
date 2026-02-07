@@ -9,7 +9,7 @@ export function isValidPhone(number: string) {
   return digits.length >= 8 && digits.length <= 16; // Check length
 }
 
-export function statusColor(status: number) {
+export function concernStatusColor(status: number) {
   const colors: Record<number, "zinc" | "green" | "yellow" | "orange" | "blue"> = {
     1: "blue",
     2: "orange",
@@ -18,4 +18,14 @@ export function statusColor(status: number) {
   };
 
   return colors[status] ?? "zinc";
+}
+
+export function checkInStatusText(status: number) {
+  const texts: Record<number, string> = {
+    1: "Upcoming",
+    2: "Scheduled",
+    3: "Open",
+  };
+
+  return texts[status] ?? "Closed";
 }

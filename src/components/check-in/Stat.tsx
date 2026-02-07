@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 
 type StatProps = {
   data: CheckInStatType;
+  status: number;
 };
 
 export default function Stat(props: StatProps) {
@@ -32,7 +33,7 @@ export default function Stat(props: StatProps) {
         ) : null}
 
         <div className="text-3xl/8 font-semibold sm:text-2xl/8">
-          {!props.data.percentage || props.data.primary ? props.data.primary : "—"}
+          {props.data.primary || (!props.data.percentage && props.status >= 3) ? props.data.primary : "—"}
           {props.data.percentage && props.data.primary ? "%" : null}
         </div>
       </div>

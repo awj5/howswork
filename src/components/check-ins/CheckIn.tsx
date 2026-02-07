@@ -2,6 +2,7 @@ import { useSearchParams } from "next/navigation";
 import { ArrowPathIcon } from "@heroicons/react/20/solid";
 import { DateTime } from "luxon";
 import type { CheckInType } from "@/types";
+import { checkInStatusText } from "@/utils/helpers";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 
@@ -14,14 +15,14 @@ type CheckInProps = {
 export default function CheckIn(props: CheckInProps) {
   const searchParams = useSearchParams();
   const startDT = DateTime.fromISO(props.data.start); // Convert to date object
-  const isScheduled = props.data.status === "Scheduled" || props.data.status === "Upcoming";
+  const isScheduled = props.data.status <= 2;
   const repeatWeeks = props.data.repeat / 7;
   const repeatText = repeatWeeks === 1 ? "Weekly" : repeatWeeks ? `${repeatWeeks} weeks` : "None";
 
   return (
     <TableRow
       href={
-        props.data.status !== "Upcoming"
+        props.data.status !== 1
           ? `/check-ins/${props.data.id}${searchParams.size ? `?${searchParams.toString()}` : ""}`
           : undefined
       }
@@ -41,8 +42,8 @@ export default function CheckIn(props: CheckInProps) {
       <TableCell className={`${isScheduled && "text-zinc-500"}`}>{repeatText}</TableCell>
 
       <TableCell>
-        <Badge color={props.data.status === "Closed" ? "green" : isScheduled ? "zinc" : "amber"}>
-          {props.data.status}
+        <Badge color={props.data.status === 4 ? "green" : isScheduled ? "zinc" : "amber"}>
+          {checkInStatusText(props.data.status)}
         </Badge>
       </TableCell>
     </TableRow>

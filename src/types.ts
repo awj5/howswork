@@ -24,7 +24,7 @@ export type CheckInType = {
   id: number;
   start: string;
   repeat: number;
-  status: string;
+  status: number;
   pin?: number;
   stats?: CheckInStatType[];
 };

@@ -2,7 +2,7 @@ import { useSearchParams } from "next/navigation";
 import { DateTime } from "luxon";
 import StatusData from "@/data/status.json";
 import type { ConcernType } from "@/types";
-import { statusColor } from "@/utils/helpers";
+import { concernStatusColor } from "@/utils/helpers";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 
@@ -26,7 +26,7 @@ export default function Concern(props: ConcernProps) {
       </TableCell>
 
       <TableCell>
-        <Badge color={statusColor(status)}>{StatusData.find((i) => i.id === status)?.title}</Badge>
+        <Badge color={concernStatusColor(status)}>{StatusData.find((i) => i.id === status)?.title}</Badge>
       </TableCell>
     </TableRow>
   );

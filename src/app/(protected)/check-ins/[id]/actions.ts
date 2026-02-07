@@ -18,7 +18,7 @@ export async function removeCheckIn(id: number, companyID: number) {
       repeat: 0,
     })
     .eq("company_id", companyID)
-    .eq("status", "Open");
+    .eq("status", 3);
 
   if (updateCheckInError) {
     console.error(updateCheckInError.message);
