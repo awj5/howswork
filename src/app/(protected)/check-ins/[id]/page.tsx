@@ -178,6 +178,12 @@ export default function CheckIn() {
       }
 
       stats.push({
+        title: "Invited",
+        primary: checkInData.contact_count,
+        secondary: 0,
+      });
+
+      stats.push({
         title: "Participation",
         primary: participation,
         secondary: participationTrend,
@@ -262,14 +268,14 @@ export default function CheckIn() {
             </div>
           </div>
 
-          <div className="mt-8 grid gap-8 sm:grid-cols-3">
+          <div className="mt-8 grid gap-8 sm:grid-cols-4">
             {checkIn.stats?.map((stat) => (
               <Stat key={stat.title} data={stat} status={checkIn.status} />
             ))}
           </div>
 
           <Subheading className="mt-12">Issues experienced</Subheading>
-          <Issues data={checkIn.issues} />
+          <Issues data={checkIn.issues} status={checkIn.status} />
         </div>
       ) : (
         error && (

@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 
 type IssuesProps = {
   data: CheckInIssueType[] | undefined;
+  status: number;
 };
 
 export default function Issues(props: IssuesProps) {
@@ -21,7 +22,7 @@ export default function Issues(props: IssuesProps) {
           );
         })
       ) : (
-        <Text>No issues reported</Text>
+        <Text>{props.status > 2 ? "No issues reported" : "N/A"}</Text>
       )}
     </div>
   );
