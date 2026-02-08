@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { TrashIcon } from "@heroicons/react/16/solid";
+import { TrashIcon, UserGroupIcon } from "@heroicons/react/16/solid";
 import { GlobeAltIcon } from "@heroicons/react/20/solid";
 import { AU, CA, IE, NZ, GB, US, SG, HK, ZA } from "country-flag-icons/react/3x2";
 import { useCompanies } from "@/hooks/useCompanies";
@@ -24,6 +25,7 @@ type FormErrorsType = {
 };
 
 export default function Settings() {
+  const router = useRouter();
   const companies = useCompanies();
   const nameRef = useRef("");
   const slugRef = useRef("");
@@ -147,16 +149,21 @@ export default function Settings() {
 
   return (
     <form onSubmit={submitForm} className="mx-auto max-w-4xl">
-      <div className="flex h-12 items-end sm:h-10">
+      <div className="flex h-12 items-end justify-between gap-4 sm:h-10">
         <div className="flex items-center gap-4">
           <Heading>Settings</Heading>
 
           {(name !== nameRef.current || slug !== slugRef.current || timezone !== timezoneRef.current) && (
-            <Badge color="amber" className="max-sm:hidden">
+            <Badge color="amber" className="fade-in max-sm:hidden">
               Unsaved changes
             </Badge>
           )}
         </div>
+
+        <Button onClick={() => router.push("/settings/admins")} outline>
+          <UserGroupIcon />
+          Manage admins
+        </Button>
       </div>
 
       <Divider className="mt-6 mb-10" />

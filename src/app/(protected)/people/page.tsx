@@ -15,6 +15,7 @@ import { Description, ErrorMessage, Field, Fieldset, Label } from "@/components/
 import { Text } from "@/components/ui/text";
 import HelperTooltip from "@/components/HelperTooltip";
 import { Badge } from "@/components/ui/badge";
+import { Divider } from "@/components/ui/divider";
 import { updateStaff } from "./actions";
 
 export default function People() {
@@ -94,17 +95,19 @@ export default function People() {
           <Heading>People</Heading>
 
           {staff !== staffRef.current && (
-            <Badge color="amber" className="max-sm:hidden">
+            <Badge color="amber" className="fade-in max-sm:hidden">
               Unsaved changes
             </Badge>
           )}
         </div>
 
-        <Button onClick={() => router.push("/people/admins")} outline>
+        <Button onClick={() => null} outline>
           <UserGroupIcon />
-          Manage admins
+          Manage teams
         </Button>
       </div>
+
+      <Divider className="mt-6 mb-10" />
 
       <Fieldset className="mt-8" disabled={disabled}>
         <Field>

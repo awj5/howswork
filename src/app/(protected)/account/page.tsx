@@ -128,7 +128,7 @@ export default function Account() {
           <Heading>My Account</Heading>
 
           {(firstName !== user?.first_name || lastName !== user?.last_name || email !== user?.email) && (
-            <Badge color="amber" className="max-sm:hidden">
+            <Badge color="amber" className="fade-in max-sm:hidden">
               Unsaved changes
             </Badge>
           )}
