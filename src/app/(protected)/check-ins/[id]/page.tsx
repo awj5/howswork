@@ -9,7 +9,7 @@ import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { createClient } from "@/utils/supabase/client";
 import { checkInStatusText } from "@/utils/helpers";
 import SentimentsData from "@/data/sentiments.json";
-import type { CheckInStatType, CheckInType } from "@/types";
+import type { CheckInIssueType, CheckInStatType, CheckInType } from "@/types";
 import { useCompanies } from "@/hooks/useCompanies";
 import { Heading, Subheading } from "@/components/ui/heading";
 import Breadcrumb from "@/components/Breadcrumb";
@@ -19,6 +19,7 @@ import { Badge } from "@/components/ui/badge";
 import { Text } from "@/components/ui/text";
 import EmptyState from "@/components/EmptyState";
 import Stat from "@/components/check-in/Stat";
+import Issues from "@/components/check-in/Issues";
 import { removeCheckIn } from "./actions";
 
 export default function CheckIn() {
@@ -66,16 +67,10 @@ export default function CheckIn() {
         return;
       }
 
-      // Generate stats
-      const stats: CheckInStatType[] = [];
-      let participationTrend = 0;
-      let sentimentTrend = 0;
-      let concernTrend = 0;
-
       // Get feedback
       const { data: feedbackData, error: feedbackError } = await supabase
         .from("feedback")
-        .select("id, sentiment")
+        .select("id, sentiment, issues")
         .eq("check_in_id", checkInData.id);
 
       if (feedbackError) {
@@ -96,6 +91,22 @@ export default function CheckIn() {
         return;
       }
 
+      // Get issues
+      const issueCounts = new Map<number, number>();
+
+      feedbackData.forEach((feedback) => {
+        feedback.issues?.forEach((id: number) => {
+          issueCounts.set(id, (issueCounts.get(id) || 0) + 1);
+        });
+      });
+
+      const issues = Array.from(issueCounts, ([id, count]) => ({ id, count })).sort((a, b) => b.count - a.count); // Order by most common
+
+      // Generate stats
+      const stats: CheckInStatType[] = [];
+      let participationTrend = 0;
+      let sentimentTrend = 0;
+      let concernTrend = 0;
       const participation = Math.round((feedbackData.length / checkInData.contact_count) * 100); // Percentage
 
       // Average and convert to percentage
@@ -191,6 +202,7 @@ export default function CheckIn() {
       const data = {
         ...checkInData,
         stats,
+        issues,
       };
 
       setCheckIn(data);
@@ -255,6 +267,9 @@ export default function CheckIn() {
               <Stat key={stat.title} data={stat} status={checkIn.status} />
             ))}
           </div>
+
+          <Subheading className="mt-12">Issues experienced</Subheading>
+          <Issues data={checkIn.issues} />
         </div>
       ) : (
         error && (
