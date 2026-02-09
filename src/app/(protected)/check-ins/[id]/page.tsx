@@ -111,7 +111,10 @@ export default function CheckIn() {
       let participationTrend = 0;
       let sentimentTrend = 0;
       let concernTrend = 0;
-      const participation = Math.round((feedbackData.length / checkInData.contact_count) * 100); // Percentage
+
+      const participation = checkInData.contact_count
+        ? Math.round((feedbackData.length / checkInData.contact_count) * 100)
+        : 0; // Percentage
 
       // Average and convert to percentage
       const sentiment = feedbackData.length
