@@ -40,6 +40,7 @@ export default function CheckIn(props: CheckInProps) {
       </TableCell>
 
       <TableCell className={`${isScheduled && "text-zinc-500"}`}>{repeatText}</TableCell>
+      <TableCell>{props.data.contact_count ?? "—"}</TableCell>
 
       <TableCell>
         <Badge color={props.data.status === 4 ? "green" : isScheduled ? "zinc" : "amber"}>

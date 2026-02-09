@@ -99,7 +99,7 @@ export default function CheckIns() {
         count: checkInsCount,
       } = await supabase
         .from("check_ins")
-        .select("id, start, repeat, status", {
+        .select("id, start, repeat, status, contact_count", {
           count: "exact",
         })
         .eq("company_id", companies[0].id)
@@ -141,6 +141,7 @@ export default function CheckIns() {
               <TableRow>
                 <TableHeader>Date &amp; Time</TableHeader>
                 <TableHeader>Repeats</TableHeader>
+                <TableHeader>Invited</TableHeader>
                 <TableHeader>Status</TableHeader>
               </TableRow>
             </TableHead>

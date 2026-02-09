@@ -9,7 +9,7 @@ import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { createClient } from "@/utils/supabase/client";
 import { checkInStatusText } from "@/utils/helpers";
 import SentimentsData from "@/data/sentiments.json";
-import type { CheckInIssueType, CheckInStatType, CheckInType } from "@/types";
+import type { CheckInStatType, CheckInType } from "@/types";
 import { useCompanies } from "@/hooks/useCompanies";
 import { Heading, Subheading } from "@/components/ui/heading";
 import Breadcrumb from "@/components/Breadcrumb";
@@ -228,7 +228,7 @@ export default function CheckIn() {
 
           <div className="lg:mt-8">
             <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-              <Heading>Check-in with {companies[0].name}</Heading>
+              <Heading>Check-in Insights</Heading>
 
               <Badge color={checkIn.status === 4 ? "green" : checkIn.status === 3 ? "amber" : "zinc"}>
                 {checkInStatusText(checkIn.status)}
