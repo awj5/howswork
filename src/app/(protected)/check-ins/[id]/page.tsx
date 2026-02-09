@@ -71,10 +71,9 @@ export default function CheckIn() {
       }
 
       // Get feedback
-      const { data: feedbackData, error: feedbackError } = await supabase
-        .from("feedback")
-        .select("id, sentiment, issues")
-        .eq("check_in_id", checkInData.id);
+      let feedbackQuery = supabase.from("feedback").select("id, sentiment, issues").eq("check_in_id", checkInData.id);
+      if (team) feedbackQuery = feedbackQuery.eq("team", team);
+      const { data: feedbackData, error: feedbackError } = await feedbackQuery;
 
       if (feedbackError) {
         console.error(feedbackError);
@@ -103,7 +102,10 @@ export default function CheckIn() {
         });
       });
 
-      const issues = Array.from(issueCounts, ([id, count]) => ({ id, count })).sort((a, b) => b.count - a.count); // Order by most common
+      const issues =
+        !team || feedbackData.length >= 3
+          ? Array.from(issueCounts, ([id, count]) => ({ id, count })).sort((a, b) => b.count - a.count)
+          : undefined; // Order by most common
 
       // Generate stats
       const stats: CheckInStatType[] = [];
@@ -111,17 +113,19 @@ export default function CheckIn() {
       let sentimentTrend = 0;
       let concernTrend = 0;
 
-      const participation = checkInData.contact_count
-        ? Math.round((feedbackData.length / checkInData.contact_count) * 100)
-        : 0; // Percentage
+      const participation =
+        checkInData.contact_count && (!team || feedbackData.length >= 3)
+          ? Math.round((feedbackData.length / checkInData.contact_count) * 100)
+          : 0; // Percentage
 
       // Average and convert to percentage
-      const sentiment = feedbackData.length
-        ? Math.round(
-            (feedbackData.reduce((sum, feedback) => sum + feedback.sentiment, 0) / feedbackData.length) *
-              (100 / SentimentsData.length)
-          )
-        : 0;
+      const sentiment =
+        feedbackData.length && (!team || feedbackData.length >= 3)
+          ? Math.round(
+              (feedbackData.reduce((sum, feedback) => sum + feedback.sentiment, 0) / feedbackData.length) *
+                (100 / SentimentsData.length)
+            )
+          : 0;
 
       // Get previous check-in
       const { data: prevCheckInData, error: prevCheckInError } = await supabase
@@ -140,10 +144,13 @@ export default function CheckIn() {
 
       if (prevCheckInData.length) {
         // Get previous check-in feedback
-        const { data: prevFeedbackData, error: prevFeedbackError } = await supabase
+        let prevFeedbackQuery = supabase
           .from("feedback")
           .select("id, sentiment")
           .eq("check_in_id", prevCheckInData[0].id);
+
+        if (team) prevFeedbackQuery = prevFeedbackQuery.eq("team", team);
+        const { data: prevFeedbackData, error: prevFeedbackError } = await prevFeedbackQuery;
 
         if (prevFeedbackError) {
           console.error(prevFeedbackError);
@@ -222,7 +229,7 @@ export default function CheckIn() {
     };
 
     getCheckIn();
-  }, [companies]);
+  }, [companies, team]);
 
   return (
     <div className="mx-auto max-w-6xl">
