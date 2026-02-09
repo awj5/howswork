@@ -41,14 +41,20 @@ export default function Team(props: TeamProps) {
   }, [companies]);
 
   return (
-    <Select value={props.val} onChange={(e) => props.setVal(e.target.value)} className={`${!teams.length && "hidden"}`}>
-      <option value="">All teams</option>
+    <div>
+      <Select
+        value={props.val}
+        onChange={(e) => props.setVal(e.target.value)}
+        className={`${!teams.length && "hidden"}`}
+      >
+        <option value="">All teams</option>
 
-      {teams.map((team) => (
-        <option key={team.id} value={team.id}>
-          {team.name}
-        </option>
-      ))}
-    </Select>
+        {teams.map((team) => (
+          <option key={team.id} value={team.id}>
+            {team.name}
+          </option>
+        ))}
+      </Select>
+    </div>
   );
 }

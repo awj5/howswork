@@ -20,7 +20,6 @@ import { Text } from "@/components/ui/text";
 import EmptyState from "@/components/EmptyState";
 import Stat from "@/components/check-in/Stat";
 import Issues from "@/components/check-in/Issues";
-import { Divider } from "@/components/ui/divider";
 import Team from "@/components/check-in/Team";
 import { removeCheckIn } from "./actions";
 
@@ -261,9 +260,7 @@ export default function CheckIn() {
               </div>
 
               {checkIn.status >= 3 ? (
-                <div>
-                  <Team val={team} setVal={setTeam} />
-                </div>
+                <Team val={team} setVal={setTeam} />
               ) : (
                 checkIn.status === 2 && (
                   <Button onClick={() => setAlertOpen(true)} outline disabled={disabled}>
@@ -281,9 +278,9 @@ export default function CheckIn() {
             ))}
           </div>
 
-          <Subheading className="mt-12">Issues experienced</Subheading>
-          <Divider className="mt-4" />
-          <Issues data={checkIn.issues} status={checkIn.status} />
+          <div className="mt-12 grid gap-8 sm:grid-cols-2">
+            <Issues data={checkIn.issues} status={checkIn.status} />
+          </div>
         </div>
       ) : (
         error && (
