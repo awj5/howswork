@@ -20,6 +20,7 @@ import { Text } from "@/components/ui/text";
 import EmptyState from "@/components/EmptyState";
 import Stat from "@/components/check-in/Stat";
 import Issues from "@/components/check-in/Issues";
+import { Divider } from "@/components/ui/divider";
 import { removeCheckIn } from "./actions";
 
 export default function CheckIn() {
@@ -276,6 +277,7 @@ export default function CheckIn() {
           </div>
 
           <Subheading className="mt-12">Issues experienced</Subheading>
+          <Divider className="mt-4" />
           <Issues data={checkIn.issues} status={checkIn.status} />
         </div>
       ) : (

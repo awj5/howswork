@@ -10,7 +10,7 @@ type IssuesProps = {
 
 export default function Issues(props: IssuesProps) {
   return (
-    <div className="mt-4 flex flex-wrap gap-4 sm:gap-3">
+    <div className="mt-5 flex flex-wrap gap-4 sm:gap-3">
       {props.data?.length ? (
         props.data.map((issue) => {
           const tag = IssuesData.find((i) => i.id === issue.id)?.tag;
