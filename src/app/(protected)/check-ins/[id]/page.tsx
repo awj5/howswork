@@ -181,27 +181,28 @@ export default function CheckIn() {
         title: "Invited",
         primary: checkInData.contact_count,
         secondary: 0,
+        primaryText: checkInData.contact_count,
       });
 
       stats.push({
         title: "Participation",
         primary: participation,
         secondary: participationTrend,
-        percentage: true,
+        primaryText: participation ? `${participation}%` : undefined,
       });
 
       stats.push({
         title: "Sentiment",
         primary: sentiment,
         secondary: sentimentTrend,
-        percentage: true,
-        sentiment: true,
+        primaryText: sentiment ? `${sentiment}%` : undefined,
       });
 
       stats.push({
         title: "Concerns raised",
         primary: concernsData.length,
         secondary: concernTrend,
+        primaryText: String(concernsData.length),
       });
 
       // Add stats to check-in

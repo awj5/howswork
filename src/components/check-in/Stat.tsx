@@ -13,7 +13,8 @@ type StatProps = {
 export default function Stat(props: StatProps) {
   const trend = props.data.secondary > 0 ? "up" : "down";
   const sentimentIndex = Math.max(0, Math.floor((props.data.primary - 1) / (100 / SentimentsData.length))); // eg. 0-20 = 0, 81-100 = 4
-  const sentiment = props.data.sentiment ? SentimentsData[sentimentIndex] : undefined;
+  const sentiment = props.data.title === "Sentiment" && props.data.primary ? SentimentsData[sentimentIndex] : undefined;
+  const isScheduled = props.status <= 2;
 
   return (
     <div>
@@ -21,7 +22,7 @@ export default function Stat(props: StatProps) {
       <div className="mt-6 text-lg/6 font-medium sm:text-sm/6">{props.data.title}</div>
 
       <div className="mt-3 flex gap-3">
-        {sentiment && props.data.primary ? (
+        {sentiment && (
           <Image
             src={`/img/emoji-${sentiment.id}.svg`}
             width={96}
@@ -30,17 +31,16 @@ export default function Stat(props: StatProps) {
             aria-hidden="true"
             className="size-8 sm:size-7"
           />
-        ) : null}
+        )}
 
         <div className="text-3xl/8 font-semibold sm:text-2xl/8">
-          {props.data.primary || (!props.data.percentage && props.status >= 3) ? props.data.primary : "—"}
-          {props.data.percentage && props.data.primary ? "%" : null}
+          {props.data.primaryText && !isScheduled ? props.data.primaryText : "—"}
         </div>
       </div>
 
-      {props.data.secondary && (!props.data.percentage || props.data.primary) ? (
+      {props.data.primaryText && !isScheduled && props.data.secondary ? (
         <div className="mt-3 flex items-center gap-1">
-          {!props.data.percentage ? (
+          {props.data.title === "Concerns raised" ? (
             <Badge>
               {trend === "up" && "+"}
               {props.data.secondary}%

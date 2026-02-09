@@ -16,8 +16,7 @@ export type CheckInStatType = {
   title: string;
   primary: number;
   secondary: number;
-  percentage?: boolean;
-  sentiment?: boolean;
+  primaryText?: string;
 };
 
 export type CheckInIssueType = {
