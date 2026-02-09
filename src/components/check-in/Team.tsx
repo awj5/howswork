@@ -30,7 +30,7 @@ export default function Team(props: TeamProps) {
         .eq("company_id", companies[0].id);
 
       if (teamsError) {
-        console.error(teams);
+        console.error(teamsError);
         return;
       }
 
