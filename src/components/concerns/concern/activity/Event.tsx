@@ -47,9 +47,9 @@ export default function Event(props: EventProps) {
           ? "bg-yellow-500"
           : status === 4
             ? "bg-green-500"
-            : "bg-gray-100 dark:bg-zinc-800";
+            : "bg-zinc-100 dark:bg-zinc-800";
 
-  const iconColor = status && status < 5 ? "text-white" : "text-gray-500 dark:text-gray-400";
+  const iconColor = status && status < 5 ? "text-white" : "text-zinc-500 dark:text-zinc-400";
 
   return (
     <div className="flex gap-3">
@@ -66,13 +66,13 @@ export default function Event(props: EventProps) {
           ) : status ? (
             <>
               Status was updated to{" "}
-              <span className="font-medium text-gray-900 dark:text-white">
+              <span className="font-medium text-zinc-900 dark:text-white">
                 {StatusData.find((i) => i.id === status)?.title}
               </span>
             </>
           ) : (
             <>
-              <span className="block font-medium text-gray-900 dark:text-white">
+              <span className="block font-medium text-zinc-900 dark:text-white">
                 {props.data.admin_name ?? "Employee"} commented
               </span>
 

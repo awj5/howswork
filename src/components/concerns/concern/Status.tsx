@@ -35,7 +35,7 @@ export default function Status(props: StatusProps) {
   return (
     <Listbox
       value={props.val > 1 ? props.val : null}
-      placeholder="Update status&hellip;"
+      placeholder="Update status"
       onChange={(e) => e && changeStatus(e)}
       aria-label="Update status"
       className="min-w-0 sm:max-w-40"

@@ -70,7 +70,7 @@ export default function Concern() {
 
             <div className="mt-4 flex flex-col gap-4 sm:mt-2.5 sm:flex-row">
               <time className="flex items-center gap-3">
-                <CalendarIcon className="size-4 text-gray-400 dark:text-gray-500" />
+                <CalendarIcon className="size-4 text-zinc-400 dark:text-zinc-500" />
                 <Text className="text-zinc-950! dark:text-white!">{date?.toLocal().toFormat("dd LLL yyyy")}</Text>
               </time>
 
@@ -134,7 +134,7 @@ export default function Concern() {
       ) : (
         error && (
           <EmptyState>
-            <ExclamationCircleIcon className="size-16 text-gray-400 sm:size-12 dark:text-gray-500" />
+            <ExclamationCircleIcon className="size-16 text-zinc-400 sm:size-12 dark:text-zinc-500" />
             <Subheading className="mt-2 text-center">{error}</Subheading>
           </EmptyState>
         )

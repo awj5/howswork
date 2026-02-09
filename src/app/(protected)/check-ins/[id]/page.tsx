@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { DateTime } from "luxon";
-import { CalendarIcon, HashtagIcon, TrashIcon, QrCodeIcon } from "@heroicons/react/16/solid";
+import { CalendarIcon, HashtagIcon, TrashIcon } from "@heroicons/react/16/solid";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { createClient } from "@/utils/supabase/client";
 import { checkInStatusText } from "@/utils/helpers";
@@ -21,6 +21,7 @@ import EmptyState from "@/components/EmptyState";
 import Stat from "@/components/check-in/Stat";
 import Issues from "@/components/check-in/Issues";
 import { Divider } from "@/components/ui/divider";
+import Team from "@/components/check-in/Team";
 import { removeCheckIn } from "./actions";
 
 export default function CheckIn() {
@@ -33,6 +34,7 @@ export default function CheckIn() {
   const [alertOpen, setAlertOpen] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [error, setError] = useState("");
+  const [team, setTeam] = useState("");
   const date = checkIn ? DateTime.fromISO(checkIn.start).toUTC() : undefined;
 
   const removeClick = async () => {
@@ -55,6 +57,7 @@ export default function CheckIn() {
   useEffect(() => {
     const getCheckIn = async () => {
       if (!companies.length) return;
+
       const { data: checkInData, error: checkInError } = await supabase
         .from("check_ins")
         .select("id, start, status, repeat, pin, contact_count")
@@ -239,7 +242,7 @@ export default function CheckIn() {
             <div className="mt-2.5 flex flex-col justify-between gap-4 sm:flex-row">
               <div className="flex gap-10 py-1.5">
                 <time className="flex items-center gap-3">
-                  <CalendarIcon className="size-4 text-gray-400 dark:text-gray-500" />
+                  <CalendarIcon className="size-4 text-zinc-400 dark:text-zinc-500" />
 
                   <Text className="text-zinc-950! dark:text-white!">
                     {date?.setZone(companies[0].timezone).toFormat("dd LLL yyyy")}
@@ -248,17 +251,16 @@ export default function CheckIn() {
 
                 {checkIn.status !== 2 && (
                   <div className="flex items-center gap-3">
-                    <HashtagIcon className="size-4 text-gray-400 dark:text-gray-500" />
+                    <HashtagIcon className="size-4 text-zinc-400 dark:text-zinc-500" />
                     <Text className="text-zinc-950! dark:text-white!">PIN: {checkIn.pin}</Text>
                   </div>
                 )}
               </div>
 
-              {checkIn.status === 3 ? (
-                <Button onClick={() => null} color="indigo">
-                  <QrCodeIcon />
-                  Generate QR code
-                </Button>
+              {checkIn.status >= 3 ? (
+                <div>
+                  <Team val={team} setVal={setTeam} />
+                </div>
               ) : (
                 checkIn.status === 2 && (
                   <Button onClick={() => setAlertOpen(true)} outline disabled={disabled}>
@@ -283,7 +285,7 @@ export default function CheckIn() {
       ) : (
         error && (
           <EmptyState>
-            <ExclamationCircleIcon className="size-16 text-gray-400 sm:size-12 dark:text-gray-500" />
+            <ExclamationCircleIcon className="size-16 text-zinc-400 sm:size-12 dark:text-zinc-500" />
             <Subheading className="mt-2 text-center">{error}</Subheading>
           </EmptyState>
         )

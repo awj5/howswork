@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { ArrowTrendingUpIcon, ArrowTrendingDownIcon } from "@heroicons/react/16/solid";
 import SentimentsData from "@/data/sentiments.json";
 import { CheckInStatType } from "@/types";
 import { Divider } from "@/components/ui/divider";
@@ -40,17 +39,10 @@ export default function Stat(props: StatProps) {
 
       {props.data.primaryText && !isScheduled && props.data.secondary ? (
         <div className="mt-3 flex items-center gap-1">
-          {props.data.title === "Concerns raised" ? (
-            <Badge>
-              {trend === "up" && "+"}
-              {props.data.secondary}%
-            </Badge>
-          ) : trend === "up" ? (
-            <ArrowTrendingUpIcon className="size-7 text-green-500 sm:size-6" />
-          ) : (
-            <ArrowTrendingDownIcon className="size-7 text-red-500 sm:size-6" />
-          )}
-
+          <Badge color={props.data.title === "Concerns raised" ? "zinc" : trend === "up" ? "green" : "red"}>
+            {trend === "up" && "+"}
+            {props.data.secondary}%
+          </Badge>
           <span className="text-sm/6 text-zinc-500 sm:text-xs/6">from last check-in</span>
         </div>
       ) : null}
