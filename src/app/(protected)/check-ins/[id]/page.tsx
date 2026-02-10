@@ -107,8 +107,8 @@ export default function CheckIn() {
           if (!issueAttributions.has(id)) issueAttributions.set(id, new Map());
           const attribution = issueAttributions.get(id)!;
 
-          feedback.attributions?.forEach((id: number) => {
-            attribution.set(id, (attribution.get(id) || 0) + 1);
+          feedback.attributions?.forEach((attrID: number) => {
+            attribution.set(attrID, (attribution.get(attrID) || 0) + 1);
           });
         });
       });
