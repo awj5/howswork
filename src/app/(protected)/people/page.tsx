@@ -101,7 +101,7 @@ export default function People() {
           )}
         </div>
 
-        <Button onClick={() => null} outline>
+        <Button onClick={() => router.push("/people/teams")} outline>
           <UserGroupIcon />
           Manage teams
         </Button>
