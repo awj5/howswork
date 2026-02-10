@@ -224,7 +224,7 @@ export default function CheckIn() {
       });
 
       stats.push({
-        title: "Sentiment",
+        title: "Sentiment score",
         primary: sentiment,
         secondary: sentimentTrend,
         primaryText: sentiment ? `${sentiment}%` : undefined,

@@ -12,7 +12,8 @@ type StatProps = {
 export default function Stat(props: StatProps) {
   const trend = props.data.secondary > 0 ? "up" : "down";
   const sentimentIndex = Math.max(0, Math.floor((props.data.primary - 1) / (100 / SentimentsData.length))); // eg. 0-20 = 0, 81-100 = 4
-  const sentiment = props.data.title === "Sentiment" && props.data.primary ? SentimentsData[sentimentIndex] : undefined;
+  const sentiment =
+    props.data.title === "Sentiment score" && props.data.primary ? SentimentsData[sentimentIndex] : undefined;
   const isScheduled = props.status <= 2;
 
   return (
