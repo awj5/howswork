@@ -18,7 +18,7 @@ export default function Issues(props: IssuesProps) {
 
       <div className="mt-4">
         {props.data?.length ? (
-          <Table className="[--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
+          <Table className="[--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]" dense>
             <TableHead>
               <TableRow>
                 <TableHeader>Issue</TableHeader>
