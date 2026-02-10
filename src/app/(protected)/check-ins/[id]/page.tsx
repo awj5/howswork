@@ -71,7 +71,11 @@ export default function CheckIn() {
       }
 
       // Get feedback
-      let feedbackQuery = supabase.from("feedback").select("id, sentiment, issues").eq("check_in_id", checkInData.id);
+      let feedbackQuery = supabase
+        .from("feedback")
+        .select("id, sentiment, issues, attributions")
+        .eq("check_in_id", checkInData.id);
+
       if (team) feedbackQuery = feedbackQuery.eq("team", team);
       const { data: feedbackData, error: feedbackError } = await feedbackQuery;
 
@@ -95,16 +99,29 @@ export default function CheckIn() {
 
       // Get issues
       const issueCounts = new Map<number, number>();
+      const issueAttributions = new Map<number, Map<number, number>>();
 
       feedbackData.forEach((feedback) => {
         feedback.issues?.forEach((id: number) => {
           issueCounts.set(id, (issueCounts.get(id) || 0) + 1);
+          if (!issueAttributions.has(id)) issueAttributions.set(id, new Map());
+          const attribution = issueAttributions.get(id)!;
+
+          feedback.attributions?.forEach((id: number) => {
+            attribution.set(id, (attribution.get(id) || 0) + 1);
+          });
         });
       });
 
       const issues =
         !team || feedbackData.length >= 3
-          ? Array.from(issueCounts, ([id, count]) => ({ id, count })).sort((a, b) => b.count - a.count)
+          ? Array.from(issueCounts, ([id, count]) => ({
+              id,
+              count,
+              attributions: Array.from(issueAttributions.get(id) || new Map(), ([id, count]) => ({ id, count })).sort(
+                (a, b) => b.count - a.count
+              ),
+            })).sort((a, b) => b.count - a.count)
           : undefined; // Order by most common
 
       // Generate stats
@@ -170,7 +187,9 @@ export default function CheckIn() {
           return;
         }
 
-        const prevParticipation = Math.round((prevFeedbackData.length / prevCheckInData[0].contact_count) * 100); // Percentage
+        const prevParticipation = prevCheckInData[0].contact_count
+          ? Math.round((prevFeedbackData.length / prevCheckInData[0].contact_count) * 100)
+          : 0; // Percentage
 
         // Average and convert to percentage
         const prevSentiment = prevFeedbackData.length
@@ -279,15 +298,13 @@ export default function CheckIn() {
             </div>
           </div>
 
-          <div className="mt-8 grid gap-8 sm:grid-cols-4">
+          <div className="mt-8 grid gap-8 sm:grid-cols-2 md:grid-cols-4">
             {checkIn.stats?.map((stat) => (
               <Stat key={stat.title} data={stat} status={checkIn.status} />
             ))}
           </div>
 
-          <div className="mt-12 grid gap-8 sm:grid-cols-2">
-            <Issues data={checkIn.issues} status={checkIn.status} />
-          </div>
+          <Issues data={checkIn.issues} status={checkIn.status} />
         </div>
       ) : (
         error && (

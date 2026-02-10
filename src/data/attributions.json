@@ -1,0 +1,8 @@
+[
+  { "id": 1, "label": "Customers/clients" },
+  { "id": 2, "label": "Systems or processes" },
+  { "id": 3, "label": "Coworkers" },
+  { "id": 4, "label": "My manager" },
+  { "id": 5, "label": "Senior leadership" },
+  { "id": 6, "label": "Other" }
+]

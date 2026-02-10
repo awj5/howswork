@@ -19,9 +19,15 @@ export type CheckInStatType = {
   primaryText?: string;
 };
 
+export type CheckInIssueAttributionType = {
+  id: number;
+  count: number;
+};
+
 export type CheckInIssueType = {
   id: number;
   count: number;
+  attributions: CheckInIssueAttributionType[];
 };
 
 export type CheckInType = {

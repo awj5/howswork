@@ -101,7 +101,7 @@ export default function Concern() {
               <div>
                 <div className="flex items-baseline justify-between">
                   <Subheading>Issues</Subheading>
-                  <Text>Select all that apply</Text>
+                  <span className="text-sm text-zinc-500 sm:text-xs">Select all that apply</span>
                 </div>
 
                 <Divider className="mt-4" />
