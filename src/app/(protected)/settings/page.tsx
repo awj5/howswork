@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { TrashIcon, UserGroupIcon } from "@heroicons/react/16/solid";
@@ -27,9 +27,9 @@ type FormErrorsType = {
 export default function Settings() {
   const router = useRouter();
   const companies = useCompanies();
-  const nameRef = useRef("");
-  const slugRef = useRef("");
-  const timezoneRef = useRef("");
+  const [savedName, setSavedName] = useState("");
+  const [savedSlug, setSavedSlug] = useState("");
+  const [savedTimezone, setSavedTimezone] = useState("");
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
   const [timezone, setTimezone] = useState("");
@@ -78,13 +78,14 @@ export default function Settings() {
   };
 
   useUnsavedWarning([
-    [name, nameRef.current],
-    [slug, slugRef.current],
-    [timezone, timezoneRef.current],
+    [name, savedName],
+    [slug, savedSlug],
+    [timezone, savedTimezone],
   ]);
 
   const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!companies.length) return;
 
     // Validate
     const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -111,12 +112,13 @@ export default function Settings() {
 
     // Success
     toast.success("Changes saved");
-    nameRef.current = name;
-    slugRef.current = slug;
-    timezoneRef.current = timezone;
+    setSavedName(name);
+    setSavedSlug(slug);
+    setSavedTimezone(timezone);
   };
 
   const deleteCompanyClick = async () => {
+    if (!companies.length) return;
     setDisabled(true);
     setAlertOpen(false); // Close
     const result = await deleteCompany(companies[0].id);
@@ -131,19 +133,19 @@ export default function Settings() {
     setName("");
     setSlug("");
     setTimezone("");
-    nameRef.current = "";
-    slugRef.current = "";
-    timezoneRef.current = "";
+    setSavedName("");
+    setSavedSlug("");
+    setSavedTimezone("");
   };
 
   useEffect(() => {
     if (!companies.length) return;
     setName(companies[0].name);
-    nameRef.current = companies[0].name;
+    setSavedName(companies[0].name);
     setSlug(companies[0].slug);
-    slugRef.current = companies[0].slug;
+    setSavedSlug(companies[0].slug);
     setTimezone(companies[0].timezone);
-    timezoneRef.current = companies[0].timezone;
+    setSavedTimezone(companies[0].timezone);
     setDisabled(false);
   }, [companies]);
 
@@ -153,7 +155,7 @@ export default function Settings() {
         <div className="flex items-center gap-4">
           <Heading>Settings</Heading>
 
-          {(name !== nameRef.current || slug !== slugRef.current || timezone !== timezoneRef.current) && (
+          {(name !== savedName || slug !== savedSlug || timezone !== savedTimezone) && (
             <Badge color="amber" className="fade-in max-sm:hidden">
               Unsaved changes
             </Badge>
@@ -230,10 +232,10 @@ export default function Settings() {
           <Field>
             <Listbox value={timezone} onChange={(e) => setTimezone(e)}>
               {/* Display company timezone if not included in list */}
-              {timezoneRef.current && !timezones.some((t) => t.value === timezoneRef.current) && (
-                <ListboxOption value={timezoneRef.current}>
+              {savedTimezone && !timezones.some((t) => t.value === savedTimezone) && (
+                <ListboxOption value={savedTimezone}>
                   <GlobeAltIcon />
-                  <ListboxLabel>{timezoneRef.current}</ListboxLabel>
+                  <ListboxLabel>{savedTimezone}</ListboxLabel>
                 </ListboxOption>
               )}
 

@@ -16,7 +16,7 @@ export default function ConfirmAdmin(props: ConfirmAdminProps) {
             <Text className="text-[16px]">Hi {props.name},</Text>
 
             <Text className="text-[16px]">
-              You've been added as an administrator for <strong>{props.company}</strong> on <strong>HowsWork</strong>.
+              You&apos;ve been added as an administrator for <strong>{props.company}</strong> on <strong>HowsWork</strong>.
             </Text>
 
             <Button
@@ -26,7 +26,7 @@ export default function ConfirmAdmin(props: ConfirmAdminProps) {
               Sign in to HowsWork
             </Button>
 
-            <Text className="text-[14px] text-gray-600">Didn't expect this? You can safely ignore this email.</Text>
+            <Text className="text-[14px] text-gray-600">Didn&apos;t expect this? You can safely ignore this email.</Text>
             <Hr className="border-gray-900/10" />
 
             <Text className="text-[12px] text-gray-600">

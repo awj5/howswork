@@ -18,7 +18,7 @@ export default function CheckIn(props: CheckInProps) {
 
             <Text className="text-[16px]">
               <strong>{props.company}</strong> is using <strong>HowsWork</strong>, a safe, anonymous way to share how
-              you're really doing and raise workplace concerns.
+              you&apos;re really doing and raise workplace concerns.
             </Text>
 
             <Text className="text-[16px]">

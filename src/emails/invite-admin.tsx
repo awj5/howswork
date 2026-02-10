@@ -29,7 +29,7 @@ export default function InviteAdmin(props: InviteAdminProps) {
             </Button>
 
             <Text className="text-[14px] text-gray-600">
-              Didn't expect this invitation? You can safely ignore this email.
+              Didn&apos;t expect this invitation? You can safely ignore this email.
             </Text>
 
             <Hr className="border-gray-900/10" />

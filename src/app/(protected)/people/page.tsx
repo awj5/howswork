@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { UserGroupIcon } from "@heroicons/react/16/solid";
@@ -22,13 +22,13 @@ export default function People() {
   const supabase = createClient();
   const router = useRouter();
   const companies = useCompanies();
-  const staffRef = useRef("");
+  const [savedStaff, setSavedStaff] = useState("");
   const [staff, setStaff] = useState("");
   const [staffError, setStaffError] = useState("");
   const [disabled, setDisabled] = useState(true);
   const members = parseContacts(staff).length;
 
-  useUnsavedWarning([[staff, staffRef.current]]);
+  useUnsavedWarning([[staff, savedStaff]]);
 
   const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -60,7 +60,7 @@ export default function People() {
 
     // Success
     toast.success("Changes saved");
-    staffRef.current = staff;
+    setSavedStaff(staff);
   };
 
   useEffect(() => {
@@ -81,7 +81,7 @@ export default function People() {
       const contacts = peopleData.contacts ?? [];
       const text = contacts.join("\n"); // One contact per line
       setStaff(text);
-      staffRef.current = text;
+      setSavedStaff(text);
       setDisabled(false);
     };
 
@@ -94,7 +94,7 @@ export default function People() {
         <div className="flex items-center gap-4">
           <Heading>People</Heading>
 
-          {staff !== staffRef.current && (
+          {staff !== savedStaff && (
             <Badge color="amber" className="fade-in max-sm:hidden">
               Unsaved changes
             </Badge>
@@ -142,7 +142,7 @@ anothername@company.com
               Clear
             </Button>
 
-            <Button type="submit" color="indigo" disabled={disabled || staff === staffRef.current}>
+            <Button type="submit" color="indigo" disabled={disabled || staff === savedStaff}>
               Save changes
             </Button>
           </div>

@@ -28,7 +28,7 @@ export default function MagicLink(props: MagicLinkProps) {
             <Text className="text-[14px] text-gray-600">This link expires in 1 hour.</Text>
 
             <Text className="text-[14px] text-gray-600">
-              If you didn't request this email, you can safely ignore it.
+              If you didn&apos;t request this email, you can safely ignore it.
             </Text>
 
             <Hr className="border-gray-900/10" />

@@ -36,7 +36,7 @@ export default function ChangeEmailAddress(props: ChangeEmailAddressProps) {
             <Text className="text-[14px] text-gray-600">This link expires in 1 hour.</Text>
 
             <Text className="text-[14px] text-gray-600">
-              If you didn't request this change, you can safely ignore this email. Your existing email address will
+              If you didn&apos;t request this change, you can safely ignore this email. Your existing email address will
               remain active.
             </Text>
 

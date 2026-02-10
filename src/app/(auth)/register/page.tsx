@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { isValidEmail } from "@/utils/helpers";
 import { AuthLayout } from "@/components/ui/auth-layout";
 import { Button } from "@/components/ui/button";
-import { Field, Label, Fieldset, ErrorMessage, Description } from "@/components/ui/fieldset";
+import { Field, Label, Fieldset, ErrorMessage } from "@/components/ui/fieldset";
 import { Heading } from "@/components/ui/heading";
 import { Input } from "@/components/ui/input";
 import { Strong, Text, TextLink } from "@/components/ui/text";
@@ -93,10 +93,10 @@ function RegisterForm() {
         {submitted && (
           <>
             <Text>
-              <Strong>We've sent a secure sign-in link to your email. Click it to access your dashboard.</Strong>
+              <Strong>We&apos;ve sent a secure sign-in link to your email. Click it to access your dashboard.</Strong>
             </Text>
 
-            <Text>If you don't see the email, check your spam folder.</Text>
+            <Text>If you don&apos;t see the email, check your spam folder.</Text>
           </>
         )}
 
