@@ -32,29 +32,27 @@ export default function Concern() {
   const [issues, setIssues] = useState<number[]>([]);
   const date = concern ? DateTime.fromISO(concern.created_at) : undefined; // Convert to date object
 
+  const getConcern = async () => {
+    const result = await getConcernData(Number(params.id));
+
+    if (result.error) {
+      setError(result.error);
+      return;
+    }
+
+    setConcern(result.data);
+
+    setStatus(
+      result.data?.activity.find((i): i is { created_at: string; status: number } => "status" in i)?.status ?? 0
+    ); // Latest status or default to "Awaiting review"
+
+    setIssues(result.data?.issues ?? []);
+    setDisabled(false);
+  };
+
   useEffect(() => {
-    if (dialogOpen) return;
-
-    const getConcern = async () => {
-      const result = await getConcernData(Number(params.id));
-
-      if (result.error) {
-        setError(result.error);
-        return;
-      }
-
-      setConcern(result.data);
-
-      setStatus(
-        result.data?.activity.find((i): i is { created_at: string; status: number } => "status" in i)?.status ?? 0
-      ); // Latest status or default to "Awaiting review"
-
-      setIssues(result.data?.issues ?? []);
-      setDisabled(false);
-    };
-
     getConcern();
-  }, [dialogOpen, status]);
+  }, [status]);
 
   return (
     <div className="mx-auto max-w-6xl">
@@ -129,6 +127,7 @@ export default function Concern() {
             concernID={Number(params.id)}
             disabled={disabled}
             setDisabled={setDisabled}
+            getConcern={getConcern}
           />
         </div>
       ) : (

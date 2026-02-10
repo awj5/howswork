@@ -64,59 +64,60 @@ export default function CheckIns() {
     // Success
     toast.success("Check-in scheduled");
     setDialogOpen(false);
+    getCheckIns(); // Reload list
+  };
+
+  const getCheckIns = async () => {
+    if (!companies.length) return;
+
+    // Pagination
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize - 1;
+
+    // Check if company has staff contacts
+    const { data: peopleData, error: peopleError } = await supabase
+      .from("people")
+      .select("contacts")
+      .eq("company_id", companies[0].id)
+      .single();
+
+    if (peopleError) {
+      console.error(peopleError);
+      return;
+    }
+
+    if (!peopleData.contacts || !peopleData.contacts.length) {
+      setNoStaffContacts(true);
+      setCheckIns(undefined);
+      return;
+    }
+
+    // Get check-ins
+    const {
+      data: checkInsData,
+      error: checkInsError,
+      count: checkInsCount,
+    } = await supabase
+      .from("check_ins")
+      .select("id, start, repeat, status, contact_count", {
+        count: "exact",
+      })
+      .eq("company_id", companies[0].id)
+      .order("start", { ascending: false })
+      .range(from, to);
+
+    if (checkInsError) {
+      console.error(checkInsError);
+      return;
+    }
+
+    setCheckIns(checkInsData);
+    setPageCount(Math.max(1, Math.ceil(checkInsCount! / pageSize)));
   };
 
   useEffect(() => {
-    if (!companies.length || disabled) return;
-
-    const getCheckIns = async () => {
-      // Pagination
-      const from = (page - 1) * pageSize;
-      const to = from + pageSize - 1;
-
-      // Check if company has staff contacts
-      const { data: peopleData, error: peopleError } = await supabase
-        .from("people")
-        .select("contacts")
-        .eq("company_id", companies[0].id)
-        .single();
-
-      if (peopleError) {
-        console.error(peopleError);
-        return;
-      }
-
-      if (!peopleData.contacts || !peopleData.contacts.length) {
-        setNoStaffContacts(true);
-        setCheckIns(undefined);
-        return;
-      }
-
-      // Get check-ins
-      const {
-        data: checkInsData,
-        error: checkInsError,
-        count: checkInsCount,
-      } = await supabase
-        .from("check_ins")
-        .select("id, start, repeat, status, contact_count", {
-          count: "exact",
-        })
-        .eq("company_id", companies[0].id)
-        .order("start", { ascending: false })
-        .range(from, to);
-
-      if (checkInsError) {
-        console.error(checkInsError);
-        return;
-      }
-
-      setCheckIns(checkInsData);
-      setPageCount(Math.max(1, Math.ceil(checkInsCount! / pageSize)));
-    };
-
     getCheckIns();
-  }, [companies, disabled, page]);
+  }, [companies, page]);
 
   return (
     <div className="mx-auto max-w-6xl">

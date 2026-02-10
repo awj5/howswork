@@ -13,6 +13,7 @@ type CommentProps = {
   setDialogOpen: Dispatch<SetStateAction<boolean>>;
   disabled: boolean;
   setDisabled: Dispatch<SetStateAction<boolean>>;
+  getConcern: () => Promise<void>;
 };
 
 export default function Comment(props: CommentProps) {
@@ -33,6 +34,7 @@ export default function Comment(props: CommentProps) {
     // Success
     toast.success("Comment added");
     props.setDialogOpen(false); // Close
+    props.getConcern();
   };
 
   useEffect(() => {

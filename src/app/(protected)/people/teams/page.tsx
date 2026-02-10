@@ -53,9 +53,9 @@ export default function Teams() {
 
   const removeTeamClick = async () => {
     if (!teamToRemove) return;
+    setAlertOpen(false);
     setDisabled(true);
     const result = await removeTeam(teamToRemove.id);
-    setAlertOpen(false);
     setDisabled(false);
 
     if (result.error) {
@@ -74,6 +74,8 @@ export default function Teams() {
   };
 
   const getTeams = async () => {
+    if (!companies.length) return;
+
     const { data: teamsData, error: teamsError } = await supabase
       .from("teams")
       .select("id, name")
@@ -89,7 +91,6 @@ export default function Teams() {
   };
 
   useEffect(() => {
-    if (!companies.length) return;
     getTeams();
   }, [companies]);
 
@@ -186,7 +187,7 @@ export default function Teams() {
             Cancel
           </Button>
 
-          <Button onClick={removeTeamClick} color="red" disabled={disabled}>
+          <Button onClick={removeTeamClick} color="red">
             Remove
           </Button>
         </AlertActions>

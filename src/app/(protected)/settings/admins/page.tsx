@@ -53,6 +53,7 @@ export default function Admins() {
     toast.success(result.success);
     setInviteEmail(""); // Reset
     setDialogOpen(false);
+    getUsers(); // Reload list
   };
 
   const removeUserClick = async () => {
@@ -76,6 +77,7 @@ export default function Admins() {
 
     // Success
     toast.success("Admin removed");
+    getUsers(); // Reload list
   };
 
   const confirmRemoveClick = (user: UserType) => {
@@ -83,49 +85,49 @@ export default function Admins() {
     setAlertOpen(true);
   };
 
+  const getUsers = async () => {
+    if (!companies.length) return;
+
+    const { data: companyUsersData, error: companyUsersError } = await supabase
+      .from("company_users")
+      .select("user_id, invite_email")
+      .eq("company_id", companies[0].id);
+
+    if (companyUsersError) {
+      console.error(companyUsersError);
+      return;
+    }
+
+    const userIDs = companyUsersData.map((i) => i.user_id).filter(Boolean); // Registered user IDs
+    const inviteEmails = companyUsersData.map((i) => i.invite_email).filter(Boolean); // Invited user emails
+
+    // Get profiles (don't show super admins unless it's their company)
+    const { data: profilesData, error: profilesError } = await supabase
+      .from("profiles")
+      .select("user_id, first_name, last_name, email")
+      .in("user_id", userIDs)
+      .or(`super_admin_company_id.is.null,super_admin_company_id.eq.${companies[0].id}`)
+      .order("first_name", { ascending: true });
+
+    if (profilesError) {
+      console.error(profilesError);
+      return;
+    }
+
+    // Add invited users to list
+    const invitedUsers = inviteEmails.map((email) => ({
+      user_id: "",
+      first_name: "",
+      last_name: "",
+      email,
+    }));
+
+    setUsers([...profilesData, ...invitedUsers]); // Combine
+  };
+
   useEffect(() => {
-    if (!companies.length || disabled) return;
-
-    const getUsers = async () => {
-      const { data: companyUsersData, error: companyUsersError } = await supabase
-        .from("company_users")
-        .select("user_id, invite_email")
-        .eq("company_id", companies[0].id);
-
-      if (companyUsersError) {
-        console.error(companyUsersError);
-        return;
-      }
-
-      const userIDs = companyUsersData.map((i) => i.user_id).filter(Boolean); // Registered user IDs
-      const inviteEmails = companyUsersData.map((i) => i.invite_email).filter(Boolean); // Invited user emails
-
-      // Get profiles (don't show super admins unless it's their company)
-      const { data: profilesData, error: profilesError } = await supabase
-        .from("profiles")
-        .select("user_id, first_name, last_name, email")
-        .in("user_id", userIDs)
-        .or(`super_admin_company_id.is.null,super_admin_company_id.eq.${companies[0].id}`)
-        .order("first_name", { ascending: true });
-
-      if (profilesError) {
-        console.error(profilesError);
-        return;
-      }
-
-      // Add invited users to list
-      const invitedUsers = inviteEmails.map((email) => ({
-        user_id: "",
-        first_name: "",
-        last_name: "",
-        email,
-      }));
-
-      setUsers([...profilesData, ...invitedUsers]); // Combine
-    };
-
     getUsers();
-  }, [companies, disabled]);
+  }, [companies]);
 
   return (
     <div className="mx-auto max-w-6xl">
