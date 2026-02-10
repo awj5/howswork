@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertActions, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from "@/components/ui/dialog";
-import { ErrorMessage, Field, Label } from "@/components/ui/fieldset";
+import { Field, Label } from "@/components/ui/fieldset";
 import { Input } from "@/components/ui/input";
 import { removeTeam, addTeam } from "./actions";
 import { Strong } from "@/components/ui/text";
@@ -31,19 +31,10 @@ export default function Teams() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [teamToRemove, setTeamToRemove] = useState<TeamType>();
   const [teamName, setTeamName] = useState("");
-  const [teamNameError, setTeamNameError] = useState(false);
   const [disabled, setDisabled] = useState(false);
 
   const addClick = async () => {
-    setTeamNameError(false);
-
-    // Validate
-    if (!teamName.trim()) {
-      setTeamNameError(true);
-      return;
-    }
-
-    // Send
+    if (!teamName.trim()) return; // Validate
     setDisabled(true);
     const result = await addTeam(teamName, companies[0]);
     setDisabled(false);
@@ -55,15 +46,16 @@ export default function Teams() {
 
     // Success
     toast.success("Team added");
-    setTeamName(""); // Reset
     setDialogOpen(false);
+    setTeamName(""); // Reset
+    getTeams(); // Reload list
   };
 
   const removeTeamClick = async () => {
-    setAlertOpen(false);
     if (!teamToRemove) return;
     setDisabled(true);
     const result = await removeTeam(teamToRemove.id);
+    setAlertOpen(false);
     setDisabled(false);
 
     if (result.error) {
@@ -73,6 +65,7 @@ export default function Teams() {
 
     // Success
     toast.success("Team removed");
+    getTeams(); // Reload list
   };
 
   const confirmRemoveClick = (team: TeamType) => {
@@ -80,26 +73,25 @@ export default function Teams() {
     setAlertOpen(true);
   };
 
+  const getTeams = async () => {
+    const { data: teamsData, error: teamsError } = await supabase
+      .from("teams")
+      .select("id, name")
+      .eq("company_id", companies[0].id)
+      .order("name", { ascending: true });
+
+    if (teamsError) {
+      console.error(teamsError);
+      return;
+    }
+
+    setTeams(teamsData);
+  };
+
   useEffect(() => {
-    if (!companies.length || disabled) return;
-
-    const getTeams = async () => {
-      const { data: teamsData, error: teamsError } = await supabase
-        .from("teams")
-        .select("id, name")
-        .eq("company_id", companies[0].id)
-        .order("name", { ascending: true });
-
-      if (teamsError) {
-        console.error(teamsError);
-        return;
-      }
-
-      setTeams(teamsData);
-    };
-
+    if (!companies.length) return;
     getTeams();
-  }, [companies, disabled]);
+  }, [companies]);
 
   return (
     <div className="mx-auto max-w-6xl">
@@ -148,7 +140,8 @@ export default function Teams() {
             <Subheading className="mt-4">No teams yet</Subheading>
 
             <Text className="mt-1 text-center">
-              Add your teams so staff can optionally identify which team they belong to during check-ins.
+              Teams are optional. They let staff choose which team they belong to during check-ins, without identifying
+              themselves.
             </Text>
 
             <Button onClick={() => setDialogOpen(true)} color="indigo" className="mt-6" disabled={disabled}>
@@ -163,22 +156,13 @@ export default function Teams() {
         <DialogTitle>Add new team</DialogTitle>
 
         <DialogDescription className="text-wrap!">
-          Team names are visible to all employees in <Strong>{companies[0]?.name.replace(/\.$/, "")}</Strong>.
+          Team names are visible to all employees at <Strong>{companies[0]?.name.replace(/\.$/, "")}</Strong>.
         </DialogDescription>
 
         <DialogBody>
           <Field>
             <Label>Name</Label>
-
-            <Input
-              type="text"
-              value={teamName}
-              onChange={(e) => setTeamName(e.target.value)}
-              invalid={teamNameError}
-              disabled={disabled}
-            />
-
-            {teamNameError && <ErrorMessage>This field is required.</ErrorMessage>}
+            <Input value={teamName} onChange={(e) => setTeamName(e.target.value)} disabled={disabled} />
           </Field>
         </DialogBody>
 
@@ -202,7 +186,7 @@ export default function Teams() {
             Cancel
           </Button>
 
-          <Button onClick={removeTeamClick} color="red">
+          <Button onClick={removeTeamClick} color="red" disabled={disabled}>
             Remove
           </Button>
         </AlertActions>

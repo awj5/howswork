@@ -6,7 +6,6 @@ import type { CompanyType } from "@/types";
 export async function addTeam(name: string, company: CompanyType) {
   const supabase = await createClient();
 
-  // Add team
   const { error: insertTeamError } = await supabase.from("teams").insert({
     name: name.trim(),
     company_id: company.id,
@@ -22,7 +21,7 @@ export async function addTeam(name: string, company: CompanyType) {
 
 export async function removeTeam(id: number) {
   const supabase = await createClient();
-  const { error: deleteTeamError } = await supabase.from("teams").delete().eq("id", id); // Delete team
+  const { error: deleteTeamError } = await supabase.from("teams").delete().eq("id", id);
 
   if (deleteTeamError) {
     console.error(deleteTeamError.message);
