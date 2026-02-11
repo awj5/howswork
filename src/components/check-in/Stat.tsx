@@ -14,7 +14,6 @@ export default function Stat(props: StatProps) {
   const sentimentIndex = Math.max(0, Math.floor((props.data.primary - 1) / (100 / SentimentsData.length))); // eg. 0-20 = 0, 81-100 = 4
   const sentiment =
     props.data.title === "Sentiment score" && props.data.primary ? SentimentsData[sentimentIndex] : undefined;
-  const isScheduled = props.status <= 2;
 
   return (
     <div>
@@ -34,11 +33,11 @@ export default function Stat(props: StatProps) {
         )}
 
         <div className="text-3xl/8 font-semibold sm:text-2xl/8">
-          {props.data.primaryText && !isScheduled ? props.data.primaryText : "—"}
+          {props.data.primaryText && props.status !== 1 ? props.data.primaryText : "—"}
         </div>
       </div>
 
-      {props.data.primaryText && !isScheduled && props.data.secondary ? (
+      {props.data.primaryText && props.status !== 1 && props.data.secondary ? (
         <div className="mt-3 flex items-center gap-1">
           <Badge color={props.data.title === "Concerns raised" ? "zinc" : trend === "up" ? "green" : "red"}>
             {trend === "up" && "+"}

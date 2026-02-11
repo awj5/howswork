@@ -58,7 +58,7 @@ export default function Issues(props: IssuesProps) {
             </TableBody>
           </Table>
         ) : (
-          <Text>{props.status > 2 ? "No issues reported" : "N/A"}</Text>
+          <Text>{props.status !== 1 ? "No issues reported" : "N/A"}</Text>
         )}
       </div>
     </div>

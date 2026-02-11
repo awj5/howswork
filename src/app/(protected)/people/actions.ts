@@ -18,6 +18,17 @@ export async function updateStaff(companyID: number, contacts: string[]) {
 
   if (normalizedContacts.length && normalizedContacts.length < 3) return { error: "At least 3 contacts are required" };
 
+  // Send welcome message to new contacts
+  const { data: welcomeSentData, error: welcomeSentError } = await supabase
+    .from("welcome_sent")
+    .select("contact")
+    .eq("company_id", companyID);
+
+  if (welcomeSentError) {
+    console.error(welcomeSentError.message);
+    return { error: "Internal server error" };
+  }
+
   // Update staff contacts (RLS only allows users in company to update it)
   const { error: updatePeopleError } = await supabase
     .from("people")

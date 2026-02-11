@@ -22,9 +22,8 @@ export function concernStatusColor(status: number) {
 
 export function checkInStatusText(status: number) {
   const texts: Record<number, string> = {
-    1: "Upcoming",
-    2: "Scheduled",
-    3: "Open",
+    1: "Scheduled",
+    2: "Open",
   };
 
   return texts[status] ?? "Closed";

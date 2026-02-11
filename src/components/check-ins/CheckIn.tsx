@@ -15,19 +15,12 @@ type CheckInProps = {
 export default function CheckIn(props: CheckInProps) {
   const searchParams = useSearchParams();
   const startDT = DateTime.fromISO(props.data.start); // Convert to date object
-  const isScheduled = props.data.status <= 2;
   const repeatWeeks = props.data.repeat / 7;
   const repeatText = repeatWeeks === 1 ? "Weekly" : repeatWeeks ? `${repeatWeeks} weeks` : "None";
 
   return (
-    <TableRow
-      href={
-        props.data.status !== 1
-          ? `/check-ins/${props.data.id}${searchParams.size ? `?${searchParams.toString()}` : ""}`
-          : undefined
-      }
-    >
-      <TableCell className={`font-medium ${isScheduled && "text-zinc-500"}`}>
+    <TableRow href={`/check-ins/${props.data.id}${searchParams.size ? `?${searchParams.toString()}` : ""}`}>
+      <TableCell className={`font-medium ${props.data.status === 1 && "text-zinc-500"}`}>
         <span className="inline-flex items-center gap-1.5">
           <time className="lg:hidden">{startDT.setZone(props.timezone).toFormat("ccc, dd LLL yyyy, h:mm a")}</time>
 
@@ -35,15 +28,15 @@ export default function CheckIn(props: CheckInProps) {
             {startDT.setZone(props.timezone).toFormat("cccc, dd LLLL yyyy, h:mm a")}
           </time>
 
-          {props.data.repeat && isScheduled ? <ArrowPathIcon className="size-5" /> : null}
+          {props.data.repeat && props.data.status === 1 ? <ArrowPathIcon className="size-5" /> : null}
         </span>
       </TableCell>
 
-      <TableCell className={`${isScheduled && "text-zinc-500"}`}>{repeatText}</TableCell>
+      <TableCell className={`${props.data.status === 1 && "text-zinc-500"}`}>{repeatText}</TableCell>
       <TableCell>{props.data.contact_count ?? "—"}</TableCell>
 
       <TableCell>
-        <Badge color={props.data.status === 4 ? "green" : isScheduled ? "zinc" : "amber"}>
+        <Badge color={props.data.status === 3 ? "green" : props.data.status === 2 ? "amber" : "zinc"}>
           {checkInStatusText(props.data.status)}
         </Badge>
       </TableCell>

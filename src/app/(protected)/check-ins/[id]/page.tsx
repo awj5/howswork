@@ -61,7 +61,6 @@ export default function CheckIn() {
         .from("check_ins")
         .select("id, start, status, repeat, pin, contact_count")
         .eq("id", Number(params.id))
-        .neq("status", 1)
         .single();
 
       if (checkInError) {
@@ -262,7 +261,7 @@ export default function CheckIn() {
             <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
               <Heading>Check-in Insights</Heading>
 
-              <Badge color={checkIn.status === 4 ? "green" : checkIn.status === 3 ? "amber" : "zinc"}>
+              <Badge color={checkIn.status === 3 ? "green" : checkIn.status === 2 ? "amber" : "zinc"}>
                 {checkInStatusText(checkIn.status)}
               </Badge>
             </div>
@@ -277,7 +276,7 @@ export default function CheckIn() {
                   </Text>
                 </time>
 
-                {checkIn.status !== 2 && (
+                {checkIn.status !== 1 && (
                   <div className="flex items-center gap-3">
                     <HashtagIcon className="size-4 text-zinc-400 dark:text-zinc-500" />
                     <Text className="text-zinc-950! dark:text-white!">PIN: {checkIn.pin}</Text>
@@ -285,10 +284,10 @@ export default function CheckIn() {
                 )}
               </div>
 
-              {checkIn.status >= 3 ? (
+              {checkIn.status >= 2 ? (
                 <Team val={team} setVal={setTeam} />
               ) : (
-                checkIn.status === 2 && (
+                checkIn.status === 1 && (
                   <Button onClick={() => setAlertOpen(true)} outline disabled={disabled}>
                     <TrashIcon />
                     Remove
