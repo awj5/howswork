@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import clsx from "clsx";
 
@@ -43,8 +44,12 @@ type DoodleProps = {
 
 export default function Doodle(props: DoodleProps) {
   const indices = Array.isArray(props.doodles) ? props.doodles : [props.doodles];
-  const index = indices[Math.floor(Math.random() * indices.length)];
-  const file = doodleFiles[index];
+  const [file, setFile] = useState<string>();
+
+  useEffect(() => {
+    const index = indices[Math.floor(Math.random() * indices.length)];
+    setFile(doodleFiles[index]);
+  }, []);
 
   return (
     <div className={clsx("aspect-4/3 w-2xs", props.className)}>
