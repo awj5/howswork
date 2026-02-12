@@ -8,6 +8,7 @@ import { CalendarIcon } from "@heroicons/react/16/solid";
 import StatusData from "@/data/status.json";
 import type { ConcernType } from "@/types";
 import { concernStatusColor } from "@/utils/helpers";
+import { useCompanies } from "@/hooks/useCompanies";
 import { Heading, Subheading } from "@/components/ui/heading";
 import EmptyState from "@/components/EmptyState";
 import Breadcrumb from "@/components/Breadcrumb";
@@ -24,6 +25,7 @@ import { getConcernData } from "./actions";
 export default function Concern() {
   const params = useParams<{ id: string }>();
   const searchParams = useSearchParams();
+  const companies = useCompanies();
   const [concern, setConcern] = useState<ConcernType>();
   const [error, setError] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -33,7 +35,8 @@ export default function Concern() {
   const date = concern ? DateTime.fromISO(concern.created_at) : undefined; // Convert to date object
 
   const getConcern = async () => {
-    const result = await getConcernData(Number(params.id));
+    if (!companies.length) return;
+    const result = await getConcernData(Number(params.id), companies[0].id);
 
     if (result.error) {
       setError(result.error);
@@ -52,7 +55,7 @@ export default function Concern() {
 
   useEffect(() => {
     getConcern();
-  }, [status]);
+  }, [companies, status]);
 
   return (
     <div className="mx-auto max-w-6xl">

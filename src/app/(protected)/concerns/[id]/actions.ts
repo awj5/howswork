@@ -3,12 +3,13 @@
 import { createClient } from "@/utils/supabase/server";
 import { encrypt, decrypt } from "@/utils/encryption";
 
-export async function getConcernData(id: number) {
+export async function getConcernData(id: number, companyID: number) {
   const supabase = await createClient();
 
   const { data: concernData, error: concernError } = await supabase
     .from("concerns")
     .select("id, tracking, details, created_at, issues")
+    .eq("company_id", companyID)
     .eq("id", id)
     .single();
 

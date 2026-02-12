@@ -60,6 +60,7 @@ export default function CheckIn() {
       const { data: checkInData, error: checkInError } = await supabase
         .from("check_ins")
         .select("id, start, status, repeat, pin, contact_count")
+        .eq("company_id", companies[0].id)
         .eq("id", Number(params.id))
         .single();
 
