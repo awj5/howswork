@@ -37,7 +37,7 @@ export async function updateStaff(companyID: number, contacts: string[]) {
     // Get company timezone
     const { data: companyData, error: companyError } = await supabase
       .from("companies")
-      .select("timezone")
+      .select("name, timezone")
       .eq("id", companyID)
       .single();
 
@@ -68,8 +68,87 @@ export async function updateStaff(companyID: number, contacts: string[]) {
     // Send emails
     const emails = newContacts.filter((contact) => contact.includes("@"));
     const from_email = isAus ? "no-reply@updates.howswork.com.au" : "no-reply@updates.howswork.app";
-    const subject = "Test";
-    const html = `<p>Hello</p>`;
+    const subject = `${companyData.name} uses HowsWork`;
+    const html = `<table border="0" width="100%" cellpadding="0" cellspacing="0" role="presentation" align="center">
+  <tbody>
+    <tr>
+      <td
+        style="
+          font-family:
+            ui-sans-serif, system-ui, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;,
+            &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;;
+        "
+      >
+        <table
+          align="center"
+          width="100%"
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="max-width: 37.5em; padding-bottom: 24px; padding-top: 24px"
+        >
+          <tbody>
+            <tr style="width: 100%">
+              <td>
+                <img
+                  alt="HowsWork"
+                  height="32"
+                  src="https://www.howswork.app/img/email-icon.png"
+                  style="display: block; outline: none; border: none; text-decoration: none"
+                  width="32"
+                />
+                <p style="font-size: 16px; line-height: 24px; margin-top: 16px; margin-bottom: 16px">Hi there,</p>
+                <p style="font-size: 16px; line-height: 24px; margin-top: 16px; margin-bottom: 16px">
+                  <strong>${companyData.name}</strong> uses <strong>HowsWork</strong> to give you a safe, anonymous way to share
+                  how things are going at work and raise any concerns.
+                </p>
+                <p style="font-size: 16px; line-height: 24px; margin-top: 16px; margin-bottom: 16px">
+                  You&#x27;ll receive a check-in request soon. Your responses are always anonymous and can never be
+                  traced back to you.
+                </p>
+                <p
+                  style="
+                    font-size: 16px;
+                    line-height: 24px;
+                    color: rgb(79, 57, 246);
+                    margin-top: 16px;
+                    margin-bottom: 16px;
+                  "
+                >
+                  <strong>No login. No tracking. Fully encrypted.</strong>
+                </p>
+                <p style="font-size: 14px; line-height: 24px; margin-top: 16px; margin-bottom: 16px">
+                  <a
+                    href="https://articles.howswork.app/how-howswork-protects-your-privacy/"
+                    style="color: #067df7; text-decoration-line: none"
+                    target="_blank"
+                    >Learn more about how HowsWork protects your privacy</a
+                  >
+                </p>
+                <hr
+                  style="width: 100%; border: none; border-top: 1px solid #eaeaea; border-color: rgb(16, 24, 40, 10%)"
+                />
+                <p
+                  style="
+                    font-size: 12px;
+                    line-height: 24px;
+                    color: rgb(74, 85, 101);
+                    margin-top: 16px;
+                    margin-bottom: 16px;
+                  "
+                >
+                  HowsWork Pty Ltd, 32 York St, Sydney 2000<br />Questions? Contact us at support@howswork.app
+                </p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+`;
 
     if (emails.length) {
       const emailRecords = emails.map((email) => ({
@@ -85,7 +164,11 @@ export async function updateStaff(companyID: number, contacts: string[]) {
 
     // Send SMS
     const phoneNumbers = newContacts.filter((contact) => !contact.includes("@"));
-    const smsMessage = `Test`;
+    const smsMessage = `Welcome to HowsWork
+
+${companyData.name} uses HowsWork so you can share how things are going and raise any concerns, completely anonymous.
+
+You'll receive a quick check-in soon. No app or sign-up needed.`;
 
     if (phoneNumbers.length) {
       const smsRecords = phoneNumbers.map((phone) => ({

@@ -28,7 +28,7 @@ export default function CheckIn(props: CheckInProps) {
             <CodeInline className="rounded-[6px] bg-gray-200 px-[4px] py-[2px] text-[20px]">{props.code}</CodeInline>
 
             <Text className="text-[16px] text-indigo-600">
-              <strong>No login, no tracking, fully encrypted.</strong>
+              <strong>No login. No tracking. Fully encrypted.</strong>
             </Text>
 
             <Text className="text-[16px]">
