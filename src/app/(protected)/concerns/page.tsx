@@ -28,6 +28,7 @@ export default function Concerns() {
   const [concerns, setConcerns] = useState<ConcernType[]>();
   const [noCheckIns, setNoCheckIns] = useState(false);
   const [pageCount, setPageCount] = useState(0);
+  const [doodleLoaded, setDoodleLoaded] = useState(false);
   const pageSize = 25;
   const page = Number(searchParams.get("page")) || 1; // Default to page 1
 
@@ -171,8 +172,8 @@ export default function Concerns() {
           <TablePagination page={page} pageCount={pageCount} route="/concerns" params={["issue"]} />
         </div>
       ) : concerns ? (
-        <EmptyState className="fade-in">
-          <Doodle doodles={13} />
+        <EmptyState className={doodleLoaded ? "fade-in" : "opacity-0"}>
+          <Doodle doodles={13} onLoad={() => setDoodleLoaded(true)} />
           <Subheading className="mt-4">No concerns reported</Subheading>
 
           <Text className="mt-1 text-center">
@@ -181,8 +182,8 @@ export default function Concerns() {
         </EmptyState>
       ) : (
         noCheckIns && (
-          <EmptyState className="fade-in">
-            <Doodle doodles={9} />
+          <EmptyState className={doodleLoaded ? "fade-in" : "opacity-0"}>
+            <Doodle doodles={9} onLoad={() => setDoodleLoaded(true)} />
             <Subheading className="mt-4">Concern reporting not active</Subheading>
 
             <Text className="mt-1 text-center">

@@ -35,6 +35,7 @@ export default function CheckIns() {
   const [checkIns, setCheckIns] = useState<CheckInType[]>();
   const [noStaffContacts, setNoStaffContacts] = useState(false);
   const [pageCount, setPageCount] = useState(0);
+  const [doodleLoaded, setDoodleLoaded] = useState(false);
   const pageSize = 25;
   const page = Number(searchParams.get("page")) || 1; // Default to page 1
 
@@ -157,8 +158,8 @@ export default function CheckIns() {
           <TablePagination page={page} pageCount={pageCount} route="/check-ins" />
         </div>
       ) : checkIns ? (
-        <EmptyState className="fade-in">
-          <Doodle doodles={28} />
+        <EmptyState className={doodleLoaded ? "fade-in" : "opacity-0"}>
+          <Doodle doodles={28} onLoad={() => setDoodleLoaded(true)} />
           <Subheading className="mt-4">No check-ins scheduled</Subheading>
 
           <Text className="mt-1 text-center">
@@ -172,8 +173,8 @@ export default function CheckIns() {
         </EmptyState>
       ) : (
         noStaffContacts && (
-          <EmptyState className="fade-in">
-            <Doodle doodles={25} />
+          <EmptyState className={doodleLoaded ? "fade-in" : "opacity-0"}>
+            <Doodle doodles={25} onLoad={() => setDoodleLoaded(true)} />
             <Subheading className="mt-4">No staff contacts</Subheading>
             <Text className="mt-1 text-center">Add staff contacts to enable check-ins.</Text>
 

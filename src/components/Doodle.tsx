@@ -40,6 +40,7 @@ const doodleFiles = [
 type DoodleProps = {
   doodles: number | number[];
   className?: string;
+  onLoad?: () => void;
 };
 
 export default function Doodle(props: DoodleProps) {
@@ -48,32 +49,14 @@ export default function Doodle(props: DoodleProps) {
 
   useEffect(() => {
     const index = indices[Math.floor(Math.random() * indices.length)];
-    setFile(doodleFiles[index]);
+    const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const path = isDark ? "/img/doodles/dark/" : "/img/doodles/";
+    setFile(path + doodleFiles[index]);
   }, []);
 
   return (
     <div className={clsx("aspect-4/3 w-2xs", props.className)}>
-      {file && (
-        <>
-          <Image
-            src={`/img/doodles/${file}`}
-            width={1024}
-            height={768}
-            alt=""
-            className="inline dark:hidden"
-            priority
-          />
-
-          <Image
-            src={`/img/doodles/dark/${file}`}
-            width={1024}
-            height={768}
-            alt=""
-            className="not-dark:hidden"
-            priority
-          />
-        </>
-      )}
+      {file && <Image src={file} width={1024} height={768} alt="Doodle" onLoad={props.onLoad} priority />}
     </div>
   );
 }

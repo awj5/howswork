@@ -32,6 +32,7 @@ export default function Teams() {
   const [teamToRemove, setTeamToRemove] = useState<TeamType>();
   const [teamName, setTeamName] = useState("");
   const [disabled, setDisabled] = useState(false);
+  const [doodleLoaded, setDoodleLoaded] = useState(false);
 
   const addClick = async () => {
     if (!teamName.trim()) return; // Validate
@@ -136,8 +137,8 @@ export default function Teams() {
         </div>
       ) : (
         teams && (
-          <EmptyState className="fade-in">
-            <Doodle doodles={6} />
+          <EmptyState className={doodleLoaded ? "fade-in" : "opacity-0"}>
+            <Doodle doodles={6} onLoad={() => setDoodleLoaded(true)} />
             <Subheading className="mt-4">No teams yet</Subheading>
 
             <Text className="mt-1 text-center">
