@@ -24,7 +24,7 @@ export default function ChangeEmailAddress(props: ChangeEmailAddressProps) {
 
             <Button
               href="{{ .ConfirmationURL }}"
-              className="rounded-[6px] bg-indigo-600 px-[14px] py-[10px] text-[14px] font-semibold text-white"
+              className="rounded-[6px] bg-indigo-600 px-[16px] py-[12px] text-[14px] font-semibold text-white"
             >
               Confirm email change
             </Button>
