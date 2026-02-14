@@ -47,7 +47,7 @@ export async function deleteCompany(companyID: number) {
   // Get company users
   const { data: companyUsersData, error: companyUsersError } = await supabase
     .from("company_users")
-    .select("*")
+    .select("id")
     .eq("company_id", companyID);
 
   if (companyUsersError) {
@@ -57,7 +57,25 @@ export async function deleteCompany(companyID: number) {
 
   if (companyUsersData.length > 1) return { error: "All admins must be removed before this company can be deleted" };
 
-  // There is only one user left so delete the company
+  // Get auth user
+  const { data: authData, error: authError } = await supabase.auth.getUser();
+  if (authError || !authData.user) return { error: "Not authenticated" };
+
+  // Get company name
+  const { data: companiesData, error: companiesError } = await supabaseAdmin
+    .from("companies")
+    .select("name")
+    .eq("id", companyID)
+    .single();
+
+  if (companiesError) {
+    console.error(companiesError.message);
+    return { error: "Internal server error" };
+  }
+
+  const companyName = companiesData.name;
+
+  // There is only one admin left so delete the company
   const { error: deleteCompanyError } = await supabase.from("companies").delete().eq("id", companyID);
 
   if (deleteCompanyError) {
@@ -65,5 +83,12 @@ export async function deleteCompany(companyID: number) {
     return { error: "Internal server error" };
   }
 
+  // Record company deletion
+  const { error: insertCompanyDeletedError } = await supabaseAdmin.from("company_deleted").insert({
+    name: companyName,
+    email: authData.user.email,
+  });
+
+  if (insertCompanyDeletedError) console.error(insertCompanyDeletedError.message);
   return { success: true };
 }

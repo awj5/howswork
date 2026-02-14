@@ -37,7 +37,7 @@ export async function updateStaff(companyID: number, contacts: string[]) {
     // Get company timezone
     const { data: companyData, error: companyError } = await supabase
       .from("companies")
-      .select("name, timezone")
+      .select("id, name, timezone")
       .eq("id", companyID)
       .single();
 
@@ -155,6 +155,7 @@ export async function updateStaff(companyID: number, contacts: string[]) {
         from_email,
         subject,
         html,
+        company_id: companyData.id,
       }));
 
       const { error: emailQueueError } = await supabaseAdmin.from("email_queue").insert(emailRecords);
@@ -173,6 +174,7 @@ You'll receive a quick check-in soon. No app or sign-up needed.`;
       const smsRecords = phoneNumbers.map((phone) => ({
         phone_number: phone,
         message: smsMessage,
+        company_id: companyData.id,
       }));
 
       const { error: smsQueueError } = await supabaseAdmin.from("sms_queue").insert(smsRecords);
