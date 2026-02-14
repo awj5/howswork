@@ -19,8 +19,6 @@ export default function InviteAdmin(props: InviteAdminProps) {
               <strong>{props.company}</strong> has invited you to access <strong>HowsWork</strong> as an administrator.
             </Text>
 
-            <Text className="text-[16px]">Use the link below to get started:</Text>
-
             <Button
               href={props.url}
               className="rounded-[6px] bg-indigo-600 px-[16px] py-[12px] text-[14px] font-semibold text-white"

@@ -20,7 +20,7 @@ export default function CheckIn(props: CheckInProps) {
 
   return (
     <TableRow href={`/check-ins/${props.data.id}${searchParams.size ? `?${searchParams.toString()}` : ""}`}>
-      <TableCell className={`font-medium ${props.data.status === 1 && "text-zinc-500"}`}>
+      <TableCell className={`font-medium ${props.data.status === 1 && "text-zinc-500 dark:text-zinc-400"}`}>
         <span className="inline-flex items-center gap-1.5">
           <time className="lg:hidden">{startDT.setZone(props.timezone).toFormat("ccc, dd LLL yyyy, h:mm a")}</time>
 
@@ -32,8 +32,11 @@ export default function CheckIn(props: CheckInProps) {
         </span>
       </TableCell>
 
-      <TableCell className={`${props.data.status === 1 && "text-zinc-500"}`}>{repeatText}</TableCell>
-      <TableCell>{props.data.contact_count ?? "—"}</TableCell>
+      <TableCell className={`${props.data.status === 1 && "text-zinc-500 dark:text-zinc-400"}`}>{repeatText}</TableCell>
+
+      <TableCell className={`${props.data.status === 1 && "text-zinc-500 dark:text-zinc-400"}`}>
+        {props.data.contact_count ?? "—"}
+      </TableCell>
 
       <TableCell>
         <Badge color={props.data.status === 3 ? "green" : props.data.status === 2 ? "amber" : "zinc"}>

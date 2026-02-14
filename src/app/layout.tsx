@@ -42,7 +42,7 @@ export default function RootLayout({
     >
       <body>
         {children}
-        <Toaster theme="system" richColors />
+        <Toaster theme="system" duration={5000} richColors />
       </body>
     </html>
   );

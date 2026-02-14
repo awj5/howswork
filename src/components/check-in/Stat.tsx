@@ -11,6 +11,7 @@ type StatProps = {
 
 export default function Stat(props: StatProps) {
   const trend = props.data.secondary > 0 ? "up" : "down";
+  const showData = props.data.primaryText && props.status !== 1;
   const sentimentIndex = Math.max(0, Math.floor((props.data.primary - 1) / (100 / SentimentsData.length))); // eg. 0-20 = 0, 81-100 = 4
   const sentiment =
     props.data.title === "Sentiment score" && props.data.primary ? SentimentsData[sentimentIndex] : undefined;
@@ -32,18 +33,18 @@ export default function Stat(props: StatProps) {
           />
         )}
 
-        <div className="text-3xl/8 font-semibold sm:text-2xl/8">
-          {props.data.primaryText && props.status !== 1 ? props.data.primaryText : "—"}
+        <div className={`text-3xl/8 font-semibold ${!showData && "text-zinc-500 dark:text-zinc-400"} sm:text-2xl/8`}>
+          {showData ? props.data.primaryText : "—"}
         </div>
       </div>
 
-      {props.data.primaryText && props.status !== 1 && props.data.secondary ? (
+      {showData && props.data.secondary ? (
         <div className="mt-3 flex items-center gap-1">
           <Badge color={props.data.title === "Concerns raised" ? "zinc" : trend === "up" ? "green" : "red"}>
             {trend === "up" && "+"}
             {props.data.secondary}%
           </Badge>
-          <span className="text-sm/6 text-zinc-500 sm:text-xs/6">from last check-in</span>
+          <span className="text-sm/6 text-zinc-500 sm:text-xs/6 dark:text-zinc-400">from last check-in</span>
         </div>
       ) : null}
     </div>

@@ -20,6 +20,7 @@ export async function scheduleCheckIn(companyID: number, start: string, repeat: 
   }
 
   const startDT = DateTime.fromISO(start, { zone: companyData.timezone }).toUTC(); // Convert to UTC using company timezone
+  if (startDT < DateTime.utc()) return { error: "Start date & time must be in the future" };
   const startISO = startDT.toISO(); // Convert to ISO to store in Supabase
   const pin = randomInt(100000, 1000000).toString(); // Generate random pin
   const startPrevWeek = startDT.minus({ days: 7 }).toISO();

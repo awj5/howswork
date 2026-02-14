@@ -65,9 +65,7 @@ export async function inviteUser(email: string, company: CompanyType) {
     const { error: sendInviteError } = await resend.emails.send({
       from: "HowsWork <no-reply@updates.howswork.app>",
       to: email,
-      subject: profileData
-        ? `Administrator access granted for ${company.name}`
-        : `${company.name} has invited you to HowsWork`,
+      subject: profileData ? `Admin access granted for ${company.name}` : `${company.name} has invited you to HowsWork`,
       react: profileData
         ? ConfirmAdmin({
             company: company.name,

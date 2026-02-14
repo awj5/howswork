@@ -156,11 +156,13 @@ export default function Admins() {
           <TableBody>
             {users.map((admin) => (
               <TableRow key={admin.email}>
-                <TableCell className={`font-medium ${!admin.user_id && "text-zinc-500"}`}>
+                <TableCell className={`font-medium ${!admin.user_id && "text-zinc-500 dark:text-zinc-400"}`}>
                   {admin.user_id ? `${admin.first_name} ${admin.last_name}` : "Invite sent"}
                 </TableCell>
 
-                <TableCell className={`${!admin.user_id && "text-zinc-500"}`}>{admin.email}</TableCell>
+                <TableCell className={`${!admin.user_id && "text-zinc-500 dark:text-zinc-400"}`}>
+                  {admin.email}
+                </TableCell>
 
                 <TableCell className="text-right">
                   <Button onClick={() => confirmRemoveClick(admin)} disabled={disabled} outline>

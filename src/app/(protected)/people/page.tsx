@@ -115,10 +115,10 @@ export default function People() {
 
           <div data-slot="description" className="flex items-center gap-1.5">
             <Description>
-              Enter one contact per employee (email OR mobile, not both). Separate by comma or line break.
+              Enter one contact per employee (email or mobile, not both). Separate by comma or line break.
             </Description>
 
-            <HelperTooltip text="Group email addresses (e.g. team@company.com) count as one employee contact." />
+            <HelperTooltip text="Group email addresses (e.g. team@company.com) count as one staff contact." />
           </div>
 
           <Textarea

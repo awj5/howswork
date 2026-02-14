@@ -104,8 +104,7 @@ export async function updateStaff(companyID: number, contacts: string[]) {
                   how things are going at work and raise any concerns.
                 </p>
                 <p style="font-size: 16px; line-height: 24px; margin-top: 16px; margin-bottom: 16px">
-                  You&#x27;ll receive a check-in request soon. Your responses are always anonymous and can never be
-                  traced back to you.
+                You&#x27;ll receive a check-in request soon. After your first check-in, you can also raise a concern at any time. Your responses are always anonymous and can never be traced back to you.
                 </p>
                 <p
                   style="

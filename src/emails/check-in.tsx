@@ -18,7 +18,8 @@ export default function CheckIn(props: CheckInProps) {
 
             <Text className="text-[16px]">
               <strong>{props.company}</strong> is using <strong>HowsWork</strong>, a safe, anonymous way to share how
-              you&apos;re really doing and raise workplace concerns.
+              you&apos;re really doing and raise workplace concerns. They&apos;ve requested a quick check-in. It takes
+              less than a minute.
             </Text>
 
             <Text className="text-[16px]">
@@ -27,21 +28,16 @@ export default function CheckIn(props: CheckInProps) {
 
             <CodeInline className="rounded-[6px] bg-gray-200 px-[4px] py-[2px] text-[20px]">{props.code}</CodeInline>
 
-            <Text className="text-[16px] text-indigo-600">
-              <strong>No login. No tracking. Fully encrypted.</strong>
-            </Text>
-
-            <Text className="text-[16px]">
-              <strong>{props.company}</strong> has requested a quick check-in to understand how things are going. It
-              takes less than a minute.
-            </Text>
-
             <Button
               href={`https://howswork.app/${props.slug}`}
-              className="block rounded-[6px] bg-indigo-600 px-[16px] py-[12px] text-center text-[14px] font-semibold text-white"
+              className="mt-[20px] block rounded-[6px] bg-indigo-600 px-[16px] py-[12px] text-center text-[14px] font-semibold text-white"
             >
               Complete check-in
             </Button>
+
+            <Text className="text-[16px] text-indigo-600">
+              <strong>No login. No tracking. Fully encrypted.</strong>
+            </Text>
 
             <Text className="text-[16px]">
               You can also visit https://howswork.app/{props.slug} anytime to raise concerns anonymously.

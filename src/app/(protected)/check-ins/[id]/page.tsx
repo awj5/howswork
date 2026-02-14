@@ -16,7 +16,7 @@ import Breadcrumb from "@/components/Breadcrumb";
 import { Alert, AlertActions, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Text } from "@/components/ui/text";
+import { Code, Text } from "@/components/ui/text";
 import EmptyState from "@/components/EmptyState";
 import Stat from "@/components/check-in/Stat";
 import Issues from "@/components/check-in/Issues";
@@ -280,7 +280,9 @@ export default function CheckIn() {
                 {checkIn.status !== 1 && (
                   <div className="flex items-center gap-3">
                     <HashtagIcon className="size-4 text-zinc-400 dark:text-zinc-500" />
-                    <Text className="text-zinc-950! dark:text-white!">PIN: {checkIn.pin}</Text>
+                    <Text className="text-zinc-950! dark:text-white!">
+                      PIN: <Code>{checkIn.pin}</Code>
+                    </Text>
                   </div>
                 )}
               </div>
