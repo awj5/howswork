@@ -69,7 +69,7 @@ export default function RiskRegister() {
     // Using state to make sure no risks empty state is not shown when risks exist
     const issue = searchParams.get("issue");
     setIssueFilter(issue ? issue : issueFilter ? "" : undefined);
-  }, [searchParams.get("issue")]);
+  }, [searchParams]);
 
   useEffect(() => {
     getRisks();
