@@ -57,3 +57,9 @@ export type ConcernType = {
   activity?: ConcernActivityType[];
   status?: number;
 };
+
+export type RiskType = {
+  id: number;
+  issues: number[];
+  description: string;
+};

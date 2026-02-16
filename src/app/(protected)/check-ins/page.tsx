@@ -36,7 +36,7 @@ export default function CheckIns() {
   const [noStaffContacts, setNoStaffContacts] = useState(false);
   const [pageCount, setPageCount] = useState(0);
   const [doodleLoaded, setDoodleLoaded] = useState(false);
-  const pageSize = 25;
+  const pageSize = 50;
   const page = Number(searchParams.get("page")) || 1; // Default to page 1
 
   const scheduleClick = async () => {

@@ -27,9 +27,9 @@ export default function Concerns() {
   const [debouncedSearch, setDebouncedSearch] = useState<string>();
   const [concerns, setConcerns] = useState<ConcernType[]>();
   const [noCheckIns, setNoCheckIns] = useState(false);
-  const [pageCount, setPageCount] = useState(0);
   const [doodleLoaded, setDoodleLoaded] = useState(false);
-  const pageSize = 25;
+  const [pageCount, setPageCount] = useState(0);
+  const pageSize = 50;
   const page = Number(searchParams.get("page")) || 1; // Default to page 1
 
   useEffect(() => {
@@ -50,7 +50,7 @@ export default function Concerns() {
     const getConcerns = async () => {
       // Pagination
       if (page !== 1 && debouncedSearch !== searchRef.current) {
-        // Reset to page 1 on search or filter
+        // Reset to page 1 on search
         router.replace("/concerns");
         return;
       }
@@ -59,7 +59,7 @@ export default function Concerns() {
       const from = (page - 1) * pageSize;
       const to = from + pageSize - 1;
 
-      // Get Concerns
+      // Get data
       let concernsQuery = supabase
         .from("concerns")
         .select("id, tracking, created_at, issues", {
