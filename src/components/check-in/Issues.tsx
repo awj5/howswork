@@ -18,7 +18,7 @@ export default function Issues(props: IssuesProps) {
 
       <div className="mt-4">
         {props.data?.length ? (
-          <Table className="[--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]" dense>
+          <Table className="[--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
             <TableHead>
               <TableRow>
                 <TableHeader>Issue</TableHeader>
@@ -36,18 +36,20 @@ export default function Issues(props: IssuesProps) {
                     <TableCell className="font-medium">{name}</TableCell>
                     <TableCell>{issue.count}</TableCell>
 
-                    <TableCell className="space-x-3">
+                    <TableCell>
                       {issue.attributions.length ? (
-                        issue.attributions.map((attribution) => {
-                          const label = AttributionsData.find((i) => i.id === attribution.id)?.label;
+                        <div className="flex min-w-3xs flex-wrap gap-3">
+                          {issue.attributions.map((attribution) => {
+                            const label = AttributionsData.find((i) => i.id === attribution.id)?.label;
 
-                          return (
-                            <Badge key={attribution.id}>
-                              {label}
-                              {attribution.count > 1 && ` (${attribution.count})`}
-                            </Badge>
-                          );
-                        })
+                            return (
+                              <Badge key={attribution.id}>
+                                {label}
+                                {attribution.count > 1 && ` (${attribution.count})`}
+                              </Badge>
+                            );
+                          })}
+                        </div>
                       ) : (
                         <Text>—</Text>
                       )}

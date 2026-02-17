@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { toast } from "sonner";
 import { DocumentPlusIcon, ArrowDownTrayIcon } from "@heroicons/react/16/solid";
 import type { RiskType } from "@/types";
 import { useCompanies } from "@/hooks/useCompanies";
@@ -15,8 +14,9 @@ import Risk from "@/components/risk-register/Risk";
 import { Text } from "@/components/ui/text";
 import EmptyState from "@/components/EmptyState";
 import Doodle from "@/components/Doodle";
-import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from "@/components/ui/dialog";
-import { getRisksData, addRisk } from "./actions";
+import ExportDialog from "@/components/risk-register/ExportDialog";
+import RiskDialog from "@/components/risk-register/RiskDialog";
+import { getRisksData } from "./actions";
 
 export default function RiskRegister() {
   const searchParams = useSearchParams();
@@ -24,27 +24,13 @@ export default function RiskRegister() {
   const [disabled, setDisabled] = useState(false);
   const [sort, setSort] = useState("status");
   const [risks, setRisks] = useState<RiskType[]>();
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [exportDialogOpen, setExportDialogOpen] = useState(false);
+  const [riskDialogOpen, setRiskDialogOpen] = useState(false);
   const [issueFilter, setIssueFilter] = useState<string>();
   const [doodleLoaded, setDoodleLoaded] = useState(false);
   const [pageCount, setPageCount] = useState(0);
   const pageSize = 50;
-  const page = Number(searchParams.get("page")) || 1; // Default to page 1
-
-  const addClick = async () => {
-    setDisabled(true);
-    const result = await addRisk(companies[0]?.id);
-    setDisabled(false);
-
-    if (result.error) {
-      toast.error(result.error);
-      return;
-    }
-
-    // Success
-    toast.success("Risk added");
-    getRisks();
-  };
+  const page = Number(searchParams.get("page")) || 1; // Default to page 1;
 
   const getRisks = async () => {
     if (!companies.length) return;
@@ -76,7 +62,7 @@ export default function RiskRegister() {
   }, [companies, page, issueFilter]);
 
   return (
-    <div className="mx-auto max-w-6xl">
+    <>
       {risks && (risks.length || issueFilter !== undefined) ? (
         <div className="fade-in">
           <div className="flex flex-col justify-between gap-x-6 gap-y-4 sm:flex-row sm:items-end">
@@ -89,12 +75,12 @@ export default function RiskRegister() {
             </div>
 
             <div className="flex gap-4">
-              <Button onClick={() => setDialogOpen(true)} outline disabled={disabled}>
+              <Button onClick={() => setExportDialogOpen(true)} outline disabled={disabled}>
                 <ArrowDownTrayIcon />
                 Export
               </Button>
 
-              <Button onClick={addClick} color="indigo" disabled={disabled}>
+              <Button onClick={() => setRiskDialogOpen(true)} color="indigo" disabled={disabled}>
                 <DocumentPlusIcon />
                 Add risk
               </Button>
@@ -109,8 +95,8 @@ export default function RiskRegister() {
                   <TableHeader>Issues</TableHeader>
                   <TableHeader>Description</TableHeader>
                   <TableHeader>Level</TableHeader>
-                  <TableHeader>Status</TableHeader>
                   <TableHeader>Reviewed</TableHeader>
+                  <TableHeader>Status</TableHeader>
                   <TableHeader>Owner</TableHeader>
                 </TableRow>
               </TableHead>
@@ -138,7 +124,7 @@ export default function RiskRegister() {
               manually.
             </Text>
 
-            <Button onClick={addClick} outline className="mt-6">
+            <Button onClick={() => setRiskDialogOpen(true)} outline className="mt-6">
               <DocumentPlusIcon />
               Add risk
             </Button>
@@ -146,25 +132,20 @@ export default function RiskRegister() {
         )
       )}
 
-      <Dialog open={dialogOpen} onClose={setDialogOpen}>
-        <DialogTitle>Schedule a check-in</DialogTitle>
+      <ExportDialog
+        open={exportDialogOpen}
+        setOpen={setExportDialogOpen}
+        disabled={disabled}
+        setDisabled={setDisabled}
+      />
 
-        <DialogDescription className="text-wrap!">
-          Employees will be notified when the check-in begins and can respond anonymously using a shared access PIN.
-        </DialogDescription>
-
-        <DialogBody></DialogBody>
-
-        <DialogActions>
-          <Button plain onClick={() => setDialogOpen(false)}>
-            Cancel
-          </Button>
-
-          <Button onClick={() => null} color="indigo" disabled={disabled}>
-            Add
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+      <RiskDialog
+        open={riskDialogOpen}
+        setOpen={setRiskDialogOpen}
+        disabled={disabled}
+        setDisabled={setDisabled}
+        getRisks={getRisks}
+      />
+    </>
   );
 }

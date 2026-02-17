@@ -59,7 +59,9 @@ export type ConcernType = {
 };
 
 export type RiskType = {
-  id: number;
-  issues: number[];
+  id?: number;
+  date_raised: string;
+  date_reviewed: string;
+  issues?: number[];
   description: string;
 };

@@ -1,0 +1,154 @@
+"use client";
+
+import { Dispatch, SetStateAction, useState } from "react";
+import { toast } from "sonner";
+import { addRisk } from "@/app/(protected)/risk-register/actions";
+import { useCompanies } from "@/hooks/useCompanies";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import { Divider } from "@/components/ui/divider";
+import { ErrorMessage, Field, FieldGroup, Label } from "@/components/ui/fieldset";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import Issues from "./risk-dialog/Issues";
+
+type RiskDialogProps = {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  disabled: boolean;
+  setDisabled: Dispatch<SetStateAction<boolean>>;
+  getRisks: () => Promise<void>;
+};
+
+type FormErrorsType = {
+  dateRaised?: boolean;
+  dateReviewed?: boolean;
+  description?: boolean;
+};
+
+export default function RiskDialog(props: RiskDialogProps) {
+  const companies = useCompanies();
+  const [formErrors, setFormErrors] = useState<FormErrorsType>({});
+  const [dateRaised, setDateRaised] = useState("");
+  const [dateReviewed, setDateReviewed] = useState("");
+  const [issues, setIssues] = useState<number[]>([]);
+  const [description, setDescription] = useState("");
+
+  const submit = async () => {
+    if (!companies.length) return;
+
+    // Validate
+    const errors: FormErrorsType = {};
+    if (!dateRaised) errors.dateRaised = true;
+    if (!dateReviewed) errors.dateReviewed = true;
+    if (!description.trim()) errors.description = true;
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
+
+    setFormErrors({});
+
+    // Add risk
+    props.setDisabled(true);
+
+    const result = await addRisk(companies[0].id, {
+      date_raised: dateRaised,
+      date_reviewed: dateReviewed,
+      issues,
+      description,
+    });
+
+    props.setDisabled(false);
+
+    if (result.error) {
+      toast.error(result.error);
+      return;
+    }
+
+    // Success
+    toast.success("Risk added");
+    props.setOpen(false); // Close
+    props.getRisks(); // Reload risk list
+
+    // Reset
+    setDateRaised("");
+    setDateReviewed("");
+    setIssues([]);
+    setDescription("");
+  };
+
+  return (
+    <Dialog open={props.open} onClose={props.setOpen} size="2xl">
+      <DialogTitle>Add a risk</DialogTitle>
+
+      <DialogDescription className="text-wrap!">
+        Manually add a risk identified outside of HowsWork, such as from a workplace observation, incident, or team
+        meeting.
+      </DialogDescription>
+
+      <DialogBody>
+        <Divider className="mb-8" />
+
+        <div className="grid grid-cols-2 gap-4">
+          <Field disabled={props.disabled}>
+            <Label>Date raised</Label>
+
+            <Input
+              type="date"
+              value={dateRaised}
+              onChange={(e) => setDateRaised(e.target.value)}
+              invalid={formErrors.dateRaised}
+            />
+
+            {formErrors.dateRaised && <ErrorMessage>This field is required.</ErrorMessage>}
+          </Field>
+
+          <Field disabled={props.disabled}>
+            <Label>Date reviewed</Label>
+
+            <Input
+              type="date"
+              value={dateReviewed}
+              onChange={(e) => setDateReviewed(e.target.value)}
+              invalid={formErrors.dateReviewed}
+            />
+
+            {formErrors.dateReviewed && <ErrorMessage>This field is required.</ErrorMessage>}
+          </Field>
+        </div>
+
+        <Divider className="my-8" soft />
+        <Issues val={issues} setVal={setIssues} disabled={props.disabled} />
+        <Divider className="my-8" soft />
+
+        <Field disabled={props.disabled}>
+          <Label>Description</Label>
+
+          <Textarea
+            rows={5}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder={"What's happening, who's affected, and how was it identified?"}
+            invalid={formErrors.description}
+          />
+
+          {formErrors.description && <ErrorMessage>This field is required.</ErrorMessage>}
+        </Field>
+
+        <Divider className="mt-8" soft />
+      </DialogBody>
+
+      <DialogActions>
+        <Button plain onClick={() => props.setOpen(false)}>
+          Cancel
+        </Button>
+
+        <Button onClick={submit} color="indigo" disabled={props.disabled}>
+          Add
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
