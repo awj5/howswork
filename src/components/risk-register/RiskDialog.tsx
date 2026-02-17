@@ -22,7 +22,7 @@ type RiskDialogProps = {
 
 type FormErrorsType = {
   dateRaised?: boolean;
-  dateReviewed?: boolean;
+  dateReviewed?: string;
   description?: boolean;
 };
 
@@ -40,7 +40,13 @@ export default function RiskDialog(props: RiskDialogProps) {
     // Validate
     const errors: FormErrorsType = {};
     if (!dateRaised) errors.dateRaised = true;
-    if (!dateReviewed) errors.dateReviewed = true;
+
+    if (!dateReviewed) {
+      errors.dateReviewed = "This field is required.";
+    } else if (dateReviewed < dateRaised) {
+      errors.dateReviewed = "Must be after date raised.";
+    }
+
     if (!description.trim()) errors.description = true;
 
     if (Object.keys(errors).length > 0) {
@@ -106,16 +112,16 @@ export default function RiskDialog(props: RiskDialogProps) {
           </Field>
 
           <Field disabled={props.disabled}>
-            <Label>Date reviewed</Label>
+            <Label>Review date</Label>
 
             <Input
               type="date"
               value={dateReviewed}
               onChange={(e) => setDateReviewed(e.target.value)}
-              invalid={formErrors.dateReviewed}
+              invalid={!!formErrors.dateReviewed}
             />
 
-            {formErrors.dateReviewed && <ErrorMessage>This field is required.</ErrorMessage>}
+            {formErrors.dateReviewed && <ErrorMessage>{formErrors.dateReviewed}</ErrorMessage>}
           </Field>
         </div>
 

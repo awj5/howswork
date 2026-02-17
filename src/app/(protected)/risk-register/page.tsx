@@ -98,6 +98,10 @@ export default function RiskRegister() {
                   <TableHeader>Reviewed</TableHeader>
                   <TableHeader>Status</TableHeader>
                   <TableHeader>Owner</TableHeader>
+
+                  <TableHeader className="relative w-0">
+                    <span className="sr-only">Actions</span>
+                  </TableHeader>
                 </TableRow>
               </TableHead>
 

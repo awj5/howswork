@@ -1,9 +1,11 @@
 import { DateTime } from "luxon";
+import { EllipsisHorizontalIcon } from "@heroicons/react/16/solid";
 import IssuesData from "@/data/issues.json";
 import type { RiskType } from "@/types";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Text } from "@/components/ui/text";
 import { Badge } from "@/components/ui/badge";
+import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from "@/components/ui/dropdown";
 
 type RiskProps = {
   data: RiskType;
@@ -46,6 +48,21 @@ export default function Risk(props: RiskProps) {
       <TableCell className="align-top">{dateReviewed.setZone(props.timezone).toFormat("dd LLL yyyy")}</TableCell>
       <TableCell className="align-top"></TableCell>
       <TableCell className="align-top"></TableCell>
+
+      <TableCell className="align-top">
+        <div className="-mx-3 -my-1.5 sm:-mx-2.5">
+          <Dropdown>
+            <DropdownButton plain aria-label="More options">
+              <EllipsisHorizontalIcon />
+            </DropdownButton>
+
+            <DropdownMenu anchor="bottom end">
+              <DropdownItem>Edit</DropdownItem>
+              <DropdownItem>Delete</DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        </div>
+      </TableCell>
     </TableRow>
   );
 }
