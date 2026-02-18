@@ -63,7 +63,9 @@ export type RiskType = {
   concern_id?: number;
   check_in_id?: number;
   date_raised: string;
-  date_reviewed: string;
+  date_reviewed?: string;
   issues?: number[];
   description: string;
+  level: number;
+  status: number;
 };

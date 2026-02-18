@@ -8,6 +8,7 @@ import { Divider } from "@/components/ui/divider";
 import { ErrorMessage, Field, Label } from "@/components/ui/fieldset";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Select } from "@/components/ui/select";
 import Issues from "./risk-dialog/Issues";
 
 type RiskDialogProps = {
@@ -32,6 +33,13 @@ export default function RiskDialog(props: RiskDialogProps) {
   const [dateReviewed, setDateReviewed] = useState("");
   const [issues, setIssues] = useState<number[]>([]);
   const [description, setDescription] = useState("");
+  const [level, setLevel] = useState("2");
+  const [status, setStatus] = useState("1");
+
+  const dateReviewedChange = (val: string) => {
+    setDateReviewed(val);
+    if (status === "1") setStatus("2");
+  };
 
   const submit = async () => {
     if (!companies.length) return;
@@ -40,9 +48,9 @@ export default function RiskDialog(props: RiskDialogProps) {
     const errors: FormErrorsType = {};
     if (!dateRaised) errors.dateRaised = true;
 
-    if (!dateReviewed) {
-      errors.dateReviewed = "This field is required.";
-    } else if (dateReviewed < dateRaised) {
+    if (status !== "1" && !dateReviewed) {
+      errors.dateReviewed = "Required when status is not Open.";
+    } else if (dateReviewed && dateReviewed < dateRaised) {
       errors.dateReviewed = "Must be after date raised.";
     }
 
@@ -65,6 +73,8 @@ export default function RiskDialog(props: RiskDialogProps) {
         date_reviewed: dateReviewed,
         issues,
         description,
+        level: Number(level),
+        status: Number(status),
       },
       props.id
     );
@@ -97,9 +107,11 @@ export default function RiskDialog(props: RiskDialogProps) {
       }
 
       setDateRaised(result.data?.date_raised?.slice(0, 10));
-      setDateReviewed(result.data?.date_reviewed?.slice(0, 10));
+      setDateReviewed(result.data?.date_reviewed?.slice(0, 10) ?? "");
       setIssues(result.data?.issues ?? []);
       setDescription(result.data?.description);
+      setLevel(String(result.data?.level));
+      setStatus(String(result.data?.status));
     };
 
     // Reset on open
@@ -107,6 +119,8 @@ export default function RiskDialog(props: RiskDialogProps) {
     setDateReviewed("");
     setIssues([]);
     setDescription("");
+    setLevel("2");
+    setStatus("1");
     setFormErrors({});
 
     if (props.id) getRisk(); // Edit risk
@@ -140,16 +154,13 @@ export default function RiskDialog(props: RiskDialogProps) {
           </Field>
 
           <Field disabled={props.disabled}>
-            <Label>Review date</Label>
+            <Label>Risk level</Label>
 
-            <Input
-              type="date"
-              value={dateReviewed}
-              onChange={(e) => setDateReviewed(e.target.value)}
-              invalid={!!formErrors.dateReviewed}
-            />
-
-            {formErrors.dateReviewed && <ErrorMessage>{formErrors.dateReviewed}</ErrorMessage>}
+            <Select value={level} onChange={(e) => setLevel(e.target.value)}>
+              <option value="1">Low</option>
+              <option value="2">Medium</option>
+              <option value="3">High</option>
+            </Select>
           </Field>
         </div>
 
@@ -170,6 +181,37 @@ export default function RiskDialog(props: RiskDialogProps) {
 
           {formErrors.description && <ErrorMessage>This field is required.</ErrorMessage>}
         </Field>
+
+        <Divider className="my-8" soft />
+
+        <div className="grid grid-cols-2 gap-4">
+          <Field disabled={props.disabled}>
+            <Label>Review date</Label>
+
+            <Input
+              type="date"
+              value={dateReviewed}
+              onChange={(e) => dateReviewedChange(e.target.value)}
+              invalid={!!formErrors.dateReviewed}
+            />
+
+            {formErrors.dateReviewed && <ErrorMessage>{formErrors.dateReviewed}</ErrorMessage>}
+          </Field>
+
+          <Field disabled={props.disabled}>
+            <Label>Status</Label>
+
+            <Select value={status} onChange={(e) => setStatus(e.target.value)}>
+              <option value="1" disabled={!!dateReviewed}>
+                Open
+              </option>
+
+              <option value="2">Under review</option>
+              <option value="3">Action planned</option>
+              <option value="4">Resolved</option>
+            </Select>
+          </Field>
+        </div>
 
         <Divider className="mt-8" soft />
       </DialogBody>

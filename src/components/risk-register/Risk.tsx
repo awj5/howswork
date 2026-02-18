@@ -20,7 +20,7 @@ type RiskProps = {
 
 export default function Risk(props: RiskProps) {
   const dateRaised = DateTime.fromISO(props.data.date_raised); // Convert to date object
-  const dateReviewed = DateTime.fromISO(props.data.date_reviewed); // Convert to date object
+  const dateReviewed = props.data.date_reviewed ? DateTime.fromISO(props.data.date_reviewed) : undefined; // Convert to date object
 
   const editClick = () => {
     props.setEditID(props.data.id!);
@@ -46,11 +46,7 @@ export default function Risk(props: RiskProps) {
             {props.data.issues.map((issue) => {
               const tag = IssuesData.find((i) => i.id === issue)?.tag;
 
-              return (
-                <Badge key={issue} color="indigo">
-                  {tag}
-                </Badge>
-              );
+              return <Badge key={issue}>{tag}</Badge>;
             })}
           </div>
         ) : (
@@ -62,9 +58,38 @@ export default function Risk(props: RiskProps) {
         <Text className="min-w-3xs whitespace-pre-line">{props.data.description}</Text>
       </TableCell>
 
-      <TableCell className="align-top"></TableCell>
-      <TableCell className="align-top">{dateReviewed.setZone(props.timezone).toFormat("dd LLL yyyy")}</TableCell>
-      <TableCell className="align-top"></TableCell>
+      <TableCell className="align-top">
+        <Badge color={props.data.level === 1 ? "yellow" : props.data.level === 2 ? "orange" : "red"}>
+          {props.data.level === 1 ? "Low" : props.data.level === 2 ? "Medium" : "High"}
+        </Badge>
+      </TableCell>
+
+      <TableCell className="align-top">
+        {dateReviewed ? dateReviewed.setZone(props.timezone).toFormat("dd LLL yyyy") : <Text>—</Text>}
+      </TableCell>
+
+      <TableCell className="align-top">
+        <Badge
+          color={
+            props.data.status === 1
+              ? "blue"
+              : props.data.status === 2
+                ? "orange"
+                : props.data.status === 3
+                  ? "yellow"
+                  : "green"
+          }
+        >
+          {props.data.status === 1
+            ? "Open"
+            : props.data.status === 2
+              ? "Under review"
+              : props.data.status === 3
+                ? "Action planned"
+                : "Resolved"}
+        </Badge>
+      </TableCell>
+
       <TableCell className="align-top"></TableCell>
 
       <TableCell className="align-top">

@@ -102,17 +102,17 @@ export default function Concern() {
               <div>
                 <div className="flex items-baseline justify-between">
                   <Subheading>Issues ({issues.length})</Subheading>
-                  <span className="text-sm text-zinc-500 sm:text-xs dark:text-zinc-400">Select all that apply</span>
+                  {/*<span className="text-sm text-zinc-500 sm:text-xs dark:text-zinc-400">Select all that apply</span>*/}
                 </div>
 
                 <Divider className="mt-4" />
 
                 <Issues
-                  concernID={Number(params.id)}
+                  //concernID={Number(params.id)}
                   val={issues}
-                  setVal={setIssues}
-                  disabled={disabled}
-                  setDisabled={setDisabled}
+                  //setVal={setIssues}
+                  //disabled={disabled}
+                  //setDisabled={setDisabled}
                 />
               </div>
             </div>

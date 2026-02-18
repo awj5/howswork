@@ -9,7 +9,7 @@ export async function getRisksData(companyID: number, from: number, to: number, 
 
   let risksQuery = supabase
     .from("risks")
-    .select("id, concern_id, check_in_id, date_raised, date_reviewed, issues, description", {
+    .select("id, concern_id, check_in_id, date_raised, date_reviewed, issues, description, level, status", {
       count: "exact",
     })
     .eq("company_id", companyID);
@@ -32,7 +32,7 @@ export async function getRiskData(id: number) {
 
   const { data: riskData, error: riskError } = await supabase
     .from("risks")
-    .select("id, concern_id, check_in_id, date_raised, date_reviewed, issues, description")
+    .select("id, concern_id, check_in_id, date_raised, date_reviewed, issues, description, level, status")
     .eq("id", id)
     .single();
 
@@ -54,9 +54,11 @@ export async function addEditRisk(companyID: number, risk: RiskType, id: number)
       .from("risks")
       .update({
         date_raised: risk.date_raised,
-        date_reviewed: risk.date_reviewed,
+        date_reviewed: risk.date_reviewed ? risk.date_reviewed : null,
         issues: risk.issues?.length ? risk.issues : null,
         description: encrypt(risk.description.trim()),
+        level: risk.level,
+        status: risk.status,
       })
       .eq("id", id);
 
@@ -69,9 +71,11 @@ export async function addEditRisk(companyID: number, risk: RiskType, id: number)
     const { error: insertRiskError } = await supabase.from("risks").insert({
       company_id: companyID,
       date_raised: risk.date_raised,
-      date_reviewed: risk.date_reviewed,
+      date_reviewed: risk.date_reviewed ? risk.date_reviewed : null,
       issues: risk.issues?.length ? risk.issues : null,
       description: encrypt(risk.description.trim()),
+      level: risk.level,
+      status: risk.status,
     });
 
     if (insertRiskError) {
