@@ -38,6 +38,28 @@ export default function Risk(props: RiskProps) {
         {dateRaised.setZone(props.timezone).toFormat("dd LLL yyyy")}
       </TableCell>
 
+      <TableCell className="align-top">
+        <Badge
+          color={
+            props.data.status === 1
+              ? "blue"
+              : props.data.status === 2
+                ? "orange"
+                : props.data.status === 3
+                  ? "yellow"
+                  : "green"
+          }
+        >
+          {props.data.status === 1
+            ? "Open"
+            : props.data.status === 2
+              ? "Under review"
+              : props.data.status === 3
+                ? "Action planned"
+                : "Resolved"}
+        </Badge>
+      </TableCell>
+
       <TableCell className="align-top"></TableCell>
 
       <TableCell className="align-top">
@@ -68,29 +90,7 @@ export default function Risk(props: RiskProps) {
         {dateReviewed ? dateReviewed.setZone(props.timezone).toFormat("dd LLL yyyy") : <Text>—</Text>}
       </TableCell>
 
-      <TableCell className="align-top">
-        <Badge
-          color={
-            props.data.status === 1
-              ? "blue"
-              : props.data.status === 2
-                ? "orange"
-                : props.data.status === 3
-                  ? "yellow"
-                  : "green"
-          }
-        >
-          {props.data.status === 1
-            ? "Open"
-            : props.data.status === 2
-              ? "Under review"
-              : props.data.status === 3
-                ? "Action planned"
-                : "Resolved"}
-        </Badge>
-      </TableCell>
-
-      <TableCell className="align-top"></TableCell>
+      <TableCell className="align-top">{props.data.owner ? props.data.owner : <Text>—</Text>}</TableCell>
 
       <TableCell className="align-top">
         <div className="-mx-3 -my-1.5 sm:-mx-2.5">

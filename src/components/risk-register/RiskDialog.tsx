@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { addEditRisk, getRiskData } from "@/app/(protected)/risk-register/actions";
 import { useCompanies } from "@/hooks/useCompanies";
+import { useUserContext } from "@/hooks/useUserContext";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Divider } from "@/components/ui/divider";
@@ -10,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
 import Issues from "./risk-dialog/Issues";
+import Owner from "./risk-dialog/Owner";
 
 type RiskDialogProps = {
   open: boolean;
@@ -28,6 +30,7 @@ type FormErrorsType = {
 
 export default function RiskDialog(props: RiskDialogProps) {
   const companies = useCompanies();
+  const { user } = useUserContext();
   const [formErrors, setFormErrors] = useState<FormErrorsType>({});
   const [dateRaised, setDateRaised] = useState("");
   const [dateReviewed, setDateReviewed] = useState("");
@@ -35,6 +38,7 @@ export default function RiskDialog(props: RiskDialogProps) {
   const [description, setDescription] = useState("");
   const [level, setLevel] = useState("2");
   const [status, setStatus] = useState("1");
+  const [owner, setOwner] = useState("");
 
   const dateReviewedChange = (val: string) => {
     setDateReviewed(val);
@@ -75,6 +79,7 @@ export default function RiskDialog(props: RiskDialogProps) {
         description,
         level: Number(level),
         status: Number(status),
+        owner,
       },
       props.id
     );
@@ -93,7 +98,7 @@ export default function RiskDialog(props: RiskDialogProps) {
   };
 
   useEffect(() => {
-    if (!props.open) return;
+    if (!props.open || !user) return;
 
     const getRisk = async () => {
       props.setDisabled(true);
@@ -112,6 +117,7 @@ export default function RiskDialog(props: RiskDialogProps) {
       setDescription(result.data?.description);
       setLevel(String(result.data?.level));
       setStatus(String(result.data?.status));
+      setOwner(result.data?.owner ?? "");
     };
 
     // Reset on open
@@ -121,13 +127,14 @@ export default function RiskDialog(props: RiskDialogProps) {
     setDescription("");
     setLevel("2");
     setStatus("1");
+    setOwner(`${user.first_name} ${user.last_name}`); // Set to auth user
     setFormErrors({});
 
     if (props.id) getRisk(); // Edit risk
-  }, [props.open]);
+  }, [props.open, user]);
 
   return (
-    <Dialog open={props.open} onClose={props.setOpen} size="2xl">
+    <Dialog open={props.open} onClose={props.setOpen} size="xl">
       <DialogTitle>{props.id ? "Edit" : "Add a"} risk</DialogTitle>
 
       <DialogDescription className="text-wrap!">
@@ -213,6 +220,8 @@ export default function RiskDialog(props: RiskDialogProps) {
           </Field>
         </div>
 
+        <Divider className="my-8" soft />
+        <Owner val={owner} setVal={setOwner} disabled={props.disabled} />
         <Divider className="mt-8" soft />
       </DialogBody>
 

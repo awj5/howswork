@@ -15,8 +15,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { ErrorMessage, Field, Label } from "@/components/ui/fieldset";
 import { Input } from "@/components/ui/input";
-import { removeUser, inviteUser } from "./actions";
 import { Strong } from "@/components/ui/text";
+import { removeUser, inviteUser } from "./actions";
 
 export default function Admins() {
   const supabase = createClient();

@@ -3,13 +3,14 @@
 import { createClient } from "@/utils/supabase/server";
 import { encrypt, decrypt } from "@/utils/encryption";
 import { RiskType } from "@/types";
+import Owner from "@/components/risk-register/risk-dialog/Owner";
 
 export async function getRisksData(companyID: number, from: number, to: number, issue?: string) {
   const supabase = await createClient();
 
   let risksQuery = supabase
     .from("risks")
-    .select("id, concern_id, check_in_id, date_raised, date_reviewed, issues, description, level, status", {
+    .select("id, concern_id, check_in_id, date_raised, date_reviewed, issues, description, level, status, owner", {
       count: "exact",
     })
     .eq("company_id", companyID);
@@ -32,7 +33,7 @@ export async function getRiskData(id: number) {
 
   const { data: riskData, error: riskError } = await supabase
     .from("risks")
-    .select("id, concern_id, check_in_id, date_raised, date_reviewed, issues, description, level, status")
+    .select("id, concern_id, check_in_id, date_raised, date_reviewed, issues, description, level, status, owner")
     .eq("id", id)
     .single();
 
@@ -59,6 +60,7 @@ export async function addEditRisk(companyID: number, risk: RiskType, id: number)
         description: encrypt(risk.description.trim()),
         level: risk.level,
         status: risk.status,
+        owner: risk.owner ? risk.owner : null,
       })
       .eq("id", id);
 
@@ -76,6 +78,7 @@ export async function addEditRisk(companyID: number, risk: RiskType, id: number)
       description: encrypt(risk.description.trim()),
       level: risk.level,
       status: risk.status,
+      owner: risk.owner ? risk.owner : null,
     });
 
     if (insertRiskError) {
