@@ -66,7 +66,7 @@ export default function RiskDialog(props: RiskDialogProps) {
         issues,
         description,
       },
-      props.id ?? undefined
+      props.id
     );
 
     props.setDisabled(false);
