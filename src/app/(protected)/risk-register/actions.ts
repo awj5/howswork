@@ -9,7 +9,7 @@ export async function getRisksData(companyID: number, from: number, to: number, 
 
   let risksQuery = supabase
     .from("risks")
-    .select("id, date_raised, date_reviewed, issues, description", {
+    .select("id, concern_id, check_in_id, date_raised, date_reviewed, issues, description", {
       count: "exact",
     })
     .eq("company_id", companyID);
@@ -27,19 +27,68 @@ export async function getRisksData(companyID: number, from: number, to: number, 
   return { data: risksData, count: risksCount };
 }
 
-export async function addRisk(companyID: number, risk: RiskType) {
+export async function getRiskData(id: number) {
   const supabase = await createClient();
 
-  const { error: insertRiskError } = await supabase.from("risks").insert({
-    company_id: companyID,
-    date_raised: risk.date_raised,
-    date_reviewed: risk.date_reviewed,
-    issues: risk.issues?.length ? risk.issues : null,
-    description: encrypt(risk.description.trim()),
-  });
+  const { data: riskData, error: riskError } = await supabase
+    .from("risks")
+    .select("id, concern_id, check_in_id, date_raised, date_reviewed, issues, description")
+    .eq("id", id)
+    .single();
 
-  if (insertRiskError) {
-    console.error(insertRiskError.message);
+  if (riskError) {
+    console.error(riskError.message);
+    return { error: "Internal server error" };
+  }
+
+  riskData.description = decrypt(riskData.description); // Decrypt description
+  return { data: riskData };
+}
+
+export async function addEditRisk(companyID: number, risk: RiskType, id?: number) {
+  const supabase = await createClient();
+
+  if (id) {
+    // Edit
+    const { error: updateRiskError } = await supabase
+      .from("risks")
+      .update({
+        date_raised: risk.date_raised,
+        date_reviewed: risk.date_reviewed,
+        issues: risk.issues?.length ? risk.issues : null,
+        description: encrypt(risk.description.trim()),
+      })
+      .eq("id", id);
+
+    if (updateRiskError) {
+      console.error(updateRiskError.message);
+      return { error: "Internal server error" };
+    }
+  } else {
+    // Add
+    const { error: insertRiskError } = await supabase.from("risks").insert({
+      company_id: companyID,
+      date_raised: risk.date_raised,
+      date_reviewed: risk.date_reviewed,
+      issues: risk.issues?.length ? risk.issues : null,
+      description: encrypt(risk.description.trim()),
+    });
+
+    if (insertRiskError) {
+      console.error(insertRiskError.message);
+      return { error: "Internal server error" };
+    }
+  }
+
+  return { success: true };
+}
+
+export async function deleteRisk(id: number) {
+  const supabase = await createClient();
+  const { error: deleteRiskError } = await supabase.from("risks").delete().eq("id", id);
+
+  if (deleteRiskError) {
+    console.error(deleteRiskError.message);
     return { error: "Internal server error" };
   }
 

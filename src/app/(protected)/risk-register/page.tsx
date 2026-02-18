@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 import { DocumentPlusIcon, ArrowDownTrayIcon } from "@heroicons/react/16/solid";
 import type { RiskType } from "@/types";
 import { useCompanies } from "@/hooks/useCompanies";
@@ -16,7 +17,8 @@ import EmptyState from "@/components/EmptyState";
 import Doodle from "@/components/Doodle";
 import ExportDialog from "@/components/risk-register/ExportDialog";
 import RiskDialog from "@/components/risk-register/RiskDialog";
-import { getRisksData } from "./actions";
+import { Alert, AlertActions, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { deleteRisk, getRisksData } from "./actions";
 
 export default function RiskRegister() {
   const searchParams = useSearchParams();
@@ -24,6 +26,9 @@ export default function RiskRegister() {
   const [disabled, setDisabled] = useState(false);
   const [sort, setSort] = useState("status");
   const [risks, setRisks] = useState<RiskType[]>();
+  const [editID, setEditID] = useState(0);
+  const [deleteID, setDeleteID] = useState(0);
+  const [alertOpen, setAlertOpen] = useState(false);
   const [exportDialogOpen, setExportDialogOpen] = useState(false);
   const [riskDialogOpen, setRiskDialogOpen] = useState(false);
   const [issueFilter, setIssueFilter] = useState<string>();
@@ -31,6 +36,28 @@ export default function RiskRegister() {
   const [pageCount, setPageCount] = useState(0);
   const pageSize = 50;
   const page = Number(searchParams.get("page")) || 1; // Default to page 1;
+
+  const addClick = () => {
+    setEditID(0);
+    setRiskDialogOpen(true);
+  };
+
+  const deleteClick = async () => {
+    if (!deleteID) return;
+    setAlertOpen(false);
+    setDisabled(true);
+    const result = await deleteRisk(deleteID);
+    setDisabled(false);
+
+    if (result.error) {
+      toast.error(result.error);
+      return;
+    }
+
+    // Success
+    toast.success("Risk deleted");
+    getRisks(); // Reload list
+  };
 
   const getRisks = async () => {
     if (!companies.length) return;
@@ -80,7 +107,7 @@ export default function RiskRegister() {
                 Export
               </Button>
 
-              <Button onClick={() => setRiskDialogOpen(true)} color="indigo" disabled={disabled}>
+              <Button onClick={addClick} color="indigo" disabled={disabled}>
                 <DocumentPlusIcon />
                 Add risk
               </Button>
@@ -92,6 +119,7 @@ export default function RiskRegister() {
               <TableHead>
                 <TableRow>
                   <TableHeader>Raised</TableHeader>
+                  <TableHeader>Source</TableHeader>
                   <TableHeader>Issues</TableHeader>
                   <TableHeader>Description</TableHeader>
                   <TableHeader>Level</TableHeader>
@@ -107,7 +135,16 @@ export default function RiskRegister() {
 
               <TableBody>
                 {risks.map((risk) => (
-                  <Risk key={risk.id} data={risk} timezone={companies[0].timezone} />
+                  <Risk
+                    key={risk.id}
+                    data={risk}
+                    timezone={companies[0].timezone}
+                    setRiskDialogOpen={setRiskDialogOpen}
+                    setEditID={setEditID}
+                    disabled={disabled}
+                    setAlertOpen={setAlertOpen}
+                    setDeleteID={setDeleteID}
+                  />
                 ))}
               </TableBody>
             </Table>
@@ -128,7 +165,7 @@ export default function RiskRegister() {
               manually.
             </Text>
 
-            <Button onClick={() => setRiskDialogOpen(true)} outline className="mt-6">
+            <Button onClick={addClick} outline className="mt-6">
               <DocumentPlusIcon />
               Add risk
             </Button>
@@ -149,7 +186,26 @@ export default function RiskRegister() {
         disabled={disabled}
         setDisabled={setDisabled}
         getRisks={getRisks}
+        id={editID}
       />
+
+      <Alert open={alertOpen} onClose={setAlertOpen}>
+        <AlertTitle>Are you sure you want to delete this risk?</AlertTitle>
+
+        <AlertDescription>
+          This will permanently delete this manually added risk. This action cannot be undone.
+        </AlertDescription>
+
+        <AlertActions>
+          <Button plain onClick={() => setAlertOpen(false)}>
+            Cancel
+          </Button>
+
+          <Button onClick={deleteClick} color="red">
+            Delete
+          </Button>
+        </AlertActions>
+      </Alert>
     </>
   );
 }

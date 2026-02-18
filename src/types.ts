@@ -60,6 +60,8 @@ export type ConcernType = {
 
 export type RiskType = {
   id?: number;
+  concern_id?: number;
+  check_in_id?: number;
   date_raised: string;
   date_reviewed: string;
   issues?: number[];

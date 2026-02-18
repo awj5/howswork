@@ -21,7 +21,7 @@ import EmptyState from "@/components/EmptyState";
 import Stat from "@/components/check-in/Stat";
 import Issues from "@/components/check-in/Issues";
 import Team from "@/components/check-in/Team";
-import { removeCheckIn } from "./actions";
+import { deleteCheckIn } from "./actions";
 
 export default function CheckIn() {
   const params = useParams<{ id: string }>();
@@ -36,11 +36,11 @@ export default function CheckIn() {
   const [team, setTeam] = useState("");
   const date = checkIn ? DateTime.fromISO(checkIn.start).toUTC() : undefined;
 
-  const removeClick = async () => {
+  const deleteClick = async () => {
     if (!companies.length) return;
     setAlertOpen(false);
     setDisabled(true);
-    const result = await removeCheckIn(Number(params.id), companies[0].id);
+    const result = await deleteCheckIn(Number(params.id), companies[0].id);
     setDisabled(false);
 
     if (result.error) {
@@ -49,7 +49,7 @@ export default function CheckIn() {
     }
 
     // Success
-    toast.success("Check-in removed");
+    toast.success("Check-in deleted");
     router.push(`/check-ins${searchParams.size ? `?${searchParams.toString()}` : ""}`);
   };
 
@@ -293,7 +293,7 @@ export default function CheckIn() {
                 checkIn.status === 1 && (
                   <Button onClick={() => setAlertOpen(true)} outline disabled={disabled}>
                     <TrashIcon />
-                    Remove
+                    Delete
                   </Button>
                 )
               )}
@@ -318,7 +318,7 @@ export default function CheckIn() {
       )}
 
       <Alert open={alertOpen} onClose={setAlertOpen}>
-        <AlertTitle>Are you sure you want to remove this check-in?</AlertTitle>
+        <AlertTitle>Are you sure you want to delete this check-in?</AlertTitle>
         <AlertDescription>This action cannot be undone.</AlertDescription>
 
         <AlertActions>
@@ -326,8 +326,8 @@ export default function CheckIn() {
             Cancel
           </Button>
 
-          <Button onClick={removeClick} color="red">
-            Remove
+          <Button onClick={deleteClick} color="red">
+            Delete
           </Button>
         </AlertActions>
       </Alert>

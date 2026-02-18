@@ -2,7 +2,7 @@
 
 import { createClient } from "@/utils/supabase/server";
 
-export async function removeCheckIn(id: number, companyID: number) {
+export async function deleteCheckIn(id: number, companyID: number) {
   const supabase = await createClient();
   const { error: deleteCheckInError } = await supabase.from("check_ins").delete().eq("id", id);
 

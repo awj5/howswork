@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from "react";
 import { DateTime } from "luxon";
 import { EllipsisHorizontalIcon } from "@heroicons/react/16/solid";
 import IssuesData from "@/data/issues.json";
@@ -10,17 +11,34 @@ import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from "@/componen
 type RiskProps = {
   data: RiskType;
   timezone: string;
+  setRiskDialogOpen: Dispatch<SetStateAction<boolean>>;
+  setEditID: Dispatch<SetStateAction<number>>;
+  disabled: boolean;
+  setAlertOpen: Dispatch<SetStateAction<boolean>>;
+  setDeleteID: Dispatch<SetStateAction<number>>;
 };
 
 export default function Risk(props: RiskProps) {
   const dateRaised = DateTime.fromISO(props.data.date_raised); // Convert to date object
   const dateReviewed = DateTime.fromISO(props.data.date_reviewed); // Convert to date object
 
+  const editClick = () => {
+    props.setEditID(props.data.id!);
+    props.setRiskDialogOpen(true);
+  };
+
+  const deleteClick = () => {
+    props.setDeleteID(props.data.id!);
+    props.setAlertOpen(true);
+  };
+
   return (
     <TableRow>
       <TableCell className="align-top font-medium">
         {dateRaised.setZone(props.timezone).toFormat("dd LLL yyyy")}
       </TableCell>
+
+      <TableCell className="align-top"></TableCell>
 
       <TableCell className="align-top">
         {props.data.issues?.length ? (
@@ -57,8 +75,16 @@ export default function Risk(props: RiskProps) {
             </DropdownButton>
 
             <DropdownMenu anchor="bottom end">
-              <DropdownItem>Edit</DropdownItem>
-              <DropdownItem>Delete</DropdownItem>
+              <DropdownItem onClick={editClick} disabled={props.disabled}>
+                Edit
+              </DropdownItem>
+
+              <DropdownItem
+                onClick={deleteClick}
+                disabled={props.disabled || !!props.data.concern_id || !!props.data.check_in_id}
+              >
+                Delete
+              </DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </div>

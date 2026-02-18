@@ -1,13 +1,11 @@
-"use client";
-
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { addRisk } from "@/app/(protected)/risk-register/actions";
+import { addEditRisk, getRiskData } from "@/app/(protected)/risk-register/actions";
 import { useCompanies } from "@/hooks/useCompanies";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Divider } from "@/components/ui/divider";
-import { ErrorMessage, Field, FieldGroup, Label } from "@/components/ui/fieldset";
+import { ErrorMessage, Field, Label } from "@/components/ui/fieldset";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import Issues from "./risk-dialog/Issues";
@@ -18,6 +16,7 @@ type RiskDialogProps = {
   disabled: boolean;
   setDisabled: Dispatch<SetStateAction<boolean>>;
   getRisks: () => Promise<void>;
+  id: number;
 };
 
 type FormErrorsType = {
@@ -59,12 +58,16 @@ export default function RiskDialog(props: RiskDialogProps) {
     // Add risk
     props.setDisabled(true);
 
-    const result = await addRisk(companies[0].id, {
-      date_raised: dateRaised,
-      date_reviewed: dateReviewed,
-      issues,
-      description,
-    });
+    const result = await addEditRisk(
+      companies[0].id,
+      {
+        date_raised: dateRaised,
+        date_reviewed: dateReviewed,
+        issues,
+        description,
+      },
+      props.id ?? undefined
+    );
 
     props.setDisabled(false);
 
@@ -74,24 +77,49 @@ export default function RiskDialog(props: RiskDialogProps) {
     }
 
     // Success
-    toast.success("Risk added");
+    toast.success(props.id ? "Risk updated" : "Risk added");
     props.setOpen(false); // Close
     props.getRisks(); // Reload risk list
+  };
 
-    // Reset
+  useEffect(() => {
+    if (!props.open) return;
+
+    const getRisk = async () => {
+      props.setDisabled(true);
+      const result = await getRiskData(props.id);
+      props.setDisabled(false);
+
+      if (result.error) {
+        toast.error(result.error);
+        props.setOpen(false); // Close
+        return;
+      }
+
+      setDateRaised(result.data?.date_raised?.slice(0, 10));
+      setDateReviewed(result.data?.date_reviewed?.slice(0, 10));
+      setIssues(result.data?.issues ?? []);
+      setDescription(result.data?.description);
+    };
+
+    // Reset on open
     setDateRaised("");
     setDateReviewed("");
     setIssues([]);
     setDescription("");
-  };
+    setFormErrors({});
+
+    if (props.id) getRisk(); // Edit risk
+  }, [props.open]);
 
   return (
     <Dialog open={props.open} onClose={props.setOpen} size="2xl">
-      <DialogTitle>Add a risk</DialogTitle>
+      <DialogTitle>{props.id ? "Edit" : "Add a"} risk</DialogTitle>
 
       <DialogDescription className="text-wrap!">
-        Manually add a risk identified outside of HowsWork, such as from a workplace observation, incident, or team
-        meeting.
+        {props.id
+          ? "Edit the details of this risk. Changes won't affect linked concerns or check-in data."
+          : "Manually add a risk identified outside of HowsWork, such as from a workplace observation, incident, or team meeting."}
       </DialogDescription>
 
       <DialogBody>
@@ -152,7 +180,7 @@ export default function RiskDialog(props: RiskDialogProps) {
         </Button>
 
         <Button onClick={submit} color="indigo" disabled={props.disabled}>
-          Add
+          {props.id ? "Save changes" : "Add"}
         </Button>
       </DialogActions>
     </Dialog>
