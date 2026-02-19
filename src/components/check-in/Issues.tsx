@@ -14,7 +14,7 @@ type IssuesProps = {
 export default function Issues(props: IssuesProps) {
   return (
     <div className="mt-12">
-      <Subheading>Issues experienced ({props.data?.length})</Subheading>
+      <Subheading>Issues experienced{props.data?.length ? ` (${props.data.length})` : ""}</Subheading>
 
       <div className="mt-4">
         {props.data?.length ? (

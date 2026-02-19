@@ -1,10 +1,10 @@
 import { Dispatch, SetStateAction } from "react";
 import { DateTime } from "luxon";
-import { EllipsisHorizontalIcon } from "@heroicons/react/16/solid";
+import { EllipsisHorizontalIcon, SparklesIcon } from "@heroicons/react/16/solid";
 import IssuesData from "@/data/issues.json";
 import type { RiskType } from "@/types";
 import { TableCell, TableRow } from "@/components/ui/table";
-import { Text } from "@/components/ui/text";
+import { Text, TextLink } from "@/components/ui/text";
 import { Badge } from "@/components/ui/badge";
 import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from "@/components/ui/dropdown";
 
@@ -21,6 +21,7 @@ type RiskProps = {
 export default function Risk(props: RiskProps) {
   const dateRaised = DateTime.fromISO(props.data.date_raised); // Convert to date object
   const dateReviewed = props.data.date_reviewed ? DateTime.fromISO(props.data.date_reviewed) : undefined; // Convert to date object
+  const checkInDate = props.data.check_in_date ? DateTime.fromISO(props.data.check_in_date) : undefined; // Convert to date object
 
   const editClick = () => {
     props.setEditID(props.data.id!);
@@ -35,7 +36,7 @@ export default function Risk(props: RiskProps) {
   return (
     <TableRow>
       <TableCell className="align-top font-medium">
-        {dateRaised.setZone(props.timezone).toFormat("dd LLL yyyy")}
+        {dateRaised.toLocal().toLocaleString({ day: "numeric", month: "numeric", year: "2-digit" })}
       </TableCell>
 
       <TableCell className="align-top">
@@ -44,7 +45,18 @@ export default function Risk(props: RiskProps) {
         </Badge>
       </TableCell>
 
-      <TableCell className="align-top">Manual</TableCell>
+      <TableCell className="align-top">
+        {props.data.concern_id ? (
+          <TextLink href={`/concerns/${props.data.concern_id}`}>HW-{props.data.concern_tracking}</TextLink>
+        ) : checkInDate ? (
+          <TextLink href={`/check-ins/${props.data.check_in_id}`}>
+            Check-in{" "}
+            {checkInDate.setZone(props.timezone).toLocaleString({ day: "numeric", month: "numeric", year: "2-digit" })}
+          </TextLink>
+        ) : (
+          "Manual"
+        )}
+      </TableCell>
 
       <TableCell className="align-top">
         {props.data.issues?.length ? (
@@ -61,7 +73,13 @@ export default function Risk(props: RiskProps) {
       </TableCell>
 
       <TableCell className="align-top">
-        <Text className="min-w-3xs whitespace-pre-line">{props.data.description}</Text>
+        <Text className="min-w-2xs whitespace-pre-line">{props.data.description}</Text>
+
+        {props.data.ai_description && (
+          <span className="mt-3 inline-flex items-center gap-1.5 bg-gradient-to-r from-indigo-500 to-fuchsia-500 bg-clip-text text-sm text-transparent sm:text-xs">
+            <SparklesIcon className="size-5 fill-indigo-500 sm:size-4" /> Auto-generated
+          </span>
+        )}
       </TableCell>
 
       <TableCell className="align-top">
@@ -87,12 +105,16 @@ export default function Risk(props: RiskProps) {
       </TableCell>
 
       <TableCell className="align-top">
-        {dateReviewed ? dateReviewed.setZone(props.timezone).toFormat("dd LLL yyyy") : <Text>—</Text>}
+        {dateReviewed ? (
+          dateReviewed.toLocal().toLocaleString({ day: "numeric", month: "numeric", year: "2-digit" })
+        ) : (
+          <Text>—</Text>
+        )}
       </TableCell>
 
       <TableCell className="align-top">
         {props.data.response ? (
-          <Text className="min-w-3xs whitespace-pre-line">{props.data.response}</Text>
+          <Text className="min-w-2xs whitespace-pre-line">{props.data.response}</Text>
         ) : (
           <Text>—</Text>
         )}

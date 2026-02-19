@@ -8,7 +8,6 @@ import { Badge } from "@/components/ui/badge";
 
 type ConcernProps = {
   data: ConcernType;
-  timezone: string;
 };
 
 export default function Concern(props: ConcernProps) {
@@ -21,8 +20,8 @@ export default function Concern(props: ConcernProps) {
       <TableCell className={"font-medium"}>HW-{props.data.tracking}</TableCell>
 
       <TableCell>
-        <time className="lg:hidden">{date.setZone(props.timezone).toFormat("ccc, dd LLL yyyy, h:mm a")}</time>
-        <time className="hidden lg:inline">{date.setZone(props.timezone).toFormat("cccc, dd LLLL yyyy, h:mm a")}</time>
+        <time className="lg:hidden">{date.toLocal().toFormat("ccc, dd LLL yyyy, h:mm a")}</time>
+        <time className="hidden lg:inline">{date.toLocal().toFormat("cccc, dd LLLL yyyy, h:mm a")}</time>
       </TableCell>
 
       <TableCell>

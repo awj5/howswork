@@ -267,13 +267,17 @@ export default function CheckIn() {
               </Badge>
             </div>
 
-            <div className="mt-2.5 flex flex-col justify-between gap-4 sm:flex-row">
+            <div className="mt-2.5 flex flex-col justify-between gap-x-6 gap-y-4 sm:flex-row">
               <div className="flex gap-10 py-1.5">
                 <time className="flex items-center gap-3">
                   <CalendarIcon className="size-4 text-zinc-400 dark:text-zinc-500" />
 
-                  <Text className="text-zinc-950! dark:text-white!">
+                  <Text className="text-zinc-950! lg:hidden dark:text-white!">
                     {date?.setZone(companies[0].timezone).toFormat("dd LLL yyyy")}
+                  </Text>
+
+                  <Text className="hidden text-zinc-950! lg:inline dark:text-white!">
+                    {date?.setZone(companies[0].timezone).toFormat("dd LLL yyyy, h:mm a (z)")}
                   </Text>
                 </time>
 

@@ -161,7 +161,7 @@ export default function Concerns() {
 
               <TableBody>
                 {concerns.map((concern) => (
-                  <Concern key={concern.id} data={concern} timezone={companies[0].timezone} />
+                  <Concern key={concern.id} data={concern} />
                 ))}
               </TableBody>
             </Table>

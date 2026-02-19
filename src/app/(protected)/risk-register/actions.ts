@@ -10,7 +10,7 @@ export async function getRisksData(companyID: number, from: number, to: number, 
   let risksQuery = supabase
     .from("risks")
     .select(
-      "id, concern_id, check_in_id, date_raised, date_reviewed, issues, description, level, status, owner, response",
+      "id, concern_id, concern_tracking, check_in_id, check_in_date, date_raised, date_reviewed, issues, description, ai_description, level, status, owner, response",
       {
         count: "exact",
       }
