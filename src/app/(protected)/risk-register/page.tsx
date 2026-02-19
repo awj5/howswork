@@ -60,7 +60,7 @@ export default function RiskRegister() {
 
     if (searchParams.get("page") && searchParams.get("page") !== "1") {
       const issue = searchParams.get("issue");
-      router.push(issue ? `/risk-register?issue=${issue}` : "/risk-register"); // Clear page param
+      router.push(issue ? `/risk-register?issue=${issue}` : "/risk-register"); // Clear page param (keep issue)
     } else {
       getRisks(); // Reload list
     }

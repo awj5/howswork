@@ -18,7 +18,12 @@ export async function getConcernData(id: number, companyID: number) {
     return { error: "Concern not found" };
   }
 
-  concernData.details = decrypt(concernData.details); // Decrypt details
+  try {
+    concernData.details = decrypt(concernData.details); // Decrypt details
+  } catch (error) {
+    console.error(error);
+    return { error: "Internal server error" };
+  }
 
   // Get status updates
   const { data: concernStatusData, error: concernStatusError } = await supabase
@@ -46,7 +51,11 @@ export async function getConcernData(id: number, companyID: number) {
 
   // Decrypt comments
   concernCommentsData.forEach((item) => {
-    item.comment = decrypt(item.comment);
+    try {
+      item.comment = decrypt(item.comment);
+    } catch {
+      item.comment = "[decryption error]";
+    }
   });
 
   // Combine status updates and comments

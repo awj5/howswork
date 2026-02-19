@@ -30,11 +30,23 @@ export async function getRisksData(companyID: number, from: number, to: number, 
       : risksQuery.order("date_raised", { ascending: false }).range(from, to));
 
   if (risksError) return { error: risksError.message };
-  risksData.forEach((risk) => (risk.description = decrypt(risk.description))); // Decrypt descriptions
+  risksData.forEach((risk) => {
+    try {
+      risk.description = decrypt(risk.description);
+    } catch {
+      risk.description = "[decryption error]";
+    }
+  });
 
   // Decrypt responses
   risksData.forEach((risk) => {
-    if (risk.response) risk.response = decrypt(risk.response);
+    if (risk.response) {
+      try {
+        risk.response = decrypt(risk.response);
+      } catch {
+        risk.response = "[decryption error]";
+      }
+    }
   });
 
   return { data: risksData, count: risksCount };
@@ -56,8 +68,13 @@ export async function getRiskData(id: number) {
     return { error: "Internal server error" };
   }
 
-  riskData.description = decrypt(riskData.description); // Decrypt description
-  if (riskData.response) riskData.response = decrypt(riskData.response); // Decrypt response
+  try {
+    riskData.description = decrypt(riskData.description); // Decrypt description
+    if (riskData.response) riskData.response = decrypt(riskData.response); // Decrypt response
+  } catch (error) {
+    console.error(error);
+    return { error: "Internal server error" };
+  }
   return { data: riskData };
 }
 
