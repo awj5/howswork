@@ -4,7 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { encrypt, decrypt } from "@/utils/encryption";
 import { RiskType } from "@/types";
 
-export async function getRisksData(companyID: number, from: number, to: number, issue?: string) {
+export async function getRisksData(companyID: number, from: number, to: number, sort: string, issue?: string) {
   const supabase = await createClient();
 
   let risksQuery = supabase
@@ -23,7 +23,11 @@ export async function getRisksData(companyID: number, from: number, to: number, 
     data: risksData,
     error: risksError,
     count: risksCount,
-  } = await risksQuery.order("created_at", { ascending: false }).range(from, to);
+  } = await (sort === "status"
+    ? risksQuery.order("status", { ascending: true }).order("date_raised", { ascending: false }).range(from, to)
+    : sort === "level"
+      ? risksQuery.order("level", { ascending: false }).order("date_raised", { ascending: false }).range(from, to)
+      : risksQuery.order("date_raised", { ascending: false }).range(from, to));
 
   if (risksError) return { error: risksError.message };
   risksData.forEach((risk) => (risk.description = decrypt(risk.description))); // Decrypt descriptions

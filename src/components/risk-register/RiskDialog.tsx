@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { addEditRisk, getRiskData } from "@/app/(protected)/risk-register/actions";
 import { useCompanies } from "@/hooks/useCompanies";
@@ -31,6 +32,8 @@ type FormErrorsType = {
 
 export default function RiskDialog(props: RiskDialogProps) {
   const companies = useCompanies();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { user } = useUserContext();
   const [formErrors, setFormErrors] = useState<FormErrorsType>({});
   const [dateRaised, setDateRaised] = useState("");
@@ -98,7 +101,12 @@ export default function RiskDialog(props: RiskDialogProps) {
     // Success
     toast.success(props.id ? "Risk updated" : "Risk added");
     props.setOpen(false); // Close
-    props.getRisks(); // Reload risk list
+
+    if (searchParams.get("page") && searchParams.get("page") !== "1" && searchParams.get("issue")) {
+      router.push(`/risk-register?issue=${searchParams.get("issue")}`); // Clear page param
+    } else {
+      props.getRisks(); // Reload list
+    }
   };
 
   useEffect(() => {

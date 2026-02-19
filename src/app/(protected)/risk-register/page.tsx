@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { DocumentPlusIcon, ArrowDownTrayIcon } from "@heroicons/react/16/solid";
 import type { RiskType } from "@/types";
@@ -22,6 +22,7 @@ import { deleteRisk, getRisksData } from "./actions";
 
 export default function RiskRegister() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const companies = useCompanies();
   const [disabled, setDisabled] = useState(false);
   const [sort, setSort] = useState("status");
@@ -56,7 +57,13 @@ export default function RiskRegister() {
 
     // Success
     toast.success("Risk deleted");
-    getRisks(); // Reload list
+
+    if (searchParams.get("page") && searchParams.get("page") !== "1") {
+      const issue = searchParams.get("issue");
+      router.push(issue ? `/risk-register?issue=${issue}` : "/risk-register"); // Clear page param
+    } else {
+      getRisks(); // Reload list
+    }
   };
 
   const getRisks = async () => {
@@ -67,7 +74,7 @@ export default function RiskRegister() {
     const to = from + pageSize - 1;
 
     // Get data
-    const result = await getRisksData(companies[0].id, from, to, issueFilter);
+    const result = await getRisksData(companies[0].id, from, to, sort, issueFilter);
 
     if (result.error) {
       console.error(result.error);
@@ -86,7 +93,7 @@ export default function RiskRegister() {
 
   useEffect(() => {
     getRisks();
-  }, [companies, page, issueFilter]);
+  }, [companies, page, sort, issueFilter]);
 
   return (
     <>

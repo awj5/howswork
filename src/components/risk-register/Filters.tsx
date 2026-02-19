@@ -33,8 +33,8 @@ export default function Filters(props: FiltersProps) {
       <div className="max-sm:hidden">
         <Select value={props.sort} onChange={(e) => props.setSort(e.target.value)}>
           <option value="status">Sort by status</option>
-          <option value="level">Sort by risk level</option>
           <option value="date">Sort by date</option>
+          <option value="level">Sort by risk level</option>
         </Select>
       </div>
     </div>
