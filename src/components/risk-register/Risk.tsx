@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { DateTime } from "luxon";
 import { EllipsisHorizontalIcon, SparklesIcon } from "@heroicons/react/16/solid";
 import IssuesData from "@/data/issues.json";
@@ -22,6 +22,11 @@ export default function Risk(props: RiskProps) {
   const dateRaised = DateTime.fromISO(props.data.date_raised); // Convert to date object
   const dateReviewed = props.data.date_reviewed ? DateTime.fromISO(props.data.date_reviewed) : undefined; // Convert to date object
   const checkInDate = props.data.check_in_date ? DateTime.fromISO(props.data.check_in_date) : undefined; // Convert to date object
+  const [descriptionExpanded, setDescriptionExpanded] = useState(false);
+  const [responseExpanded, setResponseExpanded] = useState(false);
+  const textLimit = 160;
+  const longDescription = props.data.description.length > textLimit;
+  const longResponse = props.data.response && props.data.response.length > textLimit;
 
   const editClick = () => {
     props.setEditID(props.data.id!);
@@ -73,7 +78,41 @@ export default function Risk(props: RiskProps) {
       </TableCell>
 
       <TableCell className="align-top">
-        <Text className="min-w-2xs whitespace-pre-line">{props.data.description}</Text>
+        <Text className="min-w-2xs whitespace-pre-line">
+          {descriptionExpanded || !longDescription ? (
+            <>
+              {props.data.description}
+              {longDescription && (
+                <>
+                  {" "}
+                  <TextLink
+                    href=""
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setDescriptionExpanded(false);
+                    }}
+                  >
+                    Less
+                  </TextLink>
+                </>
+              )}
+            </>
+          ) : (
+            <>
+              {props.data.description.slice(0, textLimit).trim()}
+              {"… "}
+              <TextLink
+                href=""
+                onClick={(e) => {
+                  e.preventDefault();
+                  setDescriptionExpanded(true);
+                }}
+              >
+                More
+              </TextLink>
+            </>
+          )}
+        </Text>
 
         {props.data.ai_description && (
           <span className="mt-3 inline-flex items-center gap-1.5 bg-gradient-to-r from-indigo-500 to-fuchsia-500 bg-clip-text text-sm text-transparent sm:text-xs">
@@ -114,7 +153,41 @@ export default function Risk(props: RiskProps) {
 
       <TableCell className="align-top">
         {props.data.response ? (
-          <Text className="min-w-2xs whitespace-pre-line">{props.data.response}</Text>
+          <Text className="min-w-2xs whitespace-pre-line">
+            {responseExpanded || !longResponse ? (
+              <>
+                {props.data.response}
+                {longResponse && (
+                  <>
+                    {" "}
+                    <TextLink
+                      href=""
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setResponseExpanded(false);
+                      }}
+                    >
+                      Less
+                    </TextLink>
+                  </>
+                )}
+              </>
+            ) : (
+              <>
+                {props.data.response.slice(0, textLimit).trim()}
+                {"… "}
+                <TextLink
+                  href=""
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setResponseExpanded(true);
+                  }}
+                >
+                  More
+                </TextLink>
+              </>
+            )}
+          </Text>
         ) : (
           <Text>—</Text>
         )}
