@@ -69,4 +69,5 @@ export type RiskType = {
   level: number;
   status: number;
   owner?: string;
+  response?: string;
 };

@@ -3,16 +3,18 @@
 import { createClient } from "@/utils/supabase/server";
 import { encrypt, decrypt } from "@/utils/encryption";
 import { RiskType } from "@/types";
-import Owner from "@/components/risk-register/risk-dialog/Owner";
 
 export async function getRisksData(companyID: number, from: number, to: number, issue?: string) {
   const supabase = await createClient();
 
   let risksQuery = supabase
     .from("risks")
-    .select("id, concern_id, check_in_id, date_raised, date_reviewed, issues, description, level, status, owner", {
-      count: "exact",
-    })
+    .select(
+      "id, concern_id, check_in_id, date_raised, date_reviewed, issues, description, level, status, owner, response",
+      {
+        count: "exact",
+      }
+    )
     .eq("company_id", companyID);
 
   if (issue) risksQuery = risksQuery.contains("issues", issue); // Filter
@@ -25,6 +27,12 @@ export async function getRisksData(companyID: number, from: number, to: number, 
 
   if (risksError) return { error: risksError.message };
   risksData.forEach((risk) => (risk.description = decrypt(risk.description))); // Decrypt descriptions
+
+  // Decrypt responses
+  risksData.forEach((risk) => {
+    if (risk.response) risk.response = decrypt(risk.response);
+  });
+
   return { data: risksData, count: risksCount };
 }
 
@@ -33,7 +41,9 @@ export async function getRiskData(id: number) {
 
   const { data: riskData, error: riskError } = await supabase
     .from("risks")
-    .select("id, concern_id, check_in_id, date_raised, date_reviewed, issues, description, level, status, owner")
+    .select(
+      "id, concern_id, check_in_id, date_raised, date_reviewed, issues, description, level, status, owner, response"
+    )
     .eq("id", id)
     .single();
 
@@ -43,6 +53,7 @@ export async function getRiskData(id: number) {
   }
 
   riskData.description = decrypt(riskData.description); // Decrypt description
+  if (riskData.response) riskData.response = decrypt(riskData.response); // Decrypt response
   return { data: riskData };
 }
 
@@ -61,6 +72,7 @@ export async function addEditRisk(companyID: number, risk: RiskType, id: number)
         level: risk.level,
         status: risk.status,
         owner: risk.owner ? risk.owner : null,
+        response: risk.response ? encrypt(risk.response.trim()) : null,
       })
       .eq("id", id);
 
@@ -79,6 +91,7 @@ export async function addEditRisk(companyID: number, risk: RiskType, id: number)
       level: risk.level,
       status: risk.status,
       owner: risk.owner ? risk.owner : null,
+      response: risk.response ? encrypt(risk.response.trim()) : null,
     });
 
     if (insertRiskError) {

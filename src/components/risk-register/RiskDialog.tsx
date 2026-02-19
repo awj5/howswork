@@ -26,6 +26,7 @@ type FormErrorsType = {
   dateRaised?: boolean;
   dateReviewed?: string;
   description?: boolean;
+  response?: boolean;
 };
 
 export default function RiskDialog(props: RiskDialogProps) {
@@ -39,6 +40,7 @@ export default function RiskDialog(props: RiskDialogProps) {
   const [level, setLevel] = useState("2");
   const [status, setStatus] = useState("1");
   const [owner, setOwner] = useState("");
+  const [response, setResponse] = useState("");
 
   const dateReviewedChange = (val: string) => {
     setDateReviewed(val);
@@ -59,6 +61,7 @@ export default function RiskDialog(props: RiskDialogProps) {
     }
 
     if (!description.trim()) errors.description = true;
+    if (Number(status) > 2 && !response.trim()) errors.response = true; // Response required when status is beyond under review
 
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
@@ -80,6 +83,7 @@ export default function RiskDialog(props: RiskDialogProps) {
         level: Number(level),
         status: Number(status),
         owner,
+        response,
       },
       props.id
     );
@@ -118,6 +122,7 @@ export default function RiskDialog(props: RiskDialogProps) {
       setLevel(String(result.data?.level));
       setStatus(String(result.data?.status));
       setOwner(result.data?.owner ?? "");
+      setResponse(result.data?.response ?? "");
     };
 
     // Reset on open
@@ -128,13 +133,14 @@ export default function RiskDialog(props: RiskDialogProps) {
     setLevel("2");
     setStatus("1");
     setOwner(`${user.first_name} ${user.last_name}`); // Set to auth user
+    setResponse("");
     setFormErrors({});
 
     if (props.id) getRisk(); // Edit risk
   }, [props.open, user]);
 
   return (
-    <Dialog open={props.open} onClose={props.setOpen} size="xl">
+    <Dialog open={props.open} onClose={props.setOpen} size="2xl">
       <DialogTitle>{props.id ? "Edit" : "Add a"} risk</DialogTitle>
 
       <DialogDescription className="text-wrap!">
@@ -179,7 +185,7 @@ export default function RiskDialog(props: RiskDialogProps) {
           <Label>Description</Label>
 
           <Textarea
-            rows={5}
+            rows={6}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder={"What's happening, who's affected, and how was it identified?"}
@@ -193,19 +199,6 @@ export default function RiskDialog(props: RiskDialogProps) {
 
         <div className="grid grid-cols-2 gap-4">
           <Field disabled={props.disabled}>
-            <Label>Review date</Label>
-
-            <Input
-              type="date"
-              value={dateReviewed}
-              onChange={(e) => dateReviewedChange(e.target.value)}
-              invalid={!!formErrors.dateReviewed}
-            />
-
-            {formErrors.dateReviewed && <ErrorMessage>{formErrors.dateReviewed}</ErrorMessage>}
-          </Field>
-
-          <Field disabled={props.disabled}>
             <Label>Status</Label>
 
             <Select value={status} onChange={(e) => setStatus(e.target.value)}>
@@ -218,9 +211,39 @@ export default function RiskDialog(props: RiskDialogProps) {
               <option value="4">Resolved</option>
             </Select>
           </Field>
+
+          <Field disabled={props.disabled}>
+            <Label>Review date</Label>
+
+            <Input
+              type="date"
+              value={dateReviewed}
+              onChange={(e) => dateReviewedChange(e.target.value)}
+              invalid={!!formErrors.dateReviewed}
+            />
+
+            {formErrors.dateReviewed && <ErrorMessage>{formErrors.dateReviewed}</ErrorMessage>}
+          </Field>
         </div>
 
         <Divider className="my-8" soft />
+
+        <Field disabled={props.disabled}>
+          <Label>Response</Label>
+
+          <Textarea
+            rows={6}
+            value={response}
+            onChange={(e) => setResponse(e.target.value)}
+            placeholder={"What controls or actions are being taken to address this risk?"}
+            invalid={formErrors.response}
+          />
+
+          {formErrors.response && <ErrorMessage>Required when status is Action planned or Resolved.</ErrorMessage>}
+        </Field>
+
+        <Divider className="my-8" soft />
+
         <Owner val={owner} setVal={setOwner} disabled={props.disabled} />
         <Divider className="mt-8" soft />
       </DialogBody>

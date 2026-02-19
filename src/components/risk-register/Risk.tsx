@@ -39,6 +39,32 @@ export default function Risk(props: RiskProps) {
       </TableCell>
 
       <TableCell className="align-top">
+        <Badge color={props.data.level === 1 ? "yellow" : props.data.level === 2 ? "orange" : "red"}>
+          {props.data.level === 1 ? "Low" : props.data.level === 2 ? "Medium" : "High"}
+        </Badge>
+      </TableCell>
+
+      <TableCell className="align-top">Manual</TableCell>
+
+      <TableCell className="align-top">
+        {props.data.issues?.length ? (
+          <div className="flex min-w-3xs flex-wrap gap-3">
+            {props.data.issues.map((issue) => {
+              const tag = IssuesData.find((i) => i.id === issue)?.tag;
+
+              return <Badge key={issue}>{tag}</Badge>;
+            })}
+          </div>
+        ) : (
+          <Text>—</Text>
+        )}
+      </TableCell>
+
+      <TableCell className="align-top">
+        <Text className="min-w-3xs whitespace-pre-line">{props.data.description}</Text>
+      </TableCell>
+
+      <TableCell className="align-top">
         <Badge
           color={
             props.data.status === 1
@@ -60,34 +86,16 @@ export default function Risk(props: RiskProps) {
         </Badge>
       </TableCell>
 
-      <TableCell className="align-top"></TableCell>
+      <TableCell className="align-top">
+        {dateReviewed ? dateReviewed.setZone(props.timezone).toFormat("dd LLL yyyy") : <Text>—</Text>}
+      </TableCell>
 
       <TableCell className="align-top">
-        {props.data.issues?.length ? (
-          <div className="flex min-w-3xs flex-wrap gap-3">
-            {props.data.issues.map((issue) => {
-              const tag = IssuesData.find((i) => i.id === issue)?.tag;
-
-              return <Badge key={issue}>{tag}</Badge>;
-            })}
-          </div>
+        {props.data.response ? (
+          <Text className="min-w-3xs whitespace-pre-line">{props.data.response}</Text>
         ) : (
           <Text>—</Text>
         )}
-      </TableCell>
-
-      <TableCell className="align-top">
-        <Text className="min-w-3xs whitespace-pre-line">{props.data.description}</Text>
-      </TableCell>
-
-      <TableCell className="align-top">
-        <Badge color={props.data.level === 1 ? "yellow" : props.data.level === 2 ? "orange" : "red"}>
-          {props.data.level === 1 ? "Low" : props.data.level === 2 ? "Medium" : "High"}
-        </Badge>
-      </TableCell>
-
-      <TableCell className="align-top">
-        {dateReviewed ? dateReviewed.setZone(props.timezone).toFormat("dd LLL yyyy") : <Text>—</Text>}
       </TableCell>
 
       <TableCell className="align-top">{props.data.owner ? props.data.owner : <Text>—</Text>}</TableCell>

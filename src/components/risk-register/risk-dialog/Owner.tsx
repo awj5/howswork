@@ -60,14 +60,14 @@ export default function Owner(props: OwnerProps) {
       <Label>Owner</Label>
 
       <Select value={props.val} onChange={(e) => props.setVal(e.target.value)}>
+        <option value="">Unassigned</option>
+
         {users.map((user) => (
           <option
             key={user.user_id}
             value={`${user.first_name} ${user.last_name}`}
           >{`${user.first_name} ${user.last_name}`}</option>
         ))}
-
-        <option value="">Unassigned</option>
       </Select>
     </Field>
   );

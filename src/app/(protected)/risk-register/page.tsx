@@ -119,12 +119,13 @@ export default function RiskRegister() {
               <TableHead>
                 <TableRow>
                   <TableHeader>Raised</TableHeader>
-                  <TableHeader>Status</TableHeader>
+                  <TableHeader>Level</TableHeader>
                   <TableHeader>Source</TableHeader>
                   <TableHeader>Issues</TableHeader>
                   <TableHeader>Description</TableHeader>
-                  <TableHeader>Level</TableHeader>
+                  <TableHeader>Status</TableHeader>
                   <TableHeader>Reviewed</TableHeader>
+                  <TableHeader>Response</TableHeader>
                   <TableHeader>Owner</TableHeader>
 
                   <TableHeader className="relative w-0">
