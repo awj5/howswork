@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { addEditRisk, getRiskData } from "@/app/(protected)/risk-register/actions";
@@ -35,6 +35,7 @@ export default function RiskDialog(props: RiskDialogProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user } = useUserContext();
+  const aiDescriptionRef = useRef("");
   const [formErrors, setFormErrors] = useState<FormErrorsType>({});
   const [dateRaised, setDateRaised] = useState("");
   const [dateReviewed, setDateReviewed] = useState("");
@@ -87,6 +88,7 @@ export default function RiskDialog(props: RiskDialogProps) {
         status: Number(status),
         owner,
         response,
+        ai_description: !!(aiDescriptionRef.current && aiDescriptionRef.current === description),
       },
       props.id
     );
@@ -126,6 +128,7 @@ export default function RiskDialog(props: RiskDialogProps) {
       setDateRaised(result.data?.date_raised?.slice(0, 10));
       setDateReviewed(result.data?.date_reviewed?.slice(0, 10) ?? "");
       setIssues(result.data?.issues ?? []);
+      aiDescriptionRef.current = result.data?.ai_description ? result.data.description : "";
       setDescription(result.data?.description);
       setLevel(String(result.data?.level));
       setStatus(String(result.data?.status));
@@ -137,6 +140,7 @@ export default function RiskDialog(props: RiskDialogProps) {
     setDateRaised("");
     setDateReviewed("");
     setIssues([]);
+    aiDescriptionRef.current = "";
     setDescription("");
     setLevel("2");
     setStatus("1");

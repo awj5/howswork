@@ -58,7 +58,7 @@ export async function getRiskData(id: number) {
   const { data: riskData, error: riskError } = await supabase
     .from("risks")
     .select(
-      "id, concern_id, check_in_id, date_raised, date_reviewed, issues, description, level, status, owner, response"
+      "id, concern_id, check_in_id, date_raised, date_reviewed, issues, description, ai_description, level, status, owner, response"
     )
     .eq("id", id)
     .single();
@@ -94,6 +94,7 @@ export async function addEditRisk(companyID: number, risk: RiskType, id: number)
         status: risk.status,
         owner: risk.owner ? risk.owner : null,
         response: risk.response ? encrypt(risk.response.trim()) : null,
+        ai_description: risk.ai_description,
       })
       .eq("id", id);
 
