@@ -7,6 +7,7 @@ import resend from "@/utils/resend";
 import type { CompanyType, UserType } from "@/types";
 import InviteAdmin from "@/emails/invite-admin";
 import ConfirmAdmin from "@/emails/confirm-admin";
+import RemoveAdmin from "@/emails/remove-admin";
 
 export async function inviteUser(email: string, company: CompanyType) {
   const supabase = await createClient();
@@ -85,7 +86,7 @@ export async function inviteUser(email: string, company: CompanyType) {
   }
 }
 
-export async function removeUser(user: UserType, companyID: number) {
+export async function removeUser(user: UserType, company: CompanyType) {
   const supabase = await createClient();
 
   // Get auth user
@@ -96,7 +97,7 @@ export async function removeUser(user: UserType, companyID: number) {
   const { data: companyUsersData, error: companyUsersError } = await supabase
     .from("company_users")
     .select("user_id, invite_email")
-    .eq("company_id", companyID);
+    .eq("company_id", company.id);
 
   if (companyUsersError) {
     console.error(companyUsersError.message);
@@ -115,11 +116,49 @@ export async function removeUser(user: UserType, companyID: number) {
     .from("company_users")
     .delete()
     .eq(user.user_id ? "user_id" : "invite_email", user.user_id || user.email)
-    .eq("company_id", companyID);
+    .eq("company_id", company.id);
 
   if (deleteCompanyUserError) {
     console.error(deleteCompanyUserError.message);
     return { error: "Internal server error" };
+  }
+
+  // Send email alerting user
+  if (user.user_id && userIDs.includes(user.user_id)) {
+    try {
+      // Get user's name
+      const { data: profileData, error: profileError } = await supabaseAdmin
+        .from("profiles")
+        .select("first_name")
+        .eq("user_id", user.user_id)
+        .single();
+
+      if (profileError) throw profileError.message;
+
+      // Get auth user's name
+      const { data: authProfileData, error: authProfileError } = await supabaseAdmin
+        .from("profiles")
+        .select("first_name, last_name")
+        .eq("user_id", authData.user.id)
+        .single();
+
+      if (authProfileError) throw authProfileError.message;
+
+      const { error: sendInviteError } = await resend.emails.send({
+        from: "HowsWork <no-reply@updates.howswork.app>",
+        to: user.email,
+        subject: `Admin access removed for ${company.name}`,
+        react: RemoveAdmin({
+          company: company.name,
+          name: profileData.first_name,
+          removedBy: `${authProfileData.first_name} ${authProfileData.last_name}`,
+        }),
+      });
+
+      if (sendInviteError) throw sendInviteError;
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return { success: true };

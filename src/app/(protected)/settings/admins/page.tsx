@@ -60,7 +60,7 @@ export default function Admins() {
     setAlertOpen(false);
     if (!userToRemove) return;
     setDisabled(true);
-    const result = await removeUser(userToRemove, companies[0].id);
+    const result = await removeUser(userToRemove, companies[0]);
 
     // Refresh page if auth user
     if (!result.error && userToRemove.user_id === user?.user_id) {

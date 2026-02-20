@@ -24,7 +24,7 @@ export default function Risk(props: RiskProps) {
   const checkInDate = props.data.check_in_date ? DateTime.fromISO(props.data.check_in_date) : undefined; // Convert to date object
   const [descriptionExpanded, setDescriptionExpanded] = useState(false);
   const [responseExpanded, setResponseExpanded] = useState(false);
-  const textLimit = 160;
+  const textLimit = 280;
   const longDescription = props.data.description.length > textLimit;
   const longResponse = props.data.response && props.data.response.length > textLimit;
 
