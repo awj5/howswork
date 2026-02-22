@@ -11,6 +11,8 @@ import { ErrorMessage, Field, Label } from "@/components/ui/fieldset";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
+import { Text } from "@/components/ui/text";
+import HelperTooltip from "../HelperTooltip";
 import Issues from "./risk-dialog/Issues";
 import Owner from "./risk-dialog/Owner";
 
@@ -45,6 +47,7 @@ export default function RiskDialog(props: RiskDialogProps) {
   const [status, setStatus] = useState("1");
   const [owner, setOwner] = useState("");
   const [response, setResponse] = useState("");
+  const [concernID, setConcernID] = useState(0);
 
   const dateReviewedChange = (val: string) => {
     setDateReviewed(val);
@@ -134,6 +137,7 @@ export default function RiskDialog(props: RiskDialogProps) {
       setStatus(String(result.data?.status));
       setOwner(result.data?.owner ?? "");
       setResponse(result.data?.response ?? "");
+      setConcernID(result.data?.concern_id ?? 0);
     };
 
     // Reset on open
@@ -146,6 +150,7 @@ export default function RiskDialog(props: RiskDialogProps) {
     setStatus("1");
     setOwner(`${user.first_name} ${user.last_name}`); // Set to auth user
     setResponse("");
+    setConcernID(0);
     setFormErrors({});
 
     if (props.id) getRisk(); // Edit risk
@@ -211,9 +216,11 @@ export default function RiskDialog(props: RiskDialogProps) {
 
         <div className="grid grid-cols-2 gap-4">
           <Field disabled={props.disabled}>
-            <Label>Status</Label>
+            <Label className="inline-flex items-center gap-1.5">
+              Status{!!concernID && <HelperTooltip text="Status is managed from the linked concern." />}
+            </Label>
 
-            <Select value={status} onChange={(e) => setStatus(e.target.value)}>
+            <Select value={status} onChange={(e) => setStatus(e.target.value)} disabled={!!concernID}>
               <option value="1" disabled={!!dateReviewed}>
                 Open
               </option>
@@ -232,6 +239,7 @@ export default function RiskDialog(props: RiskDialogProps) {
               value={dateReviewed}
               onChange={(e) => dateReviewedChange(e.target.value)}
               invalid={!!formErrors.dateReviewed}
+              disabled={!!concernID}
             />
 
             {formErrors.dateReviewed && <ErrorMessage>{formErrors.dateReviewed}</ErrorMessage>}

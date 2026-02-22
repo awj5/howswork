@@ -44,7 +44,7 @@ export default function Account() {
     window.location.reload(); // Refresh page
   };
 
-  const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
+  const submitForm = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // Validate
@@ -159,8 +159,8 @@ export default function Account() {
             <Subheading>Email</Subheading>
 
             <Text>
-              Changing your email will log you out. You&apos;ll need to confirm your new email address before signing back
-              in.
+              Changing your email will log you out. You&apos;ll need to confirm your new email address before signing
+              back in.
             </Text>
           </div>
 

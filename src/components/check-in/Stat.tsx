@@ -38,7 +38,7 @@ export default function Stat(props: StatProps) {
         </div>
       </div>
 
-      {showData && props.data.secondary ? (
+      {!!(showData && props.data.secondary) && (
         <div className="mt-3 flex items-center gap-1">
           <Badge color={props.data.title === "Concerns raised" ? "zinc" : trend === "up" ? "green" : "red"}>
             {trend === "up" && "+"}
@@ -46,7 +46,7 @@ export default function Stat(props: StatProps) {
           </Badge>
           <span className="text-sm/6 text-zinc-500 sm:text-xs/6 dark:text-zinc-400">from last check-in</span>
         </div>
-      ) : null}
+      )}
     </div>
   );
 }

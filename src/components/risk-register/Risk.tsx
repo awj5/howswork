@@ -65,7 +65,7 @@ export default function Risk(props: RiskProps) {
 
       <TableCell className="align-top">
         {props.data.issues?.length ? (
-          <div className="flex min-w-3xs flex-wrap gap-3">
+          <div className="inline-flex min-w-3xs flex-wrap gap-3">
             {props.data.issues.map((issue) => {
               const tag = IssuesData.find((i) => i.id === issue)?.tag;
 

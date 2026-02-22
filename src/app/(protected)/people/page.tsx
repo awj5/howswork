@@ -30,7 +30,7 @@ export default function People() {
 
   useUnsavedWarning([[staff, savedStaff]]);
 
-  const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
+  const submitForm = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStaffError("");
     const contacts = parseContacts(staff);

@@ -19,7 +19,7 @@ function LoginForm() {
   const [submitted, setSubmitted] = useState(false);
   const [emailError, setEmailError] = useState(false);
 
-  const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
+  const submitForm = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setEmailError(false);
     const formData = new FormData(e.currentTarget);

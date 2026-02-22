@@ -140,7 +140,7 @@ export default function Admins() {
         </Button>
       </div>
 
-      {users.length ? (
+      {!!users.length && (
         <Table className="fade-in mt-8 [--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
           <TableHead>
             <TableRow>
@@ -174,7 +174,7 @@ export default function Admins() {
             ))}
           </TableBody>
         </Table>
-      ) : null}
+      )}
 
       <Dialog open={dialogOpen} onClose={setDialogOpen}>
         <DialogTitle>Invite administrator</DialogTitle>

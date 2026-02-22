@@ -83,7 +83,7 @@ export default function Settings() {
     [timezone, savedTimezone],
   ]);
 
-  const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
+  const submitForm = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!companies.length) return;
 
