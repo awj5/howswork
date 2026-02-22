@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
+import { ExclamationCircleIcon } from "@heroicons/react/20/solid";
 import { addEditRisk, getRiskData } from "@/app/(protected)/risk-register/actions";
 import { useCompanies } from "@/hooks/useCompanies";
 import { useUserContext } from "@/hooks/useUserContext";
@@ -12,7 +13,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
 import { Text } from "@/components/ui/text";
-import HelperTooltip from "../HelperTooltip";
 import Issues from "./risk-dialog/Issues";
 import Owner from "./risk-dialog/Owner";
 
@@ -215,12 +215,10 @@ export default function RiskDialog(props: RiskDialogProps) {
         <Divider className="my-8" soft />
 
         <div className="grid grid-cols-2 gap-4">
-          <Field disabled={props.disabled}>
-            <Label className="inline-flex items-center gap-1.5">
-              Status{!!concernID && <HelperTooltip text="Status is managed from the linked concern." />}
-            </Label>
+          <Field disabled={props.disabled || !!concernID}>
+            <Label className="inline-flex items-center gap-1.5">Status</Label>
 
-            <Select value={status} onChange={(e) => setStatus(e.target.value)} disabled={!!concernID}>
+            <Select value={status} onChange={(e) => setStatus(e.target.value)}>
               <option value="1" disabled={!!dateReviewed}>
                 Open
               </option>
@@ -231,7 +229,7 @@ export default function RiskDialog(props: RiskDialogProps) {
             </Select>
           </Field>
 
-          <Field disabled={props.disabled}>
+          <Field disabled={props.disabled || !!concernID}>
             <Label>Review date</Label>
 
             <Input
@@ -239,12 +237,18 @@ export default function RiskDialog(props: RiskDialogProps) {
               value={dateReviewed}
               onChange={(e) => dateReviewedChange(e.target.value)}
               invalid={!!formErrors.dateReviewed}
-              disabled={!!concernID}
             />
 
             {formErrors.dateReviewed && <ErrorMessage>{formErrors.dateReviewed}</ErrorMessage>}
           </Field>
         </div>
+
+        {!!concernID && (
+          <div className="mt-6 flex items-center gap-1.5">
+            <ExclamationCircleIcon aria-hidden="true" className="size-5" />
+            <Text>Status is managed from the linked concern.</Text>
+          </div>
+        )}
 
         <Divider className="my-8" soft />
 
