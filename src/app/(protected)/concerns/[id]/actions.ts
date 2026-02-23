@@ -120,6 +120,32 @@ export async function addStatus(concernID: number, status: number, companyID: nu
     return { error: "Internal server error" };
   }
 
+  // Get risk
+  const { data: riskData, error: riskError } = await supabase
+    .from("risks")
+    .select("date_reviewed")
+    .eq("concern_id", concernID)
+    .maybeSingle();
+
+  if (riskError) {
+    console.error(riskError.message);
+    return { error: "Internal server error" };
+  }
+
+  // Update risk
+  const { error: updateRiskError } = await supabase
+    .from("risks")
+    .update({
+      status: status === 5 ? 4 : status, // No further action shown as Resolved
+      ...(status >= 2 && !riskData?.date_reviewed && { date_reviewed: new Date().toISOString() }), // Set date reviewed
+    })
+    .eq("concern_id", concernID);
+
+  if (updateRiskError) {
+    console.error(updateRiskError.message);
+    return { error: "Internal server error" };
+  }
+
   return { success: true };
 }
 

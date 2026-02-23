@@ -2,7 +2,9 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { DateTime } from "luxon";
 import { EllipsisHorizontalIcon, SparklesIcon } from "@heroicons/react/16/solid";
 import IssuesData from "@/data/issues.json";
+import StatusData from "@/data/status.json";
 import type { RiskType } from "@/types";
+import { concernStatusColor } from "@/utils/helpers";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Text, TextLink } from "@/components/ui/text";
 import { Badge } from "@/components/ui/badge";
@@ -122,24 +124,8 @@ export default function Risk(props: RiskProps) {
       </TableCell>
 
       <TableCell className="align-top">
-        <Badge
-          color={
-            props.data.status === 1
-              ? "blue"
-              : props.data.status === 2
-                ? "orange"
-                : props.data.status === 3
-                  ? "yellow"
-                  : "green"
-          }
-        >
-          {props.data.status === 1
-            ? "Open"
-            : props.data.status === 2
-              ? "Under review"
-              : props.data.status === 3
-                ? "Action planned"
-                : "Resolved"}
+        <Badge color={concernStatusColor(props.data.status)}>
+          {StatusData.find((i) => i.id === props.data.status)?.title.replace("New response", "Open")}
         </Badge>
       </TableCell>
 

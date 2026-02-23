@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { ExclamationCircleIcon } from "@heroicons/react/20/solid";
+import StatusData from "@/data/status.json";
 import { addEditRisk, getRiskData } from "@/app/(protected)/risk-register/actions";
 import { useCompanies } from "@/hooks/useCompanies";
 import { useUserContext } from "@/hooks/useUserContext";
@@ -92,6 +93,7 @@ export default function RiskDialog(props: RiskDialogProps) {
         owner,
         response,
         ai_description: !!(aiDescriptionRef.current && aiDescriptionRef.current === description),
+        concern_id: concernID,
       },
       props.id
     );
@@ -170,7 +172,7 @@ export default function RiskDialog(props: RiskDialogProps) {
         <Divider className="mb-8" />
 
         <div className="grid grid-cols-2 gap-4">
-          <Field disabled={props.disabled}>
+          <Field disabled={props.disabled || !!concernID}>
             <Label>Date raised</Label>
 
             <Input
@@ -219,13 +221,11 @@ export default function RiskDialog(props: RiskDialogProps) {
             <Label className="inline-flex items-center gap-1.5">Status</Label>
 
             <Select value={status} onChange={(e) => setStatus(e.target.value)}>
-              <option value="1" disabled={!!dateReviewed}>
-                Open
-              </option>
-
-              <option value="2">Under review</option>
-              <option value="3">Action planned</option>
-              <option value="4">Resolved</option>
+              {StatusData.slice(1, -1).map((status) => (
+                <option key={status.id} value={status.id} disabled={status.id === 1 && !!dateReviewed}>
+                  {status.title.replace("New response", "Open")}
+                </option>
+              ))}
             </Select>
           </Field>
 
