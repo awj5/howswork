@@ -73,4 +73,6 @@ export type RiskType = {
   status: number;
   owner?: string;
   response?: string;
+  date_resolved?: string;
+  ai_response?: boolean;
 };

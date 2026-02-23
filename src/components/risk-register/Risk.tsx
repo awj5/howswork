@@ -21,14 +21,17 @@ type RiskProps = {
 };
 
 export default function Risk(props: RiskProps) {
-  const dateRaised = DateTime.fromISO(props.data.date_raised); // Convert to date object
-  const dateReviewed = props.data.date_reviewed ? DateTime.fromISO(props.data.date_reviewed) : undefined; // Convert to date object
-  const checkInDate = props.data.check_in_date ? DateTime.fromISO(props.data.check_in_date) : undefined; // Convert to date object
   const [descriptionExpanded, setDescriptionExpanded] = useState(false);
   const [responseExpanded, setResponseExpanded] = useState(false);
   const textLimit = 280;
   const longDescription = props.data.description.length > textLimit;
   const longResponse = props.data.response && props.data.response.length > textLimit;
+
+  // Convert to date object
+  const dateRaised = DateTime.fromISO(props.data.date_raised);
+  const dateReviewed = props.data.date_reviewed ? DateTime.fromISO(props.data.date_reviewed) : undefined;
+  const dateResolved = props.data.date_resolved ? DateTime.fromISO(props.data.date_resolved) : undefined;
+  const checkInDate = props.data.check_in_date ? DateTime.fromISO(props.data.check_in_date) : undefined;
 
   const editClick = () => {
     props.setEditID(props.data.id!);
@@ -42,7 +45,7 @@ export default function Risk(props: RiskProps) {
 
   return (
     <TableRow>
-      <TableCell className="align-top font-medium">
+      <TableCell className="align-top">
         {dateRaised.toLocal().toLocaleString({ day: "numeric", month: "numeric", year: "2-digit" })}
       </TableCell>
 
@@ -116,11 +119,7 @@ export default function Risk(props: RiskProps) {
           )}
         </Text>
 
-        {props.data.ai_description && (
-          <span className="mt-3 inline-flex items-center gap-1.5 bg-gradient-to-r from-indigo-500 to-fuchsia-500 bg-clip-text text-sm text-transparent sm:text-xs">
-            <SparklesIcon className="size-5 fill-indigo-500 sm:size-4" /> Auto-generated
-          </span>
-        )}
+        {props.data.ai_description && <AILabel />}
       </TableCell>
 
       <TableCell className="align-top">
@@ -139,41 +138,53 @@ export default function Risk(props: RiskProps) {
 
       <TableCell className="align-top">
         {props.data.response ? (
-          <Text className="min-w-2xs whitespace-pre-line">
-            {responseExpanded || !longResponse ? (
-              <>
-                {props.data.response}
-                {longResponse && (
-                  <>
-                    {" "}
-                    <TextLink
-                      href=""
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setResponseExpanded(false);
-                      }}
-                    >
-                      Less
-                    </TextLink>
-                  </>
-                )}
-              </>
-            ) : (
-              <>
-                {props.data.response.slice(0, textLimit).trim()}
-                {"… "}
-                <TextLink
-                  href=""
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setResponseExpanded(true);
-                  }}
-                >
-                  More
-                </TextLink>
-              </>
-            )}
-          </Text>
+          <>
+            <Text className="min-w-2xs whitespace-pre-line">
+              {responseExpanded || !longResponse ? (
+                <>
+                  {props.data.response}
+                  {longResponse && (
+                    <>
+                      {" "}
+                      <TextLink
+                        href=""
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setResponseExpanded(false);
+                        }}
+                      >
+                        Less
+                      </TextLink>
+                    </>
+                  )}
+                </>
+              ) : (
+                <>
+                  {props.data.response.slice(0, textLimit).trim()}
+                  {"… "}
+                  <TextLink
+                    href=""
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setResponseExpanded(true);
+                    }}
+                  >
+                    More
+                  </TextLink>
+                </>
+              )}
+            </Text>
+
+            {props.data.ai_response && <AILabel />}
+          </>
+        ) : (
+          <Text>—</Text>
+        )}
+      </TableCell>
+
+      <TableCell className="align-top">
+        {dateResolved ? (
+          dateResolved.toLocal().toLocaleString({ day: "numeric", month: "numeric", year: "2-digit" })
         ) : (
           <Text>—</Text>
         )}
@@ -204,5 +215,13 @@ export default function Risk(props: RiskProps) {
         </div>
       </TableCell>
     </TableRow>
+  );
+}
+
+function AILabel() {
+  return (
+    <span className="mt-3 inline-flex items-center gap-1.5 bg-gradient-to-r from-indigo-500 to-fuchsia-500 bg-clip-text text-sm text-transparent sm:text-xs">
+      <SparklesIcon className="size-5 fill-indigo-500 sm:size-4" /> Auto-generated
+    </span>
   );
 }

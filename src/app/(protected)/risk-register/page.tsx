@@ -133,6 +133,7 @@ export default function RiskRegister() {
                   <TableHeader>Status</TableHeader>
                   <TableHeader>Reviewed</TableHeader>
                   <TableHeader>Response</TableHeader>
+                  <TableHeader>Resolved</TableHeader>
                   <TableHeader>Owner</TableHeader>
 
                   <TableHeader className="relative w-0">

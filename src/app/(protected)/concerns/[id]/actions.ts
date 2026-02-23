@@ -1,7 +1,9 @@
 "use server";
 
+import StatusData from "@/data/status.json";
 import { createClient } from "@/utils/supabase/server";
 import { encrypt, decrypt } from "@/utils/encryption";
+import { generateRiskResponse } from "@/utils/ai";
 
 export async function getConcernData(id: number, companyID: number) {
   const supabase = await createClient();
@@ -103,11 +105,54 @@ export async function addComment(concernID: number, comment: string, companyID: 
     return { error: "Internal server error" };
   }
 
+  // Get risk
+  const { data: riskData, error: riskError } = await supabase
+    .from("risks")
+    .select("owner")
+    .eq("concern_id", concernID)
+    .maybeSingle();
+
+  if (riskError) {
+    console.error(riskError.message);
+    return { error: "Internal server error" };
+  }
+
+  // Update risk
+  if (riskData && !riskData.owner) {
+    const { error: updateRiskError } = await supabase
+      .from("risks")
+      .update({
+        owner: `${profileData.first_name} ${profileData.last_name}`,
+      })
+      .eq("concern_id", concernID);
+
+    if (updateRiskError) {
+      console.error(updateRiskError.message);
+      return { error: "Internal server error" };
+    }
+  }
+
   return { success: true };
 }
 
 export async function addStatus(concernID: number, status: number, companyID: number) {
   const supabase = await createClient();
+
+  // Get auth user
+  const { data: authData, error: authError } = await supabase.auth.getUser();
+  if (authError || !authData.user) return { error: "Not authenticated" };
+
+  // Get profile
+  const { data: profileData, error: profileError } = await supabase
+    .from("profiles")
+    .select("first_name, last_name")
+    .eq("user_id", authData.user.id)
+    .single();
+
+  if (profileError) {
+    console.error(profileError.message);
+    return { error: "Internal server error" };
+  }
 
   const { error: insertConcernStatusError } = await supabase.from("concern_status").insert({
     status,
@@ -123,7 +168,7 @@ export async function addStatus(concernID: number, status: number, companyID: nu
   // Get risk
   const { data: riskData, error: riskError } = await supabase
     .from("risks")
-    .select("date_reviewed")
+    .select("date_reviewed, owner")
     .eq("concern_id", concernID)
     .maybeSingle();
 
@@ -132,12 +177,68 @@ export async function addStatus(concernID: number, status: number, companyID: nu
     return { error: "Internal server error" };
   }
 
+  // Generate AI risk response
+  let riskResponse = "";
+
+  if (status >= 4) {
+    // Get status updates
+    const { data: concernStatusData, error: concernStatusError } = await supabase
+      .from("concern_status")
+      .select("created_at, status")
+      .eq("concern_id", concernID)
+      .order("created_at", { ascending: false });
+
+    if (concernStatusError) {
+      console.error(concernStatusError.message);
+      return { error: "Internal server error" };
+    }
+
+    // Get comments
+    const { data: concernCommentsData, error: concernCommentsError } = await supabase
+      .from("concern_comments")
+      .select("created_at, comment, admin_name")
+      .eq("concern_id", concernID)
+      .order("created_at", { ascending: false });
+
+    if (concernCommentsError) {
+      console.error(concernCommentsError.message);
+      return { error: "Internal server error" };
+    }
+
+    // Decrypt comments
+    concernCommentsData.forEach((item) => {
+      try {
+        item.comment = decrypt(item.comment);
+      } catch {
+        item.comment = "[decryption error]";
+      }
+    });
+
+    // Combine status updates and comments, mapping status numbers to titles for AI
+    const statusWithTitles = concernStatusData.map((item) => ({
+      created_at: item.created_at,
+      status: StatusData.find((s) => s.id === item.status)?.title ?? String(item.status),
+    }));
+
+    const activity = [...statusWithTitles, ...concernCommentsData].sort(
+      (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    );
+
+    riskResponse = await generateRiskResponse(activity);
+  }
+
+  const now = new Date().toISOString();
+
   // Update risk
   const { error: updateRiskError } = await supabase
     .from("risks")
     .update({
       status: status === 5 ? 4 : status, // No further action shown as Resolved
-      ...(status >= 2 && !riskData?.date_reviewed && { date_reviewed: new Date().toISOString() }), // Set date reviewed
+      date_resolved: status >= 4 ? now : null,
+      response: riskResponse ? encrypt(riskResponse) : null,
+      ai_response: !!riskResponse,
+      ...(status >= 2 && !riskData?.date_reviewed && { date_reviewed: now }),
+      ...(!riskData?.owner && { owner: `${profileData.first_name} ${profileData.last_name}` }), // Add owner if not already assigned
     })
     .eq("concern_id", concernID);
 

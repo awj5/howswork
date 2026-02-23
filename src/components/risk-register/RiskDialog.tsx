@@ -31,6 +31,7 @@ type FormErrorsType = {
   dateReviewed?: string;
   description?: boolean;
   response?: boolean;
+  dateResolved?: string;
 };
 
 export default function RiskDialog(props: RiskDialogProps) {
@@ -39,6 +40,7 @@ export default function RiskDialog(props: RiskDialogProps) {
   const searchParams = useSearchParams();
   const { user } = useUserContext();
   const aiDescriptionRef = useRef("");
+  const aiResponseRef = useRef("");
   const [formErrors, setFormErrors] = useState<FormErrorsType>({});
   const [dateRaised, setDateRaised] = useState("");
   const [dateReviewed, setDateReviewed] = useState("");
@@ -49,10 +51,16 @@ export default function RiskDialog(props: RiskDialogProps) {
   const [owner, setOwner] = useState("");
   const [response, setResponse] = useState("");
   const [concernID, setConcernID] = useState(0);
+  const [dateResolved, setDateResolved] = useState("");
 
   const dateReviewedChange = (val: string) => {
     setDateReviewed(val);
     if (status === "1") setStatus("2");
+  };
+
+  const dateResolvedChange = (val: string) => {
+    setDateResolved(val);
+    if (val) setStatus("4");
   };
 
   const submit = async () => {
@@ -65,11 +73,21 @@ export default function RiskDialog(props: RiskDialogProps) {
     if (status !== "1" && !dateReviewed) {
       errors.dateReviewed = "Required when status is not Open.";
     } else if (dateReviewed && dateReviewed < dateRaised) {
-      errors.dateReviewed = "Must be after date raised.";
+      errors.dateReviewed = "Cannot be before date raised.";
     }
 
     if (!description.trim()) errors.description = true;
     if (Number(status) > 2 && !response.trim()) errors.response = true; // Response required when status is beyond under review
+
+    if (status === "4" && !dateResolved) {
+      errors.dateResolved = "Required when status is Resolved.";
+    } else if (status !== "4" && dateResolved) {
+      errors.dateResolved = "Status is not Resolved.";
+    } else if (dateResolved && dateResolved < dateRaised) {
+      errors.dateResolved = "Cannot be before date raised.";
+    } else if (dateResolved && dateResolved < dateReviewed) {
+      errors.dateResolved = "Cannot be before date reviewed.";
+    }
 
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
@@ -94,6 +112,8 @@ export default function RiskDialog(props: RiskDialogProps) {
         response,
         ai_description: !!(aiDescriptionRef.current && aiDescriptionRef.current === description),
         concern_id: concernID,
+        date_resolved: dateResolved,
+        ai_response: !!(aiResponseRef.current && aiResponseRef.current === response),
       },
       props.id
     );
@@ -138,8 +158,10 @@ export default function RiskDialog(props: RiskDialogProps) {
       setLevel(String(result.data?.level));
       setStatus(String(result.data?.status));
       setOwner(result.data?.owner ?? "");
+      aiResponseRef.current = result.data?.ai_response ? result.data.response : "";
       setResponse(result.data?.response ?? "");
       setConcernID(result.data?.concern_id ?? 0);
+      setDateResolved(result.data?.date_resolved?.slice(0, 10) ?? "");
     };
 
     // Reset on open
@@ -151,9 +173,11 @@ export default function RiskDialog(props: RiskDialogProps) {
     setLevel("2");
     setStatus("1");
     setOwner(`${user.first_name} ${user.last_name}`); // Set to auth user
+    aiResponseRef.current = "";
     setResponse("");
     setConcernID(0);
     setFormErrors({});
+    setDateResolved("");
 
     if (props.id) getRisk(); // Edit risk
   }, [props.open, user]);
@@ -268,7 +292,23 @@ export default function RiskDialog(props: RiskDialogProps) {
 
         <Divider className="my-8" soft />
 
-        <Owner val={owner} setVal={setOwner} disabled={props.disabled} />
+        <div className="grid grid-cols-2 gap-4">
+          <Field disabled={props.disabled || !!concernID}>
+            <Label>Resolved date</Label>
+
+            <Input
+              type="date"
+              value={dateResolved}
+              onChange={(e) => dateResolvedChange(e.target.value)}
+              invalid={!!formErrors.dateResolved}
+            />
+
+            {formErrors.dateResolved && <ErrorMessage>{formErrors.dateResolved}</ErrorMessage>}
+          </Field>
+
+          <Owner val={owner} setVal={setOwner} disabled={props.disabled} />
+        </div>
+
         <Divider className="mt-8" soft />
       </DialogBody>
 
