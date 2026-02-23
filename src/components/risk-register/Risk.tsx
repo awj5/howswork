@@ -44,18 +44,18 @@ export default function Risk(props: RiskProps) {
   };
 
   return (
-    <TableRow>
-      <TableCell className="align-top">
+    <TableRow className="[&>td]:align-top">
+      <TableCell>
         {dateRaised.toLocal().toLocaleString({ day: "numeric", month: "numeric", year: "2-digit" })}
       </TableCell>
 
-      <TableCell className="align-top">
+      <TableCell>
         <Badge color={props.data.level === 1 ? "yellow" : props.data.level === 2 ? "orange" : "red"}>
           {props.data.level === 1 ? "Low" : props.data.level === 2 ? "Medium" : "High"}
         </Badge>
       </TableCell>
 
-      <TableCell className="align-top">
+      <TableCell>
         {props.data.concern_id ? (
           <TextLink href={`/concerns/${props.data.concern_id}`}>HW-{props.data.concern_tracking}</TextLink>
         ) : checkInDate ? (
@@ -68,12 +68,11 @@ export default function Risk(props: RiskProps) {
         )}
       </TableCell>
 
-      <TableCell className="align-top">
+      <TableCell>
         {props.data.issues?.length ? (
           <div className="inline-flex min-w-3xs flex-wrap gap-3">
             {props.data.issues.map((issue) => {
               const tag = IssuesData.find((i) => i.id === issue)?.tag;
-
               return <Badge key={issue}>{tag}</Badge>;
             })}
           </div>
@@ -82,7 +81,7 @@ export default function Risk(props: RiskProps) {
         )}
       </TableCell>
 
-      <TableCell className="align-top">
+      <TableCell>
         <Text className="min-w-2xs whitespace-pre-line">
           {descriptionExpanded || !longDescription ? (
             <>
@@ -122,13 +121,13 @@ export default function Risk(props: RiskProps) {
         {props.data.ai_description && <AILabel />}
       </TableCell>
 
-      <TableCell className="align-top">
+      <TableCell>
         <Badge color={concernStatusColor(props.data.status)}>
           {StatusData.find((i) => i.id === props.data.status)?.title.replace("New response", "Open")}
         </Badge>
       </TableCell>
 
-      <TableCell className="align-top">
+      <TableCell>
         {dateReviewed ? (
           dateReviewed.toLocal().toLocaleString({ day: "numeric", month: "numeric", year: "2-digit" })
         ) : (
@@ -136,7 +135,7 @@ export default function Risk(props: RiskProps) {
         )}
       </TableCell>
 
-      <TableCell className="align-top">
+      <TableCell>
         {props.data.response ? (
           <>
             <Text className="min-w-2xs whitespace-pre-line">
@@ -182,7 +181,7 @@ export default function Risk(props: RiskProps) {
         )}
       </TableCell>
 
-      <TableCell className="align-top">
+      <TableCell>
         {dateResolved ? (
           dateResolved.toLocal().toLocaleString({ day: "numeric", month: "numeric", year: "2-digit" })
         ) : (
@@ -190,9 +189,9 @@ export default function Risk(props: RiskProps) {
         )}
       </TableCell>
 
-      <TableCell className="align-top">{props.data.owner ? props.data.owner : <Text>—</Text>}</TableCell>
+      <TableCell>{props.data.owner ? props.data.owner : <Text>—</Text>}</TableCell>
 
-      <TableCell className="align-top">
+      <TableCell>
         <div className="-mx-3 -my-1.5 sm:-mx-2.5">
           <Dropdown>
             <DropdownButton plain aria-label="More options">

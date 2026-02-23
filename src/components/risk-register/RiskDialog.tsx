@@ -60,7 +60,7 @@ export default function RiskDialog(props: RiskDialogProps) {
 
   const dateResolvedChange = (val: string) => {
     setDateResolved(val);
-    if (val) setStatus("4");
+    setStatus("4");
   };
 
   const submit = async () => {
@@ -73,7 +73,7 @@ export default function RiskDialog(props: RiskDialogProps) {
     if (status !== "1" && !dateReviewed) {
       errors.dateReviewed = "Required when status is not Open.";
     } else if (dateReviewed && dateReviewed < dateRaised) {
-      errors.dateReviewed = "Cannot be before date raised.";
+      errors.dateReviewed = "Cannot be before raised date.";
     }
 
     if (!description.trim()) errors.description = true;
@@ -81,12 +81,10 @@ export default function RiskDialog(props: RiskDialogProps) {
 
     if (status === "4" && !dateResolved) {
       errors.dateResolved = "Required when status is Resolved.";
-    } else if (status !== "4" && dateResolved) {
-      errors.dateResolved = "Status is not Resolved.";
     } else if (dateResolved && dateResolved < dateRaised) {
-      errors.dateResolved = "Cannot be before date raised.";
+      errors.dateResolved = "Cannot be before raised date.";
     } else if (dateResolved && dateResolved < dateReviewed) {
-      errors.dateResolved = "Cannot be before date reviewed.";
+      errors.dateResolved = "Cannot be before reviewed date.";
     }
 
     if (Object.keys(errors).length > 0) {
@@ -176,8 +174,8 @@ export default function RiskDialog(props: RiskDialogProps) {
     aiResponseRef.current = "";
     setResponse("");
     setConcernID(0);
-    setFormErrors({});
     setDateResolved("");
+    setFormErrors({});
 
     if (props.id) getRisk(); // Edit risk
   }, [props.open, user]);
@@ -242,11 +240,15 @@ export default function RiskDialog(props: RiskDialogProps) {
 
         <div className="grid grid-cols-2 gap-4">
           <Field disabled={props.disabled || !!concernID}>
-            <Label className="inline-flex items-center gap-1.5">Status</Label>
+            <Label>Status</Label>
 
             <Select value={status} onChange={(e) => setStatus(e.target.value)}>
               {StatusData.slice(1, -1).map((status) => (
-                <option key={status.id} value={status.id} disabled={status.id === 1 && !!dateReviewed}>
+                <option
+                  key={status.id}
+                  value={status.id}
+                  disabled={(status.id === 1 && !!dateReviewed) || (status.id < 4 && !!dateResolved)}
+                >
                   {status.title.replace("New response", "Open")}
                 </option>
               ))}
@@ -268,8 +270,11 @@ export default function RiskDialog(props: RiskDialogProps) {
         </div>
 
         {!!concernID && (
-          <div className="mt-6 flex items-center gap-1.5">
-            <ExclamationCircleIcon aria-hidden="true" className="size-5" />
+          <div className="mt-5 flex gap-1.5 sm:items-center">
+            <div className="shrink-0">
+              <ExclamationCircleIcon aria-hidden="true" className="size-5" />
+            </div>
+
             <Text>Status is managed from the linked concern.</Text>
           </div>
         )}

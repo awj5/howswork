@@ -1,7 +1,8 @@
 "use server";
 
-export async function generateRiskResponse(activity: unknown[]) {
-  console.log(activity);
+import { ConcernActivityType } from "@/types";
+
+export async function generateRiskResponse(activity: ConcernActivityType[]) {
   try {
     const systemPrompt = `You are a response drafting assistant for HowsWork, a workplace psychosocial safety platform.
 

@@ -43,8 +43,9 @@ export type CheckInType = {
 
 export type ConcernActivityType = {
   created_at: string;
-  status?: number;
+  status?: number | string;
   comment?: string;
+  author?: string;
   admin_name?: string;
 };
 
@@ -73,6 +74,6 @@ export type RiskType = {
   status: number;
   owner?: string;
   response?: string;
-  date_resolved?: string;
   ai_response?: boolean;
+  date_resolved?: string;
 };

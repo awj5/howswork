@@ -30,6 +30,8 @@ export async function getRisksData(companyID: number, from: number, to: number, 
       : risksQuery.order("date_raised", { ascending: false }).range(from, to));
 
   if (risksError) return { error: risksError.message };
+
+  // Decrypt descriptions
   risksData.forEach((risk) => {
     try {
       risk.description = decrypt(risk.description);
@@ -75,6 +77,7 @@ export async function getRiskData(id: number) {
     console.error(error);
     return { error: "Internal server error" };
   }
+
   return { data: riskData };
 }
 
@@ -87,15 +90,15 @@ export async function addEditRisk(companyID: number, risk: RiskType, id: number)
       .from("risks")
       .update({
         ...(!risk.concern_id && { date_raised: risk.date_raised }),
-        date_reviewed: risk.date_reviewed ? risk.date_reviewed : null,
+        date_reviewed: risk.date_reviewed || null,
         issues: risk.issues?.length ? risk.issues : null,
         description: encrypt(risk.description.trim()),
         level: risk.level,
         status: risk.status,
-        owner: risk.owner ? risk.owner : null,
+        owner: risk.owner || null,
         response: risk.response ? encrypt(risk.response.trim()) : null,
         ai_description: risk.ai_description,
-        date_resolved: risk.date_resolved ? risk.date_resolved : null,
+        date_resolved: risk.date_resolved || null,
         ai_response: risk.ai_response,
       })
       .eq("id", id);
@@ -109,14 +112,14 @@ export async function addEditRisk(companyID: number, risk: RiskType, id: number)
     const { error: insertRiskError } = await supabase.from("risks").insert({
       company_id: companyID,
       date_raised: risk.date_raised,
-      date_reviewed: risk.date_reviewed ? risk.date_reviewed : null,
+      date_reviewed: risk.date_reviewed || null,
       issues: risk.issues?.length ? risk.issues : null,
       description: encrypt(risk.description.trim()),
       level: risk.level,
       status: risk.status,
-      owner: risk.owner ? risk.owner : null,
+      owner: risk.owner || null,
       response: risk.response ? encrypt(risk.response.trim()) : null,
-      date_resolved: risk.date_resolved ? risk.date_resolved : null,
+      date_resolved: risk.date_resolved || null,
     });
 
     if (insertRiskError) {

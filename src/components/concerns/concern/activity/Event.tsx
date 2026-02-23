@@ -30,7 +30,7 @@ const icons = {
 
 export default function Event(props: EventProps) {
   const date = DateTime.fromISO(props.data.created_at); // Convert to date object
-  const status = props.data.status ?? null;
+  const status = (props.data.status as number) ?? null;
 
   const Icon = props.data.comment
     ? props.data.admin_name

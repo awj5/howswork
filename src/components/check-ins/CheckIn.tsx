@@ -28,7 +28,7 @@ export default function CheckIn(props: CheckInProps) {
             {startDT.setZone(props.timezone).toFormat("cccc, dd LLLL yyyy, h:mm a")}
           </time>
 
-          {props.data.repeat && props.data.status !== 3 ? <ArrowPathIcon className="size-5" /> : null}
+          {!!(props.data.repeat && props.data.status !== 3) && <ArrowPathIcon className="size-5" />}
         </span>
       </TableCell>
 

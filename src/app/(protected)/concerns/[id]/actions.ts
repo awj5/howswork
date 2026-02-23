@@ -117,7 +117,7 @@ export async function addComment(concernID: number, comment: string, companyID: 
     return { error: "Internal server error" };
   }
 
-  // Update risk
+  // Update risk (add owner)
   if (riskData && !riskData.owner) {
     const { error: updateRiskError } = await supabase
       .from("risks")
@@ -177,7 +177,7 @@ export async function addStatus(concernID: number, status: number, companyID: nu
     return { error: "Internal server error" };
   }
 
-  // Generate AI risk response
+  // Generate AI risk response (if resolved)
   let riskResponse = "";
 
   if (status >= 4) {
@@ -214,15 +214,18 @@ export async function addStatus(concernID: number, status: number, companyID: nu
       }
     });
 
-    // Combine status updates and comments, mapping status numbers to titles for AI
+    // Map status numbers to titles and set author for AI
     const statusWithTitles = concernStatusData.map((item) => ({
       created_at: item.created_at,
-      status: StatusData.find((s) => s.id === item.status)?.title ?? String(item.status),
+      status: StatusData.find((i) => i.id === item.status)?.title,
+      author: item.status === 1 ? "Employee" : "Admin",
     }));
 
-    const activity = [...statusWithTitles, ...concernCommentsData].sort(
-      (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-    );
+    // Combine status updates and comments, and set comments author
+    const activity = [
+      ...statusWithTitles,
+      ...concernCommentsData.map((item) => ({ ...item, author: item.admin_name ? "Admin" : "Employee" })),
+    ].sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
 
     riskResponse = await generateRiskResponse(activity);
   }
@@ -234,9 +237,9 @@ export async function addStatus(concernID: number, status: number, companyID: nu
     .from("risks")
     .update({
       status: status === 5 ? 4 : status, // No further action shown as Resolved
-      date_resolved: status >= 4 ? now : null,
-      response: riskResponse ? encrypt(riskResponse) : null,
-      ai_response: !!riskResponse,
+      date_resolved: status >= 4 ? now : null, // Null if not resolved
+      response: status >= 4 ? encrypt(riskResponse || "Unable to generate a response. See concern for details.") : null,
+      ai_response: status >= 4,
       ...(status >= 2 && !riskData?.date_reviewed && { date_reviewed: now }),
       ...(!riskData?.owner && { owner: `${profileData.first_name} ${profileData.last_name}` }), // Add owner if not already assigned
     })
