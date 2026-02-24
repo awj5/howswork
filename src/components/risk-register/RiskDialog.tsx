@@ -51,6 +51,7 @@ export default function RiskDialog(props: RiskDialogProps) {
   const [owner, setOwner] = useState("");
   const [response, setResponse] = useState("");
   const [concernID, setConcernID] = useState(0);
+  const [checkInID, setCheckInID] = useState(0);
   const [dateResolved, setDateResolved] = useState("");
 
   const dateReviewedChange = (val: string) => {
@@ -110,6 +111,7 @@ export default function RiskDialog(props: RiskDialogProps) {
         response,
         ai_description: !!(aiDescriptionRef.current && aiDescriptionRef.current === description),
         concern_id: concernID,
+        check_in_id: checkInID,
         date_resolved: dateResolved,
         ai_response: !!(aiResponseRef.current && aiResponseRef.current === response),
       },
@@ -159,6 +161,7 @@ export default function RiskDialog(props: RiskDialogProps) {
       aiResponseRef.current = result.data?.ai_response ? result.data.response : "";
       setResponse(result.data?.response ?? "");
       setConcernID(result.data?.concern_id ?? 0);
+      setCheckInID(result.data?.check_in_id ?? 0);
       setDateResolved(result.data?.date_resolved?.slice(0, 10) ?? "");
     };
 
@@ -174,6 +177,7 @@ export default function RiskDialog(props: RiskDialogProps) {
     aiResponseRef.current = "";
     setResponse("");
     setConcernID(0);
+    setCheckInID(0);
     setDateResolved("");
     setFormErrors({});
 
@@ -194,7 +198,7 @@ export default function RiskDialog(props: RiskDialogProps) {
         <Divider className="mb-8" />
 
         <div className="grid grid-cols-2 gap-4">
-          <Field disabled={props.disabled || !!concernID}>
+          <Field disabled={props.disabled || !!concernID || !!checkInID}>
             <Label>Date raised</Label>
 
             <Input

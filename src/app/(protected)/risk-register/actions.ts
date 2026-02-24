@@ -99,7 +99,7 @@ export async function addEditRisk(companyID: number, risk: RiskType, id: number)
     const { error: updateRiskError } = await supabase
       .from("risks")
       .update({
-        ...(!risk.concern_id && { date_raised: risk.date_raised }),
+        ...(!risk.concern_id && !risk.check_in_id && { date_raised: risk.date_raised }),
         date_reviewed: risk.date_reviewed || null,
         issues: risk.issues?.length ? risk.issues : null,
         description: encrypt(risk.description.trim()),
