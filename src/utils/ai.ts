@@ -46,7 +46,7 @@ Do not:
     });
 
     const json = await response.json();
-    if (!response.ok) throw new Error(json.error.message);
+    if (!response.ok) throw new Error(json.error?.message ?? `OpenAI error ${response.status}`);
     const result = json.choices[0].message.content;
     if (!result) throw new Error("Response is empty");
     return result;
