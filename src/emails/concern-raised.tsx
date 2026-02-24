@@ -13,7 +13,8 @@ export default function ConcernRaised(props: ConcernRaisedProps) {
             <Img src="https://www.howswork.app/img/email-icon.png" width="32" height="32" alt="HowsWork" />
 
             <Text className="text-[16px]">
-              An employee at <strong>{props.company}</strong> has raised a concern.
+              An employee at <strong>{props.company}</strong> has raised a concern and it has been added to the risk
+              register.
             </Text>
 
             <Button
