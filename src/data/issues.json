@@ -51,13 +51,15 @@
     "id": 9,
     "name": "Traumatic events",
     "tag": "traumatic exposure",
-    "description": "Witnessing or experiencing distressing or traumatic incidents at work."
+    "description": "Witnessing or experiencing distressing or traumatic incidents at work.",
+    "serious": true
   },
   {
     "id": 10,
     "name": "Remote/isolated work",
     "tag": "isolated work",
-    "description": "Working alone or remotely with limited access to others or support."
+    "description": "Working alone or remotely with limited access to others or support.",
+    "serious": true
   },
   {
     "id": 11,
@@ -69,24 +71,28 @@
     "id": 12,
     "name": "Violence and aggression",
     "tag": "threats or aggression",
-    "description": "Physical threats, attacks, or aggressive behaviour from others."
+    "description": "Physical threats, attacks, or aggressive behaviour from others.",
+    "serious": true
   },
   {
     "id": 13,
     "name": "Bullying",
     "tag": "bullying",
-    "description": "Repeated unreasonable behaviour that intimidates, humiliates, or undermines you."
+    "description": "Repeated unreasonable behaviour that intimidates, humiliates, or undermines you.",
+    "serious": true
   },
   {
     "id": 14,
     "name": "Harassment",
     "tag": "harassment",
-    "description": "Unwelcome conduct, including sexual or other forms of harassment."
+    "description": "Unwelcome conduct, including sexual or other forms of harassment.",
+    "serious": true
   },
   {
     "id": 15,
     "name": "Workplace relationships",
     "tag": "conflict",
-    "description": "Ongoing tension, disputes, or difficult relationships with colleagues."
+    "description": "Ongoing tension, disputes, or difficult relationships with colleagues.",
+    "serious": true
   }
 ]

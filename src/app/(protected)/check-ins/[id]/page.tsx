@@ -106,10 +106,10 @@ export default function CheckIn() {
         feedback.issues?.forEach((id: number) => {
           issueCounts.set(id, (issueCounts.get(id) || 0) + 1);
           if (!issueAttributions.has(id)) issueAttributions.set(id, new Map());
-          const attribution = issueAttributions.get(id)!;
+          const attributions = issueAttributions.get(id)!;
 
           feedback.attributions?.forEach((attrID: number) => {
-            attribution.set(attrID, (attribution.get(attrID) || 0) + 1);
+            attributions.set(attrID, (attributions.get(attrID) || 0) + 1);
           });
         });
       });
