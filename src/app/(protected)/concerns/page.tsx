@@ -7,7 +7,7 @@ import type { ConcernType } from "@/types";
 import { useCompanies } from "@/hooks/useCompanies";
 import { createClient } from "@/utils/supabase/client";
 import { Heading, Subheading } from "@/components/ui/heading";
-import Search from "@/components/concerns/Search";
+import Filters from "@/components/concerns/Filters";
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import EmptyState from "@/components/EmptyState";
 import { Text } from "@/components/ui/text";
@@ -147,7 +147,7 @@ export default function Concerns() {
             <Heading>Concerns</Heading>
           </div>
 
-          <Search query={search} setQuery={setSearch} />
+          <Filters query={search} setQuery={setSearch} />
 
           {concerns.length ? (
             <Table striped className="mt-8 [--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">

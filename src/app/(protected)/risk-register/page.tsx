@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { DocumentPlusIcon, ArrowDownTrayIcon } from "@heroicons/react/16/solid";
+import { DocumentPlusIcon, ArrowDownTrayIcon, ClipboardIcon } from "@heroicons/react/16/solid";
 import type { RiskType } from "@/types";
 import { useCompanies } from "@/hooks/useCompanies";
 import { Heading, Subheading } from "@/components/ui/heading";
@@ -33,6 +33,8 @@ export default function RiskRegister() {
   const [exportDialogOpen, setExportDialogOpen] = useState(false);
   const [riskDialogOpen, setRiskDialogOpen] = useState(false);
   const [issueFilter, setIssueFilter] = useState<string>();
+  const [concernID, setConcernID] = useState<string>();
+  const [checkInID, setCheckInID] = useState<string>();
   const [doodleLoaded, setDoodleLoaded] = useState(false);
   const [pageCount, setPageCount] = useState(0);
   const pageSize = 50;
@@ -74,7 +76,7 @@ export default function RiskRegister() {
     const to = from + pageSize - 1;
 
     // Get data
-    const result = await getRisksData(companies[0].id, from, to, sort, issueFilter);
+    const result = await getRisksData(companies[0].id, from, to, sort, issueFilter, concernID, checkInID);
 
     if (result.error) {
       console.error(result.error);
@@ -89,15 +91,19 @@ export default function RiskRegister() {
     // Using state to make sure no risks empty state is not shown when risks exist
     const issue = searchParams.get("issue");
     setIssueFilter(issue ? issue : issueFilter ? "" : undefined);
+    const concern = searchParams.get("concern");
+    setConcernID(concern ? concern : concernID ? "" : undefined);
+    const checkIn = searchParams.get("check-in");
+    setCheckInID(checkIn ? checkIn : checkInID ? "" : undefined);
   }, [searchParams]);
 
   useEffect(() => {
     getRisks();
-  }, [companies, page, sort, issueFilter]);
+  }, [companies, page, sort, issueFilter, concernID, checkInID]);
 
   return (
     <>
-      {risks && (risks.length || issueFilter !== undefined) ? (
+      {risks && (risks.length || issueFilter !== undefined || concernID !== undefined || checkInID !== undefined) ? (
         <div className="fade-in">
           <div className="flex flex-col justify-between gap-x-6 gap-y-4 sm:flex-row sm:items-end">
             <div className="flex-1">
@@ -105,58 +111,71 @@ export default function RiskRegister() {
                 <Heading>Risk Register</Heading>
               </div>
 
-              <Filters sort={sort} setSort={setSort} disabled={disabled} />
+              {!concernID && !checkInID && <Filters sort={sort} setSort={setSort} disabled={disabled} />}
             </div>
 
-            <div className="flex gap-4">
-              <Button onClick={() => setExportDialogOpen(true)} outline disabled={disabled}>
-                <ArrowDownTrayIcon />
-                Export
-              </Button>
+            {!concernID && !checkInID && (
+              <div className="flex gap-4">
+                <Button onClick={() => setExportDialogOpen(true)} disabled={disabled}>
+                  <ArrowDownTrayIcon />
+                  Export
+                </Button>
 
-              <Button onClick={addClick} color="indigo" disabled={disabled}>
-                <DocumentPlusIcon />
-                Add risk
-              </Button>
-            </div>
+                <Button onClick={addClick} color="indigo" disabled={disabled}>
+                  <DocumentPlusIcon />
+                  Add risk
+                </Button>
+              </div>
+            )}
           </div>
 
           {risks.length ? (
-            <Table grid className="mt-8 [--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
-              <TableHead>
-                <TableRow>
-                  <TableHeader>Raised</TableHeader>
-                  <TableHeader>Level</TableHeader>
-                  <TableHeader>Source</TableHeader>
-                  <TableHeader>Issues</TableHeader>
-                  <TableHeader>Description</TableHeader>
-                  <TableHeader>Status</TableHeader>
-                  <TableHeader>Reviewed</TableHeader>
-                  <TableHeader>Response</TableHeader>
-                  <TableHeader>Resolved</TableHeader>
-                  <TableHeader>Owner</TableHeader>
+            <>
+              <Table grid className="mt-8 [--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
+                <TableHead>
+                  <TableRow>
+                    <TableHeader>Raised</TableHeader>
+                    <TableHeader>Level</TableHeader>
+                    <TableHeader>Source</TableHeader>
+                    <TableHeader>Issues</TableHeader>
+                    <TableHeader>Description</TableHeader>
+                    <TableHeader>Status</TableHeader>
+                    <TableHeader>Reviewed</TableHeader>
+                    <TableHeader>Response</TableHeader>
+                    <TableHeader>Resolved</TableHeader>
+                    <TableHeader>Owner</TableHeader>
 
-                  <TableHeader className="relative w-0">
-                    <span className="sr-only">Actions</span>
-                  </TableHeader>
-                </TableRow>
-              </TableHead>
+                    <TableHeader className="relative w-0">
+                      <span className="sr-only">Actions</span>
+                    </TableHeader>
+                  </TableRow>
+                </TableHead>
 
-              <TableBody>
-                {risks.map((risk) => (
-                  <Risk
-                    key={risk.id}
-                    data={risk}
-                    timezone={companies[0].timezone}
-                    setRiskDialogOpen={setRiskDialogOpen}
-                    setEditID={setEditID}
-                    disabled={disabled}
-                    setAlertOpen={setAlertOpen}
-                    setDeleteID={setDeleteID}
-                  />
-                ))}
-              </TableBody>
-            </Table>
+                <TableBody>
+                  {risks.map((risk) => (
+                    <Risk
+                      key={risk.id}
+                      data={risk}
+                      timezone={companies[0].timezone}
+                      setRiskDialogOpen={setRiskDialogOpen}
+                      setEditID={setEditID}
+                      disabled={disabled}
+                      setAlertOpen={setAlertOpen}
+                      setDeleteID={setDeleteID}
+                    />
+                  ))}
+                </TableBody>
+              </Table>
+
+              {(concernID || checkInID) && (
+                <div className="mt-6 flex justify-center">
+                  <Button onClick={() => router.push("/risk-register")} outline>
+                    <ClipboardIcon />
+                    View all risks
+                  </Button>
+                </div>
+              )}
+            </>
           ) : (
             <Text className="mt-8">No risks found</Text>
           )}
@@ -174,7 +193,7 @@ export default function RiskRegister() {
               manually.
             </Text>
 
-            <Button onClick={addClick} outline className="mt-6">
+            <Button onClick={addClick} color="indigo" className="mt-6">
               <DocumentPlusIcon />
               Add risk
             </Button>

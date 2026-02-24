@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { DateTime } from "luxon";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
-import { CalendarIcon } from "@heroicons/react/16/solid";
+import { CalendarIcon, ChatBubbleOvalLeftIcon, ClipboardIcon } from "@heroicons/react/16/solid";
 import StatusData from "@/data/status.json";
 import type { ConcernType } from "@/types";
 import { concernStatusColor } from "@/utils/helpers";
@@ -24,6 +24,7 @@ import { getConcernData } from "./actions";
 
 export default function Concern() {
   const params = useParams<{ id: string }>();
+  const router = useRouter();
   const searchParams = useSearchParams();
   const companies = useCompanies();
   const [concern, setConcern] = useState<ConcernType>();
@@ -84,7 +85,13 @@ export default function Concern() {
                   setDisabled={setDisabled}
                 />
 
-                <Button onClick={() => setDialogOpen(true)} className="whitespace-nowrap" disabled={disabled}>
+                <Button
+                  onClick={() => setDialogOpen(true)}
+                  className="whitespace-nowrap"
+                  disabled={disabled}
+                  color="indigo"
+                >
+                  <ChatBubbleOvalLeftIcon />
                   Add a comment
                 </Button>
               </div>
@@ -115,6 +122,15 @@ export default function Concern() {
                   //setDisabled={setDisabled}
                 />
               </div>
+
+              <Button
+                className="mt-4 self-start"
+                onClick={() => router.push(`/risk-register/?concern=${params.id}`)}
+                outline
+              >
+                <ClipboardIcon />
+                View in Risk Register
+              </Button>
             </div>
 
             <div className="w-full">

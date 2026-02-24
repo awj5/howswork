@@ -17,7 +17,7 @@ export async function updateStaff(companyID: number, contacts: string[]) {
     return contact;
   });
 
-  if (normalizedContacts.length < 3) return { error: "At least 3 contacts are required" };
+  if (contacts.length && normalizedContacts.length < 3) return { error: "At least 3 contacts are required" };
 
   // Update staff contacts (RLS only allows users in company to update it)
   const { error: updatePeopleError } = await supabase

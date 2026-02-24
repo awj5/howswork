@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { DateTime } from "luxon";
-import { CalendarIcon, HashtagIcon, TrashIcon } from "@heroicons/react/16/solid";
+import { CalendarIcon, ClipboardIcon, HashtagIcon, TrashIcon } from "@heroicons/react/16/solid";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { createClient } from "@/utils/supabase/client";
 import { checkInStatusText } from "@/utils/helpers";
@@ -34,6 +34,7 @@ export default function CheckIn() {
   const [disabled, setDisabled] = useState(false);
   const [error, setError] = useState("");
   const [team, setTeam] = useState("");
+  const [inRiskRegister, setInRiskRegister] = useState(false);
   const date = checkIn ? DateTime.fromISO(checkIn.start).toUTC() : undefined;
 
   const deleteClick = async () => {
@@ -245,6 +246,16 @@ export default function CheckIn() {
       };
 
       setCheckIn(data);
+
+      // Check if included in risk register
+      const { data: riskData, error: riskError } = await supabase
+        .from("risks")
+        .select("id")
+        .eq("check_in_id", checkInData.id)
+        .limit(1);
+
+      if (riskError) console.error(riskError);
+      setInRiskRegister(!!riskData?.length);
     };
 
     getCheckIn();
@@ -311,6 +322,13 @@ export default function CheckIn() {
           </div>
 
           <Issues data={checkIn.issues} status={checkIn.status} />
+
+          {inRiskRegister && (
+            <Button className="mt-12" onClick={() => router.push(`/risk-register/?check-in=${params.id}`)} outline>
+              <ClipboardIcon />
+              View in Risk Register
+            </Button>
+          )}
         </div>
       ) : (
         error && (

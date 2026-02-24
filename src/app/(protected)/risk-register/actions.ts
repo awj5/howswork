@@ -4,7 +4,15 @@ import { createClient } from "@/utils/supabase/server";
 import { encrypt, decrypt } from "@/utils/encryption";
 import { RiskType } from "@/types";
 
-export async function getRisksData(companyID: number, from: number, to: number, sort: string, issue?: string) {
+export async function getRisksData(
+  companyID: number,
+  from: number,
+  to: number,
+  sort: string,
+  issue?: string,
+  concernID?: string,
+  checkInID?: string
+) {
   const supabase = await createClient();
 
   let risksQuery = supabase
@@ -18,6 +26,8 @@ export async function getRisksData(companyID: number, from: number, to: number, 
     .eq("company_id", companyID);
 
   if (issue) risksQuery = risksQuery.contains("issues", issue); // Filter
+  if (concernID) risksQuery = risksQuery.eq("concern_id", concernID); // Concern only
+  if (checkInID) risksQuery = risksQuery.eq("check_in_id", checkInID); // Check-in only
 
   const {
     data: risksData,

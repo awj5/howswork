@@ -5,12 +5,12 @@ import IssuesData from "@/data/issues.json";
 import { Input, InputGroup } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 
-type SearchProps = {
+type FiltersProps = {
   query: string | undefined;
   setQuery: Dispatch<SetStateAction<string | undefined>>;
 };
 
-export default function Search(props: SearchProps) {
+export default function Filters(props: FiltersProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 

@@ -180,7 +180,7 @@ export default function Account() {
         <Divider className="my-10" soft />
 
         <div className="flex flex-col-reverse items-end justify-between gap-10 sm:flex-row">
-          <Button type="button" onClick={() => setAlertOpen(true)} outline>
+          <Button type="button" onClick={() => setAlertOpen(true)}>
             <TrashIcon />
             Delete my account
           </Button>

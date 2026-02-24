@@ -125,7 +125,7 @@ export default function Teams() {
                   <TableCell className="font-medium">{team.name}</TableCell>
 
                   <TableCell className="text-right">
-                    <Button onClick={() => confirmRemoveClick(team)} disabled={disabled} outline>
+                    <Button onClick={() => confirmRemoveClick(team)} disabled={disabled} plain>
                       <XCircleIcon />
                       Remove
                     </Button>

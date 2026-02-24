@@ -165,7 +165,7 @@ export default function Admins() {
                 </TableCell>
 
                 <TableCell className="text-right">
-                  <Button onClick={() => confirmRemoveClick(admin)} disabled={disabled} outline>
+                  <Button onClick={() => confirmRemoveClick(admin)} disabled={disabled} plain>
                     <XCircleIcon />
                     Remove
                   </Button>
