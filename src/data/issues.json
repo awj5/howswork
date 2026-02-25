@@ -58,8 +58,7 @@
     "id": 10,
     "name": "Remote/isolated work",
     "tag": "isolated work",
-    "description": "Working alone or remotely with limited access to others or support.",
-    "serious": true
+    "description": "Working alone or remotely with limited access to others or support."
   },
   {
     "id": 11,
@@ -92,7 +91,6 @@
     "id": 15,
     "name": "Workplace relationships",
     "tag": "conflict",
-    "description": "Ongoing tension, disputes, or difficult relationships with colleagues.",
-    "serious": true
+    "description": "Ongoing tension, disputes, or difficult relationships with colleagues."
   }
 ]
