@@ -6,6 +6,7 @@ import StatusData from "@/data/status.json";
 import { addEditRisk, getRiskData } from "@/app/(protected)/risk-register/actions";
 import { useCompanies } from "@/hooks/useCompanies";
 import { useUserContext } from "@/hooks/useUserContext";
+import { toLocalMidnightISO } from "@/utils/helpers";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Divider } from "@/components/ui/divider";
@@ -101,8 +102,8 @@ export default function RiskDialog(props: RiskDialogProps) {
     const result = await addEditRisk(
       companies[0].id,
       {
-        date_raised: dateRaised,
-        date_reviewed: dateReviewed,
+        date_raised: toLocalMidnightISO(dateRaised),
+        date_reviewed: dateReviewed ? toLocalMidnightISO(dateReviewed) : "",
         issues,
         description,
         level: Number(level),
@@ -112,7 +113,7 @@ export default function RiskDialog(props: RiskDialogProps) {
         ai_description: !!(aiDescriptionRef.current && aiDescriptionRef.current === description),
         concern_id: concernID,
         check_in_id: checkInID,
-        date_resolved: dateResolved,
+        date_resolved: dateResolved ? toLocalMidnightISO(dateResolved) : "",
         ai_response: !!(aiResponseRef.current && aiResponseRef.current === response),
       },
       props.id

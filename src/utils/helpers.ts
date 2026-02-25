@@ -28,3 +28,13 @@ export function checkInStatusText(status: number) {
 
   return texts[status] ?? "Closed";
 }
+
+export function toLocalMidnightISO(date: string) {
+  const [year, month, day] = date.split("-").map(Number);
+  return new Date(year, month - 1, day).toISOString();
+}
+
+export function toLocalEndOfDayISO(date: string) {
+  const [year, month, day] = date.split("-").map(Number);
+  return new Date(year, month - 1, day, 23, 59, 59, 999).toISOString();
+}
