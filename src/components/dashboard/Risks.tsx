@@ -1,12 +1,10 @@
-import { Dispatch, SetStateAction } from "react";
 import { DateTime } from "luxon";
-import { RiskType, DashboardStatType } from "@/types";
+import { RiskSummaryType, DashboardStatType } from "@/types";
 import { Subheading } from "@/components/ui/heading";
 import Stat from "@/components/dashboard/risks/Stat";
 
 type RisksProps = {
-  data: RiskType[] | undefined;
-  setData: Dispatch<SetStateAction<RiskType[] | undefined>>;
+  data: RiskSummaryType[] | undefined;
 };
 
 export default function Risks(props: RisksProps) {

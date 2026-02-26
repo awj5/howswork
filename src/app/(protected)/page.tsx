@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { RiskType } from "@/types";
+import type { RiskSummaryType } from "@/types";
 import { useCompanies } from "@/hooks/useCompanies";
 import { createClient } from "@/utils/supabase/client";
 import { Heading } from "@/components/ui/heading";
@@ -9,7 +9,7 @@ import Risks from "@/components/dashboard/Risks";
 
 export default function Home() {
   const companies = useCompanies();
-  const [risks, setRisks] = useState<RiskType[]>();
+  const [risks, setRisks] = useState<RiskSummaryType[]>();
 
   useEffect(() => {
     if (!companies.length) return;
@@ -42,7 +42,7 @@ export default function Home() {
             <Heading>{companies[0]?.name}</Heading>
           </div>
 
-          <Risks data={risks} setData={setRisks} />
+          <Risks data={risks} />
         </div>
       )}
     </div>

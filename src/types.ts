@@ -68,15 +68,17 @@ export type RiskType = {
   date_raised: string;
   date_reviewed?: string;
   issues?: number[];
-  description?: string;
+  description: string;
   ai_description?: boolean;
-  level?: number;
+  level: number;
   status: number;
   owner?: string;
   response?: string;
   ai_response?: boolean;
   date_resolved?: string;
 };
+
+export type RiskSummaryType = Pick<RiskType, "id" | "status" | "date_raised" | "date_reviewed" | "date_resolved">;
 
 export type DashboardStatType = {
   title: string;
