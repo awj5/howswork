@@ -83,6 +83,7 @@ export default function ExportDialog(props: ExportDialogProps) {
       URL.revokeObjectURL(url);
 
       props.setOpen(false); // Close dialog
+      toast.success("Risk register exported");
 
       // Reset
       setStart("");
