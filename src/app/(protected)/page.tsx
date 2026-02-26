@@ -1,11 +1,14 @@
 "use client";
 
+import { useState } from "react";
+import type { DashboardStatType } from "@/types";
 import { useCompanies } from "@/hooks/useCompanies";
 import { Heading } from "@/components/ui/heading";
 import Risks from "@/components/dashboard/Risks";
 
 export default function Home() {
   const companies = useCompanies();
+  const [riskStats, setRiskStats] = useState<DashboardStatType[]>([]);
 
   return (
     <div className="mx-auto max-w-6xl">
@@ -13,7 +16,7 @@ export default function Home() {
         <Heading>{companies[0]?.name}</Heading>
       </div>
 
-      <Risks />
+      <Risks data={riskStats} setData={setRiskStats} />
     </div>
   );
 }

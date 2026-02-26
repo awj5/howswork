@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { DateTime } from "luxon";
 import { createClient } from "@/utils/supabase/client";
 import { useCompanies } from "@/hooks/useCompanies";
@@ -6,9 +6,13 @@ import { DashboardStatType } from "@/types";
 import { Subheading } from "@/components/ui/heading";
 import Stat from "@/components/dashboard/risks/Stat";
 
-export default function Risks() {
+type RisksProps = {
+  data: DashboardStatType[];
+  setData: Dispatch<SetStateAction<DashboardStatType[]>>;
+};
+
+export default function Risks(props: RisksProps) {
   const companies = useCompanies();
-  const [stats, setStats] = useState<DashboardStatType[]>([]);
 
   useEffect(() => {
     if (!companies.length) return;
@@ -27,13 +31,13 @@ export default function Risks() {
         return;
       }
 
-      const statsData: DashboardStatType[] = [];
+      const stats: DashboardStatType[] = [];
 
       // Awaiting
       const awaitingReview = risksData.filter((i) => i.status === 1);
       const oldestRaised = awaitingReview[0] ? DateTime.fromISO(awaitingReview[0].date_raised) : null;
 
-      statsData.push({
+      stats.push({
         title: "Awaiting review",
         primary: awaitingReview.length,
         secondary: oldestRaised?.toLocal().toRelative()?.replace(/ ago$/, "") ?? undefined,
@@ -47,7 +51,7 @@ export default function Risks() {
 
       const oldestReviewed = open[0] ? DateTime.fromISO(open[0].date_reviewed) : null;
 
-      statsData.push({
+      stats.push({
         title: "Open",
         primary: open.length,
         secondary: oldestReviewed?.toLocal().toRelative()?.replace(/ ago$/, "") ?? undefined,
@@ -65,14 +69,14 @@ export default function Risks() {
           )
         : undefined;
 
-      statsData.push({
+      stats.push({
         title: "Resolved",
         primary: resolved.length,
         secondary: avgDays ? `${avgDays} day${avgDays !== 1 ? "s" : ""}` : undefined,
         secondaryText: "avg to resolve",
       });
 
-      setStats(statsData);
+      props.setData(stats);
     };
 
     getStats();
@@ -83,7 +87,7 @@ export default function Risks() {
       <Subheading className="mt-8">Risks</Subheading>
 
       <div className="mt-4 grid gap-8 sm:grid-cols-3">
-        {stats.map((stat) => (
+        {props.data.map((stat) => (
           <Stat key={stat.title} data={stat} />
         ))}
       </div>
