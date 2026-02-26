@@ -152,7 +152,10 @@ export async function removeUser(user: UserType, company: CompanyType) {
         react: RemoveAdmin({
           company: company.name,
           name: profileData.first_name,
-          removedBy: `${authProfileData.first_name} ${authProfileData.last_name}`,
+          removedBy:
+            user.user_id === authData.user.id
+              ? "yourself"
+              : `${authProfileData.first_name} ${authProfileData.last_name}`,
         }),
       });
 

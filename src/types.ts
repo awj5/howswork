@@ -68,9 +68,9 @@ export type RiskType = {
   date_raised: string;
   date_reviewed?: string;
   issues?: number[];
-  description: string;
+  description?: string;
   ai_description?: boolean;
-  level: number;
+  level?: number;
   status: number;
   owner?: string;
   response?: string;

@@ -24,7 +24,7 @@ export default function Risk(props: RiskProps) {
   const [descriptionExpanded, setDescriptionExpanded] = useState(false);
   const [responseExpanded, setResponseExpanded] = useState(false);
   const textLimit = 280;
-  const longDescription = props.data.description.length > textLimit;
+  const longDescription = props.data.description!.length > textLimit;
   const longResponse = props.data.response && props.data.response.length > textLimit;
 
   // Convert to date object
@@ -103,7 +103,7 @@ export default function Risk(props: RiskProps) {
             </>
           ) : (
             <>
-              {props.data.description.slice(0, textLimit).trim()}
+              {props.data.description!.slice(0, textLimit).trim()}
               {"… "}
               <TextLink
                 href=""

@@ -1,93 +1,67 @@
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { DateTime } from "luxon";
-import { createClient } from "@/utils/supabase/client";
-import { useCompanies } from "@/hooks/useCompanies";
-import { DashboardStatType } from "@/types";
+import { RiskType, DashboardStatType } from "@/types";
 import { Subheading } from "@/components/ui/heading";
 import Stat from "@/components/dashboard/risks/Stat";
 
 type RisksProps = {
-  data: DashboardStatType[];
-  setData: Dispatch<SetStateAction<DashboardStatType[]>>;
+  data: RiskType[] | undefined;
+  setData: Dispatch<SetStateAction<RiskType[] | undefined>>;
 };
 
 export default function Risks(props: RisksProps) {
-  const companies = useCompanies();
+  const stats: DashboardStatType[] = [];
 
-  useEffect(() => {
-    if (!companies.length) return;
+  // Awaiting
+  const awaitingReview = props.data?.filter((i) => i.status === 1) ?? [];
+  const oldestRaised = awaitingReview[0] ? DateTime.fromISO(awaitingReview[0].date_raised) : null;
 
-    const getStats = async () => {
-      const supabase = createClient();
+  stats.push({
+    title: "Awaiting review",
+    primary: awaitingReview.length,
+    secondary: oldestRaised?.toLocal().toRelative()?.replace(/ ago$/, "") ?? undefined,
+    secondaryText: "oldest awaiting review",
+  });
 
-      const { data: risksData, error: risksError } = await supabase
-        .from("risks")
-        .select("id, status, date_raised, date_reviewed, date_resolved")
-        .eq("company_id", companies[0].id)
-        .order("date_raised", { ascending: true });
+  // Open
+  const open =
+    props.data
+      ?.filter((i) => i.status === 2 || i.status === 3)
+      .sort((a, b) => new Date(a.date_reviewed!).getTime() - new Date(b.date_reviewed!).getTime()) ?? []; // Order by date reviewed
 
-      if (risksError) {
-        console.error(risksError);
-        return;
-      }
+  const oldestReviewed = open[0] ? DateTime.fromISO(open[0].date_reviewed!) : null;
 
-      const stats: DashboardStatType[] = [];
+  stats.push({
+    title: "Open",
+    primary: open.length,
+    secondary: oldestReviewed?.toLocal().toRelative()?.replace(/ ago$/, "") ?? undefined,
+    secondaryText: "longest open",
+  });
 
-      // Awaiting
-      const awaitingReview = risksData.filter((i) => i.status === 1);
-      const oldestRaised = awaitingReview[0] ? DateTime.fromISO(awaitingReview[0].date_raised) : null;
+  // Resolved
+  const resolved = props.data?.filter((i) => i.status === 4) ?? [];
 
-      stats.push({
-        title: "Awaiting review",
-        primary: awaitingReview.length,
-        secondary: oldestRaised?.toLocal().toRelative()?.replace(/ ago$/, "") ?? undefined,
-        secondaryText: "oldest awaiting review",
-      });
+  const avgDays = resolved.length
+    ? Math.round(
+        resolved.reduce((sum, risk) => {
+          return sum + DateTime.fromISO(risk.date_resolved!).diff(DateTime.fromISO(risk.date_raised), "days").days;
+        }, 0) / resolved.length
+      )
+    : undefined;
 
-      // Open
-      const open = risksData
-        .filter((i) => i.status === 2 || i.status === 3)
-        .sort((a, b) => new Date(a.date_reviewed).getTime() - new Date(b.date_reviewed).getTime()); // Order by date reviewed
-
-      const oldestReviewed = open[0] ? DateTime.fromISO(open[0].date_reviewed) : null;
-
-      stats.push({
-        title: "Open",
-        primary: open.length,
-        secondary: oldestReviewed?.toLocal().toRelative()?.replace(/ ago$/, "") ?? undefined,
-        secondaryText: "longest open",
-      });
-
-      // Resolved
-      const resolved = risksData.filter((i) => i.status === 4);
-
-      const avgDays = resolved.length
-        ? Math.round(
-            resolved.reduce((sum, risk) => {
-              return sum + DateTime.fromISO(risk.date_resolved).diff(DateTime.fromISO(risk.date_raised), "days").days;
-            }, 0) / resolved.length
-          )
-        : undefined;
-
-      stats.push({
-        title: "Resolved",
-        primary: resolved.length,
-        secondary: avgDays ? `${avgDays} day${avgDays !== 1 ? "s" : ""}` : undefined,
-        secondaryText: "avg to resolve",
-      });
-
-      props.setData(stats);
-    };
-
-    getStats();
-  }, [companies]);
+  stats.push({
+    title: "Resolved",
+    primary: resolved.length,
+    secondary: avgDays ? `${avgDays} day${avgDays !== 1 ? "s" : ""}` : undefined,
+    secondaryText: "avg to resolve",
+  });
 
   return (
     <>
       <Subheading className="mt-8">Risks</Subheading>
 
       <div className="mt-4 grid gap-8 sm:grid-cols-3">
-        {props.data.map((stat) => (
+        {stats.map((stat) => (
           <Stat key={stat.title} data={stat} />
         ))}
       </div>
