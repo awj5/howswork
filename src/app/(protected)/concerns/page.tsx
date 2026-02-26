@@ -17,7 +17,6 @@ import { Button } from "@/components/ui/button";
 import Doodle from "@/components/Doodle";
 
 export default function Concerns() {
-  const supabase = createClient();
   const router = useRouter();
   const searchParams = useSearchParams();
   const companies = useCompanies();
@@ -48,6 +47,8 @@ export default function Concerns() {
     if (!companies.length) return;
 
     const getConcerns = async () => {
+      const supabase = createClient();
+
       // Pagination
       if (page !== 1 && debouncedSearch !== searchRef.current) {
         // Reset to page 1 on search

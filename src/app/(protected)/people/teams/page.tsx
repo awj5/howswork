@@ -24,7 +24,6 @@ type TeamType = {
 };
 
 export default function Teams() {
-  const supabase = createClient();
   const companies = useCompanies();
   const [teams, setTeams] = useState<TeamType[]>();
   const [alertOpen, setAlertOpen] = useState(false);
@@ -76,6 +75,7 @@ export default function Teams() {
 
   const getTeams = async () => {
     if (!companies.length) return;
+    const supabase = createClient();
 
     const { data: teamsData, error: teamsError } = await supabase
       .from("teams")

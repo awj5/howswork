@@ -23,7 +23,6 @@ import Doodle from "@/components/Doodle";
 import { scheduleCheckIn } from "./actions";
 
 export default function CheckIns() {
-  const supabase = createClient();
   const router = useRouter();
   const companies = useCompanies();
   const searchParams = useSearchParams();
@@ -70,6 +69,7 @@ export default function CheckIns() {
 
   const getCheckIns = async () => {
     if (!companies.length) return;
+    const supabase = createClient();
 
     // Pagination
     const from = (page - 1) * pageSize;

@@ -19,7 +19,6 @@ import { Divider } from "@/components/ui/divider";
 import { updateStaff } from "./actions";
 
 export default function People() {
-  const supabase = createClient();
   const router = useRouter();
   const companies = useCompanies();
   const [savedStaff, setSavedStaff] = useState("");
@@ -67,6 +66,8 @@ export default function People() {
     if (!companies.length) return;
 
     const getStaff = async () => {
+      const supabase = createClient();
+
       const { data: peopleData, error: peopleError } = await supabase
         .from("people")
         .select("contacts")

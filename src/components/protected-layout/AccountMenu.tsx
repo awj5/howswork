@@ -12,9 +12,9 @@ import { DropdownDivider, DropdownItem, DropdownLabel } from "@/components/ui/dr
 
 export default function AccountMenu() {
   const router = useRouter();
-  const supabase = createClient();
 
   const signOutClick = async () => {
+    const supabase = createClient();
     await supabase.auth.signOut();
     router.push("/login");
   };

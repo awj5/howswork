@@ -24,7 +24,6 @@ type FormErrorsType = {
 };
 
 export default function Account() {
-  const supabase = createClient();
   const { user, setUser } = useUserContext();
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -40,6 +39,7 @@ export default function Account() {
   ]);
 
   const logout = async () => {
+    const supabase = createClient();
     await supabase.auth.signOut();
     window.location.reload(); // Refresh page
   };

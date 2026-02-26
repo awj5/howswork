@@ -16,7 +16,6 @@ type TeamType = {
 };
 
 export default function Team(props: TeamProps) {
-  const supabase = createClient();
   const companies = useCompanies();
   const [teams, setTeams] = useState<TeamType[]>([]);
 
@@ -24,6 +23,8 @@ export default function Team(props: TeamProps) {
     if (!companies.length) return;
 
     const getTeams = async () => {
+      const supabase = createClient();
+
       const { data: teamsData, error: teamsError } = await supabase
         .from("teams")
         .select("id, name")

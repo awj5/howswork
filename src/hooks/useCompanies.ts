@@ -5,11 +5,12 @@ import type { CompanyType } from "@/types";
 import { createClient } from "@/utils/supabase/client";
 
 export function useCompanies() {
-  const supabase = createClient();
   const [companies, setCompanies] = useState<CompanyType[]>([]);
 
   useEffect(() => {
     async function getCompany() {
+      const supabase = createClient();
+
       // Get auth user
       const { data: authData, error: authError } = await supabase.auth.getUser();
       if (authError || !authData.user) return;

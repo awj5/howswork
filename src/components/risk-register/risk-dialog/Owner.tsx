@@ -14,7 +14,6 @@ type OwnerProps = {
 };
 
 export default function Owner(props: OwnerProps) {
-  const supabase = createClient();
   const companies = useCompanies();
   const [users, setUsers] = useState<UserType[]>([]);
   const [disabled, setDisabled] = useState(true);
@@ -23,6 +22,8 @@ export default function Owner(props: OwnerProps) {
     if (!companies.length) return;
 
     const getUsers = async () => {
+      const supabase = createClient();
+
       const { data: companyUsersData, error: companyUsersError } = await supabase
         .from("company_users")
         .select("user_id")

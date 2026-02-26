@@ -8,7 +8,6 @@ import { useCompanies } from "@/hooks/useCompanies";
 let cachedCount = 0;
 
 export default function ConcernCount() {
-  const supabase = createClient();
   const pathname = usePathname();
   const companies = useCompanies();
   const [count, setCount] = useState(cachedCount);
@@ -17,6 +16,8 @@ export default function ConcernCount() {
     if (!companies.length) return;
 
     const getConcerns = async () => {
+      const supabase = createClient();
+
       const { data: concernsData, error: concernsError } = await supabase
         .from("concerns")
         .select("id")

@@ -2,23 +2,18 @@
 
 import { useCompanies } from "@/hooks/useCompanies";
 import { Heading } from "@/components/ui/heading";
+import Risks from "@/components/dashboard/Risks";
 
 export default function Home() {
   const companies = useCompanies();
 
   return (
-    <div className="flex h-12 items-end sm:h-10">
-      <Heading>{companies[0]?.name}</Heading>
+    <div className="mx-auto max-w-6xl">
+      <div className="flex h-12 items-end sm:h-10">
+        <Heading>{companies[0]?.name}</Heading>
+      </div>
+
+      <Risks />
     </div>
   );
 }
-
-/*
-- Add people first and then schedule your pulse checks start date to get started (step 1. step 2 etc.)
-- Key insights (no. of concerns reported)
-- Trends (hazard category changes over time and AI insights)
-- Pulse check participation over time
-- Filter by date and pulse check period
-- AI recommendations
-- “What needs attention today”
-*/

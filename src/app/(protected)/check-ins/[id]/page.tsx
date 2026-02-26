@@ -26,7 +26,6 @@ import { deleteCheckIn } from "./actions";
 export default function CheckIn() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
-  const supabase = createClient();
   const searchParams = useSearchParams();
   const companies = useCompanies();
   const [checkIn, setCheckIn] = useState<CheckInType>();
@@ -57,6 +56,7 @@ export default function CheckIn() {
   useEffect(() => {
     const getCheckIn = async () => {
       if (!companies.length) return;
+      const supabase = createClient();
 
       const { data: checkInData, error: checkInError } = await supabase
         .from("check_ins")

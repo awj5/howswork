@@ -77,3 +77,10 @@ export type RiskType = {
   ai_response?: boolean;
   date_resolved?: string;
 };
+
+export type DashboardStatType = {
+  title: string;
+  primary: number;
+  secondary?: string;
+  secondaryText: string;
+};

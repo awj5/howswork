@@ -19,7 +19,6 @@ import { Strong } from "@/components/ui/text";
 import { removeUser, inviteUser } from "./actions";
 
 export default function Admins() {
-  const supabase = createClient();
   const { user } = useUserContext();
   const companies = useCompanies();
   const [users, setUsers] = useState<UserType[]>([]);
@@ -87,6 +86,7 @@ export default function Admins() {
 
   const getUsers = async () => {
     if (!companies.length) return;
+    const supabase = createClient();
 
     const { data: companyUsersData, error: companyUsersError } = await supabase
       .from("company_users")
