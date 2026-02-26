@@ -295,6 +295,7 @@ export default function CheckIn() {
                 {checkIn.status !== 1 && (
                   <div className="flex items-center gap-3">
                     <HashtagIcon className="size-4 text-zinc-400 dark:text-zinc-500" />
+
                     <Text className="text-zinc-950! dark:text-white!">
                       PIN: <Code>{checkIn.pin}</Code>
                     </Text>

@@ -123,7 +123,7 @@ export default function Risk(props: RiskProps) {
 
       <TableCell>
         <Badge color={concernStatusColor(props.data.status)}>
-          {StatusData.find((i) => i.id === props.data.status)?.title.replace("New response", "Open")}
+          {StatusData.find((i) => i.id === props.data.status)?.title.replace("New response", "Awaiting review")}
         </Badge>
       </TableCell>
 

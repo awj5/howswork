@@ -44,6 +44,7 @@ export default function Stat(props: StatProps) {
             {trend === "up" && "+"}
             {props.data.secondary}%
           </Badge>
+
           <span className="text-sm/6 text-zinc-500 sm:text-xs/6 dark:text-zinc-400">from last check-in</span>
         </div>
       )}

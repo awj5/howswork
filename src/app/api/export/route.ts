@@ -73,7 +73,11 @@ export async function POST(req: NextRequest) {
         formatted["description"] = "[decryption error]";
       }
 
-      formatted["status"] = StatusData.find((i) => i.id === row.status)?.title.replace("New response", "Open"); // Status
+      // Status
+      formatted["status"] = StatusData.find((i) => i.id === row.status)?.title.replace(
+        "New response",
+        "Awaiting review"
+      );
 
       // Response
       if (row.response) {

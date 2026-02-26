@@ -254,7 +254,7 @@ export default function RiskDialog(props: RiskDialogProps) {
                   value={status.id}
                   disabled={(status.id === 1 && !!dateReviewed) || (status.id < 4 && !!dateResolved)}
                 >
-                  {status.title.replace("New response", "Open")}
+                  {status.title.replace("New response", "Awaiting review")}
                 </option>
               ))}
             </Select>
