@@ -3,7 +3,6 @@ import { utils, write } from "xlsx";
 import { DateTime } from "luxon";
 import StatusData from "@/data/status.json";
 import IssuesData from "@/data/issues.json";
-import { toLocalEndOfDayISO, toLocalMidnightISO } from "@/utils/helpers";
 import { createClient } from "@/utils/supabase/server";
 import { decrypt } from "@/utils/encryption";
 
@@ -20,41 +19,43 @@ export async function POST(req: NextRequest) {
       .eq("company_id", companyID)
       .order("date_raised", { ascending: false });
 
-    if (start) risksQuery = risksQuery.gte("date_raised", toLocalMidnightISO(start));
-    if (end) risksQuery = risksQuery.lte("date_raised", toLocalEndOfDayISO(end));
+    if (start) risksQuery = risksQuery.gte("date_raised", start);
+    if (end) risksQuery = risksQuery.lte("date_raised", end);
 
     const { data: risksData, error: risksError } = await risksQuery;
     if (risksError) throw new Error(risksError.message);
 
+    // Get company timezone
+    const { data: companyData, error: companyError } = await supabase
+      .from("companies")
+      .select("timezone")
+      .eq("id", companyID)
+      .single();
+
+    if (companyError) throw new Error(companyError.message);
+
     // Create file
     const formattedData = risksData.map((row) => {
       const formatted = { ...row };
+
+      // Dates
       const dateRaised = DateTime.fromISO(row.date_raised);
       const dateReviewed = row.date_reviewed ? DateTime.fromISO(row.date_reviewed) : undefined;
       const dateResolved = row.date_resolved ? DateTime.fromISO(row.date_resolved) : undefined;
       const checkInDate = row.check_in_date ? DateTime.fromISO(row.check_in_date) : undefined;
-
-      // Dates
-      formatted["date_raised"] = dateRaised
-        .toLocal()
-        .toLocaleString({ day: "numeric", month: "numeric", year: "numeric" });
+      const dateFormat = companyData.timezone.includes("America") ? "M/d/yyyy" : "d/M/yyyy";
+      formatted["date_raised"] = dateRaised.setZone(companyData.timezone).toFormat(dateFormat);
 
       if (dateReviewed) {
-        formatted["date_reviewed"] = dateReviewed
-          .toLocal()
-          .toLocaleString({ day: "numeric", month: "numeric", year: "numeric" });
+        formatted["date_reviewed"] = dateReviewed.setZone(companyData.timezone).toFormat(dateFormat);
       }
 
       if (dateResolved) {
-        formatted["date_resolved"] = dateResolved
-          .toLocal()
-          .toLocaleString({ day: "numeric", month: "numeric", year: "numeric" });
+        formatted["date_resolved"] = dateResolved.setZone(companyData.timezone).toFormat(dateFormat);
       }
 
       if (checkInDate) {
-        formatted["check_in_date"] = checkInDate
-          .toLocal()
-          .toLocaleString({ day: "numeric", month: "numeric", year: "numeric" });
+        formatted["check_in_date"] = checkInDate.setZone(companyData.timezone).toFormat(dateFormat);
       }
 
       formatted["level"] = row.level === 1 ? "Low" : row.level === 2 ? "Medium" : "High"; // Level

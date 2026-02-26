@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { DateTime } from "luxon";
 import { toast } from "sonner";
 import { useCompanies } from "@/hooks/useCompanies";
+import { toLocalMidnightISO, toLocalEndOfDayISO } from "@/utils/helpers";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { ErrorMessage, Field, FieldGroup, Fieldset, Label } from "@/components/ui/fieldset";
@@ -65,8 +66,8 @@ export default function ExportDialog(props: ExportDialogProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           companyID: companies[0].id,
-          start,
-          end,
+          start: start ? toLocalMidnightISO(start) : undefined,
+          end: end ? toLocalEndOfDayISO(end) : undefined,
           format,
         }),
       });
