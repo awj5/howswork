@@ -83,6 +83,7 @@ export type RiskSummaryType = Pick<RiskType, "id" | "status" | "date_raised" | "
 export type DashboardStatType = {
   title: string;
   primary: number;
-  secondary?: string;
   secondaryText: string;
+  secondary?: string;
+  badgeColor?: "green" | "red" | "amber";
 };
