@@ -169,7 +169,7 @@ export default function RiskRegister() {
 
               {(concernID || checkInID) && (
                 <div className="mt-6 flex justify-center">
-                  <Button onClick={() => router.push("/risk-register")} outline>
+                  <Button href="/risk-register" outline>
                     <ClipboardIcon />
                     View all risks
                   </Button>

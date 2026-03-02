@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { ClockIcon, UsersIcon } from "@heroicons/react/16/solid";
 import { toast } from "sonner";
 import { DateTime } from "luxon";
@@ -23,7 +23,6 @@ import Doodle from "@/components/Doodle";
 import { scheduleCheckIn } from "./actions";
 
 export default function CheckIns() {
-  const router = useRouter();
   const companies = useCompanies();
   const searchParams = useSearchParams();
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -178,7 +177,7 @@ export default function CheckIns() {
             <Subheading className="mt-4">No staff contacts</Subheading>
             <Text className="mt-1 text-center">Add staff contacts to enable check-ins.</Text>
 
-            <Button onClick={() => router.push("/people")} outline className="mt-6">
+            <Button href="/people" outline className="mt-6">
               <UsersIcon />
               Add staff contacts
             </Button>

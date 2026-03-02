@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { TrashIcon, UserGroupIcon } from "@heroicons/react/16/solid";
 import { GlobeAltIcon } from "@heroicons/react/20/solid";
@@ -25,7 +24,6 @@ type FormErrorsType = {
 };
 
 export default function Settings() {
-  const router = useRouter();
   const companies = useCompanies();
   const [savedName, setSavedName] = useState("");
   const [savedSlug, setSavedSlug] = useState("");
@@ -162,7 +160,7 @@ export default function Settings() {
           )}
         </div>
 
-        <Button onClick={() => router.push("/settings/admins")} outline>
+        <Button href="/settings/admins" outline>
           <UserGroupIcon />
           Manage admins
         </Button>

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { UserGroupIcon } from "@heroicons/react/16/solid";
 import { useCompanies } from "@/hooks/useCompanies";
@@ -19,7 +18,6 @@ import { Divider } from "@/components/ui/divider";
 import { updateStaff } from "./actions";
 
 export default function People() {
-  const router = useRouter();
   const companies = useCompanies();
   const [savedStaff, setSavedStaff] = useState("");
   const [staff, setStaff] = useState("");
@@ -102,7 +100,7 @@ export default function People() {
           )}
         </div>
 
-        <Button onClick={() => router.push("/people/teams")} outline>
+        <Button href="/people/teams" outline>
           <UserGroupIcon />
           Manage teams
         </Button>

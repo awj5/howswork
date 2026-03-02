@@ -1,13 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { Subheading } from "@/components/ui/heading";
 import { Button } from "@/components/ui/button";
 import Doodle from "@/components/Doodle";
 
 export default function Error() {
-  const router = useRouter();
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -25,7 +23,7 @@ export default function Error() {
             <Doodle doodles={31} />
             <Subheading className="mt-4 text-center">{error}</Subheading>
 
-            <Button onClick={() => router.push("/login")} className="mt-6" outline>
+            <Button href="/login" className="mt-6" outline>
               Sign in again
             </Button>
           </div>
