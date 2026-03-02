@@ -87,7 +87,7 @@ export default function CheckIns() {
       return;
     }
 
-    if (!peopleData.contacts || !peopleData.contacts.length) {
+    if (!peopleData.contacts.length) {
       setNoStaffContacts(true);
       setCheckIns(undefined);
       return;
