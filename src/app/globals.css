@@ -5,6 +5,18 @@
   --font-sans--font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
+:root {
+  --chart-grid: color-mix(in oklch, var(--color-zinc-950) 5%, transparent);
+  --chart-tooltip-bg: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --chart-grid: rgb(255 255 255 / 5%);
+    --chart-tooltip-bg: #000;
+  }
+}
+
 body,
 html {
   overscroll-behavior-y: none;
