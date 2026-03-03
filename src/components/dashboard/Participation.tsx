@@ -15,7 +15,7 @@ export default function Participation(props: ParticipationProps) {
       <div className="text-lg/6 font-medium sm:text-sm/6">Participation</div>
 
       <AreaChart
-        className="mt-6 h-64 [&_*]:outline-none"
+        className="mt-6 h-72 [&_*]:outline-none"
         margin={{
           top: 12,
           right: 8,
@@ -61,7 +61,7 @@ export default function Participation(props: ParticipationProps) {
           cursor={{ stroke: "var(--chart-grid)" }}
         />
 
-        <Legend wrapperStyle={{ fontSize: "var(--text-sm)" }} />
+        <Legend wrapperStyle={{ fontSize: "var(--text-sm)", paddingTop: "calc(var(--spacing) * 2)" }} />
         <Area dataKey="contact_count" name="Invited" stroke="#71717a" fill="#71717a" fillOpacity={0.2} />
         <Area dataKey="feedback" name="Participated" stroke="#6366f1" fill="#6366f1" fillOpacity={0.2} />
       </AreaChart>

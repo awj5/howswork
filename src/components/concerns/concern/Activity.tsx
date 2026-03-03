@@ -8,7 +8,7 @@ type ActivityProps = {
 
 export default function Activity(props: ActivityProps) {
   return (
-    <div className="relative mt-4">
+    <div className="relative mt-6">
       <span aria-hidden="true" className="absolute top-0 left-4 -ml-px h-full w-0.5 bg-zinc-200 dark:bg-white/10" />
 
       <div className="relative flex flex-col gap-8">

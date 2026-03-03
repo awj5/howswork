@@ -17,13 +17,13 @@ export default function Issues(props: IssuesProps) {
   return (
     <>
       {props.val.length ? (
-        <div className="mt-5 flex flex-wrap gap-4 sm:gap-3">
+        <div className="mt-6 flex flex-wrap gap-4 sm:gap-3">
           {props.val.map((issue) => (
             <Badge key={issue}>{IssuesData.find((i) => i.id === issue)?.tag}</Badge>
           ))}
         </div>
       ) : (
-        <Text className="mt-3">No issues selected</Text>
+        <Text className="mt-4">No issues selected</Text>
       )}
     </>
   );
