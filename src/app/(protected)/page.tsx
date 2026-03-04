@@ -7,14 +7,17 @@ import { createClient } from "@/utils/supabase/client";
 import { Heading, Subheading } from "@/components/ui/heading";
 import Risks from "@/components/dashboard/Risks";
 import Instructions from "@/components/dashboard/Instructions";
-import Participation from "@/components/dashboard/Participation";
+import CheckIns from "@/components/dashboard/CheckIns";
 import { Divider } from "@/components/ui/divider";
+import Doodle from "@/components/Doodle";
+import { Text } from "@/components/ui/text";
 
 export default function Home() {
   const companies = useCompanies();
   const [risks, setRisks] = useState<RiskSummaryType[]>();
   const [checkIns, setCheckIns] = useState<CheckInType[]>();
   const [noStaffContacts, setNoStaffContacts] = useState(false);
+  const nonScheduledCheckIns = checkIns?.filter((i) => i.status !== 1);
 
   useEffect(() => {
     if (!companies.length) return;
@@ -51,7 +54,7 @@ export default function Home() {
       // Get check-in feedback
       const { data: feedbackData, error: feedbackError } = await supabase
         .from("feedback")
-        .select("id, check_in_id")
+        .select("id, check_in_id, sentiment")
         .in("check_in_id", checkInIDs);
 
       if (feedbackError) {
@@ -59,9 +62,9 @@ export default function Home() {
         return;
       }
 
-      // Count feedback for each check-in
-      const feedbackByCheckIn = feedbackData.reduce<Record<number, number>>((map, feedback) => {
-        map[feedback.check_in_id] = (map[feedback.check_in_id] ?? 0) + 1;
+      // Group feedback sentiments by check-in
+      const sentimentsByCheckIn = feedbackData.reduce<Record<number, number[]>>((map, feedback) => {
+        (map[feedback.check_in_id] ??= []).push(feedback.sentiment);
         return map;
       }, {});
 
@@ -79,7 +82,7 @@ export default function Home() {
 
       if (!peopleData.contacts.length) setNoStaffContacts(true);
       setRisks(risksData);
-      setCheckIns(checkInsData.map((i) => ({ ...i, feedback: feedbackByCheckIn[i.id] ?? 0 }))); // Add feedback count
+      setCheckIns(checkInsData.map((i) => ({ ...i, sentiments: sentimentsByCheckIn[i.id] ?? [] })));
     };
 
     getRisks();
@@ -94,12 +97,23 @@ export default function Home() {
           </div>
 
           <Risks data={risks} />
-          <Subheading className="mt-12">Check-in trends</Subheading>
+          <Subheading className="mt-12">Trends</Subheading>
           <Divider className="mt-4" />
 
-          <div className="mt-6 flex flex-col gap-8">
-            <Participation checkIns={checkIns} timezone={companies[0].timezone} />
-          </div>
+          {nonScheduledCheckIns?.length ? (
+            <div className="mt-6 flex flex-col gap-8">
+              <CheckIns data={nonScheduledCheckIns} timezone={companies[0].timezone} />
+            </div>
+          ) : (
+            <div className="mt-6 flex flex-col items-center">
+              <Doodle doodles={24} />
+              <Subheading className="mt-4">No data yet</Subheading>
+
+              <Text className="mt-1 text-center">
+                Schedule a check-in to start collecting early risk signals and enable concern reporting.
+              </Text>
+            </div>
+          )}
         </div>
       ) : (
         risks !== undefined && checkIns !== undefined && <Instructions noStaffContacts={noStaffContacts} />

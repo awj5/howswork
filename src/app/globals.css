@@ -7,13 +7,13 @@
 
 :root {
   --chart-grid: color-mix(in oklch, var(--color-zinc-950) 5%, transparent);
-  --chart-tooltip-bg: #fff;
+  --chart-bg: var(--color-zinc-100);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --chart-grid: rgb(255 255 255 / 5%);
-    --chart-tooltip-bg: #000;
+    --chart-bg: var(--color-zinc-950);
   }
 }
 

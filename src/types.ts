@@ -39,7 +39,7 @@ export type CheckInType = {
   contact_count?: number;
   stats?: CheckInStatType[];
   issues?: CheckInIssueType[];
-  feedback?: number;
+  sentiments?: number[];
 };
 
 export type ConcernActivityType = {
