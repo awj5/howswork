@@ -27,7 +27,7 @@ export type CheckInIssueAttributionType = {
 export type CheckInIssueType = {
   id: number;
   count: number;
-  attributions: CheckInIssueAttributionType[];
+  attributions?: CheckInIssueAttributionType[];
 };
 
 export type CheckInType = {

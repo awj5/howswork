@@ -37,7 +37,7 @@ export default function Issues(props: IssuesProps) {
                     <TableCell>{issue.count}</TableCell>
 
                     <TableCell>
-                      {issue.attributions.length ? (
+                      {issue.attributions?.length ? (
                         <div className="inline-flex min-w-3xs flex-wrap gap-3">
                           {issue.attributions.map((attribution) => {
                             const label = AttributionsData.find((i) => i.id === attribution.id)?.label;

@@ -278,7 +278,7 @@ export default function CheckIn() {
               </Badge>
             </div>
 
-            <div className="mt-2.5 flex flex-col justify-between gap-x-6 gap-y-4 sm:flex-row">
+            <div className="mt-2.5 flex flex-col items-start justify-between gap-x-6 gap-y-4 sm:flex-row">
               <div className="flex gap-10 py-1.5">
                 <time className="flex items-center gap-3">
                   <CalendarIcon className="size-4 text-zinc-400 dark:text-zinc-500" />
