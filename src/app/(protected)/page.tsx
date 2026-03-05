@@ -24,7 +24,7 @@ export default function Home() {
   useEffect(() => {
     if (!companies.length) return;
 
-    const getRisks = async () => {
+    const getData = async () => {
       const supabase = createClient();
 
       // Get company risks
@@ -107,7 +107,7 @@ export default function Home() {
       );
     };
 
-    getRisks();
+    getData();
   }, [companies]);
 
   return (
