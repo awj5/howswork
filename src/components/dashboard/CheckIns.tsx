@@ -9,7 +9,7 @@ type CheckInsProps = {
 
 export default function CheckIns(props: CheckInsProps) {
   // Add sentiment score to data
-  const dataWithSentiment = props.data?.map((checkIn) => {
+  const chartData = props.data?.map((checkIn) => {
     const sentimentScore = checkIn.sentiments?.length
       ? Math.round(
           (checkIn.sentiments.reduce((sum, sentiment) => sum + sentiment, 0) / (checkIn.sentiments.length * 5)) * 100
@@ -32,7 +32,7 @@ export default function CheckIns(props: CheckInsProps) {
           bottom: 0,
         }}
         responsive
-        data={dataWithSentiment}
+        data={chartData}
       >
         <XAxis
           dataKey="start"
@@ -67,8 +67,8 @@ export default function CheckIns(props: CheckInsProps) {
             border: "none",
             borderRadius: "var(--radius-lg)",
           }}
-          labelStyle={{ fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-semibold)" }}
-          itemStyle={{ fontSize: "var(--text-sm)" }}
+          labelStyle={{ fontSize: "var(--text-sm)", padding: 0, paddingBottom: "calc(var(--spacing) * 1)" }}
+          itemStyle={{ fontSize: "var(--text-xs)", padding: 0 }}
           labelFormatter={(val) => DateTime.fromISO(val, { zone: props.timezone }).toLocaleString(DateTime.DATE_FULL)}
           separator=": "
           cursor={{ stroke: "var(--chart-grid)" }}
@@ -83,7 +83,7 @@ export default function CheckIns(props: CheckInsProps) {
           name="Invited"
           stroke="#71717a"
           fill="#71717a"
-          fillOpacity={0.2}
+          fillOpacity={0.3}
           dot={{ r: 4, fill: "var(--chart-bg)", fillOpacity: 1 }}
           activeDot={{ r: 4, stroke: "#71717a", strokeWidth: 1 }}
         />
@@ -95,7 +95,7 @@ export default function CheckIns(props: CheckInsProps) {
           name="Participated"
           stroke="#6366f1"
           fill="#6366f1"
-          fillOpacity={0.2}
+          fillOpacity={0.3}
           dot={{ r: 4, fill: "var(--chart-bg)", fillOpacity: 1 }}
           activeDot={{ r: 4, stroke: "#6366f1", strokeWidth: 1 }}
         />
@@ -106,14 +106,13 @@ export default function CheckIns(props: CheckInsProps) {
           dataKey="sentimentScore"
           name="Sentiment"
           unit="%"
-          stroke="#FACC15"
-          fill="#FACC15"
+          stroke="#eab308"
+          fill="#eab308"
           fillOpacity={0}
           dot={({ cx = 0, cy = 0, key, payload }) => {
-            const score = payload.sentimentScore;
-            if (!score) return <g key={key} />;
-            const emoji = Math.min(5, Math.ceil(score / 20)) || 1; // eg. 0-20 = 1, 81-100 = 5
-            return <image key={key} href={`/img/emoji-${emoji}.svg`} x={cx - 8} y={cy - 8} width={16} height={16} />;
+            if (!payload.sentimentScore) return <g key={key} />;
+            const emoji = Math.min(5, Math.ceil(payload.sentimentScore / 20)) || 1; // eg. 0-20 = 1, 81-100 = 5
+            return <image key={key} href={`/img/emoji-${emoji}.svg`} x={cx - 10} y={cy - 10} width={20} height={20} />;
           }}
           activeDot={false}
         />

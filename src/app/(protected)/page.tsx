@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { CheckInType, RiskSummaryType } from "@/types";
+import type { CheckInType, RiskSummaryType, ConcernType } from "@/types";
 import { useCompanies } from "@/hooks/useCompanies";
 import { createClient } from "@/utils/supabase/client";
 import { Heading, Subheading } from "@/components/ui/heading";
@@ -11,11 +11,13 @@ import CheckIns from "@/components/dashboard/CheckIns";
 import { Divider } from "@/components/ui/divider";
 import Doodle from "@/components/Doodle";
 import { Text } from "@/components/ui/text";
+import Concerns from "@/components/dashboard/Concerns";
 
 export default function Home() {
   const companies = useCompanies();
   const [risks, setRisks] = useState<RiskSummaryType[]>();
   const [checkIns, setCheckIns] = useState<CheckInType[]>();
+  const [concerns, setConcerns] = useState<ConcernType[]>([]);
   const [noStaffContacts, setNoStaffContacts] = useState(false);
   const nonScheduledCheckIns = checkIns?.filter((i) => i.status !== 1);
 
@@ -62,11 +64,25 @@ export default function Home() {
         return;
       }
 
-      // Group feedback sentiments by check-in
+      // Group sentiments by check-in
       const sentimentsByCheckIn = feedbackData.reduce<Record<number, number[]>>((map, feedback) => {
         (map[feedback.check_in_id] ??= []).push(feedback.sentiment);
         return map;
       }, {});
+
+      // Get company concerns
+      const { data: concernsData, error: concernsError } = await supabase
+        .from("concerns")
+        .select("id, created_at, tracking, issues")
+        .eq("company_id", companies[0].id)
+        .order("created_at", { ascending: true });
+
+      if (concernsError) {
+        console.error(concernsError);
+        return;
+      }
+
+      setConcerns(concernsData);
 
       // Check if company has staff contacts
       const { data: peopleData, error: peopleError } = await supabase
@@ -82,7 +98,13 @@ export default function Home() {
 
       if (!peopleData.contacts.length) setNoStaffContacts(true);
       setRisks(risksData);
-      setCheckIns(checkInsData.map((i) => ({ ...i, sentiments: sentimentsByCheckIn[i.id] ?? [] })));
+
+      setCheckIns(
+        checkInsData.map((checkIn) => ({
+          ...checkIn,
+          sentiments: sentimentsByCheckIn[checkIn.id] ?? [],
+        }))
+      );
     };
 
     getRisks();
@@ -97,12 +119,13 @@ export default function Home() {
           </div>
 
           <Risks data={risks} />
-          <Subheading className="mt-12">Trends</Subheading>
+          <Subheading className="mt-12">Engagement overview</Subheading>
           <Divider className="mt-4" />
 
           {nonScheduledCheckIns?.length ? (
             <div className="mt-6 flex flex-col gap-8">
               <CheckIns data={nonScheduledCheckIns} timezone={companies[0].timezone} />
+              <Concerns data={concerns} />
             </div>
           ) : (
             <div className="mt-6 flex flex-col items-center">
