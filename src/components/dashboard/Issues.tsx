@@ -32,16 +32,6 @@ export default function Issues(props: IssuesProps) {
         }}
         responsive
       >
-        <Tooltip
-          contentStyle={{
-            backgroundColor: "var(--chart-bg)",
-            border: "none",
-            borderRadius: "var(--radius-lg)",
-          }}
-          itemStyle={{ fontSize: "var(--text-xs)", padding: 0, color: "var(--text-foreground)" }}
-          separator=": "
-        />
-
         <Legend
           iconSize={10}
           layout="vertical"
@@ -55,6 +45,16 @@ export default function Issues(props: IssuesProps) {
           itemSorter={(item) => {
             return chartData.findIndex((i) => i.name === item.value);
           }}
+        />
+
+        <Tooltip
+          contentStyle={{
+            backgroundColor: "var(--chart-bg)",
+            border: "none",
+            borderRadius: "var(--radius-lg)",
+          }}
+          itemStyle={{ fontSize: "var(--text-xs)", padding: 0, color: "var(--text-foreground)" }}
+          separator=": "
         />
 
         <Pie

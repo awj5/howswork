@@ -60,6 +60,7 @@ export default function CheckIns(props: CheckInsProps) {
 
         <YAxis yAxisId="percentage" domain={[0, 100]} hide />
         <CartesianGrid yAxisId="count" vertical={false} stroke="var(--chart-grid)" />
+        <Legend wrapperStyle={{ fontSize: "var(--text-sm)", paddingTop: "calc(var(--spacing) * 2)" }} />
 
         <Tooltip
           contentStyle={{
@@ -73,8 +74,6 @@ export default function CheckIns(props: CheckInsProps) {
           separator=": "
           cursor={{ stroke: "var(--chart-grid)" }}
         />
-
-        <Legend wrapperStyle={{ fontSize: "var(--text-sm)", paddingTop: "calc(var(--spacing) * 2)" }} />
 
         {chartData?.length === 1 && (
           <>
