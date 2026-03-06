@@ -27,7 +27,8 @@ export default function Owner(props: OwnerProps) {
       const { data: companyUsersData, error: companyUsersError } = await supabase
         .from("company_users")
         .select("user_id")
-        .eq("company_id", companies[0].id);
+        .eq("company_id", companies[0].id)
+        .not("user_id", "is", null);
 
       if (companyUsersError) {
         console.error(companyUsersError);

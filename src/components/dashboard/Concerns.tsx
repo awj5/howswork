@@ -21,7 +21,7 @@ export default function Concerns(props: ConcernsProps) {
 
   return (
     <div>
-      <div className="text-lg/6 font-medium sm:text-sm/6">Concerns</div>
+      <div className="text-lg/6 font-medium sm:text-sm/6">Concerns raised</div>
 
       <BarChart
         className="mt-6 h-72 [&_*]:outline-none"

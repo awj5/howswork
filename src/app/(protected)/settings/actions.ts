@@ -48,7 +48,8 @@ export async function deleteCompany(companyID: number) {
   const { data: companyUsersData, error: companyUsersError } = await supabase
     .from("company_users")
     .select("id")
-    .eq("company_id", companyID);
+    .eq("company_id", companyID)
+    .not("user_id", "is", null);
 
   if (companyUsersError) {
     console.error(companyUsersError.message);

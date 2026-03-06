@@ -3,74 +3,86 @@
     "id": 1,
     "name": "High job demands",
     "tag": "excessive workload",
-    "description": "Too much work, unrealistic deadlines, or constant time pressure."
+    "description": "Too much work, unrealistic deadlines, or constant time pressure.",
+    "color": "#ef4444"
   },
   {
     "id": 2,
     "name": "Low job demands",
     "tag": "insufficient work",
-    "description": "Not enough meaningful work, repetitive tasks, or skills going unused."
+    "description": "Not enough meaningful work, repetitive tasks, or skills going unused.",
+    "color": "#f97316"
   },
   {
     "id": 3,
     "name": "Job control",
     "tag": "lack of autonomy",
-    "description": "Little say in how you do your work or when tasks get done."
+    "description": "Little say in how you do your work or when tasks get done.",
+    "color": "#eab308"
   },
   {
     "id": 4,
     "name": "Support",
     "tag": "lack of support",
-    "description": "Not getting the help you need from managers, colleagues, or the company."
+    "description": "Not getting the help you need from managers, colleagues, or the company.",
+    "color": "#84cc16"
   },
   {
     "id": 5,
     "name": "Role clarity",
     "tag": "unclear expectations",
-    "description": "Uncertain about your responsibilities or what's expected of you."
+    "description": "Uncertain about your responsibilities or what's expected of you.",
+    "color": "#22c55e"
   },
   {
     "id": 6,
     "name": "Change management",
     "tag": "poor communication",
-    "description": "Changes happening without warning, explanation, or consultation."
+    "description": "Changes happening without warning, explanation, or consultation.",
+    "color": "#10b981"
   },
   {
     "id": 7,
     "name": "Recognition and reward",
     "tag": "lack of recognition",
-    "description": "Your work is rarely acknowledged or rewarded."
+    "description": "Your work is rarely acknowledged or rewarded.",
+    "color": "#14b8a6"
   },
   {
     "id": 8,
     "name": "Fairness",
     "tag": "unfair treatment",
-    "description": "Inconsistent rules, bias, or unfair decisions."
+    "description": "Inconsistent rules, bias, or unfair decisions.",
+    "color": "#06b6d4"
   },
   {
     "id": 9,
     "name": "Traumatic events",
     "tag": "traumatic exposure",
     "description": "Witnessing or experiencing distressing or traumatic incidents at work.",
+    "color": "#0ea5e9",
     "serious": true
   },
   {
     "id": 10,
     "name": "Remote/isolated work",
     "tag": "isolated work",
-    "description": "Working alone or remotely with limited access to others or support."
+    "description": "Working alone or remotely with limited access to others or support.",
+    "color": "#3b82f6"
   },
   {
     "id": 11,
     "name": "Physical environment",
     "tag": "poor or unsafe conditions",
-    "description": "Workplace conditions that negatively affect your safety or comfort."
+    "description": "Workplace conditions that negatively affect your safety or comfort.",
+    "color": "#8b5cf6"
   },
   {
     "id": 12,
     "name": "Violence and aggression",
     "tag": "threats or aggression",
     "description": "Physical threats, attacks, or aggressive behaviour from others.",
+    "color": "#a855f7",
     "serious": true
   },
   {
@@ -78,6 +90,7 @@
     "name": "Bullying",
     "tag": "bullying",
     "description": "Repeated unreasonable behaviour that intimidates, humiliates, or undermines you.",
+    "color": "#d946ef",
     "serious": true
   },
   {
@@ -85,12 +98,14 @@
     "name": "Harassment",
     "tag": "harassment",
     "description": "Unwelcome conduct, including sexual or other forms of harassment.",
+    "color": "#ec4899",
     "serious": true
   },
   {
     "id": 15,
     "name": "Workplace relationships",
     "tag": "conflict",
-    "description": "Ongoing tension, disputes, or difficult relationships with colleagues."
+    "description": "Ongoing tension, disputes, or difficult relationships with colleagues.",
+    "color": "#f43f5e"
   }
 ]

@@ -1,4 +1,4 @@
-import { AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid, Legend } from "recharts";
+import { AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid, Legend, ReferenceArea } from "recharts";
 import { DateTime } from "luxon";
 import { CheckInType } from "@/types";
 
@@ -21,7 +21,7 @@ export default function CheckIns(props: CheckInsProps) {
 
   return (
     <div>
-      <div className="text-lg/6 font-medium sm:text-sm/6">Check-ins</div>
+      <div className="text-lg/6 font-medium sm:text-sm/6">Check-in trends</div>
 
       <AreaChart
         className="mt-6 h-72 [&_*]:outline-none"
@@ -76,6 +76,43 @@ export default function CheckIns(props: CheckInsProps) {
 
         <Legend wrapperStyle={{ fontSize: "var(--text-sm)", paddingTop: "calc(var(--spacing) * 2)" }} />
 
+        {chartData?.length === 1 && (
+          <>
+            <ReferenceArea
+              yAxisId="count"
+              y1={chartData[0].contact_count}
+              shape={({ x, y, width, height }) => (
+                <g>
+                  <rect x={x} y={y} width={width} height={height} fill="#71717a" fillOpacity={0.3} />
+                  <line x1={x} y1={y} x2={x + width} y2={y} stroke="#71717a" strokeWidth={1} />
+                </g>
+              )}
+            />
+
+            <ReferenceArea
+              yAxisId="count"
+              y1={chartData[0].sentiments?.length}
+              shape={({ x, y, width, height }) => (
+                <g>
+                  <rect x={x} y={y} width={width} height={height} fill="#6366f1" fillOpacity={0.3} />
+                  <line x1={x} y1={y} x2={x + width} y2={y} stroke="#6366f1" strokeWidth={1} />
+                </g>
+              )}
+            />
+
+            <ReferenceArea
+              yAxisId="percentage"
+              y1={chartData[0].sentimentScore!}
+              shape={({ x, y, width, height }) => (
+                <g>
+                  <rect x={x} y={y} width={width} height={height} fill="#eab308" fillOpacity={0} />
+                  <line x1={x} y1={y} x2={x + width} y2={y} stroke="#eab308" strokeWidth={1} />
+                </g>
+              )}
+            />
+          </>
+        )}
+
         <Area
           yAxisId="count"
           type="monotone"
@@ -100,22 +137,26 @@ export default function CheckIns(props: CheckInsProps) {
           activeDot={{ r: 4, stroke: "#6366f1", strokeWidth: 1 }}
         />
 
-        <Area
-          yAxisId="percentage"
-          type="linear"
-          dataKey="sentimentScore"
-          name="Sentiment"
-          unit="%"
-          stroke="#eab308"
-          fill="#eab308"
-          fillOpacity={0}
-          dot={({ cx = 0, cy = 0, key, payload }) => {
-            if (!payload.sentimentScore) return <g key={key} />;
-            const emoji = Math.min(5, Math.ceil(payload.sentimentScore / 20)) || 1; // eg. 0-20 = 1, 81-100 = 5
-            return <image key={key} href={`/img/emoji-${emoji}.svg`} x={cx - 10} y={cy - 10} width={20} height={20} />;
-          }}
-          activeDot={false}
-        />
+        {chartData?.length && chartData[0].sentiments?.length && (
+          <Area
+            yAxisId="percentage"
+            type="linear"
+            dataKey="sentimentScore"
+            name="Sentiment"
+            unit="%"
+            stroke="#eab308"
+            fill="#eab308"
+            fillOpacity={0}
+            dot={({ cx = 0, cy = 0, key, payload }) => {
+              if (!payload.sentimentScore) return <g key={key} />;
+              const emoji = Math.min(5, Math.ceil(payload.sentimentScore / 20)) || 1; // eg. 0-20 = 1, 81-100 = 5
+              return (
+                <image key={key} href={`/img/emoji-${emoji}.svg`} x={cx - 10} y={cy - 10} width={20} height={20} />
+              );
+            }}
+            activeDot={false}
+          />
+        )}
       </AreaChart>
     </div>
   );

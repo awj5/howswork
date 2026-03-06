@@ -162,7 +162,7 @@ export default function CheckIns() {
           <Subheading className="mt-4">No check-ins scheduled</Subheading>
 
           <Text className="mt-1 text-center">
-            Schedule a check-in to start collecting early risk signals and enable concern reporting.
+            Schedule your first check-in to start collecting early risk signals and enable concern reporting.
           </Text>
 
           <Button onClick={() => setDialogOpen(true)} color="indigo" className="mt-6" disabled={disabled}>
