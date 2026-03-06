@@ -137,7 +137,7 @@ export default function CheckIns(props: CheckInsProps) {
           activeDot={{ r: 4, stroke: "#6366f1", strokeWidth: 1 }}
         />
 
-        {chartData?.length && chartData[0].sentiments?.length && (
+        {(chartData?.length !== 1 || chartData[0].sentiments?.length) && (
           <Area
             yAxisId="percentage"
             type="linear"
