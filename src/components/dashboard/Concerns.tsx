@@ -72,7 +72,7 @@ export default function Concerns(props: ConcernsProps) {
           cursor={false}
         />
 
-        <Bar dataKey="count" name="Concerns" fill="#6366f1" fillOpacity={0.7} radius={[8, 8, 0, 0]} />
+        <Bar dataKey="count" name="Concerns" fill="#6366f1" radius={[8, 8, 0, 0]} />
       </BarChart>
     </div>
   );
