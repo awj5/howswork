@@ -131,7 +131,7 @@ export default function CheckIns(props: CheckInsProps) {
           name="Participated"
           stroke="#6366f1"
           fill="#6366f1"
-          fillOpacity={0.3}
+          fillOpacity={0.7}
           dot={{ r: 4, fill: "var(--chart-bg)", fillOpacity: 1 }}
           activeDot={{ r: 4, stroke: "#6366f1", strokeWidth: 1 }}
         />

@@ -11,6 +11,7 @@ import CheckIns from "@/components/dashboard/CheckIns";
 import { Divider } from "@/components/ui/divider";
 import Doodle from "@/components/Doodle";
 import { Text } from "@/components/ui/text";
+import { Select } from "@/components/ui/select";
 import Concerns from "@/components/dashboard/Concerns";
 import Issues from "@/components/dashboard/Issues";
 import EmptyState from "@/components/EmptyState";
@@ -23,6 +24,8 @@ export default function Home() {
   const [issues, setIssues] = useState<CheckInIssueType[]>([]);
   const [noStaffContacts, setNoStaffContacts] = useState(false);
   const [doodleLoaded, setDoodleLoaded] = useState(false);
+  const [start, setStart] = useState("");
+  const [end, setEnd] = useState("");
   const nonScheduledCheckIns = checkIns?.filter((i) => i.status !== 1);
 
   useEffect(() => {
@@ -135,7 +138,20 @@ export default function Home() {
           </div>
 
           <Risks data={risks} />
-          <Subheading className="mt-12">Engagement overview</Subheading>
+
+          <div className="mt-8 flex items-end justify-between">
+            <Subheading>Engagement overview</Subheading>
+
+            <div>
+              <Select name="status">
+                <option value="3">Last 3 months</option>
+                <option value="6">Last 6 months</option>
+                <option value="12">Last 12 months</option>
+                <option value="fy">This financial year</option>
+              </Select>
+            </div>
+          </div>
+
           <Divider className="mt-4" />
 
           <div className="mt-6 flex flex-col gap-8">

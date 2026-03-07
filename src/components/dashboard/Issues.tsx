@@ -14,9 +14,13 @@ export default function Issues(props: IssuesProps) {
   const chartData = props.data
     .map((item) => {
       const issue = IssuesData.find((i) => i.id === item.id)!;
-      return { name: issue.name, value: item.count, fill: issue.color };
+      return { name: issue.name, value: item.count };
     })
-    .sort((a, b) => b.value - a.value);
+    .sort((a, b) => b.value - a.value)
+    .map((item, index) => ({
+      ...item,
+      fill: `rgba(99, 102, 241, ${Math.max(1 - index * 0.04, 0.2)})`,
+    }));
 
   return (
     <div>
