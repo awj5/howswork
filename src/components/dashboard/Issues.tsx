@@ -62,7 +62,7 @@ export default function Issues(props: IssuesProps) {
           dataKey="value"
           cx="25%"
           outerRadius={isMobile ? 60 : undefined}
-          stroke="var(--chart-stroke)"
+          stroke="var(--chart-bg)"
           startAngle={90}
           endAngle={-270}
         />

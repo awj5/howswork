@@ -8,14 +8,12 @@
 :root {
   --chart-grid: color-mix(in oklch, var(--color-zinc-950) 5%, transparent);
   --chart-bg: var(--color-zinc-100);
-  --chart-stroke: color-mix(in oklch, var(--color-zinc-950) 30%, transparent);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --chart-grid: rgb(255 255 255 / 5%);
     --chart-bg: var(--color-zinc-950);
-    --chart-stroke: rgb(255 255 255 / 30%);
   }
 }
 
