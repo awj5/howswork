@@ -24,9 +24,9 @@ export default function Concerns(props: ConcernsProps) {
       <div className="text-lg/6 font-medium sm:text-sm/6">Concerns raised</div>
 
       <BarChart
-        className="mt-6 h-72 [&_*]:outline-none"
+        className="mt-4 h-72 [&_*]:outline-none"
         margin={{
-          top: 12,
+          top: 16,
           right: 0,
           left: 0,
           bottom: 0,
@@ -62,7 +62,7 @@ export default function Concerns(props: ConcernsProps) {
         <Tooltip
           contentStyle={{
             backgroundColor: "var(--chart-bg)",
-            border: "none",
+            border: "1px solid var(--chart-grid)",
             borderRadius: "var(--radius-lg)",
           }}
           labelStyle={{ fontSize: "var(--text-sm)", padding: 0, paddingBottom: "calc(var(--spacing) * 1)" }}
@@ -72,7 +72,7 @@ export default function Concerns(props: ConcernsProps) {
           cursor={false}
         />
 
-        <Bar dataKey="count" name="Concerns" fill="#6366f1" radius={[8, 8, 0, 0]} />
+        <Bar dataKey="count" name="Concerns" fill="#6366f1" radius={[8, 8, 8, 8]} />
       </BarChart>
     </div>
   );

@@ -14,20 +14,16 @@ export default function Issues(props: IssuesProps) {
   const chartData = props.data
     .map((item) => {
       const issue = IssuesData.find((i) => i.id === item.id)!;
-      return { name: issue.name, value: item.count };
+      return { name: issue.name, value: item.count, fill: issue.color };
     })
-    .sort((a, b) => b.value - a.value)
-    .map((item, index) => ({
-      ...item,
-      fill: `rgba(99, 102, 241, ${Math.max(1 - index * 0.04, 0.2)})`,
-    }));
+    .sort((a, b) => b.value - a.value);
 
   return (
     <div>
       <div className="text-lg/6 font-medium sm:text-sm/6">Issues flagged</div>
 
       <PieChart
-        className="mt-6 h-72 [&_*]:outline-none"
+        className="mt-8 h-72 [&_*]:outline-none"
         margin={{
           top: 0,
           right: 0,
@@ -54,7 +50,7 @@ export default function Issues(props: IssuesProps) {
         <Tooltip
           contentStyle={{
             backgroundColor: "var(--chart-bg)",
-            border: "none",
+            border: "1px solid var(--chart-grid)",
             borderRadius: "var(--radius-lg)",
           }}
           itemStyle={{ fontSize: "var(--text-xs)", padding: 0, color: "var(--text-foreground)" }}
@@ -66,7 +62,7 @@ export default function Issues(props: IssuesProps) {
           dataKey="value"
           cx="25%"
           outerRadius={isMobile ? 60 : undefined}
-          stroke="var(--chart-bg)"
+          strokeWidth={0}
           startAngle={90}
           endAngle={-270}
         />

@@ -24,15 +24,35 @@ export default function Home() {
   const [issues, setIssues] = useState<CheckInIssueType[]>([]);
   const [noStaffContacts, setNoStaffContacts] = useState(false);
   const [doodleLoaded, setDoodleLoaded] = useState(false);
-  const [start, setStart] = useState("");
-  const [end, setEnd] = useState("");
+  const [filter, setFilter] = useState<string>();
   const nonScheduledCheckIns = checkIns?.filter((i) => i.status !== 1);
 
   useEffect(() => {
     if (!companies.length) return;
 
+    const getDateRange = (range?: string) => {
+      const now = new Date();
+      const year = now.getFullYear();
+      const today = now.toISOString().split("T")[0] + "T23:59:59";
+      if (range === "ty") return { start: `${year}-01-01`, end: today }; // This year
+      if (range === "ly") return { start: `${year - 1}-01-01`, end: `${year - 1}-12-31T23:59:59` }; // Last year
+      if (range === "at") return { start: null, end: null }; // All time
+      const date = new Date();
+
+      if (range === "p6") {
+        date.setMonth(date.getMonth() - 6); // 6 months
+      } else if (range === "p3") {
+        date.setMonth(date.getMonth() - 3); // 3 months
+      } else {
+        date.setFullYear(date.getFullYear() - 1); // 12 months (default)
+      }
+
+      return { start: date.toISOString().split("T")[0] + "T00:00:00", end: today };
+    };
+
     const getData = async () => {
       const supabase = createClient();
+      const dateRange = getDateRange(filter);
 
       // Check if company has staff contacts
       const { data: peopleData, error: peopleError } = await supabase
@@ -46,8 +66,6 @@ export default function Home() {
         return;
       }
 
-      if (!peopleData.contacts.length) setNoStaffContacts(true);
-
       // Get company risks
       const { data: risksData, error: risksError } = await supabase
         .from("risks")
@@ -60,14 +78,16 @@ export default function Home() {
         return;
       }
 
-      setRisks(risksData);
-
       // Get company check-ins
-      const { data: checkInsData, error: checkInsError } = await supabase
+      let checkInsQuery = supabase
         .from("check_ins")
         .select("id, start, repeat, status, contact_count")
         .eq("company_id", companies[0].id)
         .order("start", { ascending: true });
+
+      if (dateRange.start) checkInsQuery = checkInsQuery.gte("start", dateRange.start);
+      if (dateRange.end) checkInsQuery = checkInsQuery.lte("start", dateRange.end);
+      const { data: checkInsData, error: checkInsError } = await checkInsQuery;
 
       if (checkInsError) {
         console.error(checkInsError);
@@ -94,18 +114,20 @@ export default function Home() {
       }, {});
 
       // Get company concerns
-      const { data: concernsData, error: concernsError } = await supabase
+      let concernsQuery = supabase
         .from("concerns")
         .select("id, created_at, tracking, issues")
         .eq("company_id", companies[0].id)
         .order("created_at", { ascending: true });
 
+      if (dateRange.start) concernsQuery = concernsQuery.gte("created_at", dateRange.start);
+      if (dateRange.end) concernsQuery = concernsQuery.lte("created_at", dateRange.end);
+      const { data: concernsData, error: concernsError } = await concernsQuery;
+
       if (concernsError) {
         console.error(concernsError);
         return;
       }
-
-      setConcerns(concernsData);
 
       // Count issues from feedback and concerns
       const issueCounts = [
@@ -116,6 +138,9 @@ export default function Home() {
         return map;
       }, {});
 
+      if (!peopleData.contacts.length) setNoStaffContacts(true);
+      setRisks(risksData);
+      setConcerns(concernsData);
       setIssues(Object.entries(issueCounts).map(([id, count]) => ({ id: Number(id), count })));
 
       setCheckIns(
@@ -127,11 +152,11 @@ export default function Home() {
     };
 
     getData();
-  }, [companies]);
+  }, [companies, filter]);
 
   return (
     <div className="mx-auto max-w-6xl">
-      {nonScheduledCheckIns?.length ? (
+      {nonScheduledCheckIns?.length || filter !== undefined ? (
         <div className="fade-in">
           <div className="flex h-12 items-end sm:h-10">
             <Heading>{companies[0]?.name}</Heading>
@@ -143,22 +168,28 @@ export default function Home() {
             <Subheading>Engagement overview</Subheading>
 
             <div>
-              <Select name="status">
-                <option value="3">Last 3 months</option>
-                <option value="6">Last 6 months</option>
-                <option value="12">Last 12 months</option>
-                <option value="fy">This financial year</option>
+              <Select value={filter} onChange={(e) => setFilter(e.target.value)}>
+                <option value="p12">Past 12 months</option>
+                <option value="p6">Past 6 months</option>
+                <option value="p3">Past 3 months</option>
+                <option value="ty">This year</option>
+                <option value="ly">Last year</option>
+                <option value="at">All time</option>
               </Select>
             </div>
           </div>
 
           <Divider className="mt-4" />
 
-          <div className="mt-6 flex flex-col gap-8">
-            <CheckIns data={nonScheduledCheckIns} timezone={companies[0].timezone} />
-            {!!concerns.length && <Concerns data={concerns} />}
-            {!!issues.length && <Issues data={issues} />}
-          </div>
+          {nonScheduledCheckIns?.length ? (
+            <div className="mt-6 flex flex-col gap-8">
+              <CheckIns data={nonScheduledCheckIns} timezone={companies[0].timezone} />
+              {!!concerns.length && <Concerns data={concerns} />}
+              {!!issues.length && <Issues data={issues} />}
+            </div>
+          ) : (
+            <Text className="mt-6">No data found</Text>
+          )}
         </div>
       ) : checkIns?.length ? (
         <EmptyState className={doodleLoaded ? "fade-in" : "opacity-0"}>

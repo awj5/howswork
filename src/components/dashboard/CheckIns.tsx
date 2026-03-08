@@ -24,9 +24,9 @@ export default function CheckIns(props: CheckInsProps) {
       <div className="text-lg/6 font-medium sm:text-sm/6">Check-in trends</div>
 
       <AreaChart
-        className="mt-6 h-72 [&_*]:outline-none"
+        className="mt-4 h-72 [&_*]:outline-none"
         margin={{
-          top: 12,
+          top: 16,
           right: 0,
           left: 0,
           bottom: 0,
@@ -65,7 +65,7 @@ export default function CheckIns(props: CheckInsProps) {
         <Tooltip
           contentStyle={{
             backgroundColor: "var(--chart-bg)",
-            border: "none",
+            border: "1px solid var(--chart-grid)",
             borderRadius: "var(--radius-lg)",
           }}
           labelStyle={{ fontSize: "var(--text-sm)", padding: 0, paddingBottom: "calc(var(--spacing) * 1)" }}
@@ -114,24 +114,24 @@ export default function CheckIns(props: CheckInsProps) {
 
         <Area
           yAxisId="count"
-          type="monotone"
+          type="natural"
           dataKey="contact_count"
           name="Invited"
           stroke="#71717a"
           fill="#71717a"
-          fillOpacity={0.2}
+          fillOpacity={0.4}
           dot={{ r: 4, fill: "var(--chart-bg)", fillOpacity: 1 }}
           activeDot={{ r: 4, stroke: "#71717a", strokeWidth: 1 }}
         />
 
         <Area
           yAxisId="count"
-          type="monotone"
+          type="natural"
           dataKey={(item: CheckInType) => item.sentiments?.length}
           name="Participated"
           stroke="#6366f1"
           fill="#6366f1"
-          fillOpacity={0.2}
+          fillOpacity={0.4}
           dot={{ r: 4, fill: "var(--chart-bg)", fillOpacity: 1 }}
           activeDot={{ r: 4, stroke: "#6366f1", strokeWidth: 1 }}
         />
@@ -143,8 +143,8 @@ export default function CheckIns(props: CheckInsProps) {
             dataKey="sentimentScore"
             name="Sentiment"
             unit="%"
-            stroke="#eab308"
-            fill="#eab308"
+            stroke="#FACC15"
+            fill="#FACC15"
             fillOpacity={0}
             dot={({ cx = 0, cy = 0, key, payload }) => {
               if (!payload.sentimentScore) return <g key={key} />;
