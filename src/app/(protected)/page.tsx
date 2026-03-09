@@ -138,7 +138,7 @@ export default function Home() {
         return map;
       }, {});
 
-      if (!peopleData.contacts.length) setNoStaffContacts(true);
+      if (!peopleData.contacts || !peopleData.contacts.length) setNoStaffContacts(true);
       setRisks(risksData);
       setConcerns(concernsData);
       setIssues(Object.entries(issueCounts).map(([id, count]) => ({ id: Number(id), count })));
