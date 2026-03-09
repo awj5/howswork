@@ -165,7 +165,9 @@ export default function Home() {
           <Risks data={risks} />
 
           <div className="mt-8 flex items-end justify-between">
-            <Subheading>Engagement overview</Subheading>
+            <Subheading>
+              Engagement<span className="hidden sm:inline"> overview</span>
+            </Subheading>
 
             <div>
               <Select value={filter} onChange={(e) => setFilter(e.target.value)}>
