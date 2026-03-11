@@ -20,6 +20,7 @@ import Activity from "@/components/concerns/concern/Activity";
 import Comment from "@/components/concerns/concern/Comment";
 import Status from "@/components/concerns/concern/Status";
 import Issues from "@/components/concerns/concern/Issues";
+import SuggestActions from "@/components/SuggestActions";
 import { getConcernData } from "./actions";
 
 export default function Concern() {
@@ -123,14 +124,14 @@ export default function Concern() {
                 />
               </div>
 
-              <Button
-                className="mt-4 self-start"
-                onClick={() => router.push(`/risk-register/?concern=${params.id}`)}
-                outline
-              >
-                <ClipboardIcon />
-                View in Risk Register
-              </Button>
+              <div className="mt-4 flex flex-col gap-4 sm:flex-row">
+                <SuggestActions disabled={disabled} />
+
+                <Button onClick={() => router.push(`/risk-register/?concern=${params.id}`)} outline>
+                  <ClipboardIcon />
+                  View in Risk Register
+                </Button>
+              </div>
             </div>
 
             <div className="w-full">

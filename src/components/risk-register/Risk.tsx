@@ -9,6 +9,7 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import { Text, TextLink } from "@/components/ui/text";
 import { Badge } from "@/components/ui/badge";
 import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from "@/components/ui/dropdown";
+import SuggestActions from "@/components/SuggestActions";
 
 type RiskProps = {
   data: RiskType;
@@ -177,7 +178,7 @@ export default function Risk(props: RiskProps) {
             {props.data.ai_response && <AILabel />}
           </>
         ) : (
-          <Text>—</Text>
+          <SuggestActions disabled={props.disabled} />
         )}
       </TableCell>
 

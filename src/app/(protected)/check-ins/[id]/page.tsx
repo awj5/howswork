@@ -21,6 +21,7 @@ import EmptyState from "@/components/EmptyState";
 import Stat from "@/components/check-in/Stat";
 import Issues from "@/components/check-in/Issues";
 import Team from "@/components/check-in/Team";
+import SuggestActions from "@/components/SuggestActions";
 import { deleteCheckIn } from "./actions";
 
 export default function CheckIn() {
@@ -325,10 +326,14 @@ export default function CheckIn() {
           <Issues data={checkIn.issues} status={checkIn.status} />
 
           {inRiskRegister && (
-            <Button className="mt-12" onClick={() => router.push(`/risk-register/?check-in=${params.id}`)} outline>
-              <ClipboardIcon />
-              View in Risk Register
-            </Button>
+            <div className="mt-12 flex flex-col gap-4 sm:flex-row">
+              <SuggestActions disabled={disabled} />
+
+              <Button onClick={() => router.push(`/risk-register/?check-in=${params.id}`)} outline>
+                <ClipboardIcon />
+                View in Risk Register
+              </Button>
+            </div>
           )}
         </div>
       ) : (
