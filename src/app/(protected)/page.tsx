@@ -164,7 +164,7 @@ export default function Home() {
 
           <Risks data={risks} />
 
-          <div className="mt-8 flex items-end justify-between">
+          <div className="mt-12 flex items-end justify-between">
             <Subheading>
               Engagement<span className="hidden sm:inline"> overview</span>
             </Subheading>
@@ -184,7 +184,7 @@ export default function Home() {
           <Divider className="mt-4" />
 
           {nonScheduledCheckIns?.length ? (
-            <div className="mt-6 flex flex-col gap-8">
+            <div className="mt-6 flex flex-col gap-12">
               <CheckIns data={nonScheduledCheckIns} timezone={companies[0].timezone} />
               {!!concerns.length && <Concerns data={concerns} />}
               {!!issues.length && <Issues data={issues} />}
