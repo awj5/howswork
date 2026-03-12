@@ -100,7 +100,7 @@ export async function addEditRisk(companyID: number, risk: RiskType, id: number)
       .from("risks")
       .update({
         ...(!risk.concern_id && !risk.check_in_id && { date_raised: risk.date_raised }),
-        date_reviewed: risk.date_reviewed || null,
+        ...(!risk.concern_id && { date_reviewed: risk.date_reviewed || null }),
         issues: risk.issues?.length ? risk.issues : null,
         description: encrypt(risk.description.trim()),
         level: risk.level,
@@ -108,7 +108,7 @@ export async function addEditRisk(companyID: number, risk: RiskType, id: number)
         owner: risk.owner || null,
         response: risk.response ? encrypt(risk.response.trim()) : null,
         ai_description: risk.ai_description,
-        date_resolved: risk.date_resolved || null,
+        ...(!risk.concern_id && { date_resolved: risk.date_resolved || null }),
         ai_response: risk.ai_response,
       })
       .eq("id", id);

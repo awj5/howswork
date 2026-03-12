@@ -6,7 +6,7 @@ import StatusData from "@/data/status.json";
 import { addEditRisk, getRiskData } from "@/app/(protected)/risk-register/actions";
 import { useCompanies } from "@/hooks/useCompanies";
 import { useUserContext } from "@/hooks/useUserContext";
-import { toLocalMidnightISO } from "@/utils/helpers";
+import { toLocalDateString, toLocalMidnightISO } from "@/utils/helpers";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Divider } from "@/components/ui/divider";
@@ -151,8 +151,8 @@ export default function RiskDialog(props: RiskDialogProps) {
         return;
       }
 
-      setDateRaised(result.data?.date_raised?.slice(0, 10));
-      setDateReviewed(result.data?.date_reviewed?.slice(0, 10) ?? "");
+      setDateRaised(toLocalDateString(result.data?.date_raised));
+      setDateReviewed(result.data?.date_reviewed ? toLocalDateString(result.data.date_reviewed) : "");
       setIssues(result.data?.issues ?? []);
       aiDescriptionRef.current = result.data?.ai_description ? result.data.description : "";
       setDescription(result.data?.description);
@@ -163,7 +163,7 @@ export default function RiskDialog(props: RiskDialogProps) {
       setResponse(result.data?.response ?? "");
       setConcernID(result.data?.concern_id ?? 0);
       setCheckInID(result.data?.check_in_id ?? 0);
-      setDateResolved(result.data?.date_resolved?.slice(0, 10) ?? "");
+      setDateResolved(result.data?.date_resolved ? toLocalDateString(result.data.date_resolved) : "");
     };
 
     // Reset on open

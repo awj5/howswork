@@ -29,6 +29,11 @@ export function checkInStatusText(status: number) {
   return texts[status] ?? "Closed";
 }
 
+export function toLocalDateString(utc: string) {
+  const date = new Date(utc);
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
+
 export function toLocalMidnightISO(date: string) {
   const [year, month, day] = date.split("-").map(Number);
   return new Date(year, month - 1, day).toISOString();
