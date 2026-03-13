@@ -2,6 +2,7 @@
 
 import { createClient } from "@/utils/supabase/server";
 import supabaseAdmin from "@/utils/supabase/admin";
+import { baseURL } from "@/utils/helpers";
 import { type UserType } from "@/types";
 
 export async function updateAccount(user: UserType) {
@@ -29,9 +30,12 @@ export async function updateAccount(user: UserType) {
   // Update auth email if changed
   if (email !== authData.user.email) {
     // Auth
-    const { error: updateAuthUserError } = await supabase.auth.updateUser({
-      email,
-    });
+    const { error: updateAuthUserError } = await supabase.auth.updateUser(
+      {
+        email,
+      },
+      { emailRedirectTo: baseURL }
+    );
 
     if (updateAuthUserError) return { error: updateAuthUserError.message };
 
