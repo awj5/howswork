@@ -107,9 +107,9 @@ export async function addEditRisk(companyID: number, risk: RiskType, id: number)
         status: risk.status,
         owner: risk.owner || null,
         response: risk.response ? encrypt(risk.response.trim()) : null,
-        ai_description: risk.ai_description,
+        ai_description: risk.ai_description ?? false,
         ...(!risk.concern_id && { date_resolved: risk.date_resolved || null }),
-        ai_response: risk.ai_response,
+        ai_response: risk.ai_response ?? false,
       })
       .eq("id", id);
 
