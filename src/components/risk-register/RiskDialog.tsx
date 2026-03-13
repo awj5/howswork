@@ -103,7 +103,7 @@ export default function RiskDialog(props: RiskDialogProps) {
       companies[0].id,
       {
         date_raised: toLocalMidnightISO(dateRaised),
-        date_reviewed: dateReviewed ? toLocalMidnightISO(dateReviewed) : "",
+        //date_reviewed: dateReviewed ? toLocalMidnightISO(dateReviewed) : "",
         //issues,
         description,
         level: Number(level),
