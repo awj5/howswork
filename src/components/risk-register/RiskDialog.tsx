@@ -103,18 +103,18 @@ export default function RiskDialog(props: RiskDialogProps) {
       companies[0].id,
       {
         date_raised: toLocalMidnightISO(dateRaised),
-        date_reviewed: dateReviewed ? toLocalMidnightISO(dateReviewed) : "",
+        date_reviewed: dateReviewed ? toLocalMidnightISO(dateReviewed) : undefined,
         issues,
         description,
         level: Number(level),
         status: Number(status),
         owner,
         response,
-        //ai_description: !!(aiDescriptionRef.current && aiDescriptionRef.current === description),
+        ai_description: (aiDescriptionRef.current && aiDescriptionRef.current === description) || undefined,
         concern_id: concernID,
         check_in_id: checkInID,
-        date_resolved: dateResolved ? toLocalMidnightISO(dateResolved) : "",
-        //ai_response: !!(aiResponseRef.current && aiResponseRef.current === response),
+        date_resolved: dateResolved ? toLocalMidnightISO(dateResolved) : undefined,
+        ai_response: (aiResponseRef.current && aiResponseRef.current === response) || undefined,
       },
       props.id
     );
