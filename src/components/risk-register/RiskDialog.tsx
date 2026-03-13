@@ -110,11 +110,11 @@ export default function RiskDialog(props: RiskDialogProps) {
         status: Number(status),
         owner,
         response,
-        ai_description: (aiDescriptionRef.current && aiDescriptionRef.current === description) || undefined,
+        ...(aiDescriptionRef.current && aiDescriptionRef.current === description && { ai_description: true }),
         concern_id: concernID,
         check_in_id: checkInID,
         date_resolved: dateResolved ? toLocalMidnightISO(dateResolved) : undefined,
-        ai_response: (aiResponseRef.current && aiResponseRef.current === response) || undefined,
+        ...(aiResponseRef.current && aiResponseRef.current === response && { ai_response: true }),
       },
       props.id
     );
