@@ -102,7 +102,7 @@ export default function CheckIns(props: CheckInsProps) {
             <ReferenceArea
               yAxisId="percentage"
               y1={chartData[0].sentimentScore!}
-              shape={({ x, y, width, height }) => (
+              shape={({ x, y, width }) => (
                 <g>
                   <line x1={x} y1={y} x2={x + width} y2={y} stroke="#FACC15" strokeWidth={2} />
                 </g>
@@ -113,12 +113,12 @@ export default function CheckIns(props: CheckInsProps) {
 
         <defs>
           <linearGradient id="gradientInvited" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#a1a1aa" stopOpacity={0.8} />
+            <stop offset="5%" stopColor="#a1a1aa" stopOpacity={0.4} />
             <stop offset="95%" stopColor="#a1a1aa" stopOpacity={0.1} />
           </linearGradient>
 
           <linearGradient id="gradientParticipated" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#6366f1" stopOpacity={0.8} />
+            <stop offset="5%" stopColor="#6366f1" stopOpacity={0.4} />
             <stop offset="95%" stopColor="#6366f1" stopOpacity={0.1} />
           </linearGradient>
         </defs>
@@ -130,6 +130,7 @@ export default function CheckIns(props: CheckInsProps) {
           name="Invited"
           stroke="#a1a1aa"
           fill="url(#gradientInvited)"
+          fillOpacity={1}
           dot={() => null}
           activeDot={{ stroke: "#a1a1aa" }}
         />
@@ -141,6 +142,7 @@ export default function CheckIns(props: CheckInsProps) {
           name="Participated"
           stroke="#6366f1"
           fill="url(#gradientParticipated)"
+          fillOpacity={1}
           dot={() => null}
           activeDot={{ stroke: "#6366f1" }}
         />
