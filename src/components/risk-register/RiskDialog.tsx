@@ -1,5 +1,3 @@
-"use client";
-
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
@@ -105,18 +103,18 @@ export default function RiskDialog(props: RiskDialogProps) {
       companies[0].id,
       {
         date_raised: toLocalMidnightISO(dateRaised),
-        date_reviewed: dateReviewed ? toLocalMidnightISO(dateReviewed) : "",
-        issues,
+        //date_reviewed: dateReviewed ? toLocalMidnightISO(dateReviewed) : "",
+        //issues,
         description,
         level: Number(level),
         status: Number(status),
-        owner,
-        response,
-        ai_description: !!(aiDescriptionRef.current && aiDescriptionRef.current === description),
-        concern_id: concernID,
-        check_in_id: checkInID,
-        date_resolved: dateResolved ? toLocalMidnightISO(dateResolved) : "",
-        ai_response: !!(aiResponseRef.current && aiResponseRef.current === response),
+        //owner,
+        //response,
+        //ai_description: !!(aiDescriptionRef.current && aiDescriptionRef.current === description),
+        //concern_id: concernID,
+        //check_in_id: checkInID,
+        //date_resolved: dateResolved ? toLocalMidnightISO(dateResolved) : "",
+        //ai_response: !!(aiResponseRef.current && aiResponseRef.current === response),
       },
       props.id
     );
