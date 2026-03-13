@@ -91,12 +91,10 @@ export async function getRiskData(id: number) {
   return { data: riskData };
 }
 
-export async function addEditRisk(companyID: number, id: number) {
+export async function addEditRisk(companyID: number, risk: RiskType, id: number) {
   const supabase = await createClient();
 
-  if (id) return { error: "Internal server error" };
-
-  /*if (id) {
+  if (id) {
     // Edit
     const { error: updateRiskError } = await supabase
       .from("risks")
@@ -138,7 +136,7 @@ export async function addEditRisk(companyID: number, id: number) {
       console.error(insertRiskError.message);
       return { error: "Internal server error" };
     }
-  }*/
+  }
 
   return { success: true };
 }
