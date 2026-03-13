@@ -180,7 +180,7 @@ export async function addStatus(concernID: number, status: number, companyID: nu
   // Generate AI risk response (if resolved)
   let riskResponse = "";
 
-  if (status >= 4) {
+  if (status >= 3) {
     // Get status updates
     const { data: concernStatusData, error: concernStatusError } = await supabase
       .from("concern_status")
@@ -239,10 +239,10 @@ export async function addStatus(concernID: number, status: number, companyID: nu
       status: status === 5 ? 4 : status, // No further action shown as Resolved
       date_resolved: status >= 4 ? now : null, // Null if not resolved
       response:
-        status >= 4
+        status >= 3
           ? encrypt(riskResponse || "Unable to generate a response. See concern for details.")
           : (riskData?.response ?? null),
-      ai_response: status >= 4,
+      ai_response: status >= 3,
       ...(status >= 2 && !riskData?.date_reviewed && { date_reviewed: now }),
       ...(!riskData?.owner && { owner: `${profileData.first_name} ${profileData.last_name}` }), // Add owner if not already assigned
     })
