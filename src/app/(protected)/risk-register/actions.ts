@@ -93,6 +93,7 @@ export async function getRiskData(id: number) {
 
 export async function addEditRisk(companyID: number, risk: RiskType, id: number) {
   const supabase = await createClient();
+  console.log(id);
 
   if (id) {
     // Edit
@@ -124,11 +125,11 @@ export async function addEditRisk(companyID: number, risk: RiskType, id: number)
       date_raised: risk.date_raised,
       date_reviewed: risk.date_reviewed || null,
       issues: risk.issues?.length ? risk.issues : null,
-      description: encrypt(risk.description.trim()),
+      //description: encrypt(risk.description.trim()),
       level: risk.level,
       status: risk.status,
       owner: risk.owner || null,
-      response: risk.response ? encrypt(risk.response.trim()) : null,
+      //response: risk.response ? encrypt(risk.response.trim()) : null,
       date_resolved: risk.date_resolved || null,
     });
 

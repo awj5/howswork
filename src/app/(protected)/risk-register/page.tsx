@@ -189,7 +189,7 @@ export default function RiskRegister() {
             <Subheading className="mt-4">No risks logged</Subheading>
 
             <Text className="mt-1 text-center">
-              Concerns and check-in trends are automatically logged in the risk register. Risks can also be added
+              Concerns and flagged check-ins are automatically logged in the risk register. Risks can also be added
               manually.
             </Text>
 
