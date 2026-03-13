@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Textarea } from "@/components/ui/textarea";
 import { Description, ErrorMessage, Field, Fieldset, Label } from "@/components/ui/fieldset";
-import { Text } from "@/components/ui/text";
+import { Strong, Text } from "@/components/ui/text";
 import HelperTooltip from "@/components/HelperTooltip";
 import { Badge } from "@/components/ui/badge";
 import { Divider } from "@/components/ui/divider";
@@ -114,7 +114,8 @@ export default function People() {
 
           <div data-slot="description" className="flex items-center gap-1.5">
             <Description>
-              Enter one contact per employee (email or mobile, not both). Separate by comma or line break.
+              Enter one contact per employee (email or mobile, <Strong>not both</Strong>). Separate by comma or line
+              break.
             </Description>
 
             <HelperTooltip text="Group email addresses (e.g. team@company.com) count as one staff contact." />
