@@ -19,6 +19,148 @@ export default function CheckIns(props: CheckInsProps) {
     return { ...checkIn, sentimentScore };
   });
 
+  // Use for staging
+  /*const chartData = [
+    {
+      id: 1,
+      start: "2026-02-05T00:00:00+00:00",
+      repeat: 7,
+      status: 3,
+      contact_count: 40,
+      sentiments: [
+        5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+      ],
+      sentimentScore: 48,
+    },
+    {
+      id: 2,
+      start: "2026-02-12T00:00:00+00:00",
+      repeat: 7,
+      status: 3,
+      contact_count: 42,
+      sentiments: [
+        5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+        5, 5, 5,
+      ],
+      sentimentScore: 61,
+    },
+    {
+      id: 3,
+      start: "2026-02-19T00:00:00+00:00",
+      repeat: 7,
+      status: 3,
+      contact_count: 41,
+      sentiments: [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
+      sentimentScore: 63,
+    },
+    {
+      id: 4,
+      start: "2026-02-26T00:00:00+00:00",
+      repeat: 7,
+      status: 3,
+      contact_count: 44,
+      sentiments: [
+        5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+      ],
+      sentimentScore: 81,
+    },
+    {
+      id: 5,
+      start: "2026-03-05T00:00:00+00:00",
+      repeat: 7,
+      status: 3,
+      contact_count: 44,
+      sentiments: [
+        5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+        5, 5, 5, 5, 5,
+      ],
+      sentimentScore: 64,
+    },
+    {
+      id: 6,
+      start: "2026-03-12T00:00:00+00:00",
+      repeat: 7,
+      status: 3,
+      contact_count: 44,
+      sentiments: [
+        5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+        5, 5, 5,
+      ],
+      sentimentScore: 72,
+    },
+    {
+      id: 7,
+      start: "2026-03-19T00:00:00+00:00",
+      repeat: 7,
+      status: 3,
+      contact_count: 48,
+      sentiments: [
+        5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+        5, 5, 5, 5, 5, 5, 5,
+      ],
+      sentimentScore: 91,
+    },
+    {
+      id: 8,
+      start: "2026-03-26T00:00:00+00:00",
+      repeat: 7,
+      status: 3,
+      contact_count: 48,
+      sentiments: [
+        5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+        5, 5, 5,
+      ],
+      sentimentScore: 78,
+    },
+    {
+      id: 9,
+      start: "2026-04-02T00:00:00+00:00",
+      repeat: 7,
+      status: 3,
+      contact_count: 48,
+      sentiments: [
+        5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+        5, 5, 5, 5, 5, 5,
+      ],
+      sentimentScore: 64,
+    },
+    {
+      id: 10,
+      start: "2026-04-09T00:00:00+00:00",
+      repeat: 7,
+      status: 3,
+      contact_count: 47,
+      sentiments: [
+        5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+      ],
+      sentimentScore: 72,
+    },
+    {
+      id: 11,
+      start: "2026-04-16T00:00:00+00:00",
+      repeat: 7,
+      status: 3,
+      contact_count: 48,
+      sentiments: [
+        5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+        5, 5, 5,
+      ],
+      sentimentScore: 58,
+    },
+    {
+      id: 12,
+      start: "2026-04-23T00:00:00+00:00",
+      repeat: 7,
+      status: 3,
+      contact_count: 49,
+      sentiments: [
+        5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+        5, 5, 5, 5, 5, 5, 5, 5,
+      ],
+      sentimentScore: 68,
+    },
+  ];*/
+
   return (
     <div>
       <div className="text-lg/6 font-medium sm:text-sm/6">Check-in trends</div>

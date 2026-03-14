@@ -67,6 +67,31 @@ export default function Risks(props: RisksProps) {
     badgeColor: avgDays ? (avgDays <= 14 ? "green" : avgDays <= 30 ? "amber" : "red") : undefined,
   });
 
+  // Use for staging
+  /*stats.push({
+    title: "Awaiting review",
+    primary: 2,
+    secondary: "1 day",
+    secondaryText: "oldest awaiting review",
+    badgeColor: "green",
+  });
+
+  stats.push({
+    title: "Open",
+    primary: 4,
+    secondary: "8 days",
+    secondaryText: "longest open",
+    badgeColor: "amber",
+  });
+
+  stats.push({
+    title: "Resolved",
+    primary: 10,
+    secondary: "3 days",
+    secondaryText: "avg to resolve",
+    badgeColor: "green",
+  });*/
+
   return (
     <>
       <div className="mt-8 flex items-end justify-between">
