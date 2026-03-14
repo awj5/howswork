@@ -66,7 +66,7 @@ export function DialogDescription({
   className,
   ...props
 }: { className?: string } & Omit<Headless.DescriptionProps<typeof Text>, 'as' | 'className'>) {
-  return <Headless.Description as={Text} {...props} className={clsx(className, 'mt-2 text-pretty')} />
+  return <Headless.Description as={Text} {...props} className={clsx(className, 'mt-2')} />
 }
 
 export function DialogBody({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
