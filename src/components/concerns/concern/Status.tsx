@@ -19,7 +19,10 @@ export default function Status(props: StatusProps) {
   const changeStatus = async (id: number) => {
     if (!companies.length || id === props.val) return;
     props.setDisabled(true);
+    let loadingToast;
+    if (id >= 4) loadingToast = toast.loading("Updating...");
     const result = await addStatus(props.concernID, id, companies[0].id);
+    toast.dismiss(loadingToast);
 
     if (result.error) {
       toast.error(result.error);
