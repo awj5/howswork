@@ -79,7 +79,7 @@ export default function RiskDialog(props: RiskDialogProps) {
     }
 
     if (!description.trim()) errors.description = true;
-    if (Number(status) > 2 && !response.trim()) errors.response = true; // Response required when status is beyond under review
+    if (Number(status) === 4 && !response.trim()) errors.response = true; // Response required when status is Resolved
 
     if (status === "4" && !dateResolved) {
       errors.dateResolved = "Required when status is Resolved.";
@@ -297,7 +297,7 @@ export default function RiskDialog(props: RiskDialogProps) {
             invalid={formErrors.response}
           />
 
-          {formErrors.response && <ErrorMessage>Required when status is Action planned or Resolved.</ErrorMessage>}
+          {formErrors.response && <ErrorMessage>Required when status is Resolved.</ErrorMessage>}
         </Field>
 
         <Divider className="my-8" soft />
