@@ -12,8 +12,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "HowsWork - Dashboard",
-  description:
-    "A trusted, anonymous channel for raising workplace concerns, helping organisations meet WHS obligations and identify risks early.",
+  description: "Give your team a trusted channel for raising workplace concerns, with a clear record of your response.",
   icons: {
     icon: [
       { url: "/img/icon.svg", media: "(prefers-color-scheme: light)" },
