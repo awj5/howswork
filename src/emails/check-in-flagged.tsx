@@ -10,7 +10,7 @@ export default function CheckInFlagged(props: CheckInFlaggedProps) {
       <Tailwind>
         <Body className="font-sans">
           <Container className="py-[24px]">
-            <Img src="https://www.howswork.app/img/email-icon.png" width="32" height="32" alt="HowsWork" />
+            <Img src="https://howswork.app/img/email-icon.png" width="32" height="32" alt="HowsWork" />
 
             <Text className="text-[16px]">
               A recent check-in at <strong>{props.company}</strong> has identified workplace issues and has been added

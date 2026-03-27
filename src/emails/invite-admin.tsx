@@ -11,7 +11,7 @@ export default function InviteAdmin(props: InviteAdminProps) {
       <Tailwind>
         <Body className="font-sans">
           <Container className="py-[24px]">
-            <Img src="https://www.howswork.app/img/email-icon.png" width="32" height="32" alt="HowsWork" />
+            <Img src="https://howswork.app/img/email-icon.png" width="32" height="32" alt="HowsWork" />
 
             <Text className="text-[16px]">Hi there,</Text>
 
