@@ -8,7 +8,7 @@ type SuggestActionsProps = {
 export default function SuggestActions(props: SuggestActionsProps) {
   return (
     <Button
-      onClick={() => null}
+      onClick={() => alert("Coming soon")}
       className={`bg-gradient-to-r from-indigo-500 to-fuchsia-500 bg-clip-text text-transparent! ${!props.disabled && "hover:from-indigo-400 hover:to-fuchsia-400 hover:[&>svg]:fill-indigo-400"}`}
       outline
     >

@@ -6,6 +6,7 @@ import {
   ShieldCheckIcon,
   UserCircleIcon,
   DocumentTextIcon,
+  ArrowTopRightOnSquareIcon,
 } from "@heroicons/react/16/solid";
 import { createClient } from "@/utils/supabase/client";
 import { DropdownDivider, DropdownItem, DropdownLabel } from "@/components/ui/dropdown";
@@ -27,6 +28,11 @@ export default function AccountMenu() {
       </DropdownItem>
 
       <DropdownDivider />
+
+      <DropdownItem href="https://articles.howswork.app/" target="_blank">
+        <ArrowTopRightOnSquareIcon />
+        <DropdownLabel>Resources</DropdownLabel>
+      </DropdownItem>
 
       <DropdownItem href="https://articles.howswork.app/privacy-policy/" target="_blank">
         <ShieldCheckIcon />
