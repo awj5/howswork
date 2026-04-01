@@ -179,13 +179,14 @@ export default function CheckIns(props: CheckInsProps) {
         <XAxis
           dataKey="start"
           padding={{ left: 28, right: 28 }}
-          tickFormatter={(val) =>
-            DateTime.fromISO(val, { zone: props.timezone }).toLocaleString({
-              year: "2-digit",
+          tickFormatter={(val) => {
+            const dt = DateTime.fromISO(val, { zone: props.timezone });
+            return dt.toLocaleString({
+              ...(dt.year !== DateTime.now().year && { year: "2-digit" }),
               month: "numeric",
               day: "numeric",
-            })
-          }
+            });
+          }}
           tick={{ dy: 8, className: "fill-zinc-500 text-xs dark:fill-zinc-400 font-medium" }}
           axisLine={false}
           tickLine={false}
