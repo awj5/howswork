@@ -6,12 +6,22 @@ import supabaseAdmin from "@/utils/supabase/admin";
 export async function updateStaff(companyID: number, contacts: string[]) {
   const supabase = await createClient();
 
-  // Normalize Aus mobile numbers
+  // Get company timezone
+  const { data: companyData, error: companyError } = await supabase
+    .from("companies")
+    .select("id, name, timezone")
+    .eq("id", companyID)
+    .single();
+
+  if (companyError) throw companyError;
+  const isAus = companyData.timezone.includes("Australia");
+
+  // Normalize mobile numbers
   const normalizedContacts = contacts.map((contact) => {
     // Check if phone number
     if (!contact.includes("@")) {
-      const normalized = normalizeAusNumber(contact);
-      return normalized ?? contact.replace(/[\s\-\(\)]/g, ""); // Keep original if not Aus number (remove all spaces, dashes, parentheses)
+      const normalized = normalizeNumber(contact, companyData.timezone);
+      return normalized ?? contact.replace(/[\s\-\(\)]/g, ""); // Keep original if not changed (remove all spaces, dashes, parentheses)
     }
 
     return contact;
@@ -34,16 +44,6 @@ export async function updateStaff(companyID: number, contacts: string[]) {
 
   // Send welcome message to new contacts
   try {
-    // Get company timezone
-    const { data: companyData, error: companyError } = await supabase
-      .from("companies")
-      .select("id, name, timezone")
-      .eq("id", companyID)
-      .single();
-
-    if (companyError) throw companyError;
-    const isAus = companyData.timezone.includes("Australia");
-
     // Get already sent welcomes for company
     const { data: welcomeSentData, error: welcomeSentError } = await supabase
       .from("welcome_sent")
@@ -187,10 +187,58 @@ You'll receive a quick check-in soon. No app or sign-up needed.`;
   return { success: true };
 }
 
-function normalizeAusNumber(number: string) {
+function normalizeNumber(number: string, timezone: string) {
   let cleaned = number.replace(/[\s\-\(\)]/g, ""); // Remove all spaces, dashes, parentheses
-  if (cleaned.startsWith("04") && cleaned.length === 10) return `+61${cleaned.substring(1)}`; // Convert 04 to +614
-  if (cleaned.startsWith("+614") && cleaned.length === 12) return cleaned; // Already in correct format
-  if (cleaned.startsWith("614") && cleaned.length === 11) return `+${cleaned}`; // Add missing +
-  return null; // Not an Aus mobile
+
+  if (timezone.includes("Australia")) {
+    if (cleaned.startsWith("04") && cleaned.length === 10) return `+61${cleaned.substring(1)}`; // Convert 04 to +614
+    if (cleaned.startsWith("614") && cleaned.length === 11) return `+${cleaned}`; // Add missing +
+    if (cleaned.startsWith("+614") && cleaned.length === 12) return cleaned; // Already in correct format
+  }
+
+  if (timezone.includes("America")) {
+    if (cleaned.length === 10 && !cleaned.startsWith("+")) return `+1${cleaned}`; // 10-digit local → +1XXXXXXXXXX
+    if (cleaned.startsWith("1") && cleaned.length === 11) return `+${cleaned}`; // Add missing +
+    if (cleaned.startsWith("+1") && cleaned.length === 12) return cleaned; // Already in correct format
+  }
+
+  if (timezone === "Europe/London") {
+    if (cleaned.startsWith("0") && cleaned.length === 11) return `+44${cleaned.substring(1)}`; // Convert 07... to +447...
+    if (cleaned.startsWith("44") && cleaned.length === 12) return `+${cleaned}`; // Add missing +
+    if (cleaned.startsWith("+44") && cleaned.length === 13) return cleaned; // Already in correct format
+  }
+
+  if (timezone === "Europe/Dublin") {
+    if (cleaned.startsWith("0") && (cleaned.length === 9 || cleaned.length === 10))
+      return `+353${cleaned.substring(1)}`; // Convert 08... to +3538...
+
+    if (cleaned.startsWith("353") && (cleaned.length === 11 || cleaned.length === 12)) return `+${cleaned}`; // Add missing +
+    if (cleaned.startsWith("+353") && (cleaned.length === 12 || cleaned.length === 13)) return cleaned; // Already in correct format
+  }
+
+  if (timezone === "Pacific/Auckland") {
+    if (cleaned.startsWith("0") && (cleaned.length === 9 || cleaned.length === 10)) return `+64${cleaned.substring(1)}`; // Convert 02... to +642...
+    if (cleaned.startsWith("64") && (cleaned.length === 10 || cleaned.length === 11)) return `+${cleaned}`; // Add missing +
+    if (cleaned.startsWith("+64") && (cleaned.length === 11 || cleaned.length === 12)) return cleaned; // Already in correct format
+  }
+
+  if (timezone === "Asia/Singapore") {
+    if (cleaned.length === 8 && !cleaned.startsWith("+")) return `+65${cleaned}`; // 8-digit local → +65XXXXXXXX
+    if (cleaned.startsWith("65") && cleaned.length === 10) return `+${cleaned}`; // Add missing +
+    if (cleaned.startsWith("+65") && cleaned.length === 11) return cleaned; // Already in correct format
+  }
+
+  if (timezone === "Asia/Hong_Kong") {
+    if (cleaned.length === 8 && !cleaned.startsWith("+")) return `+852${cleaned}`; // 8-digit local → +852XXXXXXXX
+    if (cleaned.startsWith("852") && cleaned.length === 11) return `+${cleaned}`; // Add missing +
+    if (cleaned.startsWith("+852") && cleaned.length === 12) return cleaned; // Already in correct format
+  }
+
+  if (timezone === "Africa/Johannesburg") {
+    if (cleaned.startsWith("0") && cleaned.length === 10) return `+27${cleaned.substring(1)}`; // Convert 08... to +278...
+    if (cleaned.startsWith("27") && cleaned.length === 11) return `+${cleaned}`; // Add missing +
+    if (cleaned.startsWith("+27") && cleaned.length === 12) return cleaned; // Already in correct format
+  }
+
+  return null; // Not changed
 }
