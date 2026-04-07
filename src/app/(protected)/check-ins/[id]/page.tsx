@@ -34,7 +34,7 @@ export default function CheckIn() {
   const [disabled, setDisabled] = useState(false);
   const [error, setError] = useState("");
   const [team, setTeam] = useState("");
-  const [inRiskRegister, setInRiskRegister] = useState(false);
+  const [riskID, setRiskID] = useState(0);
   const date = checkIn ? DateTime.fromISO(checkIn.start).toUTC() : undefined;
 
   const deleteClick = async () => {
@@ -253,10 +253,10 @@ export default function CheckIn() {
         .from("risks")
         .select("id")
         .eq("check_in_id", checkInData.id)
-        .limit(1);
+        .maybeSingle();
 
       if (riskError) console.error(riskError);
-      setInRiskRegister(!!riskData?.length);
+      if (riskData) setRiskID(riskData.id);
     };
 
     getCheckIn();
@@ -325,9 +325,9 @@ export default function CheckIn() {
 
           <Issues data={checkIn.issues} status={checkIn.status} />
 
-          {inRiskRegister && (
+          {!!riskID && (
             <div className="mt-12 flex flex-col gap-4 sm:flex-row">
-              <SuggestActions disabled={disabled} />
+              <SuggestActions riskID={riskID} disabled={disabled} setDisabled={setDisabled} />
 
               <Button onClick={() => router.push(`/risk-register/?check-in=${params.id}`)} outline>
                 <ClipboardIcon />

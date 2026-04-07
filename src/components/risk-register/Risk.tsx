@@ -17,6 +17,7 @@ type RiskProps = {
   setRiskDialogOpen: Dispatch<SetStateAction<boolean>>;
   setEditID: Dispatch<SetStateAction<number>>;
   disabled: boolean;
+  setDisabled: Dispatch<SetStateAction<boolean>>;
   setAlertOpen: Dispatch<SetStateAction<boolean>>;
   setDeleteID: Dispatch<SetStateAction<number>>;
 };
@@ -178,7 +179,7 @@ export default function Risk(props: RiskProps) {
             {props.data.ai_response && <AILabel />}
           </>
         ) : (
-          <SuggestActions disabled={props.disabled} />
+          <SuggestActions riskID={props.data.id!} disabled={props.disabled} setDisabled={props.setDisabled} />
         )}
       </TableCell>
 

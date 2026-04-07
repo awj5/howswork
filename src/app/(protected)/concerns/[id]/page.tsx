@@ -34,6 +34,7 @@ export default function Concern() {
   const [status, setStatus] = useState(0);
   const [disabled, setDisabled] = useState(false);
   const [issues, setIssues] = useState<number[]>([]);
+  const [riskID, setRiskID] = useState(0);
   const date = concern ? DateTime.fromISO(concern.created_at) : undefined; // Convert to date object
 
   const getConcern = async () => {
@@ -46,6 +47,7 @@ export default function Concern() {
     }
 
     setConcern(result.data);
+    setRiskID(result.risk?.id);
 
     setStatus(
       result.data?.activity.find((i): i is { created_at: string; status: number } => "status" in i)?.status ?? 0
@@ -125,7 +127,7 @@ export default function Concern() {
               </div>
 
               <div className="mt-4 flex flex-col gap-4 sm:flex-row">
-                <SuggestActions disabled={disabled} />
+                <SuggestActions riskID={riskID} disabled={disabled} setDisabled={setDisabled} />
 
                 <Button onClick={() => router.push(`/risk-register/?concern=${params.id}`)} outline>
                   <ClipboardIcon />

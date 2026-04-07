@@ -70,7 +70,15 @@ export async function getConcernData(id: number, companyID: number) {
     activity,
   };
 
-  return { data: response };
+  // Get risk
+  const { data: riskData, error: riskError } = await supabase.from("risks").select("id").eq("concern_id", id).single();
+
+  if (riskError) {
+    console.error(riskError.message);
+    return { error: "Internal server error" };
+  }
+
+  return { data: response, risk: riskData };
 }
 
 export async function addComment(concernID: number, comment: string, companyID: number) {

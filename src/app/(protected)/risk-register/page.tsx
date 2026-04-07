@@ -160,6 +160,7 @@ export default function RiskRegister() {
                       setRiskDialogOpen={setRiskDialogOpen}
                       setEditID={setEditID}
                       disabled={disabled}
+                      setDisabled={setDisabled}
                       setAlertOpen={setAlertOpen}
                       setDeleteID={setDeleteID}
                     />
