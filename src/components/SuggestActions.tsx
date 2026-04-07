@@ -39,11 +39,7 @@ export default function SuggestActions(props: SuggestActionsProps) {
 
   return (
     <>
-      <Button
-        onClick={generateClick}
-        className={`bg-gradient-to-r from-indigo-500 to-fuchsia-500 bg-clip-text text-transparent! ${!props.disabled && "hover:from-indigo-400 hover:to-fuchsia-400 hover:[&>svg]:fill-indigo-400"}`}
-        outline
-      >
+      <Button onClick={generateClick} className="gradient-text" outline disabled={props.disabled}>
         <SparklesIcon className="fill-indigo-500" />
         Suggest actions
       </Button>
@@ -58,12 +54,7 @@ export default function SuggestActions(props: SuggestActionsProps) {
         <DialogBody className="text-sm/6 whitespace-pre-line text-zinc-900 dark:text-white">{suggestion}</DialogBody>
 
         <DialogActions>
-          <Button
-            onClick={generateClick}
-            className={`bg-gradient-to-r from-indigo-500 to-fuchsia-500 bg-clip-text text-transparent! ${!props.disabled && "hover:from-indigo-400 hover:to-fuchsia-400 hover:[&>svg]:fill-indigo-400"}`}
-            outline
-            disabled={props.disabled}
-          >
+          <Button onClick={generateClick} className="gradient-text" outline disabled={props.disabled}>
             <ArrowPathIcon className="fill-indigo-500" />
             Regenerate
           </Button>

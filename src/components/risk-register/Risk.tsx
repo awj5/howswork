@@ -221,7 +221,7 @@ export default function Risk(props: RiskProps) {
 
 function AILabel() {
   return (
-    <span className="mt-3 inline-flex items-center gap-1.5 bg-gradient-to-r from-indigo-500 to-fuchsia-500 bg-clip-text text-sm text-transparent sm:text-xs">
+    <span className="gradient-text pointer-events-none mt-3 inline-flex items-center gap-1.5 text-sm sm:text-xs">
       <SparklesIcon className="size-5 fill-indigo-500 sm:size-4" /> Auto-generated
     </span>
   );

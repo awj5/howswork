@@ -22,6 +22,18 @@ html {
   overscroll-behavior-y: none;
 }
 
+@utility gradient-text {
+  background-image: linear-gradient(to right, var(--color-indigo-500), var(--color-fuchsia-500));
+  background-clip: text;
+  color: transparent !important;
+  &:not([disabled]):hover {
+    background-image: linear-gradient(to right, var(--color-indigo-400), var(--color-fuchsia-400));
+    & > svg {
+      fill: var(--color-indigo-400);
+    }
+  }
+}
+
 @utility fade-in {
   animation: fade-in 0.1s ease-out;
 }

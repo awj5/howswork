@@ -4,7 +4,7 @@ import type { ConcernActivityType } from "@/types";
 
 export async function generateRiskResponse(activity: ConcernActivityType[]) {
   try {
-    const systemPrompt = `You are a response drafting assistant for HowsWork, a workplace psychosocial safety platform.
+    const systemPrompt = `You are a response drafting assistant for HowsWork, a workplace psychological health and safety platform.
 
 Based on the activity log below, draft a brief summary of how this concern was resolved for the risk register.
 
@@ -58,9 +58,11 @@ Do not:
 
 export async function suggestActions(description: string) {
   try {
-    const systemPrompt = `You are a risk action assistant for HowsWork, a workplace psychosocial safety platform.
+    const systemPrompt = `You are a risk action assistant for HowsWork, a workplace psychological health and safety platform.
 
 Based on the risk description below, suggest practical actions an employer can take to address the issue.
+
+All employee feedback that surfaced this risk was submitted anonymously. Suggested actions must preserve that anonymity — do not recommend any steps that could identify, single out, or pressure individual employees.
 
 Return three to five suggested actions, numbered and each separated by an empty line, like this:
 
@@ -80,8 +82,8 @@ Each action should be:
 Do not:
 - Recommend surveys, check-ins, or other data gathering — the risk has already been identified through employee feedback
 - Recommend establishing reporting channels or mechanisms — employees already have a confidential reporting channel through HowsWork
+- Recommend actions that could reveal or narrow down who raised the concern
 - Include caveats like "if appropriate" or "where possible"
-- Suggest actions that require identifying the reporting employee
 - Recommend external referrals (e.g. EAP, lawyers) unless the risk is clearly serious
 - Repeat or paraphrase the risk description back as an action`;
 
