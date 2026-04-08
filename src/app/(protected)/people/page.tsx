@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { UserGroupIcon } from "@heroicons/react/16/solid";
+import PlansData from "@/data/plans.json";
 import { useCompanies } from "@/hooks/useCompanies";
 import { useUnsavedWarning } from "@/hooks/useUnsavedWarning";
 import { createClient } from "@/utils/supabase/client";
@@ -11,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Textarea } from "@/components/ui/textarea";
 import { Description, ErrorMessage, Field, Fieldset, Label } from "@/components/ui/fieldset";
-import { Strong, Text } from "@/components/ui/text";
+import { Strong, Text, TextLink } from "@/components/ui/text";
 import HelperTooltip from "@/components/HelperTooltip";
 import { Badge } from "@/components/ui/badge";
 import { Divider } from "@/components/ui/divider";
@@ -21,7 +22,7 @@ export default function People() {
   const companies = useCompanies();
   const [savedStaff, setSavedStaff] = useState("");
   const [staff, setStaff] = useState("");
-  const [staffError, setStaffError] = useState("");
+  const [staffError, setStaffError] = useState<React.ReactNode>();
   const [disabled, setDisabled] = useState(true);
   const members = parseContacts(staff).length;
 
@@ -31,14 +32,26 @@ export default function People() {
     e.preventDefault();
     setStaffError("");
     const contacts = parseContacts(staff);
+    const companyPlan = PlansData.find((i) => i.id === companies[0].plan);
 
     // Validate
     if (contacts.length && contacts.length < 3) {
       setStaffError("Add at least 3 staff contacts. This helps protect anonymity.");
       return;
+    } else if (contacts.length && companyPlan && contacts.length > companyPlan.limit) {
+      setStaffError(
+        <>
+          Your plan supports up to {companyPlan.limit} staff contacts. Remove some or{" "}
+          <TextLink href="/settings" className="underline">
+            upgrade
+          </TextLink>{" "}
+          to add more.
+        </>
+      );
+      return;
     }
 
-    const invalidContacts = contacts.filter((c) => !isValidContact(c));
+    const invalidContacts = contacts.filter((i) => !isValidContact(i));
 
     if (invalidContacts.length) {
       setStaffError("One or more contacts are invalid. Please check and try again.");
@@ -128,7 +141,7 @@ export default function People() {
             placeholder={`name@company.com
 anothername@company.com
 +61 4XX XXX XXX`}
-            invalid={staffError !== ""}
+            invalid={!!staffError}
           />
 
           {staffError && <ErrorMessage>{staffError}</ErrorMessage>}

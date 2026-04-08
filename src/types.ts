@@ -10,6 +10,7 @@ export type CompanyType = {
   name: string;
   slug: string;
   timezone: string;
+  plan: number;
 };
 
 export type CheckInStatType = {

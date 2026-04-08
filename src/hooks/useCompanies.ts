@@ -40,14 +40,28 @@ export function useCompanies() {
         return;
       }
 
+      // Get company plans
+      const { data: companyPlanData, error: companyPlanError } = await supabase
+        .from("company_plan")
+        .select("company_id, plan_id")
+        .in("company_id", companyIDs);
+
+      if (companyPlanError) {
+        console.error(companyPlanError);
+        return;
+      }
+
+      const planByCompany = Object.fromEntries(companyPlanData.map((i) => [i.company_id, i.plan_id]));
       const selected = localStorage.getItem("company");
 
-      // Sort locally stored first, then alphabetically
-      const sorted = [...companiesData].sort((a, b) => {
-        if (a.id.toString() === selected) return -1;
-        if (b.id.toString() === selected) return 1;
-        return a.name.localeCompare(b.name);
-      });
+      // Sort locally stored first, then alphabetically, and attach plan ID
+      const sorted = [...companiesData]
+        .sort((a, b) => {
+          if (a.id.toString() === selected) return -1;
+          if (b.id.toString() === selected) return 1;
+          return a.name.localeCompare(b.name);
+        })
+        .map((i) => ({ ...i, plan: planByCompany[i.id] }));
 
       setCompanies(sorted);
     }

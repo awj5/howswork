@@ -1,19 +1,36 @@
 "use server";
 
+import PlansData from "@/data/plans.json";
 import { createClient } from "@/utils/supabase/server";
 import supabaseAdmin from "@/utils/supabase/admin";
 
 export async function updateStaff(companyID: number, contacts: string[]) {
   const supabase = await createClient();
 
-  // Get company timezone
+  // Get company
   const { data: companyData, error: companyError } = await supabase
     .from("companies")
     .select("id, name, timezone")
     .eq("id", companyID)
     .single();
 
-  if (companyError) throw companyError;
+  if (companyError) {
+    console.error(companyError.message);
+    return { error: "Internal server error" };
+  }
+
+  // Get company plan
+  const { data: companyPlanData, error: companyPlanError } = await supabase
+    .from("company_plan")
+    .select("id, plan_id")
+    .eq("company_id", companyID)
+    .single();
+
+  if (companyPlanError) {
+    console.error(companyPlanError.message);
+    return { error: "Internal server error" };
+  }
+
   const isAus = companyData.timezone.includes("Australia");
 
   // Normalize mobile numbers
@@ -28,6 +45,12 @@ export async function updateStaff(companyID: number, contacts: string[]) {
   });
 
   if (contacts.length && normalizedContacts.length < 3) return { error: "At least 3 contacts are required" };
+
+  // Check if contacts within plan limit
+  const plan = PlansData.find((i) => i.id === companyPlanData.plan_id);
+
+  if (plan && contacts.length && normalizedContacts.length > plan.limit)
+    return { error: `Your plan supports up to ${plan.limit} staff contacts. Remove some or upgrade to add more.` };
 
   // Update staff contacts (RLS only allows users in company to update it)
   const { error: updatePeopleError } = await supabase
