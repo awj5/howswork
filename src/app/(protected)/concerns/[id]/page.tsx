@@ -126,14 +126,16 @@ export default function Concern() {
                 />
               </div>
 
-              <div className="mt-4 flex flex-col gap-4 sm:flex-row">
-                <SuggestActions riskID={riskID} disabled={disabled} setDisabled={setDisabled} />
+              {!!riskID && (
+                <div className="mt-4 flex flex-col gap-4 sm:flex-row">
+                  <SuggestActions riskID={riskID} disabled={disabled} setDisabled={setDisabled} />
 
-                <Button onClick={() => router.push(`/risk-register/?concern=${params.id}`)} outline>
-                  <ClipboardIcon />
-                  View in Risk Register
-                </Button>
-              </div>
+                  <Button onClick={() => router.push(`/risk-register/?concern=${params.id}`)} outline>
+                    <ClipboardIcon />
+                    View in Risk Register
+                  </Button>
+                </div>
+              )}
             </div>
 
             <div className="w-full">

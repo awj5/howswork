@@ -5,6 +5,7 @@ import { suggestActions } from "@/utils/ai";
 import { getRiskData } from "@/app/(protected)/risk-register/actions";
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { TextLink } from "@/components/ui/text";
 
 type SuggestActionsProps = {
   riskID: number;
@@ -48,12 +49,19 @@ export default function SuggestActions(props: SuggestActionsProps) {
         <DialogTitle>Suggested actions</DialogTitle>
 
         <DialogDescription className="text-wrap!">
-          These suggestions are based on best practice. Adjust them to fit your workplace and record any actions taken.
+          These suggestions are based on best practice but won't fit every situation. Adapt them to your workplace and
+          record any actions taken.{" "}
+          <TextLink
+            href="https://articles.howswork.app/how-howswork-uses-ai-to-help-employers-act-faster/"
+            target="_blank"
+          >
+            Learn more
+          </TextLink>
         </DialogDescription>
 
         <DialogBody className="text-sm/6 whitespace-pre-line text-zinc-900 dark:text-white">{suggestion}</DialogBody>
 
-        <DialogActions>
+        <DialogActions className="flex-col! sm:flex-row!">
           <Button onClick={generateClick} className="gradient-text" outline disabled={props.disabled}>
             <ArrowPathIcon className="fill-indigo-500" />
             Regenerate

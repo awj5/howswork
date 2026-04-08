@@ -71,7 +71,11 @@ export async function getConcernData(id: number, companyID: number) {
   };
 
   // Get risk
-  const { data: riskData, error: riskError } = await supabase.from("risks").select("id").eq("concern_id", id).single();
+  const { data: riskData, error: riskError } = await supabase
+    .from("risks")
+    .select("id")
+    .eq("concern_id", id)
+    .maybeSingle();
 
   if (riskError) {
     console.error(riskError.message);
