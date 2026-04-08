@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { EnvelopeIcon, XCircleIcon } from "@heroicons/react/16/solid";
 import { toast } from "sonner";
+import PlansData from "@/data/plans.json";
 import { useCompanies } from "@/hooks/useCompanies";
 import { isValidEmail } from "@/utils/helpers";
 import { useUserContext } from "@/hooks/useUserContext";
@@ -15,7 +16,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { ErrorMessage, Field, Label } from "@/components/ui/fieldset";
 import { Input } from "@/components/ui/input";
-import { Strong } from "@/components/ui/text";
+import { Strong, TextLink } from "@/components/ui/text";
 import { removeUser, inviteUser } from "./actions";
 
 export default function Admins() {
@@ -26,15 +27,28 @@ export default function Admins() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [userToRemove, setUserToRemove] = useState<UserType>();
   const [inviteEmail, setInviteEmail] = useState("");
-  const [inviteEmailError, setInviteEmailError] = useState(false);
+  const [inviteEmailError, setInviteEmailError] = useState<React.ReactNode>();
   const [disabled, setDisabled] = useState(false);
 
   const inviteClick = async () => {
-    setInviteEmailError(false);
+    if (!companies.length) return;
+    setInviteEmailError(undefined);
 
     // Validate
     if (!isValidEmail(inviteEmail)) {
-      setInviteEmailError(true);
+      setInviteEmailError("Enter a valid email address.");
+      return;
+    }
+
+    // Check if admins within plan limit (exclude enterprise)
+    const plan = PlansData.find((i) => i.id === companies[0].plan);
+
+    if (plan && !plan.unlimited && users.length >= plan.admins) {
+      setInviteEmailError(
+        <>
+          Your plan supports {plan.admins} administrators. <TextLink href="/settings">Upgrade</TextLink> to add more.
+        </>
+      );
       return;
     }
 
@@ -192,11 +206,11 @@ export default function Admins() {
               type="email"
               value={inviteEmail}
               onChange={(e) => setInviteEmail(e.target.value)}
-              invalid={inviteEmailError}
+              invalid={!!inviteEmailError}
               disabled={disabled}
             />
 
-            {inviteEmailError && <ErrorMessage>Enter a valid email address.</ErrorMessage>}
+            {inviteEmailError && <ErrorMessage>{inviteEmailError}</ErrorMessage>}
           </Field>
         </DialogBody>
 

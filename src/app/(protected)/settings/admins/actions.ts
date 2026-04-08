@@ -1,5 +1,6 @@
 "use server";
 
+import PlansData from "@/data/plans.json";
 import { baseURL, isValidEmail } from "@/utils/helpers";
 import { createClient } from "@/utils/supabase/server";
 import supabaseAdmin from "@/utils/supabase/admin";
@@ -47,6 +48,24 @@ export async function inviteUser(email: string, company: CompanyType) {
 
   if (userIDs.includes(profileData?.user_id)) return { error: "User is already in this company" };
   if (inviteEmails.includes(email)) return { error: "User is already invited" };
+
+  // Get company plan
+  const { data: companyPlanData, error: companyPlanError } = await supabase
+    .from("company_plan")
+    .select("id, plan_id")
+    .eq("company_id", company.id)
+    .single();
+
+  if (companyPlanError) {
+    console.error(companyPlanError.message);
+    return { error: "Internal server error" };
+  }
+
+  // Check if admins within plan limit (exclude enterprise)
+  const plan = PlansData.find((i) => i.id === companyPlanData.plan_id);
+
+  if (plan && !plan.unlimited && companyUsersData.length >= plan.admins)
+    return { error: `Your plan supports ${plan.admins} administrators. Upgrade to add more.` };
 
   // Add user to company
   const { error: insertCompanyUserError } = await supabaseAdmin.from("company_users").insert({

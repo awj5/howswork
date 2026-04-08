@@ -31,7 +31,7 @@ export default function People() {
   const submitForm = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!companies.length) return;
-    setStaffError("");
+    setStaffError(undefined);
     const contacts = parseContacts(staff);
 
     // Validate
@@ -54,10 +54,7 @@ export default function People() {
       setStaffError(
         <>
           Your plan supports up to {plan.limit} staff contacts. Remove some or{" "}
-          <TextLink href="/settings" className="underline">
-            upgrade
-          </TextLink>{" "}
-          to add more.
+          <TextLink href="/settings">upgrade</TextLink> to add more.
         </>
       );
       return;
