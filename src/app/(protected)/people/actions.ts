@@ -46,10 +46,10 @@ export async function updateStaff(companyID: number, contacts: string[]) {
 
   if (contacts.length && normalizedContacts.length < 3) return { error: "At least 3 contacts are required" };
 
-  // Check if contacts within plan limit
+  // Check if contacts within plan limit (exclude enterprise)
   const plan = PlansData.find((i) => i.id === companyPlanData.plan_id);
 
-  if (plan && contacts.length && normalizedContacts.length > plan.limit)
+  if (plan && !plan.unlimited && contacts.length && normalizedContacts.length > plan.limit)
     return { error: `Your plan supports up to ${plan.limit} staff contacts. Remove some or upgrade to add more.` };
 
   // Update staff contacts (RLS only allows users in company to update it)

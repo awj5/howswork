@@ -17,6 +17,7 @@
   {
     "id": 4,
     "title": "Enterprise",
-    "limit": 0
+    "limit": 0,
+    "unlimited": true
   }
 ]

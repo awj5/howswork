@@ -30,24 +30,13 @@ export default function People() {
 
   const submitForm = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!companies.length) return;
     setStaffError("");
     const contacts = parseContacts(staff);
-    const companyPlan = PlansData.find((i) => i.id === companies[0].plan);
 
     // Validate
     if (contacts.length && contacts.length < 3) {
       setStaffError("Add at least 3 staff contacts. This helps protect anonymity.");
-      return;
-    } else if (contacts.length && companyPlan && contacts.length > companyPlan.limit) {
-      setStaffError(
-        <>
-          Your plan supports up to {companyPlan.limit} staff contacts. Remove some or{" "}
-          <TextLink href="/settings" className="underline">
-            upgrade
-          </TextLink>{" "}
-          to add more.
-        </>
-      );
       return;
     }
 
@@ -55,6 +44,22 @@ export default function People() {
 
     if (invalidContacts.length) {
       setStaffError("One or more contacts are invalid. Please check and try again.");
+      return;
+    }
+
+    // Check if contacts within plan limit (exclude enterprise)
+    const plan = PlansData.find((i) => i.id === companies[0].plan);
+
+    if (contacts.length && plan && !plan.unlimited && contacts.length > plan.limit) {
+      setStaffError(
+        <>
+          Your plan supports up to {plan.limit} staff contacts. Remove some or{" "}
+          <TextLink href="/settings" className="underline">
+            upgrade
+          </TextLink>{" "}
+          to add more.
+        </>
+      );
       return;
     }
 
