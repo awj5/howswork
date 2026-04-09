@@ -4,21 +4,24 @@
     "title": "Starter",
     "limit": 10,
     "admins": 1,
-    "sms": false
+    "sms": false,
+    "ai": false
   },
   {
     "id": 2,
     "title": "Team",
     "limit": 50,
     "admins": 3,
-    "sms": false
+    "sms": false,
+    "ai": true
   },
   {
     "id": 3,
     "title": "Business",
     "limit": 200,
     "admins": 5,
-    "sms": true
+    "sms": true,
+    "ai": true
   },
   {
     "id": 4,
@@ -26,6 +29,7 @@
     "limit": 0,
     "unlimited": true,
     "admins": 0,
-    "sms": true
+    "sms": true,
+    "ai": true
   }
 ]

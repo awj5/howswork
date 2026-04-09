@@ -3,6 +3,7 @@ import { DateTime } from "luxon";
 import { EllipsisHorizontalIcon, SparklesIcon } from "@heroicons/react/16/solid";
 import IssuesData from "@/data/issues.json";
 import StatusData from "@/data/status.json";
+import PlansData from "@/data/plans.json";
 import type { RiskType } from "@/types";
 import { concernStatusColor } from "@/utils/helpers";
 import { TableCell, TableRow } from "@/components/ui/table";
@@ -10,6 +11,7 @@ import { Text, TextLink } from "@/components/ui/text";
 import { Badge } from "@/components/ui/badge";
 import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from "@/components/ui/dropdown";
 import SuggestActions from "@/components/SuggestActions";
+import ViewSummary from "../ViewSummary";
 
 type RiskProps = {
   data: RiskType;
@@ -20,6 +22,7 @@ type RiskProps = {
   setDisabled: Dispatch<SetStateAction<boolean>>;
   setAlertOpen: Dispatch<SetStateAction<boolean>>;
   setDeleteID: Dispatch<SetStateAction<number>>;
+  plan: number;
 };
 
 export default function Risk(props: RiskProps) {
@@ -28,6 +31,7 @@ export default function Risk(props: RiskProps) {
   const textLimit = 280;
   const longDescription = props.data.description.length > textLimit;
   const longResponse = props.data.response && props.data.response.length > textLimit;
+  const plan = PlansData.find((i) => i.id === props.plan);
 
   // Convert to date object
   const dateRaised = DateTime.fromISO(props.data.date_raised);
@@ -84,43 +88,49 @@ export default function Risk(props: RiskProps) {
       </TableCell>
 
       <TableCell>
-        <Text className="min-w-2xs whitespace-pre-line">
-          {descriptionExpanded || !longDescription ? (
-            <>
-              {props.data.description}
-              {longDescription && (
+        {props.data.ai_description && !plan?.ai ? (
+          <ViewSummary disabled={props.disabled} />
+        ) : (
+          <>
+            <Text className="min-w-2xs whitespace-pre-line">
+              {descriptionExpanded || !longDescription ? (
                 <>
-                  {" "}
+                  {props.data.description}
+                  {longDescription && (
+                    <>
+                      {" "}
+                      <TextLink
+                        href=""
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setDescriptionExpanded(false);
+                        }}
+                      >
+                        Less
+                      </TextLink>
+                    </>
+                  )}
+                </>
+              ) : (
+                <>
+                  {props.data.description.slice(0, textLimit).trim()}
+                  {"… "}
                   <TextLink
                     href=""
                     onClick={(e) => {
                       e.preventDefault();
-                      setDescriptionExpanded(false);
+                      setDescriptionExpanded(true);
                     }}
                   >
-                    Less
+                    More
                   </TextLink>
                 </>
               )}
-            </>
-          ) : (
-            <>
-              {props.data.description.slice(0, textLimit).trim()}
-              {"… "}
-              <TextLink
-                href=""
-                onClick={(e) => {
-                  e.preventDefault();
-                  setDescriptionExpanded(true);
-                }}
-              >
-                More
-              </TextLink>
-            </>
-          )}
-        </Text>
+            </Text>
 
-        {props.data.ai_description && <AILabel />}
+            {props.data.ai_description && <AILabel />}
+          </>
+        )}
       </TableCell>
 
       <TableCell>
@@ -138,7 +148,9 @@ export default function Risk(props: RiskProps) {
       </TableCell>
 
       <TableCell>
-        {props.data.response ? (
+        {props.data.response && props.data.ai_response && !plan?.ai ? (
+          <ViewSummary disabled={props.disabled} />
+        ) : props.data.response ? (
           <>
             <Text className="min-w-2xs whitespace-pre-line">
               {responseExpanded || !longResponse ? (

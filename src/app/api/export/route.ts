@@ -3,6 +3,7 @@ import { utils, write } from "xlsx";
 import { DateTime } from "luxon";
 import StatusData from "@/data/status.json";
 import IssuesData from "@/data/issues.json";
+import PlansData from "@/data/plans.json";
 import { createClient } from "@/utils/supabase/server";
 import { decrypt } from "@/utils/encryption";
 
@@ -14,7 +15,7 @@ export async function POST(req: NextRequest) {
     let risksQuery = supabase
       .from("risks")
       .select(
-        "date_raised, level, concern_tracking, check_in_date, issues, description, status, date_reviewed, response, date_resolved, owner"
+        "date_raised, level, concern_tracking, check_in_date, issues, description, ai_description, status, date_reviewed, response, ai_response, date_resolved, owner"
       )
       .eq("company_id", companyID)
       .order("date_raised", { ascending: false });
@@ -33,6 +34,16 @@ export async function POST(req: NextRequest) {
       .single();
 
     if (companyError) throw new Error(companyError.message);
+
+    // Get company plan
+    const { data: companyPlanData, error: companyPlanError } = await supabase
+      .from("company_plan")
+      .select("id, plan_id")
+      .eq("company_id", companyID)
+      .single();
+
+    if (companyPlanError) throw new Error(companyPlanError.message);
+    const plan = PlansData.find((i) => i.id === companyPlanData.plan_id);
 
     // Create file
     const formattedData = risksData.map((row) => {
@@ -68,7 +79,8 @@ export async function POST(req: NextRequest) {
 
       // Description
       try {
-        formatted["description"] = decrypt(row.description);
+        formatted["description"] =
+          !row.ai_description || (row.ai_description && plan?.ai) ? decrypt(row.description) : "";
       } catch {
         formatted["description"] = "[decryption error]";
       }
@@ -82,7 +94,7 @@ export async function POST(req: NextRequest) {
       // Response
       if (row.response) {
         try {
-          formatted["response"] = decrypt(row.response);
+          formatted["response"] = !row.ai_response || (row.ai_response && plan?.ai) ? decrypt(row.response) : "";
         } catch {
           formatted["response"] = "[decryption error]";
         }

@@ -163,6 +163,7 @@ export default function RiskRegister() {
                       setDisabled={setDisabled}
                       setAlertOpen={setAlertOpen}
                       setDeleteID={setDeleteID}
+                      plan={companies[0].plan ?? 0}
                     />
                   ))}
                 </TableBody>

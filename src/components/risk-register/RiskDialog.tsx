@@ -3,6 +3,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { ExclamationCircleIcon } from "@heroicons/react/20/solid";
 import StatusData from "@/data/status.json";
+import PlansData from "@/data/plans.json";
 import { addEditRisk, getRiskData } from "@/app/(protected)/risk-register/actions";
 import { useCompanies } from "@/hooks/useCompanies";
 import { useUserContext } from "@/hooks/useUserContext";
@@ -138,7 +139,7 @@ export default function RiskDialog(props: RiskDialogProps) {
   };
 
   useEffect(() => {
-    if (!props.open || !user) return;
+    if (!props.open || !user || !companies.length) return;
 
     const getRisk = async () => {
       props.setDisabled(true);
@@ -155,12 +156,27 @@ export default function RiskDialog(props: RiskDialogProps) {
       setDateReviewed(result.data?.date_reviewed ? toLocalDateString(result.data.date_reviewed) : "");
       setIssues(result.data?.issues ?? []);
       aiDescriptionRef.current = result.data?.ai_description ? result.data.description : "";
-      setDescription(result.data?.description);
+
+      // Only show AI description if included in plan
+      const plan = PlansData.find((i) => i.id === companies[0].plan);
+
+      setDescription(
+        !result.data?.ai_description || (result.data?.ai_description && plan?.ai) ? result.data?.description : ""
+      );
+
       setLevel(String(result.data?.level));
       setStatus(String(result.data?.status));
       setOwner(result.data?.owner ?? "");
       aiResponseRef.current = result.data?.ai_response ? result.data.response : "";
-      setResponse(result.data?.response ?? "");
+
+      // Only show AI response if included in plan
+      setResponse(
+        (result.data?.response && !result.data?.ai_response) ||
+          (result.data?.response && result.data?.ai_response && plan?.ai)
+          ? result.data.response
+          : ""
+      );
+
       setConcernID(result.data?.concern_id ?? 0);
       setCheckInID(result.data?.check_in_id ?? 0);
       setDateResolved(result.data?.date_resolved ? toLocalDateString(result.data.date_resolved) : "");
@@ -183,7 +199,7 @@ export default function RiskDialog(props: RiskDialogProps) {
     setFormErrors({});
 
     if (props.id) getRisk(); // Edit risk
-  }, [props.open, user]);
+  }, [props.open, user, companies]);
 
   return (
     <Dialog open={props.open} onClose={props.setOpen} size="2xl">

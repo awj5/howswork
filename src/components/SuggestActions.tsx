@@ -1,9 +1,12 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "sonner";
 import { SparklesIcon, ArrowPathIcon } from "@heroicons/react/16/solid";
+import PlansData from "@/data/plans.json";
 import { suggestActions } from "@/utils/ai";
+import { useCompanies } from "@/hooks/useCompanies";
 import { getRiskData } from "@/app/(protected)/risk-register/actions";
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import { Alert, AlertActions, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { TextLink } from "@/components/ui/text";
 
@@ -14,10 +17,23 @@ type SuggestActionsProps = {
 };
 
 export default function SuggestActions(props: SuggestActionsProps) {
+  const companies = useCompanies();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [suggestion, setSuggestion] = useState("");
+  const [alertOpen, setAlertOpen] = useState(false);
 
   const generateClick = async () => {
+    if (!companies.length) return;
+
+    // Check if within plan limit
+    const plan = PlansData.find((i) => i.id === companies[0].plan);
+
+    if (!plan?.ai) {
+      setAlertOpen(true);
+      return;
+    }
+
+    // Generate suggestions
     props.setDisabled(true);
     const loadingToast = toast.loading("Thinking...");
 
@@ -70,6 +86,24 @@ export default function SuggestActions(props: SuggestActionsProps) {
           <Button onClick={() => setDialogOpen(false)}>Done</Button>
         </DialogActions>
       </Dialog>
+
+      <Alert open={alertOpen} onClose={setAlertOpen}>
+        <AlertTitle className="gradient-text pointer-events-none">Unlock AI features</AlertTitle>
+
+        <AlertDescription>
+          Get recommended next steps based on the issues raised. Available on paid plans.
+        </AlertDescription>
+
+        <AlertActions>
+          <Button plain onClick={() => setAlertOpen(false)}>
+            Cancel
+          </Button>
+
+          <Button href="/settings" color="indigo">
+            Upgrade
+          </Button>
+        </AlertActions>
+      </Alert>
     </>
   );
 }
