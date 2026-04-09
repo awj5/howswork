@@ -18,7 +18,7 @@ export default function ViewSummary(props: ViewSummaryProps) {
       </Button>
 
       <Alert open={alertOpen} onClose={setAlertOpen}>
-        <AlertTitle className="gradient-text pointer-events-none">Unlock AI features</AlertTitle>
+        <AlertTitle className="gradient-text pointer-events-none inline">Unlock AI features</AlertTitle>
 
         <AlertDescription>
           Get auto-generated risk descriptions and response notes. Available on paid plans.

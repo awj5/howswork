@@ -62,7 +62,7 @@ export default function SuggestActions(props: SuggestActionsProps) {
       </Button>
 
       <Dialog open={dialogOpen} onClose={setDialogOpen} size="2xl">
-        <DialogTitle className="gradient-text pointer-events-none">Suggested actions</DialogTitle>
+        <DialogTitle className="gradient-text pointer-events-none inline">Suggested actions</DialogTitle>
 
         <DialogDescription className="text-wrap!">
           These AI-generated suggestions are based on best practice but won&pos;t fit every situation. Adapt them to
@@ -88,7 +88,7 @@ export default function SuggestActions(props: SuggestActionsProps) {
       </Dialog>
 
       <Alert open={alertOpen} onClose={setAlertOpen}>
-        <AlertTitle className="gradient-text pointer-events-none">Unlock AI features</AlertTitle>
+        <AlertTitle className="gradient-text pointer-events-none inline">Unlock AI features</AlertTitle>
 
         <AlertDescription>
           Get recommended next steps based on the issues raised. Available on paid plans.
