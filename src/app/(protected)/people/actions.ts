@@ -46,10 +46,10 @@ export async function updateStaff(companyID: number, contacts: string[]) {
   });
 
   if (contacts.length && normalizedContacts.length < 3) return { error: "At least 3 contacts are required" };
-  const hasPhoneContacts = contacts.some((i) => isValidPhone(i));
 
-  // Check if  within plan limit
+  // Check if within plan limit
   const plan = PlansData.find((i) => i.id === companyPlanData.plan_id);
+  const hasPhoneContacts = normalizedContacts.some((i) => isValidPhone(i));
 
   if (hasPhoneContacts && !plan?.sms) {
     return { error: "Your plan doesn\u2019t support SMS. Remove mobile numbers or upgrade to enable it." };
