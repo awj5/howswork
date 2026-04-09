@@ -3,11 +3,11 @@ import { SparklesIcon } from "@heroicons/react/16/solid";
 import { Alert, AlertActions, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 
-type SuggestActionsProps = {
+type ViewSummaryProps = {
   disabled: boolean;
 };
 
-export default function ViewSummary(props: SuggestActionsProps) {
+export default function ViewSummary(props: ViewSummaryProps) {
   const [alertOpen, setAlertOpen] = useState(false);
 
   return (

@@ -79,8 +79,7 @@ export async function POST(req: NextRequest) {
 
       // Description
       try {
-        formatted["description"] =
-          !row.ai_description || (row.ai_description && plan?.ai) ? decrypt(row.description) : "";
+        formatted["description"] = !row.ai_description || plan?.ai ? decrypt(row.description) : "";
       } catch {
         formatted["description"] = "[decryption error]";
       }
@@ -94,7 +93,7 @@ export async function POST(req: NextRequest) {
       // Response
       if (row.response) {
         try {
-          formatted["response"] = !row.ai_response || (row.ai_response && plan?.ai) ? decrypt(row.response) : "";
+          formatted["response"] = !row.ai_response || plan?.ai ? decrypt(row.response) : "";
         } catch {
           formatted["response"] = "[decryption error]";
         }
