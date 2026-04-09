@@ -21,7 +21,7 @@ export default function ViewSummary(props: ViewSummaryProps) {
         <AlertTitle className="gradient-text pointer-events-none">Unlock AI features</AlertTitle>
 
         <AlertDescription>
-          Get auto-generated risk descriptions and response notes across your risk register. Available on paid plans.
+          Get auto-generated risk descriptions and response notes. Available on paid plans.
         </AlertDescription>
 
         <AlertActions>

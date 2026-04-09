@@ -62,11 +62,11 @@ export default function SuggestActions(props: SuggestActionsProps) {
       </Button>
 
       <Dialog open={dialogOpen} onClose={setDialogOpen} size="2xl">
-        <DialogTitle>Suggested actions</DialogTitle>
+        <DialogTitle className="gradient-text pointer-events-none">Suggested actions</DialogTitle>
 
         <DialogDescription className="text-wrap!">
-          These suggestions are based on best practice but won't fit every situation. Adapt them to your workplace and
-          record any actions taken.{" "}
+          These AI-generated suggestions are based on best practice but won&pos;t fit every situation. Adapt them to
+          your workplace and record any actions taken.{" "}
           <TextLink
             href="https://articles.howswork.app/how-howswork-uses-ai-to-help-employers-act-faster/"
             target="_blank"
