@@ -47,16 +47,27 @@ export default function People() {
       return;
     }
 
-    // Check if contacts within plan limit (exclude enterprise)
+    // Check if within plan limit
     const plan = PlansData.find((i) => i.id === companies[0].plan);
+    const hasPhoneContacts = contacts.some((i) => isValidPhone(i));
 
-    if (contacts.length && plan && !plan.unlimited && contacts.length > plan.limit) {
+    if (hasPhoneContacts && !plan?.sms) {
+      setStaffError(
+        <>
+          Your plan doesn&apos;t support SMS. Remove mobile numbers or <TextLink href="/settings">upgrade</TextLink> to
+          enable it.
+        </>
+      );
+
+      return;
+    } else if (contacts.length && plan && !plan.unlimited && contacts.length > plan.limit) {
       setStaffError(
         <>
           Your plan supports up to {plan.limit} staff contacts. Remove some or{" "}
           <TextLink href="/settings">upgrade</TextLink> to add more.
         </>
       );
+
       return;
     }
 

@@ -3,6 +3,7 @@
 import PlansData from "@/data/plans.json";
 import { createClient } from "@/utils/supabase/server";
 import supabaseAdmin from "@/utils/supabase/admin";
+import { isValidPhone } from "@/utils/helpers";
 
 export async function updateStaff(companyID: number, contacts: string[]) {
   const supabase = await createClient();
@@ -45,12 +46,16 @@ export async function updateStaff(companyID: number, contacts: string[]) {
   });
 
   if (contacts.length && normalizedContacts.length < 3) return { error: "At least 3 contacts are required" };
+  const hasPhoneContacts = contacts.some((i) => isValidPhone(i));
 
-  // Check if contacts within plan limit (exclude enterprise)
+  // Check if  within plan limit
   const plan = PlansData.find((i) => i.id === companyPlanData.plan_id);
 
-  if (plan && !plan.unlimited && contacts.length && normalizedContacts.length > plan.limit)
+  if (hasPhoneContacts && !plan?.sms) {
+    return { error: "Your plan doesn\u2019t support SMS. Remove mobile numbers or upgrade to enable it." };
+  } else if (plan && !plan.unlimited && contacts.length && normalizedContacts.length > plan.limit) {
     return { error: `Your plan supports up to ${plan.limit} staff contacts. Remove some or upgrade to add more.` };
+  }
 
   // Update staff contacts (RLS only allows users in company to update it)
   const { error: updatePeopleError } = await supabase
