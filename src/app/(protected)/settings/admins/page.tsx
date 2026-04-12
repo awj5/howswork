@@ -18,6 +18,7 @@ import { ErrorMessage, Field, Label } from "@/components/ui/fieldset";
 import { Input } from "@/components/ui/input";
 import { Strong, TextLink } from "@/components/ui/text";
 import { removeUser, inviteUser } from "./actions";
+import { openStripe } from "../actions";
 
 export default function Admins() {
   const { user } = useUserContext();
@@ -46,7 +47,11 @@ export default function Admins() {
     if (plan && !plan.unlimited && users.length >= plan.admins) {
       setInviteEmailError(
         <>
-          Your plan supports {plan.admins} administrators. <TextLink href="/settings">Upgrade</TextLink> to add more.
+          Your plan supports {plan.admins} administrators.{" "}
+          <TextLink href="#" onClick={() => (companies.length ? openStripe(companies[0].stripe_customer_id!) : null)}>
+            Upgrade
+          </TextLink>{" "}
+          to add more.
         </>
       );
       return;

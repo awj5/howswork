@@ -43,7 +43,7 @@ export function useCompanies() {
       // Get company plans
       const { data: companyPlanData, error: companyPlanError } = await supabase
         .from("company_plan")
-        .select("company_id, plan_id")
+        .select("company_id, plan_id, stripe_customer_id")
         .in("company_id", companyIDs);
 
       if (companyPlanError) {
@@ -51,7 +51,9 @@ export function useCompanies() {
         return;
       }
 
-      const planByCompany = Object.fromEntries(companyPlanData.map((i) => [i.company_id, i.plan_id]));
+      const planByCompany = Object.fromEntries(
+        companyPlanData.map((i) => [i.company_id, { plan_id: i.plan_id, stripe_customer_id: i.stripe_customer_id }])
+      );
       const selected = localStorage.getItem("company");
 
       // Sort locally stored first, then alphabetically, and attach plan ID
@@ -61,7 +63,11 @@ export function useCompanies() {
           if (b.id.toString() === selected) return 1;
           return a.name.localeCompare(b.name);
         })
-        .map((i) => ({ ...i, plan: planByCompany[i.id] }));
+        .map((i) => ({
+          ...i,
+          plan: planByCompany[i.id].plan_id,
+          stripe_customer_id: planByCompany[i.id].stripe_customer_id,
+        }));
 
       setCompanies(sorted);
     }

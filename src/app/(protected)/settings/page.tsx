@@ -2,21 +2,22 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { TrashIcon, UserGroupIcon } from "@heroicons/react/16/solid";
+import { TrashIcon, UserGroupIcon, CreditCardIcon } from "@heroicons/react/16/solid";
 import { GlobeAltIcon } from "@heroicons/react/20/solid";
 import { AU, CA, IE, NZ, GB, US, SG, HK, ZA } from "country-flag-icons/react/3x2";
+import PlansData from "@/data/plans.json";
 import { useCompanies } from "@/hooks/useCompanies";
 import { useUnsavedWarning } from "@/hooks/useUnsavedWarning";
 import { Heading, Subheading } from "@/components/ui/heading";
 import { Alert, AlertActions, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Text, TextLink } from "@/components/ui/text";
+import { Strong, Text, TextLink } from "@/components/ui/text";
 import { Divider } from "@/components/ui/divider";
 import { Input } from "@/components/ui/input";
 import { ErrorMessage, Field, Fieldset } from "@/components/ui/fieldset";
 import { Button } from "@/components/ui/button";
 import { Listbox, ListboxLabel, ListboxOption } from "@/components/ui/listbox";
 import { Badge } from "@/components/ui/badge";
-import { deleteCompany, updateCompany } from "./actions";
+import { deleteCompany, updateCompany, openStripe } from "./actions";
 
 type FormErrorsType = {
   name?: boolean;
@@ -34,6 +35,7 @@ export default function Settings() {
   const [disabled, setDisabled] = useState(true);
   const [formErrors, setFormErrors] = useState<FormErrorsType>({});
   const [alertOpen, setAlertOpen] = useState(false);
+  const plan = companies.length ? PlansData.find((i) => i.id === companies[0].plan) : undefined;
 
   const timezonesByCountry = {
     AU: [
@@ -169,6 +171,37 @@ export default function Settings() {
       <Divider className="mt-6 mb-10" />
 
       <Fieldset disabled={disabled}>
+        {plan && (
+          <>
+            <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
+              <div className="flex flex-col gap-1">
+                <Subheading>Subscription</Subheading>
+
+                <Text>
+                  You&apos;re on the <Strong className="text-indigo-500!">{plan.title}</Strong> plan. Manage invoices,
+                  payment details, and more.{" "}
+                  <TextLink
+                    href={`https://howswork.${timezone.includes("Australia") ? "com.au" : "app"}/pricing`}
+                    target="_blank"
+                  >
+                    View plan pricing
+                  </TextLink>
+                  .
+                </Text>
+              </div>
+
+              <div className="flex items-start sm:justify-end">
+                <Button onClick={() => openStripe(companies[0].stripe_customer_id!)}>
+                  <CreditCardIcon />
+                  Manage billing
+                </Button>
+              </div>
+            </section>
+
+            <Divider className="my-10" soft />
+          </>
+        )}
+
         <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
           <div className="flex flex-col gap-1">
             <Subheading>Company Name</Subheading>

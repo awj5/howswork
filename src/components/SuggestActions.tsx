@@ -5,6 +5,7 @@ import PlansData from "@/data/plans.json";
 import { suggestActions } from "@/utils/ai";
 import { useCompanies } from "@/hooks/useCompanies";
 import { getRiskData } from "@/app/(protected)/risk-register/actions";
+import { openStripe } from "@/app/(protected)/settings/actions";
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Alert, AlertActions, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -99,7 +100,10 @@ export default function SuggestActions(props: SuggestActionsProps) {
             Cancel
           </Button>
 
-          <Button href="/settings" color="indigo">
+          <Button
+            onClick={() => (companies.length ? openStripe(companies[0].stripe_customer_id!) : null)}
+            color="indigo"
+          >
             Upgrade
           </Button>
         </AlertActions>

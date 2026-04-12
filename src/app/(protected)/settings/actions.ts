@@ -1,8 +1,13 @@
 "use server";
 
+import { redirect } from "next/navigation";
+import Stripe from "stripe";
 import { createClient } from "@/utils/supabase/server";
 import supabaseAdmin from "@/utils/supabase/admin";
+import { baseURL } from "@/utils/helpers";
 import { type CompanyType } from "@/types";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function updateCompany(company: CompanyType) {
   const supabase = await createClient();
@@ -92,4 +97,13 @@ export async function deleteCompany(companyID: number) {
 
   if (insertCompanyDeletedError) console.error(insertCompanyDeletedError.message);
   return { success: true };
+}
+
+export async function openStripe(customer: string) {
+  const session = await stripe.billingPortal.sessions.create({
+    customer,
+    return_url: `${baseURL}/settings`,
+  });
+
+  redirect(session.url);
 }

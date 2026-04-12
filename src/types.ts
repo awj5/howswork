@@ -11,6 +11,7 @@ export type CompanyType = {
   slug: string;
   timezone: string;
   plan?: number;
+  stripe_customer_id?: string;
 };
 
 export type CheckInStatType = {
