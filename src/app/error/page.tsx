@@ -23,8 +23,8 @@ export default function Error() {
             <Doodle doodles={31} />
             <Subheading className="mt-4 text-center">{error}</Subheading>
 
-            <Button href="/login" className="mt-6" outline>
-              Sign in again
+            <Button href="/" className="mt-6" outline>
+              Back to dashboard
             </Button>
           </div>
         )}

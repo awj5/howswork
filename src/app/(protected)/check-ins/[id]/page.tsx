@@ -331,7 +331,7 @@ export default function CheckIn() {
 
               <Button onClick={() => router.push(`/risk-register/?check-in=${params.id}`)} outline>
                 <ClipboardIcon />
-                View in Risk Register
+                View in risk register
               </Button>
             </div>
           )}

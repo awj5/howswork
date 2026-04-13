@@ -132,7 +132,7 @@ export default function Concern() {
 
                   <Button onClick={() => router.push(`/risk-register/?concern=${params.id}`)} outline>
                     <ClipboardIcon />
-                    View in Risk Register
+                    View in risk register
                   </Button>
                 </div>
               )}

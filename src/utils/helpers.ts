@@ -1,5 +1,5 @@
 export const baseURL = process.env.NODE_ENV === "production" ? "https://admin.howswork.app" : "http://localhost:3000";
-export const pricingURL = `${process.env.NODE_ENV === "production" ? "https://howswork.app" : "http://localhost:3001"}/pricing?upgrade=true`;
+export const pricingURL = `${process.env.NODE_ENV === "production" ? "https://howswork.app" : "http://localhost:3001"}/pricing`;
 export const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
 export function isValidPhone(number: string) {

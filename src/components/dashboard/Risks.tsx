@@ -99,7 +99,7 @@ export default function Risks(props: RisksProps) {
 
         <Button href="/risk-register" outline>
           <ClipboardIcon />
-          View Risk Register
+          View risk register
         </Button>
       </div>
 
