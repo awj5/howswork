@@ -15,8 +15,12 @@ const priceIDs: Record<string, Record<string, string>> = {
   },
 };
 
-export default async function Upgrade({ searchParams }: { searchParams: Promise<{ plan: string; billing: string }> }) {
-  const { plan, billing } = await searchParams;
+export default async function Upgrade({
+  searchParams,
+}: {
+  searchParams: Promise<{ company: string; plan: string; billing: string }>;
+}) {
+  const { company, plan, billing } = await searchParams;
   const supabase = await createClient();
   const priceID = priceIDs[plan]?.[billing];
 

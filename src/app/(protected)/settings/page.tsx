@@ -185,13 +185,13 @@ export default function Settings() {
 
               <div className="flex items-start gap-4 sm:justify-end">
                 {plan.id === 1 ? (
-                  <Button href={pricingURL} color="indigo">
+                  <Button href={pricingURL + `?company=${companies[0].id}`} color="indigo">
                     <BoltIcon />
                     Upgrade
                   </Button>
                 ) : (
                   <>
-                    <Button href={pricingURL}>
+                    <Button href={pricingURL + `?company=${companies[0].id}`}>
                       <ArrowsRightLeftIcon />
                       Change plan
                     </Button>

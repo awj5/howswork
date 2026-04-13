@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { SparklesIcon, BoltIcon } from "@heroicons/react/16/solid";
 import { pricingURL } from "@/utils/helpers";
+import { useCompanies } from "@/hooks/useCompanies";
 import { Alert, AlertActions, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 
@@ -9,6 +10,7 @@ type ViewSummaryProps = {
 };
 
 export default function ViewSummary(props: ViewSummaryProps) {
+  const companies = useCompanies();
   const [alertOpen, setAlertOpen] = useState(false);
 
   return (
@@ -30,7 +32,7 @@ export default function ViewSummary(props: ViewSummaryProps) {
             Cancel
           </Button>
 
-          <Button href={pricingURL} color="indigo">
+          <Button href={pricingURL + `?company=${companies[0].id}`} color="indigo">
             <BoltIcon />
             Upgrade
           </Button>

@@ -46,9 +46,11 @@ export default function Admins() {
     if (plan && !plan.unlimited && users.length >= plan.admins) {
       setInviteEmailError(
         <>
-          Your plan supports {plan.admins} administrators. <TextLink href={pricingURL}>Upgrade</TextLink> to add more.
+          Your plan supports {plan.admins} administrators.{" "}
+          <TextLink href={pricingURL + `?company=${companies[0].id}`}>Upgrade</TextLink> to add more.
         </>
       );
+
       return;
     }
 

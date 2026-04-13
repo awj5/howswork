@@ -100,7 +100,7 @@ export default function SuggestActions(props: SuggestActionsProps) {
             Cancel
           </Button>
 
-          <Button href={pricingURL} color="indigo">
+          <Button href={pricingURL + `?company=${companies[0].id}`} color="indigo">
             <BoltIcon />
             Upgrade
           </Button>

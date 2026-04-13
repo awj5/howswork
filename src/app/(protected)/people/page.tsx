@@ -29,10 +29,11 @@ export default function People() {
   useUnsavedWarning([[staff, savedStaff]]);
 
   const upgradeClick = () => {
+    if (!companies.length) return;
     setStaff(savedStaff); // Bypass unsaved warning
 
     setTimeout(() => {
-      window.location.href = pricingURL;
+      window.location.href = pricingURL + `?company=${companies[0].id}`;
     }, 0);
   };
 
