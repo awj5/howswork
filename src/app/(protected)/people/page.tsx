@@ -28,6 +28,14 @@ export default function People() {
 
   useUnsavedWarning([[staff, savedStaff]]);
 
+  const upgradeClick = () => {
+    setStaff(savedStaff); // Bypass unsaved warning
+
+    setTimeout(() => {
+      window.location.href = pricingURL;
+    }, 0);
+  };
+
   const submitForm = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!companies.length) return;
@@ -54,8 +62,11 @@ export default function People() {
     if (hasPhoneContacts && !plan?.sms) {
       setStaffError(
         <>
-          Your plan doesn&apos;t support SMS. Remove mobile numbers or <TextLink href={pricingURL}>upgrade</TextLink> to
-          enable it.
+          Your plan doesn&apos;t support SMS. Remove mobile numbers or{" "}
+          <TextLink href="#" onClick={upgradeClick}>
+            upgrade
+          </TextLink>{" "}
+          to enable it.
         </>
       );
 
@@ -64,7 +75,10 @@ export default function People() {
       setStaffError(
         <>
           Your plan supports up to {plan.limit} staff contacts. Remove some or{" "}
-          <TextLink href={pricingURL}>upgrade</TextLink> to add more.
+          <TextLink href="#" onClick={upgradeClick}>
+            upgrade
+          </TextLink>{" "}
+          to add more.
         </>
       );
 
