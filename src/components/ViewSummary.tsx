@@ -32,7 +32,7 @@ export default function ViewSummary(props: ViewSummaryProps) {
             Cancel
           </Button>
 
-          <Button href={pricingURL + `?company=${companies[0].id}`} color="indigo">
+          <Button href={pricingURL + `?company=${companies.length ? companies[0].id : 0}`} color="indigo">
             <BoltIcon />
             Upgrade
           </Button>
