@@ -50,12 +50,14 @@ export default async function Upgrade({
 
   if (companyPlanError) redirect(`/error#error_description=${encodeURIComponent("Internal server error")}`);
 
-  // Check if same plan or is a cancellation
+  // Redirect
   if (companyPlanData.plan_id === Number(plan)) {
-    redirect("/settings"); // Is same plan
+    redirect("/settings"); // Plan is the same
   } else if (plan === "1" && companyPlanData.plan_id !== 1) {
-    // Will cancel
+    // Cancellation
+    // Open portal or do cancellation here
   } else {
+    // Open Stripe
     const session = await stripe.checkout.sessions.create({
       customer: companyPlanData.stripe_customer_id,
       line_items: [{ price: priceID, quantity: 1 }],
