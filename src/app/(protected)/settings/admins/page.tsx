@@ -5,7 +5,7 @@ import { EnvelopeIcon, XCircleIcon } from "@heroicons/react/16/solid";
 import { toast } from "sonner";
 import PlansData from "@/data/plans.json";
 import { useCompanies } from "@/hooks/useCompanies";
-import { isValidEmail } from "@/utils/helpers";
+import { isValidEmail, pricingURL } from "@/utils/helpers";
 import { useUserContext } from "@/hooks/useUserContext";
 import type { UserType } from "@/types";
 import { createClient } from "@/utils/supabase/client";
@@ -18,7 +18,6 @@ import { ErrorMessage, Field, Label } from "@/components/ui/fieldset";
 import { Input } from "@/components/ui/input";
 import { Strong, TextLink } from "@/components/ui/text";
 import { removeUser, inviteUser } from "./actions";
-import { openStripe } from "../actions";
 
 export default function Admins() {
   const { user } = useUserContext();
@@ -47,11 +46,7 @@ export default function Admins() {
     if (plan && !plan.unlimited && users.length >= plan.admins) {
       setInviteEmailError(
         <>
-          Your plan supports {plan.admins} administrators.{" "}
-          <TextLink href="#" onClick={() => (companies.length ? openStripe(companies[0].stripe_customer_id!) : null)}>
-            Upgrade
-          </TextLink>{" "}
-          to add more.
+          Your plan supports {plan.admins} administrators. <TextLink href={pricingURL}>Upgrade</TextLink> to add more.
         </>
       );
       return;

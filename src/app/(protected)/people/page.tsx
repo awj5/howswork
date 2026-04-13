@@ -4,11 +4,10 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { UserGroupIcon } from "@heroicons/react/16/solid";
 import PlansData from "@/data/plans.json";
-import { openStripe } from "@/app/(protected)/settings/actions";
 import { useCompanies } from "@/hooks/useCompanies";
 import { useUnsavedWarning } from "@/hooks/useUnsavedWarning";
 import { createClient } from "@/utils/supabase/client";
-import { isValidEmail, isValidPhone } from "@/utils/helpers";
+import { isValidEmail, isValidPhone, pricingURL } from "@/utils/helpers";
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Textarea } from "@/components/ui/textarea";
@@ -55,11 +54,8 @@ export default function People() {
     if (hasPhoneContacts && !plan?.sms) {
       setStaffError(
         <>
-          Your plan doesn&apos;t support SMS. Remove mobile numbers or{" "}
-          <TextLink href="#" onClick={() => (companies.length ? openStripe(companies[0].stripe_customer_id!) : null)}>
-            upgrade
-          </TextLink>{" "}
-          to enable it.
+          Your plan doesn&apos;t support SMS. Remove mobile numbers or <TextLink href={pricingURL}>upgrade</TextLink> to
+          enable it.
         </>
       );
 
@@ -68,10 +64,7 @@ export default function People() {
       setStaffError(
         <>
           Your plan supports up to {plan.limit} staff contacts. Remove some or{" "}
-          <TextLink href="#" onClick={() => (companies.length ? openStripe(companies[0].stripe_customer_id!) : null)}>
-            upgrade
-          </TextLink>{" "}
-          to add more.
+          <TextLink href={pricingURL}>upgrade</TextLink> to add more.
         </>
       );
 

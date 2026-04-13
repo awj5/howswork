@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { SparklesIcon } from "@heroicons/react/16/solid";
-import { openStripe } from "@/app/(protected)/settings/actions";
-import { useCompanies } from "@/hooks/useCompanies";
+import { SparklesIcon, BoltIcon } from "@heroicons/react/16/solid";
+import { pricingURL } from "@/utils/helpers";
 import { Alert, AlertActions, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 
@@ -10,7 +9,6 @@ type ViewSummaryProps = {
 };
 
 export default function ViewSummary(props: ViewSummaryProps) {
-  const companies = useCompanies();
   const [alertOpen, setAlertOpen] = useState(false);
 
   return (
@@ -32,10 +30,8 @@ export default function ViewSummary(props: ViewSummaryProps) {
             Cancel
           </Button>
 
-          <Button
-            onClick={() => (companies.length ? openStripe(companies[0].stripe_customer_id!) : null)}
-            color="indigo"
-          >
+          <Button href={pricingURL} color="indigo">
+            <BoltIcon />
             Upgrade
           </Button>
         </AlertActions>

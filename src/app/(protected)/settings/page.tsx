@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { TrashIcon, UserGroupIcon, CreditCardIcon } from "@heroicons/react/16/solid";
+import { TrashIcon, UserGroupIcon, CreditCardIcon, BoltIcon, ArrowsRightLeftIcon } from "@heroicons/react/16/solid";
 import { GlobeAltIcon } from "@heroicons/react/20/solid";
 import { AU, CA, IE, NZ, GB, US, SG, HK, ZA } from "country-flag-icons/react/3x2";
 import PlansData from "@/data/plans.json";
+import { pricingURL } from "@/utils/helpers";
 import { useCompanies } from "@/hooks/useCompanies";
 import { useUnsavedWarning } from "@/hooks/useUnsavedWarning";
 import { Heading, Subheading } from "@/components/ui/heading";
@@ -178,23 +179,29 @@ export default function Settings() {
                 <Subheading>Subscription</Subheading>
 
                 <Text>
-                  You&apos;re on the <Strong className="text-indigo-500!">{plan.title}</Strong> plan. Manage invoices,
-                  payment details, and more.{" "}
-                  <TextLink
-                    href={`https://howswork.${timezone.includes("Australia") ? "com.au" : "app"}/pricing`}
-                    target="_blank"
-                  >
-                    View plan pricing
-                  </TextLink>
-                  .
+                  You&apos;re on the <Strong>{plan.title}</Strong> plan.
                 </Text>
               </div>
 
-              <div className="flex items-start sm:justify-end">
-                <Button onClick={() => openStripe(companies[0].stripe_customer_id!)}>
-                  <CreditCardIcon />
-                  Manage billing
-                </Button>
+              <div className="flex items-start gap-4 sm:justify-end">
+                {plan.id === 1 ? (
+                  <Button href={pricingURL} color="indigo">
+                    <BoltIcon />
+                    Upgrade
+                  </Button>
+                ) : (
+                  <>
+                    <Button href={pricingURL}>
+                      <ArrowsRightLeftIcon />
+                      Change plan
+                    </Button>
+
+                    <Button onClick={() => openStripe(companies[0].stripe_customer_id!)}>
+                      <CreditCardIcon />
+                      Billing
+                    </Button>
+                  </>
+                )}
               </div>
             </section>
 

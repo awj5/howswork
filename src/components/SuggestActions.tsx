@@ -1,11 +1,11 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "sonner";
-import { SparklesIcon, ArrowPathIcon } from "@heroicons/react/16/solid";
+import { SparklesIcon, ArrowPathIcon, BoltIcon } from "@heroicons/react/16/solid";
 import PlansData from "@/data/plans.json";
 import { suggestActions } from "@/utils/ai";
+import { pricingURL } from "@/utils/helpers";
 import { useCompanies } from "@/hooks/useCompanies";
 import { getRiskData } from "@/app/(protected)/risk-register/actions";
-import { openStripe } from "@/app/(protected)/settings/actions";
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Alert, AlertActions, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -100,10 +100,8 @@ export default function SuggestActions(props: SuggestActionsProps) {
             Cancel
           </Button>
 
-          <Button
-            onClick={() => (companies.length ? openStripe(companies[0].stripe_customer_id!) : null)}
-            color="indigo"
-          >
+          <Button href={pricingURL} color="indigo">
+            <BoltIcon />
             Upgrade
           </Button>
         </AlertActions>
