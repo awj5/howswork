@@ -5,7 +5,8 @@
     "limit": 10,
     "admins": 1,
     "sms": false,
-    "ai": false
+    "ai": false,
+    "price": [{ "monthly": "", "annually": "" }]
   },
   {
     "id": 2,
@@ -13,7 +14,8 @@
     "limit": 50,
     "admins": 3,
     "sms": false,
-    "ai": true
+    "ai": true,
+    "price": [{ "monthly": "price_1TMbSRFe3iYFR8itbXkbX9XE", "annually": "price_1TKcFJFe3iYFR8itIVPLia73" }]
   },
   {
     "id": 3,
@@ -21,7 +23,8 @@
     "limit": 200,
     "admins": 5,
     "sms": true,
-    "ai": true
+    "ai": true,
+    "price": [{ "monthly": "price_1TMbTnFe3iYFR8itOX4nSfap", "annually": "price_1TKcHqFe3iYFR8itsGafibq3" }]
   },
   {
     "id": 4,
@@ -30,6 +33,7 @@
     "unlimited": true,
     "admins": 0,
     "sms": true,
-    "ai": true
+    "ai": true,
+    "price": [{ "monthly": "", "annually": "" }]
   }
 ]

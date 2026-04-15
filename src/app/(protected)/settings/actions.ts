@@ -7,7 +7,7 @@ import supabaseAdmin from "@/utils/supabase/admin";
 import { baseURL } from "@/utils/helpers";
 import { type CompanyType } from "@/types";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY_TEST!);
 
 export async function updateCompany(company: CompanyType) {
   const supabase = await createClient();

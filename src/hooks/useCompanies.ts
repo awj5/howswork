@@ -54,6 +54,7 @@ export function useCompanies() {
       const planByCompany = Object.fromEntries(
         companyPlanData.map((i) => [i.company_id, { plan_id: i.plan_id, stripe_customer_id: i.stripe_customer_id }])
       );
+
       const selected = localStorage.getItem("company");
 
       // Sort locally stored first, then alphabetically, and attach plan ID
@@ -63,10 +64,10 @@ export function useCompanies() {
           if (b.id.toString() === selected) return 1;
           return a.name.localeCompare(b.name);
         })
-        .map((i) => ({
-          ...i,
-          plan: planByCompany[i.id].plan_id,
-          stripe_customer_id: planByCompany[i.id].stripe_customer_id,
+        .map((company) => ({
+          ...company,
+          plan: planByCompany[company.id].plan_id,
+          stripe_customer_id: planByCompany[company.id].stripe_customer_id,
         }));
 
       setCompanies(sorted);
