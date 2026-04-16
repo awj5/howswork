@@ -190,17 +190,10 @@ export default function Settings() {
                     Upgrade
                   </Button>
                 ) : (
-                  <>
-                    <Button href={pricingURL + `?company=${companies[0].id}`}>
-                      <ArrowsRightLeftIcon />
-                      Change plan
-                    </Button>
-
-                    <Button onClick={() => openStripe(companies[0].stripe_customer_id!)}>
-                      <CreditCardIcon />
-                      Billing
-                    </Button>
-                  </>
+                  <Button onClick={() => openStripe(companies[0].stripe_customer_id!)}>
+                    <CreditCardIcon />
+                    Plan &amp; billing
+                  </Button>
                 )}
               </div>
             </section>

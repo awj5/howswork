@@ -15,7 +15,6 @@ export default async function Upgrade({
   const supabase = await createClient();
   const planData = PlansData.find((i) => i.id === Number(plan));
   const priceID = planData?.price[0]?.[billing as "monthly" | "annually"];
-
   if (!priceID && plan !== "1") redirect(`/error#error_description=${encodeURIComponent("Invalid plan selected")}`); // Plan doesn't exist and isn't starter plan
 
   // Get auth user
@@ -45,9 +44,14 @@ export default async function Upgrade({
   // Redirect
   if (companyPlanData.plan_id === Number(plan)) {
     redirect("/settings"); // Selected plan is the same as the current plan
-  } else if (plan === "1" && companyPlanData.plan_id !== 1) {
-    // Cancellation
-    // Open portal or do cancellation here
+  } else if (companyPlanData.plan_id !== 1) {
+    // Company already subscribed - open Stripe portal
+    const session = await stripe.billingPortal.sessions.create({
+      customer: companyPlanData.stripe_customer_id,
+      return_url: `${baseURL}/settings`,
+    });
+
+    redirect(session.url);
   } else {
     // Open Stripe to subscribe
     const session = await stripe.checkout.sessions.create({
