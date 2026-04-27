@@ -18,7 +18,7 @@ import { Select } from "@/components/ui/select";
 import { Text } from "@/components/ui/text";
 import EmptyState from "@/components/EmptyState";
 import { TablePagination } from "@/components/TablePagination";
-import CheckIn from "@/components/check-ins/CheckIn";
+import CheckIn from "@/components/assessments/CheckIn";
 import Doodle from "@/components/Doodle";
 import { scheduleCheckIn } from "./actions";
 
@@ -27,7 +27,7 @@ export default function CheckIns() {
   const searchParams = useSearchParams();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [scheduled, setScheduled] = useState("");
-  const [repeat, setRepeat] = useState("28"); // Default
+  const [repeat, setRepeat] = useState("84"); // Default
   const [scheduledError, setScheduledError] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [checkIns, setCheckIns] = useState<CheckInType[]>();
@@ -61,7 +61,7 @@ export default function CheckIns() {
     }
 
     // Success
-    toast.success("Check-in scheduled");
+    toast.success("Assessment scheduled");
     setDialogOpen(false);
     getCheckIns(); // Reload list
   };
@@ -124,7 +124,7 @@ export default function CheckIns() {
       {checkIns && checkIns.length ? (
         <div className="fade-in">
           <div className="flex h-12 items-end justify-between gap-4 sm:h-10">
-            <Heading>Check-ins</Heading>
+            <Heading>Assessments</Heading>
 
             <Button
               onClick={() => setDialogOpen(true)}
@@ -154,20 +154,20 @@ export default function CheckIns() {
             </TableBody>
           </Table>
 
-          <TablePagination page={page} pageCount={pageCount} route="/check-ins" />
+          <TablePagination page={page} pageCount={pageCount} route="/assessments" />
         </div>
       ) : checkIns ? (
         <EmptyState className={doodleLoaded ? "fade-in" : "opacity-0"}>
           <Doodle doodles={28} onLoad={() => setDoodleLoaded(true)} />
-          <Subheading className="mt-4">No check-ins scheduled</Subheading>
+          <Subheading className="mt-4">No assessments scheduled</Subheading>
 
           <Text className="mt-1 text-center">
-            Schedule your first check-in to start collecting early risk signals and enable concern reporting.
+            Schedule your first assessment to start collecting early risk signals and enable concern reporting.
           </Text>
 
           <Button onClick={() => setDialogOpen(true)} color="indigo" className="mt-6" disabled={disabled}>
             <ClockIcon />
-            Schedule check-in
+            Schedule assessment
           </Button>
         </EmptyState>
       ) : (
@@ -175,7 +175,7 @@ export default function CheckIns() {
           <EmptyState className={doodleLoaded ? "fade-in" : "opacity-0"}>
             <Doodle doodles={25} onLoad={() => setDoodleLoaded(true)} />
             <Subheading className="mt-4">No staff contacts</Subheading>
-            <Text className="mt-1 text-center">Add staff contacts to enable check-ins.</Text>
+            <Text className="mt-1 text-center">Add staff contacts to enable assessments.</Text>
 
             <Button href="/people" outline className="mt-6">
               <UsersIcon />
@@ -186,10 +186,10 @@ export default function CheckIns() {
       )}
 
       <Dialog open={dialogOpen} onClose={setDialogOpen}>
-        <DialogTitle>Schedule a check-in</DialogTitle>
+        <DialogTitle>Schedule an assessment</DialogTitle>
 
         <DialogDescription className="text-wrap!">
-          Employees will be notified when the check-in begins and can respond anonymously using a shared access PIN.
+          Employees will be notified when the assessment begins and can respond anonymously using a shared access PIN.
         </DialogDescription>
 
         <DialogBody>
@@ -212,11 +212,11 @@ export default function CheckIns() {
                 <Label>Repeat</Label>
 
                 <Select value={repeat} onChange={(e) => setRepeat(e.target.value)}>
-                  <option value="7">Every week</option>
-                  <option value="14">Every 2 weeks</option>
-                  <option value="28">Every 4 weeks</option>
-                  <option value="56">Every 8 weeks</option>
-                  <option value="84">Every 12 weeks</option>
+                  <option value="28">Monthly</option>
+                  <option value="56">Every 2 months</option>
+                  <option value="84">Quarterly</option>
+                  <option value="168">Every 6 months</option>
+                  <option value="336">Annually</option>
                   <option value="0">None</option>
                 </Select>
               </Field>

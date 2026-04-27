@@ -18,8 +18,8 @@ export default function CheckIn(props: CheckInProps) {
 
             <Text className="text-[16px]">
               <strong>{props.company}</strong> is using <strong>HowsWork</strong>, a safe, anonymous way to share how
-              you&apos;re really doing and raise workplace concerns. They&apos;ve requested a quick check-in. It takes
-              less than a minute.
+              you&apos;re really doing and raise workplace concerns. They&apos;ve sent you a short survey. It only takes
+              a few minutes.
             </Text>
 
             <Text className="text-[16px]">
@@ -32,7 +32,7 @@ export default function CheckIn(props: CheckInProps) {
               href={`https://howswork.app/${props.slug}`}
               className="mt-[20px] block rounded-[6px] bg-indigo-600 px-[16px] py-[12px] text-center text-[14px] font-semibold text-white"
             >
-              Complete check-in
+              Complete survey
             </Button>
 
             <Text className="text-[16px] text-indigo-600">
@@ -50,7 +50,7 @@ export default function CheckIn(props: CheckInProps) {
             </Text>
 
             <Text className="text-[14px] text-gray-600">
-              Please do not share externally. A new access code is sent with each check-in request.
+              Please do not share externally. A new access code is sent with each survey.
             </Text>
 
             <Hr className="border-gray-900/10" />

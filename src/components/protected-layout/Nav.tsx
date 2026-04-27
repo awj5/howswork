@@ -27,7 +27,7 @@ export default function Nav() {
 
   const navItems = [
     { href: "/", label: "Dashboard", Icon: HomeIcon },
-    { href: "/check-ins", label: "Check-ins", Icon: CheckCircleIcon },
+    { href: "/assessments", label: "Assessments", Icon: CheckCircleIcon },
     { href: "/concerns", label: "Concerns", Icon: HandRaisedIcon },
     { href: "/risk-register", label: "Risk Register", Icon: ClipboardIcon },
     { href: "/people", label: "People", Icon: UsersIcon },

@@ -13,15 +13,15 @@ export default function CheckInFlagged(props: CheckInFlaggedProps) {
             <Img src="https://howswork.app/img/email-icon.png" width="32" height="32" alt="HowsWork" />
 
             <Text className="text-[16px]">
-              A recent check-in at <strong>{props.company}</strong> has identified workplace issues and has been added
+              A recent assessment at <strong>{props.company}</strong> has identified workplace issues and has been added
               to the risk register.
             </Text>
 
             <Button
-              href="https://admin.howswork.app/check-ins/0"
+              href="https://admin.howswork.app/assessments/0"
               className="rounded-[6px] bg-indigo-600 px-[16px] py-[12px] text-[14px] font-semibold text-white"
             >
-              View check-in
+              View assessment
             </Button>
 
             <Text className="text-[14px] text-gray-600">Review recommended within 7 days.</Text>
