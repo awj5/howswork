@@ -93,7 +93,7 @@ export default function RiskRegister() {
     setIssueFilter(issue ? issue : issueFilter ? "" : undefined);
     const concern = searchParams.get("concern");
     setConcernID(concern ? concern : concernID ? "" : undefined);
-    const checkIn = searchParams.get("check-in");
+    const checkIn = searchParams.get("assessment");
     setCheckInID(checkIn ? checkIn : checkInID ? "" : undefined);
   }, [searchParams]);
 

@@ -18,7 +18,7 @@ export default function CheckInFlagged(props: CheckInFlaggedProps) {
             </Text>
 
             <Button
-              href="https://admin.howswork.app/check-ins/0"
+              href="https://admin.howswork.app/assessments/0"
               className="rounded-[6px] bg-indigo-600 px-[16px] py-[12px] text-[14px] font-semibold text-white"
             >
               View check-in

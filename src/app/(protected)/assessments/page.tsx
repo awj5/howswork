@@ -154,7 +154,7 @@ export default function CheckIns() {
             </TableBody>
           </Table>
 
-          <TablePagination page={page} pageCount={pageCount} route="/check-ins" />
+          <TablePagination page={page} pageCount={pageCount} route="/assessments" />
         </div>
       ) : checkIns ? (
         <EmptyState className={doodleLoaded ? "fade-in" : "opacity-0"}>

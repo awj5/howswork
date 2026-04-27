@@ -191,7 +191,7 @@ export default function Concerns() {
               Employees need a check-in PIN to raise concerns. Schedule your first check-in to enable reporting.
             </Text>
 
-            <Button href="/check-ins" outline className="mt-6">
+            <Button href="/assessments" outline className="mt-6">
               <CheckCircleIcon />
               Schedule first check-in
             </Button>

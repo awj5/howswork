@@ -51,7 +51,7 @@ export default function CheckIn() {
 
     // Success
     toast.success("Check-in deleted");
-    router.push(`/check-ins${searchParams.size ? `?${searchParams.toString()}` : ""}`);
+    router.push(`/assessments${searchParams.size ? `?${searchParams.toString()}` : ""}`);
   };
 
   useEffect(() => {
@@ -266,7 +266,7 @@ export default function CheckIn() {
     <div className="mx-auto max-w-6xl">
       {checkIn && companies.length ? (
         <div className="fade-in">
-          <Breadcrumb href={`/check-ins${searchParams.size ? `?${searchParams.toString()}` : ""}`}>
+          <Breadcrumb href={`/assessments${searchParams.size ? `?${searchParams.toString()}` : ""}`}>
             Check-ins
           </Breadcrumb>
 
@@ -329,7 +329,7 @@ export default function CheckIn() {
             <div className="mt-12 flex flex-col gap-4 sm:flex-row">
               <SuggestActions riskID={riskID} disabled={disabled} setDisabled={setDisabled} />
 
-              <Button onClick={() => router.push(`/risk-register/?check-in=${params.id}`)} outline>
+              <Button onClick={() => router.push(`/risk-register/?assessment=${params.id}`)} outline>
                 <ClipboardIcon />
                 View in risk register
               </Button>
