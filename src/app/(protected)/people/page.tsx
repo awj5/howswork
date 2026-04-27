@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { UserGroupIcon } from "@heroicons/react/16/solid";
+import { UserGroupIcon, BoltIcon } from "@heroicons/react/16/solid";
 import PlansData from "@/data/plans.json";
 import { useCompanies } from "@/hooks/useCompanies";
 import { useUnsavedWarning } from "@/hooks/useUnsavedWarning";
@@ -25,6 +25,7 @@ export default function People() {
   const [staffError, setStaffError] = useState<React.ReactNode>();
   const [disabled, setDisabled] = useState(true);
   const members = parseContacts(staff).length;
+  const plan = companies.length ? PlansData.find((i) => i.id === companies[0].plan) : undefined;
 
   useUnsavedWarning([[staff, savedStaff]]);
 
@@ -56,8 +57,6 @@ export default function People() {
       return;
     }
 
-    // Check if within plan limit
-    const plan = PlansData.find((i) => i.id === companies[0].plan);
     const hasPhoneContacts = contacts.some((i) => isValidPhone(i));
 
     if (hasPhoneContacts && !plan?.sms) {
@@ -147,9 +146,23 @@ export default function People() {
         </Button>
       </div>
 
-      <Divider className="mt-6 mb-10" />
+      <Divider className="mt-6" />
 
-      <Fieldset className="mt-8" disabled={disabled}>
+      {plan?.id === 1 && (
+        <div className="mt-8 flex items-center justify-between gap-4 rounded-xl bg-indigo-600 p-2 dark:bg-indigo-500">
+          <Text className="pl-1 text-sm! text-white! sm:p-2">
+            <Strong>Need more than 10 employee contacts?</Strong>
+            <span className="hidden sm:inline"> Upgrade your plan.</span>
+          </Text>
+
+          <Button onClick={upgradeClick} color="white" className="cursor-pointer">
+            <BoltIcon />
+            Upgrade
+          </Button>
+        </div>
+      )}
+
+      <Fieldset className="mt-10" disabled={disabled}>
         <Field>
           <Label>Staff Contacts</Label>
 

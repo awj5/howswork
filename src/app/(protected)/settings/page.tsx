@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { TrashIcon, UserGroupIcon, CreditCardIcon, BoltIcon, ArrowsRightLeftIcon } from "@heroicons/react/16/solid";
+import { TrashIcon, UserGroupIcon, CreditCardIcon, BoltIcon } from "@heroicons/react/16/solid";
 import { GlobeAltIcon } from "@heroicons/react/20/solid";
 import { AU, CA, IE, NZ, GB, US, SG, HK, ZA } from "country-flag-icons/react/3x2";
 import PlansData from "@/data/plans.json";
