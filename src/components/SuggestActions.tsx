@@ -66,7 +66,7 @@ export default function SuggestActions(props: SuggestActionsProps) {
         <DialogTitle className="gradient-text pointer-events-none inline">Suggested actions</DialogTitle>
 
         <DialogDescription className="text-wrap!">
-          These AI-generated suggestions are based on best practice but won&apos;t fit every situation. Adapt them to
+          These AI-generated suggestions are based on best practice but won&pos;t fit every situation. Adapt them to
           your workplace and record any actions taken.{" "}
           <TextLink
             href="https://articles.howswork.app/how-howswork-uses-ai-to-help-employers-act-faster/"

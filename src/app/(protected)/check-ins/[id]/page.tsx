@@ -18,9 +18,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Code, Text } from "@/components/ui/text";
 import EmptyState from "@/components/EmptyState";
-import Stat from "@/components/assessment/Stat";
-import Issues from "@/components/assessment/Issues";
-import Team from "@/components/assessment/Team";
+import Stat from "@/components/check-in/Stat";
+import Issues from "@/components/check-in/Issues";
+import Team from "@/components/check-in/Team";
 import SuggestActions from "@/components/SuggestActions";
 import { deleteCheckIn } from "./actions";
 
@@ -50,8 +50,8 @@ export default function CheckIn() {
     }
 
     // Success
-    toast.success("Assessment deleted");
-    router.push(`/assessments${searchParams.size ? `?${searchParams.toString()}` : ""}`);
+    toast.success("Check-in deleted");
+    router.push(`/check-ins${searchParams.size ? `?${searchParams.toString()}` : ""}`);
   };
 
   useEffect(() => {
@@ -68,7 +68,7 @@ export default function CheckIn() {
 
       if (checkInError) {
         console.error(checkInError);
-        setError("Assessment not found");
+        setError("Check-in not found");
         return;
       }
 
@@ -266,13 +266,13 @@ export default function CheckIn() {
     <div className="mx-auto max-w-6xl">
       {checkIn && companies.length ? (
         <div className="fade-in">
-          <Breadcrumb href={`/assessments${searchParams.size ? `?${searchParams.toString()}` : ""}`}>
-            Assessments
+          <Breadcrumb href={`/check-ins${searchParams.size ? `?${searchParams.toString()}` : ""}`}>
+            Check-ins
           </Breadcrumb>
 
           <div className="lg:mt-8">
             <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-              <Heading>Assessment Insights</Heading>
+              <Heading>Check-in Insights</Heading>
 
               <Badge color={checkIn.status === 3 ? "green" : checkIn.status === 2 ? "amber" : "zinc"}>
                 {checkInStatusText(checkIn.status)}
@@ -329,7 +329,7 @@ export default function CheckIn() {
             <div className="mt-12 flex flex-col gap-4 sm:flex-row">
               <SuggestActions riskID={riskID} disabled={disabled} setDisabled={setDisabled} />
 
-              <Button onClick={() => router.push(`/risk-register/?assessment=${params.id}`)} outline>
+              <Button onClick={() => router.push(`/risk-register/?check-in=${params.id}`)} outline>
                 <ClipboardIcon />
                 View in risk register
               </Button>
@@ -346,7 +346,7 @@ export default function CheckIn() {
       )}
 
       <Alert open={alertOpen} onClose={setAlertOpen}>
-        <AlertTitle>Are you sure you want to delete this assessment?</AlertTitle>
+        <AlertTitle>Are you sure you want to delete this check-in?</AlertTitle>
         <AlertDescription>This action cannot be undone.</AlertDescription>
 
         <AlertActions>

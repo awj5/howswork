@@ -178,7 +178,7 @@ export default function Concerns() {
           <Subheading className="mt-4">No concerns reported</Subheading>
 
           <Text className="mt-1 text-center">
-            Employees can raise anonymous concerns anytime using an assessment PIN. All submissions will appear here.
+            Employees can raise anonymous concerns anytime using a check-in PIN. All submissions will appear here.
           </Text>
         </EmptyState>
       ) : (
@@ -188,12 +188,12 @@ export default function Concerns() {
             <Subheading className="mt-4">Concern reporting not active</Subheading>
 
             <Text className="mt-1 text-center">
-              Employees need an assessment PIN to raise concerns. Schedule your first assessment to enable reporting.
+              Employees need a check-in PIN to raise concerns. Schedule your first check-in to enable reporting.
             </Text>
 
-            <Button href="/assessments" outline className="mt-6">
+            <Button href="/check-ins" outline className="mt-6">
               <CheckCircleIcon />
-              Schedule first assessment
+              Schedule first check-in
             </Button>
           </EmptyState>
         )

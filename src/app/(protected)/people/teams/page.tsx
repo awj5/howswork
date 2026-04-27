@@ -142,7 +142,7 @@ export default function Teams() {
             <Subheading className="mt-4">No teams yet</Subheading>
 
             <Text className="mt-1 text-center">
-              Teams are optional. They let staff choose which team they belong to during assessments, without being
+              Teams are optional. They let staff choose which team they belong to during check-ins, without being
               identified.
             </Text>
 

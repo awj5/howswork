@@ -20,8 +20,8 @@ export default function Welcome(props: WelcomeProps) {
             </Text>
 
             <Text className="text-[16px]">
-              You&apos;ll receive a short survey soon. After your first survey, you can also raise a concern at any
-              time. Your responses are always anonymous and can never be traced back to you.
+              You&apos;ll receive a check-in request soon. After your first check-in, you can also raise a concern at
+              any time. Your responses are always anonymous and can never be traced back to you.
             </Text>
 
             <Text className="text-[16px] text-indigo-600">

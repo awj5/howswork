@@ -93,7 +93,7 @@ export default function RiskRegister() {
     setIssueFilter(issue ? issue : issueFilter ? "" : undefined);
     const concern = searchParams.get("concern");
     setConcernID(concern ? concern : concernID ? "" : undefined);
-    const checkIn = searchParams.get("assessment");
+    const checkIn = searchParams.get("check-in");
     setCheckInID(checkIn ? checkIn : checkInID ? "" : undefined);
   }, [searchParams]);
 
@@ -191,7 +191,7 @@ export default function RiskRegister() {
             <Subheading className="mt-4">No risks logged</Subheading>
 
             <Text className="mt-1 text-center">
-              Concerns and flagged assessments are automatically logged in the risk register. Risks can also be added
+              Concerns and flagged check-ins are automatically logged in the risk register. Risks can also be added
               manually.
             </Text>
 

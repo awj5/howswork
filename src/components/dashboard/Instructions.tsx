@@ -53,11 +53,11 @@ export default function Instructions(props: InstructionsProps) {
               </div>
 
               <div className="flex flex-1 flex-col items-start gap-4 pt-1">
-                <Text>Choose an assessment frequency. HowsWork handles the rest.</Text>
+                <Text>Choose a check-in frequency. HowsWork handles the rest.</Text>
 
-                <Button href="/assessments" outline>
+                <Button href="/check-ins" outline>
                   <CheckCircleIcon />
-                  Schedule first assessment
+                  Schedule first check-in
                 </Button>
               </div>
             </div>
