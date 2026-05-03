@@ -20,12 +20,12 @@ export default function Home() {
   const companies = useCompanies();
   const [risks, setRisks] = useState<RiskSummaryType[]>([]);
   const [checkIns, setCheckIns] = useState<CheckInType[]>();
+  const [checkInsScheduled, setCheckInsScheduled] = useState(false);
   const [concerns, setConcerns] = useState<ConcernType[]>([]);
   const [issues, setIssues] = useState<CheckInIssueType[]>([]);
   const [noStaffContacts, setNoStaffContacts] = useState(false);
   const [doodleLoaded, setDoodleLoaded] = useState(false);
   const [filter, setFilter] = useState<string>();
-  const nonScheduledCheckIns = checkIns?.filter((i) => i.status !== 1);
 
   useEffect(() => {
     if (!companies.length) return;
@@ -78,11 +78,28 @@ export default function Home() {
         return;
       }
 
-      // Get company check-ins
+      // Count scheduled company check-ins
+      const { count: checkInsCount, error: checkInsCountError } = await supabase
+        .from("check_ins")
+        .select("id", {
+          count: "exact",
+        })
+        .eq("company_id", companies[0].id)
+        .eq("status", 1);
+
+      if (checkInsCountError) {
+        console.error(checkInsCountError);
+        return;
+      }
+
+      setCheckInsScheduled(!!checkInsCount);
+
+      // Get non-scheduled company check-ins
       let checkInsQuery = supabase
         .from("check_ins")
         .select("id, start, repeat, status, contact_count")
         .eq("company_id", companies[0].id)
+        .neq("status", 1)
         .order("start", { ascending: true });
 
       if (dateRange.start) checkInsQuery = checkInsQuery.gte("start", dateRange.start);
@@ -156,7 +173,7 @@ export default function Home() {
 
   return (
     <div className="mx-auto max-w-6xl">
-      {nonScheduledCheckIns?.length || filter !== undefined ? (
+      {checkIns?.length || filter !== undefined ? (
         <div className="fade-in">
           <div className="flex h-12 items-end sm:h-10">
             <Heading>{companies[0]?.name}</Heading>
@@ -183,9 +200,9 @@ export default function Home() {
 
           <Divider className="mt-4" />
 
-          {nonScheduledCheckIns?.length ? (
+          {checkIns?.length ? (
             <div className="mt-6 flex flex-col gap-12">
-              <CheckIns data={nonScheduledCheckIns} timezone={companies[0].timezone} />
+              <CheckIns data={checkIns} timezone={companies[0].timezone} />
               {!!concerns.length && <Concerns data={concerns} />}
               {!!issues.length && <Issues data={issues} />}
             </div>
@@ -193,13 +210,14 @@ export default function Home() {
             <Text className="mt-6">No data found</Text>
           )}
         </div>
-      ) : checkIns?.length ? (
+      ) : checkInsScheduled ? (
         <EmptyState className={doodleLoaded ? "fade-in" : "opacity-0"}>
           <Doodle doodles={24} onLoad={() => setDoodleLoaded(true)} />
           <Subheading className="mt-4">Nothing here yet</Subheading>
 
           <Text className="mt-1 text-center">
-            Once check-ins come in, you&apos;ll see risks, trends, and how your workplace is tracking over time.
+            Once assessment results come in, you&apos;ll see risks, trends, and how your workplace is tracking over
+            time.
           </Text>
         </EmptyState>
       ) : (

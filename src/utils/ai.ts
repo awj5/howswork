@@ -80,7 +80,7 @@ Each action should be:
 - Free of legal advice or compliance claims
 
 Do not:
-- Recommend surveys, check-ins, or other data gathering — the risk has already been identified through employee feedback
+- Recommend surveys, assessments, or other data gathering — the risk has already been identified through employee feedback
 - Recommend establishing reporting channels or mechanisms — employees already have a confidential reporting channel through HowsWork
 - Recommend actions that could reveal or narrow down who raised the concern
 - Include caveats like "if appropriate" or "where possible"

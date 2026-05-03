@@ -50,7 +50,7 @@ export default function CheckIn() {
     }
 
     // Success
-    toast.success("Check-in deleted");
+    toast.success("Assessment deleted");
     router.push(`/assessments${searchParams.size ? `?${searchParams.toString()}` : ""}`);
   };
 
@@ -68,7 +68,7 @@ export default function CheckIn() {
 
       if (checkInError) {
         console.error(checkInError);
-        setError("Check-in not found");
+        setError("Assessment not found");
         return;
       }
 
@@ -267,12 +267,12 @@ export default function CheckIn() {
       {checkIn && companies.length ? (
         <div className="fade-in">
           <Breadcrumb href={`/assessments${searchParams.size ? `?${searchParams.toString()}` : ""}`}>
-            Check-ins
+            Assessments
           </Breadcrumb>
 
           <div className="lg:mt-8">
             <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-              <Heading>Check-in Insights</Heading>
+              <Heading>Assessment Insights</Heading>
 
               <Badge color={checkIn.status === 3 ? "green" : checkIn.status === 2 ? "amber" : "zinc"}>
                 {checkInStatusText(checkIn.status)}
@@ -346,7 +346,7 @@ export default function CheckIn() {
       )}
 
       <Alert open={alertOpen} onClose={setAlertOpen}>
-        <AlertTitle>Are you sure you want to delete this check-in?</AlertTitle>
+        <AlertTitle>Are you sure you want to delete this assessment?</AlertTitle>
         <AlertDescription>This action cannot be undone.</AlertDescription>
 
         <AlertActions>

@@ -66,7 +66,7 @@ export default function Risk(props: RiskProps) {
           <TextLink href={`/concerns/${props.data.concern_id}`}>HW-{props.data.concern_tracking}</TextLink>
         ) : checkInDate ? (
           <TextLink href={`/assessments/${props.data.check_in_id}`}>
-            Check-in{" "}
+            Assessment{" "}
             {checkInDate.setZone(props.timezone).toLocaleString({ day: "numeric", month: "numeric", year: "2-digit" })}
           </TextLink>
         ) : (

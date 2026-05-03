@@ -163,7 +163,7 @@ export default function CheckIns(props: CheckInsProps) {
 
   return (
     <div>
-      <div className="text-lg/6 font-medium sm:text-sm/6">Check-in trends</div>
+      <div className="text-lg/6 font-medium sm:text-sm/6">Assessment trends</div>
 
       <AreaChart
         className="mt-4 h-72 [&_*]:outline-none"

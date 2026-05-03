@@ -22,7 +22,7 @@ export default function ResendPIN(props: ResendPINProps) {
             </Text>
 
             <Text className="text-[16px]">
-              Access code for all <strong>{props.company}</strong> employees:
+              Access PIN for all <strong>{props.company}</strong> employees:
             </Text>
 
             <CodeInline className="rounded-[6px] bg-gray-200 px-[4px] py-[2px] text-[20px]">{props.code}</CodeInline>

@@ -191,8 +191,7 @@ export default function RiskRegister() {
             <Subheading className="mt-4">No risks logged</Subheading>
 
             <Text className="mt-1 text-center">
-              Concerns and flagged check-ins are automatically logged in the risk register. Risks can also be added
-              manually.
+              Concerns and assessments are automatically logged in the risk register. Risks can also be added manually.
             </Text>
 
             <Button onClick={addClick} color="indigo" className="mt-6">
