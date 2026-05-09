@@ -61,7 +61,7 @@ export default function CheckIns() {
     }
 
     // Success
-    toast.success("Assessment scheduled");
+    toast.success("Check-in scheduled");
     setDialogOpen(false);
     getCheckIns(); // Reload list
   };
@@ -124,7 +124,7 @@ export default function CheckIns() {
       {checkIns && checkIns.length ? (
         <div className="fade-in">
           <div className="flex h-12 items-end justify-between gap-4 sm:h-10">
-            <Heading>Assessments</Heading>
+            <Heading>Check-ins</Heading>
 
             <Button
               onClick={() => setDialogOpen(true)}
@@ -154,20 +154,20 @@ export default function CheckIns() {
             </TableBody>
           </Table>
 
-          <TablePagination page={page} pageCount={pageCount} route="/assessments" />
+          <TablePagination page={page} pageCount={pageCount} route="/check-ins" />
         </div>
       ) : checkIns ? (
         <EmptyState className={doodleLoaded ? "fade-in" : "opacity-0"}>
           <Doodle doodles={28} onLoad={() => setDoodleLoaded(true)} />
-          <Subheading className="mt-4">No assessments scheduled</Subheading>
+          <Subheading className="mt-4">No check-ins scheduled</Subheading>
 
           <Text className="mt-1 text-center">
-            Schedule your first assessment to start collecting early risk signals and enable concern reporting.
+            Schedule your first check-in to start collecting early risk signals and enable concern reporting.
           </Text>
 
           <Button onClick={() => setDialogOpen(true)} color="indigo" className="mt-6" disabled={disabled}>
             <ClockIcon />
-            Schedule assessment
+            Schedule check-in
           </Button>
         </EmptyState>
       ) : (
@@ -175,7 +175,7 @@ export default function CheckIns() {
           <EmptyState className={doodleLoaded ? "fade-in" : "opacity-0"}>
             <Doodle doodles={25} onLoad={() => setDoodleLoaded(true)} />
             <Subheading className="mt-4">No staff contacts</Subheading>
-            <Text className="mt-1 text-center">Add staff contacts to enable assessments.</Text>
+            <Text className="mt-1 text-center">Add staff contacts to enable check-ins.</Text>
 
             <Button href="/people" outline className="mt-6">
               <UsersIcon />
@@ -186,10 +186,10 @@ export default function CheckIns() {
       )}
 
       <Dialog open={dialogOpen} onClose={setDialogOpen}>
-        <DialogTitle>Schedule an assessment</DialogTitle>
+        <DialogTitle>Schedule a check-in</DialogTitle>
 
         <DialogDescription className="text-wrap!">
-          Employees will be notified when the assessment begins and can respond anonymously using a shared access PIN.
+          Employees will be notified when the check-in begins and can respond anonymously using a shared access PIN.
         </DialogDescription>
 
         <DialogBody>

@@ -207,7 +207,7 @@ export default function RiskDialog(props: RiskDialogProps) {
 
       <DialogDescription className="text-wrap!">
         {props.id
-          ? "Edit the details of this risk. Changes won't affect linked concerns or assessment data."
+          ? "Edit the details of this risk. Changes won't affect linked concerns or check-in data."
           : "Manually add a risk identified outside of HowsWork, such as from a workplace observation, incident, or team meeting."}
       </DialogDescription>
 

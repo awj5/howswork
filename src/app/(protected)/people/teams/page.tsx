@@ -142,7 +142,7 @@ export default function Teams() {
             <Subheading className="mt-4">No teams yet</Subheading>
 
             <Text className="mt-1 text-center">
-              Teams are optional. They let staff select their team during assessments, without being identified.
+              Teams are optional. They let staff select their team during check-ins, without being identified.
             </Text>
 
             <Button onClick={() => setDialogOpen(true)} color="indigo" className="mt-6" disabled={disabled}>

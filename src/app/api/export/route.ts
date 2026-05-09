@@ -106,7 +106,7 @@ export async function POST(req: NextRequest) {
       Raised: row.date_raised,
       Level: row.level,
       "Concern tracking": row.concern_tracking,
-      "Assessment date": row.check_in_date,
+      "Check-in date": row.check_in_date,
       Issues: row.issues,
       Description: row.description,
       Status: row.status,

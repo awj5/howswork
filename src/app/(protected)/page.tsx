@@ -216,8 +216,7 @@ export default function Home() {
           <Subheading className="mt-4">Nothing here yet</Subheading>
 
           <Text className="mt-1 text-center">
-            Once assessment results come in, you&apos;ll see risks, trends, and how your workplace is tracking over
-            time.
+            Once check-in results come in, you&apos;ll see risks, trends, and how your workplace is tracking over time.
           </Text>
         </EmptyState>
       ) : (
