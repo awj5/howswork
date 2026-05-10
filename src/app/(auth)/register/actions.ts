@@ -4,6 +4,7 @@ import { baseURL, isValidEmail } from "@/utils/helpers";
 import { createClient } from "@/utils/supabase/server";
 
 export async function signUp(formData: FormData) {
+  if (formData.get("website")) return { success: true }; // Honeypot
   const supabase = await createClient();
   const emailRedirectTo = `${baseURL}/callback?return_to=/`;
   let email = formData.get("email") as string;

@@ -104,6 +104,8 @@ function RegisterForm() {
 
         {!submitted && (
           <Fieldset className="flex flex-col gap-8" disabled={disabled}>
+            <input type="text" name="website" tabIndex={-1} autoComplete="off" className="absolute top-0 left-full" />
+
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-4">
               <Field>
                 <Label>First Name</Label>
