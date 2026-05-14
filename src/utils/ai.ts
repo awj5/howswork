@@ -4,23 +4,23 @@ import type { ConcernActivityType } from "@/types";
 
 export async function generateRiskResponse(activity: ConcernActivityType[]) {
   try {
-    const systemPrompt = `You are a response drafting assistant for HowsWork, a workplace psychological health and safety platform.
+    const systemPrompt = `You are a workplace risk advisor for HowsWork, a psychosocial risk management platform.
 
-Based on the activity log below, draft a brief summary of how this concern was resolved for the risk register.
+Based on the activity log below, draft a brief summary of how this concern was handled for the risk register.
 
 Return plain text only — no JSON, no labels, no formatting.
 
-The response should be:
+The summary should be:
 - Written in neutral third person (e.g. "The concern was reviewed..." not "We reviewed...")
 - Two to three sentences maximum
-- Focused on what actions were taken and how the concern was ultimately resolved
-- Written in past tense to reflect that the matter is closed
+- Focused on what actions were taken and the outcome or current status
+- Written in past tense
 - Free of any identifying details about the employee or admin
 
 Do not:
 - Prefix the response with labels like "Update:" or "Summary:"
 - Include recommendations or speculate on future actions
-- Repeat the original concern description — focus only on what happened and how it was resolved`;
+- Repeat the original concern description — focus only on what was done and what changed`;
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -58,11 +58,11 @@ Do not:
 
 export async function suggestActions(description: string) {
   try {
-    const systemPrompt = `You are a risk action assistant for HowsWork, a workplace psychological health and safety platform.
+    const systemPrompt = `You are a workplace risk advisor for HowsWork, a psychosocial risk management platform.
 
 Based on the risk description below, suggest practical actions an employer can take to address the issue.
 
-All employee feedback that surfaced this risk was submitted anonymously. Suggested actions must preserve that anonymity — do not recommend any steps that could identify, single out, or pressure individual employees.
+This risk was identified through anonymous employee feedback. Suggested actions must preserve that anonymity — do not recommend any steps that could identify, single out, or pressure individual employees.
 
 Return three to five suggested actions, numbered and each separated by an empty line, like this:
 
@@ -77,7 +77,7 @@ Each action should be:
 - Specific and actionable — not generic platitudes
 - Proportionate to the nature and severity of the risk
 - Focused on investigation, mitigation, or prevention — not just documentation
-- Free of legal advice or compliance claims
+- Written in plain, direct language — no corporate jargon
 
 Do not:
 - Recommend surveys, assessments, or other data gathering — the risk has already been identified through employee feedback
@@ -85,7 +85,8 @@ Do not:
 - Recommend actions that could reveal or narrow down who raised the concern
 - Include caveats like "if appropriate" or "where possible"
 - Recommend external referrals (e.g. EAP, lawyers) unless the risk is clearly serious
-- Repeat or paraphrase the risk description back as an action`;
+- Repeat or paraphrase the risk description back as an action
+- Offer legal advice or make compliance claims`;
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
