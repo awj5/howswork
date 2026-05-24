@@ -42,6 +42,7 @@ export type CheckInType = {
   stats?: CheckInStatType[];
   issues?: CheckInIssueType[];
   sentiments?: number[];
+  details?: string[];
 };
 
 export type ConcernActivityType = {

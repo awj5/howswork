@@ -20,9 +20,10 @@ import { Code, Text } from "@/components/ui/text";
 import EmptyState from "@/components/EmptyState";
 import Stat from "@/components/check-in/Stat";
 import Issues from "@/components/check-in/Issues";
+import Feedback from "@/components/check-in/Feedback";
 import Team from "@/components/check-in/Team";
 import SuggestActions from "@/components/SuggestActions";
-import { deleteCheckIn } from "./actions";
+import { deleteCheckIn, decryptDetails } from "./actions";
 
 export default function CheckIn() {
   const params = useParams<{ id: string }>();
@@ -75,7 +76,7 @@ export default function CheckIn() {
       // Get feedback
       let feedbackQuery = supabase
         .from("feedback")
-        .select("id, sentiment, issues, attributions")
+        .select("id, sentiment, issues, attributions, details")
         .eq("check_in_id", checkInData.id);
 
       if (team) feedbackQuery = feedbackQuery.eq("team", team);
@@ -125,6 +126,16 @@ export default function CheckIn() {
               ),
             })).sort((a, b) => b.count - a.count)
           : undefined; // Order by most common
+
+      // Get details
+      const detailsResult = await decryptDetails(feedbackData.map((i) => i.details).filter(Boolean));
+
+      if (detailsResult.error) {
+        setError(detailsResult.error);
+        return;
+      }
+
+      const details = detailsResult.data ?? [];
 
       // Generate stats
       const stats: CheckInStatType[] = [];
@@ -244,6 +255,7 @@ export default function CheckIn() {
         ...checkInData,
         stats,
         issues,
+        details,
       };
 
       setCheckIn(data);
@@ -324,6 +336,7 @@ export default function CheckIn() {
           </div>
 
           <Issues data={checkIn.issues} status={checkIn.status} />
+          <Feedback data={checkIn.details} status={checkIn.status} />
 
           {!!riskID && (
             <div className="mt-12 flex flex-col gap-4 sm:flex-row">
