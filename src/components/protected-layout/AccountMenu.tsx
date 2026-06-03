@@ -34,12 +34,12 @@ export default function AccountMenu() {
         <DropdownLabel>Resources</DropdownLabel>
       </DropdownItem>
 
-      <DropdownItem href="https://howswork.app/articles/privacy-policy/" target="_blank">
+      <DropdownItem href="https://articles.howswork.app/privacy-policy/" target="_blank">
         <ShieldCheckIcon />
         <DropdownLabel>Privacy policy</DropdownLabel>
       </DropdownItem>
 
-      <DropdownItem href="https://howswork.app/articles/terms-of-use/" target="_blank">
+      <DropdownItem href="https://articles.howswork.app/terms-of-use/" target="_blank">
         <DocumentTextIcon />
         <DropdownLabel>Terms of use</DropdownLabel>
       </DropdownItem>
