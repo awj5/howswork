@@ -165,7 +165,7 @@ export async function updateStaff(companyID: number, contacts: string[]) {
                     margin-bottom: 16px;
                   "
                 >
-                  HowsWork Pty Ltd, 32 York St, Sydney 2000<br />Questions? Contact us at support@howswork.app
+                  HowsWork Pty Ltd<br />Questions? Contact us at support@howswork.app
                 </p>
               </td>
             </tr>

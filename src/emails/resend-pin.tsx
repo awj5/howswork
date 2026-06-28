@@ -45,7 +45,7 @@ export default function ResendPIN(props: ResendPINProps) {
             <Hr className="border-gray-900/10" />
 
             <Text className="text-[12px] text-gray-600">
-              HowsWork Pty Ltd, 32 York St, Sydney 2000
+              HowsWork Pty Ltd
               <br />
               Questions? Contact us at support@howswork.app
             </Text>
