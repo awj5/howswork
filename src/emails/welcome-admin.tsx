@@ -33,7 +33,7 @@ export default function WelcomeAdmin(props: WelcomeAdminProps) {
               Your <strong>HowsWork</strong> account for <strong>{props.company}</strong> is set up and ready to go.
             </Text>
 
-            <Heading className="mt-[48px] mb-[48px] text-center text-[24px] leading-[32px] text-indigo-600">
+            <Heading className="mt-[42px] mb-[42px] text-center text-[24px] leading-[32px]">
               How to get started:
             </Heading>
 
@@ -51,8 +51,7 @@ export default function WelcomeAdmin(props: WelcomeAdminProps) {
               {
                 number: 3,
                 title: "Review your risk register.",
-                description:
-                  "After your first responses come in, HowsWork will surface any psychosocial hazards and suggest actions.",
+                description: "Once responses come in, HowsWork flags any psychosocial risks and recommends actions.",
               },
             ].map((feature) => (
               <Section className="mb-[36px]">
@@ -72,7 +71,7 @@ export default function WelcomeAdmin(props: WelcomeAdminProps) {
                   </Column>
 
                   <Column valign="top">
-                    <Heading as="h2" className="mt-[0px] mb-[8px] text-[18px] leading-[28px]">
+                    <Heading as="h2" className="mt-[0px] mb-[8px] text-[18px] leading-[28px] text-gray-900">
                       {feature.title}
                     </Heading>
 
@@ -90,8 +89,8 @@ export default function WelcomeAdmin(props: WelcomeAdminProps) {
             </Button>
 
             <Text className="text-[14px]">
-              <Link href="https://articles.howswork.app/how-howswork-protects-your-privacy/">
-                Learn more about how HowsWork protects your privacy
+              <Link href="https://articles.howswork.app/how-howswork-uses-ai-to-help-employers-act-faster/">
+                Learn more about how HowsWork uses AI to help employers act faster
               </Link>
             </Text>
 
