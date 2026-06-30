@@ -23,7 +23,7 @@ export default function RemoveAdmin(props: RemoveAdminProps) {
 
             <Hr className="border-gray-900/10" />
 
-            <Text className="text-[12px] text-gray-600">
+            <Text className="text-[12px] leading-[16px] text-gray-600">
               HowsWork
               <br />
               Questions? Contact us at support@howswork.app

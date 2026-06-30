@@ -145,7 +145,7 @@ export async function updateStaff(companyID: number, contacts: string[]) {
                 >
                   <strong>No login. No tracking. Fully encrypted.</strong>
                 </p>
-                <p style="font-size: 14px; line-height: 24px; margin-top: 16px; margin-bottom: 16px">
+                <p style="font-size: 14px; line-height: 20px; margin-top: 16px; margin-bottom: 16px">
                   <a
                     href="https://articles.howswork.app/how-howswork-protects-your-privacy/"
                     style="color: #067df7; text-decoration-line: none"
@@ -159,13 +159,13 @@ export async function updateStaff(companyID: number, contacts: string[]) {
                 <p
                   style="
                     font-size: 12px;
-                    line-height: 24px;
+                    line-height: 16px;
                     color: rgb(74, 85, 101);
                     margin-top: 16px;
                     margin-bottom: 16px;
                   "
                 >
-                  HowsWork Pty Ltd<br />Questions? Contact us at support@howswork.app
+                  HowsWork${isAus ? " Pty Ltd" : ""}<br />Questions? Contact us at support@howswork.app
                 </p>
               </td>
             </tr>

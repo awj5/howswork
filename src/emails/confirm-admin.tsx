@@ -27,12 +27,13 @@ export default function ConfirmAdmin(props: ConfirmAdminProps) {
               Sign in to HowsWork
             </Button>
 
-            <Text className="text-[14px] text-gray-600">
+            <Text className="text-[14px] leading-[20px] text-gray-600">
               Didn&apos;t expect this? You can safely ignore this email.
             </Text>
+
             <Hr className="border-gray-900/10" />
 
-            <Text className="text-[12px] text-gray-600">
+            <Text className="text-[12px] leading-[16px] text-gray-600">
               HowsWork
               <br />
               Questions? Contact us at support@howswork.app

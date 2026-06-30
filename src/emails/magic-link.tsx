@@ -25,15 +25,15 @@ export default function MagicLink(props: MagicLinkProps) {
               Sign in to HowsWork
             </Button>
 
-            <Text className="text-[14px] text-gray-600">This link expires in 1 hour.</Text>
+            <Text className="text-[14px] leading-[20px] text-gray-600">This link expires in 1 hour.</Text>
 
-            <Text className="text-[14px] text-gray-600">
+            <Text className="text-[14px] leading-[20px] text-gray-600">
               If you didn&apos;t request this email, you can safely ignore it.
             </Text>
 
             <Hr className="border-gray-900/10" />
 
-            <Text className="text-[12px] text-gray-600">
+            <Text className="text-[12px] leading-[16px] text-gray-600">
               HowsWork
               <br />
               Questions? Contact us at support@howswork.app

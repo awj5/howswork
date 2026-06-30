@@ -43,20 +43,20 @@ export default function CheckIn(props: CheckInProps) {
               You can also visit https://howswork.app/{props.slug} anytime to raise concerns anonymously.
             </Text>
 
-            <Text className="text-[14px]">
+            <Text className="text-[14px] leading-[20px]">
               <Link href="https://articles.howswork.app/how-howswork-protects-your-privacy/">
                 Learn more about how HowsWork protects your privacy
               </Link>
             </Text>
 
-            <Text className="text-[14px] text-gray-600">
+            <Text className="text-[14px] leading-[20px] text-gray-600">
               Please do not share externally. A new access PIN is sent with each check-in.
             </Text>
 
             <Hr className="border-gray-900/10" />
 
-            <Text className="text-[12px] text-gray-600">
-              HowsWork Pty Ltd
+            <Text className="text-[12px] leading-[16px] text-gray-600">
+              HowsWork
               <br />
               Questions? Contact us at support@howswork.app
             </Text>

@@ -33,9 +33,9 @@ export default function WelcomeAdmin(props: WelcomeAdminProps) {
               Your <strong>HowsWork</strong> account for <strong>{props.company}</strong> is set up and ready to go.
             </Text>
 
-            <Heading className="mt-[42px] mb-[42px] text-center text-[24px] leading-[32px]">
-              How to get started:
-            </Heading>
+            <Text className="mb-[24px] text-[20px] leading-[28px] text-indigo-600">
+              <strong>How to get started:</strong>
+            </Text>
 
             {[
               {
@@ -50,13 +50,13 @@ export default function WelcomeAdmin(props: WelcomeAdminProps) {
               },
               {
                 number: 3,
-                title: "Review your risk register.",
+                title: "Review your risk register",
                 description: "Once responses come in, HowsWork flags any psychosocial risks and recommends actions.",
               },
             ].map((feature) => (
-              <Section className="mb-[36px]">
-                <Row className="pr-[32px] pl-[12px]">
-                  <Column width="24" height="24" align="center" valign="top" className="h-[24px] w-[24px] pr-[18px]">
+              <Section className="mb-[32px]">
+                <Row>
+                  <Column width="24" height="24" align="center" valign="top" className="h-[24px] w-[24px] pr-[16px]">
                     <Row>
                       <Column
                         align="center"
@@ -71,11 +71,11 @@ export default function WelcomeAdmin(props: WelcomeAdminProps) {
                   </Column>
 
                   <Column valign="top">
-                    <Heading as="h2" className="mt-[0px] mb-[8px] text-[18px] leading-[28px] text-gray-900">
-                      {feature.title}
-                    </Heading>
+                    <Text className="m-[0px] text-[16px]">
+                      <strong>{feature.title}</strong>
+                    </Text>
 
-                    <Text className="m-0 text-[14px] leading-[24px] text-gray-500">{feature.description}</Text>
+                    <Text className="m-[0px] text-[14px] leading-[20px] text-gray-500">{feature.description}</Text>
                   </Column>
                 </Row>
               </Section>
@@ -88,7 +88,7 @@ export default function WelcomeAdmin(props: WelcomeAdminProps) {
               Go to your dashboard
             </Button>
 
-            <Text className="text-[14px]">
+            <Text className="text-[14px] leading-[20px]">
               <Link href="https://articles.howswork.app/how-howswork-uses-ai-to-help-employers-act-faster/">
                 Learn more about how HowsWork uses AI to help employers act faster
               </Link>
@@ -96,8 +96,8 @@ export default function WelcomeAdmin(props: WelcomeAdminProps) {
 
             <Hr className="border-gray-900/10" />
 
-            <Text className="text-[12px] text-gray-600">
-              HowsWork Pty Ltd
+            <Text className="text-[12px] leading-[16px] text-gray-600">
+              HowsWork
               <br />
               Questions? Contact us at support@howswork.app
             </Text>
