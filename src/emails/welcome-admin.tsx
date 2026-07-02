@@ -54,7 +54,7 @@ export default function WelcomeAdmin(props: WelcomeAdminProps) {
                 description: "Once responses come in, HowsWork flags any psychosocial risks and recommends actions.",
               },
             ].map((feature) => (
-              <Section className="mb-[32px]">
+              <Section className="mb-[24px]">
                 <Row>
                   <Column width="24" height="24" align="center" valign="top" className="h-[24px] w-[24px] pr-[16px]">
                     <Row>
