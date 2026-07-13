@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { Toaster } from "sonner";
 import ogImage from "../../public/img/og.png";
 import "./globals.css";
@@ -48,6 +49,8 @@ export default function RootLayout({
         {children}
         <Toaster theme="system" duration={5000} richColors />
       </body>
+
+      <GoogleAnalytics gaId="G-LPJ370JJP6" />
     </html>
   );
 }
