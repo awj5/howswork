@@ -2,6 +2,7 @@
 
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { sendGAEvent } from "@next/third-parties/google";
 import { toast } from "sonner";
 import { isValidEmail } from "@/utils/helpers";
 import { AuthLayout } from "@/components/ui/auth-layout";
@@ -72,6 +73,7 @@ function RegisterForm() {
     }
 
     // Success
+    if (!isInvite && !result.hp) sendGAEvent("event", "signup_complete");
     setSubmitted(true);
   };
 

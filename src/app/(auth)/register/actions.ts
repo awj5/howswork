@@ -5,7 +5,7 @@ import { createClient } from "@/utils/supabase/server";
 import supabaseAdmin from "@/utils/supabase/admin";
 
 export async function signUp(formData: FormData) {
-  if (formData.get("website")) return { success: true }; // Honeypot
+  if (formData.get("website")) return { success: true, hp: true }; // Honeypot
   const supabase = await createClient();
   const emailRedirectTo = `${baseURL}/callback?return_to=/`;
   let email = formData.get("email") as string;
