@@ -2,7 +2,7 @@
   {
     "id": 1,
     "title": "Starter",
-    "limit": 10,
+    "limit": 20,
     "admins": 1,
     "sms": false,
     "ai": false,
