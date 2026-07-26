@@ -14,7 +14,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "HowsWork - Dashboard",
   description:
-    "Psychosocial risk management for Australian employers. Identify hazards early, act on them, and hold the record that you did.",
+    "Identify and manage psychosocial risks through regular team check-ins, anonymous reporting, and an automated risk register.",
   icons: {
     icon: [
       { url: "/img/icon.svg", media: "(prefers-color-scheme: light)" },
