@@ -14,7 +14,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "HowsWork - Dashboard",
   description:
-    "Anonymous check-ins and concern reports give people a safe way to speak up. HowsWork records risks, guides the response, and documents every action.",
+    "Continuous psychosocial risk assessment for Australian employers. Anonymous reporting that records every risk and the response to it.",
   icons: {
     icon: [
       { url: "/img/icon.svg", media: "(prefers-color-scheme: light)" },
