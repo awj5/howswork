@@ -15,7 +15,7 @@
     "admins": 3,
     "sms": false,
     "ai": true,
-    "price": [{ "monthly": "price_1TKcA3Fe3iYFR8it4K4ZTzz4", "annually": "price_1TKcFJFe3iYFR8itIVPLia73" }]
+    "price": [{ "monthly": "price_1TyLD8Fe3iYFR8it6s4UgdbP", "annually": "price_1TyLQsFe3iYFR8itytZKfcL3" }]
   },
   {
     "id": 3,
@@ -24,7 +24,7 @@
     "admins": 5,
     "sms": true,
     "ai": true,
-    "price": [{ "monthly": "price_1TKcClFe3iYFR8itW05WSZOd", "annually": "price_1TKcHqFe3iYFR8itsGafibq3" }]
+    "price": [{ "monthly": "price_1TyLKBFe3iYFR8itbTJOKyxj", "annually": "price_1TyLScFe3iYFR8itCpxqGAlp" }]
   },
   {
     "id": 4,
