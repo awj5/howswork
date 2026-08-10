@@ -89,7 +89,7 @@ export default function WelcomeAdmin(props: WelcomeAdminProps) {
             </Button>
 
             <Text className="text-[14px] leading-[20px]">
-              <Link href="https://articles.howswork.app/how-howswork-uses-ai-to-help-employers-act-faster/">
+              <Link href="https://howswork.ghost.io/how-howswork-uses-ai-to-help-employers-act-faster/">
                 Learn more about how HowsWork uses AI to help employers act faster
               </Link>
             </Text>
