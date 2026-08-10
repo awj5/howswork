@@ -80,12 +80,12 @@ function LoginForm() {
               Continue
             </Button>
 
-            <Text>
+            {/*<Text>
               New to HowsWork?{" "}
               <TextLink href="/register">
                 <Strong>Set up your company</Strong>
               </TextLink>
-            </Text>
+            </Text>*/}
           </Fieldset>
         )}
       </form>
