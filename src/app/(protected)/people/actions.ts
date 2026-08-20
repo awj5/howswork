@@ -147,7 +147,7 @@ export async function updateStaff(companyID: number, contacts: string[]) {
                 </p>
                 <p style="font-size: 14px; line-height: 20px; margin-top: 16px; margin-bottom: 16px">
                   <a
-                    href="https://howswork.ghost.io/how-howswork-protects-your-privacy/"
+                    href="https://howswork.app/articles/how-howswork-protects-your-privacy/"
                     style="color: #067df7; text-decoration-line: none"
                     target="_blank"
                     >Learn more about how HowsWork protects your privacy</a

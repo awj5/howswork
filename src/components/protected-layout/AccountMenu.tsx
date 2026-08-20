@@ -29,17 +29,12 @@ export default function AccountMenu() {
 
       <DropdownDivider />
 
-      <DropdownItem href="https://howswork.ghost.io/" target="_blank">
-        <ArrowTopRightOnSquareIcon />
-        <DropdownLabel>Resources</DropdownLabel>
-      </DropdownItem>
-
-      <DropdownItem href="https://howswork.ghost.io/privacy-policy/" target="_blank">
+      <DropdownItem href="https://howswork.app/privacy-policy" target="_blank">
         <ShieldCheckIcon />
         <DropdownLabel>Privacy policy</DropdownLabel>
       </DropdownItem>
 
-      <DropdownItem href="https://howswork.ghost.io/terms-of-use/" target="_blank">
+      <DropdownItem href="https://howswork.app/terms-of-use" target="_blank">
         <DocumentTextIcon />
         <DropdownLabel>Terms of use</DropdownLabel>
       </DropdownItem>

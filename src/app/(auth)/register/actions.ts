@@ -439,7 +439,7 @@ export async function signUp(formData: FormData) {
                 >
                 <p style="font-size: 14px; line-height: 20px; margin-top: 16px; margin-bottom: 16px">
                   <a
-                    href="https://howswork.ghost.io/how-howswork-uses-ai-to-help-employers-act-faster/"
+                    href="https://howswork.app/articles/how-howswork-uses-ai-to-help-employers-act-faster/"
                     style="color: #067df7; text-decoration-line: none"
                     target="_blank"
                     >Learn more about how HowsWork uses AI to help employers act faster</a

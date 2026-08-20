@@ -36,7 +36,7 @@ export default function ResendPIN(props: ResendPINProps) {
             </Text>
 
             <Text className="text-[14px] leading-[20px]">
-              <Link href="https://howswork.ghost.io/how-howswork-protects-your-privacy/">
+              <Link href="https://howswork.app/articles/how-howswork-protects-your-privacy/">
                 Learn more about how HowsWork protects your privacy
               </Link>
             </Text>

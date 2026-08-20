@@ -68,7 +68,10 @@ export default function SuggestActions(props: SuggestActionsProps) {
         <DialogDescription className="text-wrap!">
           These AI-generated suggestions are based on best practice but won&pos;t fit every situation. Adapt them to
           your workplace and record any actions taken.{" "}
-          <TextLink href="https://howswork.ghost.io/how-howswork-uses-ai-to-help-employers-act-faster/" target="_blank">
+          <TextLink
+            href="https://howswork.app/articles/how-howswork-uses-ai-to-help-employers-act-faster/"
+            target="_blank"
+          >
             Learn more
           </TextLink>
         </DialogDescription>
