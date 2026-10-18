@@ -95,7 +95,6 @@ export async function updateStaff(companyID: number, contacts: string[]) {
 
     // Send emails
     const emails = newContacts.filter((contact) => contact.includes("@"));
-    const from_email = isAus ? "no-reply@updates.howswork.com.au" : "no-reply@updates.howswork.app";
     const subject = `${companyData.name} uses HowsWork`;
     const html = `<table border="0" width="100%" cellpadding="0" cellspacing="0" role="presentation" align="center">
   <tbody>
@@ -180,7 +179,7 @@ export async function updateStaff(companyID: number, contacts: string[]) {
     if (emails.length) {
       const emailRecords = emails.map((email) => ({
         to_email: email,
-        from_email,
+        from_email: "no-reply@updates.howswork.app",
         subject,
         html,
         company_id: companyData.id,
