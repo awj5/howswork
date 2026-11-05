@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import {
-  HomeIcon,
+  RectangleGroupIcon,
   HandRaisedIcon,
   CheckCircleIcon,
   UsersIcon,
@@ -26,7 +26,7 @@ export default function Nav() {
   const pathname = usePathname();
 
   const navItems = [
-    { href: "/", label: "Dashboard", Icon: HomeIcon },
+    { href: "/", label: "Dashboard", Icon: RectangleGroupIcon },
     { href: "/check-ins", label: "Check-ins", Icon: CheckCircleIcon },
     { href: "/concerns", label: "Concerns", Icon: HandRaisedIcon },
     { href: "/risk-register", label: "Risk Register", Icon: ClipboardIcon },

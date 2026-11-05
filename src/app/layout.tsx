@@ -16,10 +16,7 @@ export const metadata: Metadata = {
   description:
     "Continuous psychosocial risk assessment for Australian employers. Anonymous reporting that records every risk and the response to it.",
   icons: {
-    icon: [
-      { url: "/img/icon.svg", media: "(prefers-color-scheme: light)" },
-      { url: "/img/icon-dark.svg", media: "(prefers-color-scheme: dark)" },
-    ],
+    icon: "/img/icon.svg",
   },
   metadataBase: new URL("https://admin.howswork.app"),
   openGraph: {
