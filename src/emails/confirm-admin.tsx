@@ -22,18 +22,18 @@ export default function ConfirmAdmin(props: ConfirmAdminProps) {
 
             <Button
               href="https://admin.howswork.app/"
-              className="rounded-[6px] bg-indigo-600 px-[16px] py-[12px] text-[14px] font-semibold text-white"
+              className="rounded-[6px] bg-indigo-500 px-[16px] py-[12px] text-[14px] font-semibold text-white"
             >
               Sign in to HowsWork
             </Button>
 
-            <Text className="text-[14px] leading-[20px] text-gray-600">
+            <Text className="text-[14px] leading-[20px] text-zinc-500">
               Didn&apos;t expect this? You can safely ignore this email.
             </Text>
 
-            <Hr className="border-gray-900/10" />
+            <Hr className="border-zinc-950/10" />
 
-            <Text className="text-[12px] leading-[16px] text-gray-600">
+            <Text className="text-[12px] leading-[16px] text-zinc-500">
               HowsWork
               <br />
               Questions? Contact us at support@howswork.app

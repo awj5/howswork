@@ -91,7 +91,7 @@ function RegisterForm() {
               ? "Set up complete"
               : isInvite
                 ? `Join ${inviteCompany}`
-                : "Set up your company"}
+                : "Set up your workspace"}
         </Heading>
 
         {submitted && (
@@ -110,13 +110,13 @@ function RegisterForm() {
 
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-4">
               <Field>
-                <Label>First Name</Label>
+                <Label>First name</Label>
                 <Input name="first_name" invalid={formErrors.first_name} />
                 {formErrors.first_name && <ErrorMessage>This field is required.</ErrorMessage>}
               </Field>
 
               <Field>
-                <Label>Last Name</Label>
+                <Label>Last name</Label>
                 <Input name="last_name" invalid={formErrors.last_name} />
                 {formErrors.last_name && <ErrorMessage>This field is required.</ErrorMessage>}
               </Field>
@@ -138,14 +138,14 @@ function RegisterForm() {
 
             {!isInvite && (
               <Field>
-                <Label>Company Name</Label>
+                <Label>Company or team name</Label>
                 <Input name="company" invalid={formErrors.company} maxLength={20} />
                 {formErrors.company && <ErrorMessage>This field is required.</ErrorMessage>}
               </Field>
             )}
 
             <Button type="submit" className="w-full" color="indigo">
-              {isInvite ? "Accept invite" : "Create company"}
+              {isInvite ? "Accept invite" : "Create workspace"}
             </Button>
 
             {!isInvite && (

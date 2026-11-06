@@ -13,7 +13,7 @@ export default function CompanySwitcher() {
   return (
     <>
       {companies.length > 1 && (
-        <Listbox defaultValue={companies[0].id} onChange={(e) => changeCompany(e)} aria-label="Company switcher">
+        <Listbox defaultValue={companies[0].id} onChange={(e) => changeCompany(e)} aria-label="Workspace switcher">
           {companies.map((company) => (
             <ListboxOption key={company.id} value={company.id}>
               <BuildingOffice2Icon />

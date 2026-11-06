@@ -83,7 +83,7 @@ function LoginForm() {
             <Text>
               New to HowsWork?{" "}
               <TextLink href="/register">
-                <Strong>Set up your company</Strong>
+                <Strong>Set up your workspace</Strong>
               </TextLink>
             </Text>
           </Fieldset>

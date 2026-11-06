@@ -179,7 +179,7 @@ export default function Settings() {
                 <Subheading>Subscription</Subheading>
 
                 <Text>
-                  You&apos;re on the <Strong>{plan.title}</Strong> plan.
+                  This workspace is on the <Strong>{plan.title}</Strong> plan.
                 </Text>
               </div>
 
@@ -204,13 +204,13 @@ export default function Settings() {
 
         <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
           <div className="flex flex-col gap-1">
-            <Subheading>Company Name</Subheading>
+            <Subheading>Workspace name</Subheading>
             <Text>This name appears to employees when they access HowsWork.</Text>
           </div>
 
           <Field>
             <Input
-              aria-label="Company Name"
+              aria-label="Workspace name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               invalid={formErrors.name}
@@ -225,10 +225,10 @@ export default function Settings() {
 
         <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
           <div className="flex flex-col gap-1">
-            <Subheading>Company URL</Subheading>
+            <Subheading>Workspace URL</Subheading>
 
             <Text>
-              This is your company's unique URL:
+              This is your unique workspace URL:
               <br />
               <TextLink
                 href={`https://howswork.${timezone.includes("Australia") ? "com.au" : "app"}/${slug}`}
@@ -241,7 +241,7 @@ export default function Settings() {
 
           <Field>
             <Input
-              aria-label="Company URL"
+              aria-label="Workspace URL"
               value={slug}
               onChange={(e) => setSlug(e.target.value)}
               invalid={formErrors.slug}
@@ -289,7 +289,7 @@ export default function Settings() {
         <div className="flex flex-col-reverse items-end justify-between gap-10 sm:flex-row">
           <Button type="button" onClick={() => setAlertOpen(true)}>
             <TrashIcon />
-            Delete company
+            Delete workspace
           </Button>
 
           <Button type="submit" color="indigo">
@@ -302,7 +302,7 @@ export default function Settings() {
         <AlertTitle>Are you sure you want to delete {companies[0]?.name.replace(/\.$/, "")}?</AlertTitle>
 
         <AlertDescription>
-          This action cannot be undone. The company and all associated records will be permanently deleted.
+          This action cannot be undone. The workspace and all associated records will be permanently deleted.
         </AlertDescription>
 
         <AlertActions>

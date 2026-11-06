@@ -25,9 +25,9 @@ export default function ResendPIN(props: ResendPINProps) {
               Access PIN for all <strong>{props.company}</strong> employees:
             </Text>
 
-            <CodeInline className="rounded-[6px] bg-gray-200 px-[4px] py-[2px] text-[20px]">{props.code}</CodeInline>
+            <CodeInline className="rounded-[6px] bg-zinc-100 px-[4px] py-[2px] text-[20px]">{props.code}</CodeInline>
 
-            <Text className="text-[16px] text-indigo-600">
+            <Text className="text-[16px] text-indigo-500">
               <strong>No login. No tracking. Fully encrypted.</strong>
             </Text>
 
@@ -36,15 +36,18 @@ export default function ResendPIN(props: ResendPINProps) {
             </Text>
 
             <Text className="text-[14px] leading-[20px]">
-              <Link href="https://howswork.app/articles/how-howswork-protects-your-privacy/">
+              <Link
+                href="https://howswork.app/articles/how-howswork-protects-your-privacy/"
+                className="text-indigo-500"
+              >
                 Learn more about how HowsWork protects your privacy
               </Link>
             </Text>
 
-            <Text className="text-[14px] leading-[20px] text-gray-600">Please do not share externally.</Text>
-            <Hr className="border-gray-900/10" />
+            <Text className="text-[14px] leading-[20px] text-zinc-500">Please do not share externally.</Text>
+            <Hr className="border-zinc-950/10" />
 
-            <Text className="text-[12px] leading-[16px] text-gray-600">
+            <Text className="text-[12px] leading-[16px] text-zinc-500">
               HowsWork
               <br />
               Questions? Contact us at support@howswork.app

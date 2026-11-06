@@ -32,7 +32,7 @@ export async function inviteUser(email: string, company: CompanyType) {
 
   const userIDs = companyUsersData.map((i) => i.user_id).filter(Boolean); // Registered user IDs
   const inviteEmails = companyUsersData.map((i) => i.invite_email).filter(Boolean); // Invited user emails
-  if (!userIDs.includes(authData.user.id)) return { error: "You do not have permission to modify this company" };
+  if (!userIDs.includes(authData.user.id)) return { error: "You do not have permission to modify this workspace" };
 
   // Check if user already exists
   const { data: profileData, error: profileError } = await supabaseAdmin
@@ -46,7 +46,7 @@ export async function inviteUser(email: string, company: CompanyType) {
     return { error: "Internal server error" };
   }
 
-  if (userIDs.includes(profileData?.user_id)) return { error: "User is already in this company" };
+  if (userIDs.includes(profileData?.user_id)) return { error: "User is already in this workspace" };
   if (inviteEmails.includes(email)) return { error: "User is already invited" };
 
   // Get company plan
@@ -126,10 +126,10 @@ export async function removeUser(user: UserType, company: CompanyType) {
 
   const userIDs = companyUsersData.map((i) => i.user_id).filter(Boolean); // Registered user IDs
   const inviteEmails = companyUsersData.map((i) => i.invite_email).filter(Boolean); // Invited user emails
-  if (!userIDs.includes(authData.user.id)) return { error: "You do not have permission to modify this company" };
+  if (!userIDs.includes(authData.user.id)) return { error: "You do not have permission to modify this workspace" };
 
   if ((user.user_id && !userIDs.includes(user.user_id)) || (!user.user_id && !inviteEmails.includes(user.email)))
-    return { error: "User is not in this company" };
+    return { error: "User is not in this workspace" };
 
   // Delete user from company using supabase admin
   const { error: deleteCompanyUserError } = await supabaseAdmin

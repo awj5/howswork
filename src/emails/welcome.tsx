@@ -24,19 +24,22 @@ export default function Welcome(props: WelcomeProps) {
               time. Your responses are always anonymous and can never be traced back to you.
             </Text>
 
-            <Text className="text-[16px] text-indigo-600">
+            <Text className="text-[16px] text-indigo-500">
               <strong>No login. No tracking. Fully encrypted.</strong>
             </Text>
 
             <Text className="text-[14px] leading-[20px]">
-              <Link href="https://howswork.app/articles/how-howswork-protects-your-privacy/">
+              <Link
+                href="https://howswork.app/articles/how-howswork-protects-your-privacy/"
+                className="text-indigo-500"
+              >
                 Learn more about how HowsWork protects your privacy
               </Link>
             </Text>
 
-            <Hr className="border-gray-900/10" />
+            <Hr className="border-zinc-950/10" />
 
-            <Text className="text-[12px] leading-[16px] text-gray-600">
+            <Text className="text-[12px] leading-[16px] text-zinc-500">
               HowsWork
               <br />
               Questions? Contact us at support@howswork.app

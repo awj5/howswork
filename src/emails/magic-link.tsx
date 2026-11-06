@@ -20,20 +20,20 @@ export default function MagicLink(props: MagicLinkProps) {
 
             <Button
               href="{{ .ConfirmationURL }}"
-              className="rounded-[6px] bg-indigo-600 px-[16px] py-[12px] text-[14px] font-semibold text-white"
+              className="rounded-[6px] bg-indigo-500 px-[16px] py-[12px] text-[14px] font-semibold text-white"
             >
               Sign in to HowsWork
             </Button>
 
-            <Text className="text-[14px] leading-[20px] text-gray-600">This link expires in 1 hour.</Text>
+            <Text className="text-[14px] leading-[20px] text-zinc-500">This link expires in 1 hour.</Text>
 
-            <Text className="text-[14px] leading-[20px] text-gray-600">
+            <Text className="text-[14px] leading-[20px] text-zinc-500">
               If you didn&apos;t request this email, you can safely ignore it.
             </Text>
 
-            <Hr className="border-gray-900/10" />
+            <Hr className="border-zinc-950/10" />
 
-            <Text className="text-[12px] leading-[16px] text-gray-600">
+            <Text className="text-[12px] leading-[16px] text-zinc-500">
               HowsWork
               <br />
               Questions? Contact us at support@howswork.app

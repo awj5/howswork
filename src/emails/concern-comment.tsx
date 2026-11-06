@@ -13,20 +13,20 @@ export default function ConcernComment(props: ConcernCommentProps) {
             <Img src="https://howswork.app/img/email-icon.png" width="32" height="32" alt="HowsWork" />
 
             <Text className="text-[16px]">
-              An employee at <strong>{props.company}</strong> has added a follow-up comment to their concern.
+              An employee in <strong>{props.company}</strong> has added a follow-up comment to their concern.
             </Text>
 
             <Button
               href="https://admin.howswork.app/concerns/0"
-              className="rounded-[6px] bg-indigo-600 px-[16px] py-[12px] text-[14px] font-semibold text-white"
+              className="rounded-[6px] bg-indigo-500 px-[16px] py-[12px] text-[14px] font-semibold text-white"
             >
               View comment
             </Button>
 
-            <Text className="text-[14px] leading-[20px] text-gray-600">Response recommended within 48 hours.</Text>
-            <Hr className="border-gray-900/10" />
+            <Text className="text-[14px] leading-[20px] text-zinc-500">Response recommended within 48 hours.</Text>
+            <Hr className="border-zinc-950/10" />
 
-            <Text className="text-[12px] leading-[16px] text-gray-600">
+            <Text className="text-[12px] leading-[16px] text-zinc-500">
               HowsWork
               <br />
               Questions? Contact us at support@howswork.app

@@ -33,7 +33,7 @@ export default function WelcomeAdmin(props: WelcomeAdminProps) {
               Your <strong>HowsWork</strong> account for <strong>{props.company}</strong> is set up and ready to go.
             </Text>
 
-            <Text className="mb-[24px] text-[20px] leading-[28px] text-indigo-600">
+            <Text className="mb-[24px] text-[20px] leading-[28px] text-indigo-500">
               <strong>How to get started:</strong>
             </Text>
 
@@ -41,7 +41,7 @@ export default function WelcomeAdmin(props: WelcomeAdminProps) {
               {
                 number: 1,
                 title: "Add staff contacts",
-                description: "Add your team's email addresses or mobile numbers.",
+                description: "Import email addresses or mobile numbers.",
               },
               {
                 number: 2,
@@ -51,7 +51,7 @@ export default function WelcomeAdmin(props: WelcomeAdminProps) {
               {
                 number: 3,
                 title: "Review your risk register",
-                description: "Once responses come in, HowsWork flags any psychosocial risks and recommends actions.",
+                description: "Once responses come in, HowsWork flags emerging issues and suggests next steps.",
               },
             ].map((feature) => (
               <Section className="mb-[24px]">
@@ -63,7 +63,7 @@ export default function WelcomeAdmin(props: WelcomeAdminProps) {
                         valign="middle"
                         width="24"
                         height="24"
-                        className="h-[24px] w-[24px] rounded-full bg-indigo-600 text-[12px] leading-none font-semibold text-white"
+                        className="h-[24px] w-[24px] rounded-full bg-indigo-500 text-[12px] leading-none font-semibold text-white"
                       >
                         {feature.number}
                       </Column>
@@ -75,7 +75,7 @@ export default function WelcomeAdmin(props: WelcomeAdminProps) {
                       <strong>{feature.title}</strong>
                     </Text>
 
-                    <Text className="m-[0px] text-[14px] leading-[20px] text-gray-500">{feature.description}</Text>
+                    <Text className="m-[0px] text-[14px] leading-[20px] text-zinc-500">{feature.description}</Text>
                   </Column>
                 </Row>
               </Section>
@@ -83,20 +83,23 @@ export default function WelcomeAdmin(props: WelcomeAdminProps) {
 
             <Button
               href="https://admin.howswork.app/"
-              className="rounded-[6px] bg-indigo-600 px-[16px] py-[12px] text-[14px] font-semibold text-white"
+              className="rounded-[6px] bg-indigo-500 px-[16px] py-[12px] text-[14px] font-semibold text-white"
             >
               Go to your dashboard
             </Button>
 
             <Text className="text-[14px] leading-[20px]">
-              <Link href="https://howswork.app/articles/how-howswork-uses-ai-to-help-employers-act-faster/">
+              <Link
+                href="https://howswork.app/articles/how-howswork-uses-ai-to-help-employers-act-faster/"
+                className="text-indigo-500"
+              >
                 Learn more about how HowsWork uses AI to help employers act faster
               </Link>
             </Text>
 
-            <Hr className="border-gray-900/10" />
+            <Hr className="border-zinc-950/10" />
 
-            <Text className="text-[12px] leading-[16px] text-gray-600">
+            <Text className="text-[12px] leading-[16px] text-zinc-500">
               HowsWork
               <br />
               Questions? Contact us at support@howswork.app

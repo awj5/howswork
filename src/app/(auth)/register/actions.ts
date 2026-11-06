@@ -98,7 +98,7 @@ export async function signUp(formData: FormData) {
                     font-size: 20px;
                     line-height: 28px;
                     margin-bottom: 24px;
-                    color: rgb(79, 57, 246);
+                    color: rgb(97, 95, 255);
                     margin-top: 16px;
                   "
                 >
@@ -154,7 +154,7 @@ export async function signUp(formData: FormData) {
                                           height: 24px;
                                           width: 24px;
                                           border-radius: 9999px;
-                                          background-color: rgb(79, 57, 246);
+                                          background-color: rgb(97, 95 ,255);
                                           font-size: 12px;
                                           line-height: 1;
                                           font-weight: 600;
@@ -186,14 +186,14 @@ export async function signUp(formData: FormData) {
                                     font-size: 14px;
                                     line-height: 20px;
                                     margin: 0px;
-                                    color: rgb(106, 114, 130);
+                                    color: rgb(113, 113, 123);
                                     margin-top: 0px;
                                     margin-bottom: 0px;
                                     margin-left: 0px;
                                     margin-right: 0px;
                                   "
                                 >
-                                  Add your team&#x27;s email addresses or mobile numbers.
+                                  Import email addresses or mobile numbers.
                                 </p>
                               </td>
                             </tr>
@@ -253,7 +253,7 @@ export async function signUp(formData: FormData) {
                                           height: 24px;
                                           width: 24px;
                                           border-radius: 9999px;
-                                          background-color: rgb(79, 57, 246);
+                                          background-color: rgb(97, 95 ,255);
                                           font-size: 12px;
                                           line-height: 1;
                                           font-weight: 600;
@@ -285,7 +285,7 @@ export async function signUp(formData: FormData) {
                                     font-size: 14px;
                                     line-height: 20px;
                                     margin: 0px;
-                                    color: rgb(106, 114, 130);
+                                    color: rgb(113, 113, 123);
                                     margin-top: 0px;
                                     margin-bottom: 0px;
                                     margin-left: 0px;
@@ -352,7 +352,7 @@ export async function signUp(formData: FormData) {
                                           height: 24px;
                                           width: 24px;
                                           border-radius: 9999px;
-                                          background-color: rgb(79, 57, 246);
+                                          background-color: rgb(97, 95 ,255);
                                           font-size: 12px;
                                           line-height: 1;
                                           font-weight: 600;
@@ -384,14 +384,14 @@ export async function signUp(formData: FormData) {
                                     font-size: 14px;
                                     line-height: 20px;
                                     margin: 0px;
-                                    color: rgb(106, 114, 130);
+                                    color: rgb(113, 113, 123);
                                     margin-top: 0px;
                                     margin-bottom: 0px;
                                     margin-left: 0px;
                                     margin-right: 0px;
                                   "
                                 >
-                                  Once responses come in, HowsWork flags any psychosocial risks and recommends actions.
+                                  Once responses come in, HowsWork flags emerging issues and suggests next steps.
                                 </p>
                               </td>
                             </tr>
@@ -410,7 +410,7 @@ export async function signUp(formData: FormData) {
                     max-width: 100%;
                     mso-padding-alt: 0px;
                     border-radius: 6px;
-                    background-color: rgb(79, 57, 246);
+                    background-color: rgb(97, 95, 255);
                     padding-right: 16px;
                     padding-left: 16px;
                     padding-bottom: 12px;
@@ -440,19 +440,19 @@ export async function signUp(formData: FormData) {
                 <p style="font-size: 14px; line-height: 20px; margin-top: 16px; margin-bottom: 16px">
                   <a
                     href="https://howswork.app/articles/how-howswork-uses-ai-to-help-employers-act-faster/"
-                    style="color: #067df7; text-decoration-line: none"
+                    style="color: rgb(97, 95, 255); text-decoration-line: none"
                     target="_blank"
                     >Learn more about how HowsWork uses AI to help employers act faster</a
                   >
                 </p>
                 <hr
-                  style="width: 100%; border: none; border-top: 1px solid #eaeaea; border-color: rgb(16, 24, 40, 10%)"
+                  style="width: 100%; border: none; border-top: 1px solid #eaeaea; border-color: rgb(9, 9, 11, 10%)"
                 />
                 <p
                   style="
                     font-size: 12px;
                     line-height: 16px;
-                    color: rgb(74, 85, 101);
+                    color: rgb(113, 113, 123);
                     margin-top: 16px;
                     margin-bottom: 16px;
                   "

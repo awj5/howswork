@@ -137,7 +137,7 @@ export async function updateStaff(companyID: number, contacts: string[]) {
                   style="
                     font-size: 16px;
                     line-height: 24px;
-                    color: rgb(79, 57, 246);
+                    color: rgb(97, 95, 255);
                     margin-top: 16px;
                     margin-bottom: 16px;
                   "
@@ -147,19 +147,19 @@ export async function updateStaff(companyID: number, contacts: string[]) {
                 <p style="font-size: 14px; line-height: 20px; margin-top: 16px; margin-bottom: 16px">
                   <a
                     href="https://howswork.app/articles/how-howswork-protects-your-privacy/"
-                    style="color: #067df7; text-decoration-line: none"
+                    style="color:rgb(97, 95, 255); text-decoration-line: none"
                     target="_blank"
                     >Learn more about how HowsWork protects your privacy</a
                   >
                 </p>
                 <hr
-                  style="width: 100%; border: none; border-top: 1px solid #eaeaea; border-color: rgb(16, 24, 40, 10%)"
+                  style="width: 100%; border: none; border-top: 1px solid #eaeaea; border-color: rgb(9, 9, 11, 10%)"
                 />
                 <p
                   style="
                     font-size: 12px;
                     line-height: 16px;
-                    color: rgb(74, 85, 101);
+                    color: rgb(113, 113, 123);
                     margin-top: 16px;
                     margin-bottom: 16px;
                   "

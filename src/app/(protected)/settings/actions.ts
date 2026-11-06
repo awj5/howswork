@@ -61,7 +61,7 @@ export async function deleteCompany(companyID: number) {
     return { error: "Internal server error" };
   }
 
-  if (companyUsersData.length > 1) return { error: "All admins must be removed before this company can be deleted" };
+  if (companyUsersData.length > 1) return { error: "All admins must be removed before this workspace can be deleted" };
 
   // Get auth user
   const { data: authData, error: authError } = await supabase.auth.getUser();

@@ -21,9 +21,9 @@ export default function RemoveAdmin(props: RemoveAdminProps) {
               {props.removedBy}.
             </Text>
 
-            <Hr className="border-gray-900/10" />
+            <Hr className="border-zinc-950/10" />
 
-            <Text className="text-[12px] leading-[16px] text-gray-600">
+            <Text className="text-[12px] leading-[16px] text-zinc-500">
               HowsWork
               <br />
               Questions? Contact us at support@howswork.app
